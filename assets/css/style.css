@@ -366,7 +366,7 @@ input,textarea{ font:inherit; }
 .social-cta--channels{ min-width:238px; }
 .social-cta .brand-icon{ width:28px; height:28px; flex:0 0 28px; }
 .social-cta .brand-icon--wechat{ color:#07c160; fill:currentColor; }
-.social-cta .brand-icon--channels{ color:#222b3a; }
+.social-cta .brand-icon--channels{ color:#ff8a00; fill:currentColor; }
 @media (max-width:560px){
   .social-cta-list{ align-items:stretch; }
   .social-cta{ min-width:0; width:100%; }
