@@ -790,7 +790,7 @@ input,textarea{ font:inherit; }
 .walkin-block{ overflow:visible; border-radius:0; background:#fff; box-shadow:none; }
 .walkin-hero{
   position:relative; overflow:hidden; min-height:520px; aspect-ratio:auto;
-  background:#eef1f5;
+  background:#eef1f5 url("../img/walkin-home-bg.jpg") center center / cover no-repeat;
 }
 .walkin-hero-image{
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
