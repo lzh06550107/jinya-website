@@ -442,6 +442,7 @@ input,textarea{ font:inherit; }
 .pm-01 .ph{ flex:1; margin-top:18px; border-radius:var(--radius-sm); overflow:hidden; min-height:200px; }
 .pm-01 .ph img{ width:100%; height:100%; object-fit:cover; }
 .pm-01 .foot{ display:flex; justify-content:flex-end; margin-top:14px; margin-bottom:4px; }
+.pm-01 .foot .arrow{ margin-right:18px; }
 
 /* 02/03 — right column, stacked: text left, photo right, side by side */
 .pm-02{ grid-column:2; grid-row:1; padding:0; border-bottom:1px solid var(--line); }
@@ -457,7 +458,7 @@ input,textarea{ font:inherit; }
 .pm-04 .row{ display:flex; gap:0; align-items:stretch; }
 .pm-04 .text{ flex:0 0 33%; display:flex; flex-direction:column; padding:30px 34px; }
 .pm-04 .foot{ margin-top:auto; padding-top:14px; }
-.pm-04 .photos{ flex:1; width:100%; max-width:100%; min-width:0; }
+.pm-04 .photos{ flex:1; width:100%; max-width:100%; min-width:0; padding:18px 0; box-sizing:border-box; }
 .pm-04 .photos .ph{ border-radius:var(--radius-sm); overflow:hidden; }
 .pm-04 .photos img{ width:100%; height:100%; object-fit:cover; }
 .product-section{ background:#fff; }
