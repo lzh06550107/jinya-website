@@ -1478,8 +1478,9 @@ input,textarea{ font:inherit; }
 .labels-hero-ref::after{ display:none; }
 .labels-hero-ref .inner-hero-bg{
   background-color:#dbe2f4;
-  background-size:auto 100%;
-  background-position:right center;
+  background-size:100% 100%;
+  background-position:center center;
+  opacity:1;
 }
 .labels-hero-ref .container{
   height:100%;
@@ -1563,8 +1564,9 @@ input,textarea{ font:inherit; }
 }
 @media (max-width:900px){
   .labels-hero-ref .inner-hero-bg{
-    background-position:74% center;
-    opacity:.72;
+    background-size:auto 100%;
+    background-position:right center;
+    opacity:.42;
   }
   .labels-hero-ref .labels-hero-copy{ max-width:620px; }
   .labels-hero-ref .labels-hero-title-row h1{ font-size:34px; }
@@ -1575,8 +1577,9 @@ input,textarea{ font:inherit; }
 }
 @media (max-width:640px){
   .labels-hero-ref .inner-hero-bg{
-    opacity:.28;
-    background-position:82% center;
+    background-size:auto 100%;
+    opacity:.22;
+    background-position:right center;
   }
   .labels-hero-ref .container{ padding:14px 18px; }
   .labels-hero-ref .labels-hero-title-row{
