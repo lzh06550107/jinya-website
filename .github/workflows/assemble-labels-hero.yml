@@ -1,0 +1,31 @@
+name: Assemble labels hero asset
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.asset-chunks/labels-*.b64'
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble JPEG
+        shell: bash
+        run: |
+          cat .asset-chunks/labels-*.b64 | tr -d '\n\r ' | base64 -d > assets/img/labels-hero-clean.jpg
+          file assets/img/labels-hero-clean.jpg
+          test "$(stat -c%s assets/img/labels-hero-clean.jpg)" -gt 20000
+      - name: Commit assembled asset
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/img/labels-hero-clean.jpg
+          git rm .asset-chunks/labels-*.b64
+          git rm .github/workflows/assemble-labels-hero.yml
+          git commit -m "assets: assemble clean labels hero background"
+          git push
