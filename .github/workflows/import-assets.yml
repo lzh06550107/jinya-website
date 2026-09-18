@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - '.import-assets/assets-full-r40.zip.part-*'
+      - '.import-assets/**'
+      - '.github/workflows/import-assets.yml'
 
 permissions:
   contents: write
@@ -19,11 +20,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reassemble and extract original assets
+      - name: Replace assets with original uploaded directory
         shell: bash
         run: |
           set -euo pipefail
           cat .import-assets/assets-full-r40.zip.part-* > /tmp/assets-full-r40.zip
+          rm -rf assets
           unzip -o /tmp/assets-full-r40.zip
           rm -rf .import-assets
 
@@ -35,6 +37,11 @@ jobs:
           count="$(find assets -type f | wc -l | tr -d ' ')"
           echo "assets file count: $count"
           test "$count" -eq 142
+          test -f assets/css/style.css
+          test -f assets/js/main.js
+          test -f assets/img/home-banner-01.png
+          test -f assets/img/home-banner-02.png
+          test -f assets/img/home-banner-03.png
 
       - name: Commit complete assets directory
         shell: bash
@@ -47,5 +54,5 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "assets: import complete original assets directory"
+          git commit -m "assets: replace with complete original uploaded assets directory"
           git push
