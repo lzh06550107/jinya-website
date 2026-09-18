@@ -1,0 +1,23 @@
+/* R40 - Homepage banner fills the viewport.
+   Loaded after style.css so it also overrides older mobile/desktop min-height rules. */
+.hero--home{
+  width:100%;
+  max-width:none;
+  margin:0;
+  height:100vh;
+  height:100dvh;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+}
+.hero--home .container{ width:100%; }
+.hero--home .swiper-viewport,
+.hero--home .swiper-track,
+.hero--home .swiper-slide{ height:100%; }
+.hero--home .swiper-slide img,
+.hero--home .swiper-slide video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
