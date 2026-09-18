@@ -800,6 +800,8 @@ input,textarea{ font:inherit; }
 .media-swiper.is-static .swiper-arrow,.media-swiper.is-static .swiper-dots{ display:none; }
 .product-swiper{ --swiper-gap:12px; padding-bottom:25px; }
 .product-swiper.is-static{ padding-bottom:0; }
+.pm-04 .photos.product-swiper{ padding-top:18px; padding-bottom:18px; }
+.pm-04 .photos.product-swiper.is-static{ padding-bottom:18px; }
 .product-swiper .swiper-slide{ aspect-ratio:4/5; }
 .product-swiper .swiper-arrow,.sample-swiper .swiper-arrow{ width:32px; height:32px; margin-top:-16px; }
 .product-swiper .swiper-dots,.sample-swiper .swiper-dots{ bottom:5px; }
