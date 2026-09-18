@@ -416,6 +416,114 @@ input,textarea{ font:inherit; }
 .gallery-panel{ display:none; }
 .gallery-panel.active{ display:block; }
 
+
+/* Homepage production workshop — reference layout: clean 3×2 grid with
+   centered titles and descriptive copy beneath each production image. */
+.workshop-section{
+  background:#fff;
+  padding:64px 0 72px;
+}
+.workshop-section .container{
+  max-width:1180px;
+}
+.workshop-head{
+  margin-bottom:34px;
+}
+.workshop-head h2{
+  font-size:30px;
+  font-weight:500;
+  color:#303030;
+  letter-spacing:.04em;
+}
+.workshop-head .eyebrow{
+  margin-top:13px;
+  color:#4f4f4f;
+  font-size:14px;
+  letter-spacing:.04em;
+}
+.workshop-head .dash{
+  display:none;
+}
+.workshop-mark{
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:3px;
+  height:15px;
+  margin-top:14px;
+}
+.workshop-mark span{
+  display:block;
+  width:3px;
+  border-radius:2px;
+  background:#222;
+}
+.workshop-mark span:nth-child(1),
+.workshop-mark span:nth-child(3){
+  height:7px;
+}
+.workshop-mark span:nth-child(2){
+  height:12px;
+}
+.workshop-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  column-gap:26px;
+  row-gap:30px;
+}
+.workshop-card{
+  min-width:0;
+  background:#fff;
+}
+.workshop-card .ph{
+  width:100%;
+  aspect-ratio:1.62/1;
+  overflow:hidden;
+  background:#f4f4f4;
+}
+.workshop-card .ph img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.workshop-copy{
+  padding:20px 4px 0;
+}
+.workshop-copy h3{
+  margin:0;
+  text-align:center;
+  color:#343434;
+  font-size:16px;
+  line-height:1.55;
+  font-weight:500;
+}
+.workshop-copy p{
+  margin:13px 0 0;
+  color:#555;
+  font-size:12.5px;
+  line-height:1.9;
+  font-weight:400;
+  text-align:left;
+}
+@media (max-width:900px){
+  .workshop-section{ padding:52px 0 60px; }
+  .workshop-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:30px 22px;
+  }
+}
+@media (max-width:600px){
+  .workshop-section{ padding:44px 0 50px; }
+  .workshop-head{ margin-bottom:28px; }
+  .workshop-head h2{ font-size:25px; }
+  .workshop-head .eyebrow{ font-size:13px; line-height:1.8; }
+  .workshop-grid{ grid-template-columns:1fr; row-gap:30px; }
+  .workshop-copy{ padding-top:16px; }
+  .workshop-copy h3{ font-size:16px; }
+  .workshop-copy p{ font-size:13px; line-height:1.85; }
+}
+
 /* numbered product cards (产品中心) — asymmetric masonry matching source layout:
    01 tall on the left; 02+03 stacked on the right; 04 spans full width below */
 .product-masonry{
