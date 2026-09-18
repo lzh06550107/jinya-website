@@ -978,6 +978,8 @@ input,textarea{ font:inherit; }
 }
 .glass-card .ic{ width:38px; height:38px; margin:0 auto 14px; }
 .glass-card .ic svg{ width:100%; height:100%; }
+.culture-banner--light .glass-card .ic{ width:56px; height:56px; margin-bottom:16px; }
+.culture-banner--light .glass-card .ic img{ width:100%; height:100%; object-fit:contain; display:block; }
 .glass-card h4{ font-size:15px; font-weight:700; margin-bottom:10px; }
 .glass-card p{ font-size:12px; opacity:.85; line-height:1.8; }
 @media (max-width:760px){ .culture-grid{ grid-template-columns:repeat(2,1fr); } }
