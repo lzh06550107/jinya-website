@@ -1040,9 +1040,13 @@ input,textarea{ font:inherit; }
 .footer-contact-sub{ font-size:13px; color:var(--muted); margin-bottom:14px; }
 .footer-qr{
   width:92px; height:92px; border:1px solid var(--line); border-radius:6px; overflow:hidden; margin-bottom:12px;
-  background:#fff; display:flex; align-items:center; justify-content:center;
+  padding:6px; box-sizing:border-box;
+  background:#fff; display:grid; place-items:center;
 }
-.footer-qr img{ width:100%; height:100%; object-fit:cover; display:block; }
+.footer-qr img{
+  width:100%; height:100%; object-fit:contain; object-position:center center;
+  display:block; margin:auto;
+}
 .social-row{ display:flex; gap:10px; align-items:center; }
 .social-row a{
   width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
