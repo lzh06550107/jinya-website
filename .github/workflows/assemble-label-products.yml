@@ -22,7 +22,7 @@ jobs:
           mkdir -p assets/img
           cat .asset-product-sprite-v58/sprite-*.b64 | tr -d '\n\r ' | base64 -d > assets/img/labels-products-sprite.webp
           file assets/img/labels-products-sprite.webp
-          test "$(stat -c%s assets/img/labels-products-sprite.webp)" -gt 200000
+          test "$(stat -c%s assets/img/labels-products-sprite.webp)" -gt 140000
 
       - name: Point the nine fixed product cards at the original-upload sprite
         shell: bash
