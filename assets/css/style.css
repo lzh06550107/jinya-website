@@ -4784,3 +4784,48 @@ input,textarea{ font:inherit; }
     );
   }
 }
+
+
+/* boxes generated banner v87 */
+.boxes-hero-ref{
+  background:#f4cfe8;
+  color:#2f2830;
+}
+
+.boxes-hero-ref::after{
+  background:linear-gradient(
+    90deg,
+    rgba(255,255,255,.10) 0%,
+    rgba(255,255,255,.06) 42%,
+    rgba(255,255,255,.01) 70%,
+    rgba(255,255,255,0) 100%
+  );
+}
+
+.boxes-hero-ref .inner-hero-bg{
+  background-size:cover;
+  background-position:center center;
+  opacity:1;
+}
+
+.boxes-hero-ref h1,
+.boxes-hero-ref .lede,
+.boxes-hero-ref .hero-tags span{
+  color:#302832;
+  text-shadow:none;
+}
+
+.boxes-hero-ref .lede{
+  opacity:1;
+}
+
+@media (max-width:640px){
+  .boxes-hero-ref::after{
+    background:linear-gradient(
+      90deg,
+      rgba(255,245,252,.72) 0%,
+      rgba(255,245,252,.52) 60%,
+      rgba(255,245,252,.20) 100%
+    );
+  }
+}
