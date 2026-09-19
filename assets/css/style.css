@@ -3890,3 +3890,238 @@ input,textarea{ font:inherit; }
     line-height:1.55;
   }
 }
+
+
+/* boxes detail + one-stop reference layout v69 */
+.boxes-detail-section{
+  padding:28px 0 56px;
+  background:#fff;
+}
+
+.boxes-detail-section .container{
+  max-width:1160px;
+}
+
+.boxes-detail-head{
+  margin-bottom:28px;
+}
+
+.boxes-detail-grid--reference{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:26px 26px;
+  max-width:1070px;
+  margin:0 auto;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card{
+  display:grid;
+  grid-template-columns:60% 40%;
+  min-height:218px;
+  overflow:hidden;
+  border:1px solid #8f8f8f;
+  border-radius:28px;
+  background:#fff;
+  box-shadow:none;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card.rev{
+  grid-template-columns:40% 60%;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card.rev .ph{
+  order:2;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card.rev .txt{
+  order:1;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card .ph{
+  min-height:218px;
+  overflow:hidden;
+  background:#f6f6f6;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card .ph img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card .txt{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:18px 24px;
+  color:#171717;
+  text-align:left;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card .tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  align-self:flex-start;
+  min-height:26px;
+  padding:2px 12px 3px;
+  border:1px solid #777;
+  border-radius:999px;
+  background:#fff;
+  color:#111;
+  font-size:16px;
+  line-height:1;
+  font-weight:400;
+  white-space:nowrap;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card h3{
+  margin:10px 0 0;
+  color:#111;
+  font-size:28px;
+  line-height:1.18;
+  font-weight:500;
+  letter-spacing:.01em;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card b{
+  margin:8px 0 0;
+  color:#111;
+  font-size:20px;
+  line-height:1;
+  font-weight:400;
+}
+
+.boxes-detail-grid--reference .boxes-detail-card p{
+  margin:10px 0 0;
+  color:#222;
+  font-size:15px;
+  line-height:1.45;
+  font-weight:400;
+}
+
+.boxes-detail-cta{
+  position:relative;
+  max-width:1086px;
+  min-height:190px;
+  margin:44px auto 0;
+  padding:24px 30px 44px;
+  background:#edf0fa;
+  text-align:center;
+}
+
+.boxes-detail-cta h3{
+  margin:0 0 10px;
+  color:#282323;
+  font-size:40px;
+  line-height:1.22;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.boxes-detail-cta p{
+  margin:0;
+  color:#292424;
+  font-size:20px;
+  line-height:1.45;
+  font-weight:400;
+}
+
+.boxes-detail-cta-badge{
+  position:absolute;
+  left:50%;
+  bottom:-38px;
+  width:80px;
+  transform:translateX(-50%);
+  color:#7f68aa;
+  text-align:center;
+}
+
+.boxes-detail-cta-icon{
+  display:grid;
+  place-items:center;
+  width:48px;
+  height:48px;
+  margin:0 auto;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:#846bb1;
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(132,107,177,.28);
+}
+
+.boxes-detail-cta-icon svg{
+  width:31px;
+  height:31px;
+}
+
+.boxes-detail-cta-badge span{
+  display:block;
+  margin-top:-1px;
+  font-size:7px;
+  line-height:1;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+@media (max-width:980px){
+  .boxes-detail-grid--reference{
+    max-width:720px;
+    grid-template-columns:1fr;
+  }
+
+  .boxes-detail-cta h3{
+    font-size:32px;
+  }
+
+  .boxes-detail-cta p{
+    font-size:17px;
+  }
+}
+
+@media (max-width:560px){
+  .boxes-detail-section{
+    padding:22px 0 50px;
+  }
+
+  .boxes-detail-grid--reference .boxes-detail-card,
+  .boxes-detail-grid--reference .boxes-detail-card.rev{
+    grid-template-columns:1fr;
+    min-height:0;
+    border-radius:20px;
+  }
+
+  .boxes-detail-grid--reference .boxes-detail-card.rev .ph,
+  .boxes-detail-grid--reference .boxes-detail-card.rev .txt{
+    order:initial;
+  }
+
+  .boxes-detail-grid--reference .boxes-detail-card .ph{
+    min-height:210px;
+  }
+
+  .boxes-detail-grid--reference .boxes-detail-card .txt{
+    padding:18px 20px 22px;
+  }
+
+  .boxes-detail-grid--reference .boxes-detail-card h3{
+    font-size:24px;
+  }
+
+  .boxes-detail-cta{
+    min-height:170px;
+    margin-top:28px;
+    padding:24px 16px 42px;
+  }
+
+  .boxes-detail-cta h3{
+    font-size:27px;
+  }
+
+  .boxes-detail-cta p{
+    font-size:15px;
+    line-height:1.55;
+  }
+}
