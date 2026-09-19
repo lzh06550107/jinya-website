@@ -2397,3 +2397,31 @@ input,textarea{ font:inherit; }
     padding:0;
   }
 }
+
+
+/* labels temperature-resistance image section v59 */
+.labels-temperature-section{
+  padding:12px 0;
+  background:#fff;
+}
+.labels-temperature-visual{
+  width:100%;
+  overflow:hidden;
+}
+.labels-temperature-visual img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:4 / 1;
+  object-fit:contain;
+}
+@media (max-width:768px){
+  .labels-temperature-section{
+    padding:8px 0;
+  }
+  .labels-temperature-visual img{
+    width:100%;
+    height:auto;
+    aspect-ratio:auto;
+  }
+}
