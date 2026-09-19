@@ -5709,3 +5709,437 @@ input,textarea{ font:inherit; }
     max-width:1180px;
   }
 }
+
+
+/* PC product pages resolution convergence v97 */
+@media (min-width:769px){
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes{
+    --product-page-max:1200px;
+  }
+
+  body.pc-labels main > section > .container,
+  body.pc-bags main > section > .container,
+  body.pc-boxes main > section > .container{
+    max-width:var(--product-page-max);
+  }
+
+  body.pc-labels .hero--inner .container,
+  body.pc-bags .hero--inner .container,
+  body.pc-boxes .hero--inner .container{
+    max-width:1248px;
+  }
+
+  /* ---------- Labels ---------- */
+  body.pc-labels .labels-hero-ref .inner-hero-bg{
+    background-size:cover;
+    background-position:center center;
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-copy{
+    max-width:min(60vw,740px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-title-row{
+    gap:clamp(14px,1.45vw,22px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-title-row h1{
+    font-size:clamp(34px,2.45vw,42px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-title-row span{
+    font-size:clamp(21px,1.55vw,26px);
+  }
+
+  body.pc-labels .labels-hero-ref .lede{
+    max-width:700px;
+    font-size:clamp(13.5px,.9vw,15px);
+  }
+
+  body.pc-labels .labels-hero-ref .lede strong{
+    font-size:clamp(20px,1.45vw,24px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-features{
+    margin-top:clamp(15px,1.4vw,20px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-feature{
+    width:clamp(112px,9.2vw,132px);
+    min-height:clamp(76px,6.2vw,88px);
+  }
+
+  body.pc-labels .labels-hero-ref .labels-hero-feature svg{
+    width:clamp(36px,2.9vw,42px);
+    height:clamp(36px,2.9vw,42px);
+    flex-basis:clamp(36px,2.9vw,42px);
+  }
+
+  body.pc-labels .labels-hero-ref + .section > .container{
+    max-width:1160px;
+  }
+
+  body.pc-labels .labels-hero-ref + .section .grid[style*="grid-template-columns"]{
+    gap:clamp(24px,2.6vw,38px);
+    align-items:stretch;
+  }
+
+  body.pc-labels .labels-material-section .container,
+  body.pc-labels .labels-craft-section .container,
+  body.pc-labels .labels-print-section .container,
+  body.pc-labels .label-elements .container,
+  body.pc-labels .labels-service-section .container,
+  body.pc-labels .labels-team-section .container{
+    max-width:1160px;
+  }
+
+  body.pc-labels .labels-material-list{
+    gap:clamp(10px,1vw,14px);
+  }
+
+  body.pc-labels .labels-material-card{
+    gap:clamp(12px,1.2vw,18px);
+    padding:clamp(8px,.7vw,10px);
+    min-height:clamp(156px,11.5vw,172px);
+  }
+
+  body.pc-labels .labels-material-media{
+    min-height:clamp(138px,10.3vw,152px);
+  }
+
+  body.pc-labels .labels-craft-section .craft-desc{
+    margin-bottom:clamp(28px,2.45vw,36px);
+    padding-left:clamp(28px,3vw,42px);
+    padding-right:clamp(28px,3vw,42px);
+  }
+
+  body.pc-labels .labels-print-section.section--tight{
+    min-height:clamp(330px,25vw,360px);
+  }
+
+  body.pc-labels .labels-print-layout{
+    grid-template-columns:minmax(260px,300px) minmax(0,1fr);
+    gap:clamp(24px,2.3vw,32px);
+  }
+
+  body.pc-labels .labels-service-flow{
+    grid-template-columns:repeat(5,minmax(126px,146px));
+    gap:clamp(14px,1.6vw,24px);
+    justify-content:space-between;
+  }
+
+  body.pc-labels .labels-service-flow .flow-node{
+    width:100%;
+    max-width:146px;
+    aspect-ratio:1;
+    height:auto;
+  }
+
+  body.pc-labels .labels-service-flow .flow-node span,
+  body.pc-labels .labels-service-flow .flow-node small{
+    font-size:clamp(18px,1.45vw,22px);
+  }
+
+  body.pc-labels .labels-guarantee-grid{
+    gap:clamp(12px,1.25vw,18px);
+  }
+
+  body.pc-labels .labels-guarantee-card{
+    min-height:clamp(218px,17vw,248px);
+    padding-left:clamp(12px,1.25vw,18px);
+    padding-right:clamp(12px,1.25vw,18px);
+  }
+
+  body.pc-labels .labels-guarantee-card h4{
+    font-size:clamp(28px,2vw,34px);
+  }
+
+  body.pc-labels .labels-guarantee-card p{
+    font-size:clamp(16px,1.25vw,21px);
+  }
+
+  body.pc-labels .labels-team-gallery{
+    gap:clamp(12px,1.3vw,18px);
+  }
+
+  body.pc-labels .labels-team-benefits{
+    column-gap:clamp(42px,5vw,72px);
+    row-gap:clamp(52px,4.8vw,70px);
+    margin-top:clamp(54px,5vw,72px);
+  }
+
+  body.pc-labels .labels-team-benefit h4{
+    font-size:clamp(21px,1.55vw,25px);
+  }
+
+  /* ---------- Bags + Boxes product galleries ---------- */
+  body.pc-bags .bags-hero-ref + .section > .container,
+  body.pc-boxes .boxes-hero-ref + .section > .container{
+    max-width:1160px;
+  }
+
+  body.pc-bags .bags-hero-ref + .section .grid[style*="grid-template-columns"],
+  body.pc-boxes .boxes-hero-ref + .section .grid[style*="grid-template-columns"]{
+    grid-template-columns:minmax(0,1.28fr) minmax(0,1fr) !important;
+    gap:clamp(14px,1.45vw,20px);
+  }
+
+  body.pc-bags .bags-hero-ref + .section .grid-2,
+  body.pc-boxes .boxes-hero-ref + .section .grid-2{
+    gap:clamp(10px,1vw,14px);
+  }
+
+  body.pc-bags .bags-hero-ref + .section .photo-card,
+  body.pc-boxes .boxes-hero-ref + .section .photo-card{
+    min-width:0;
+  }
+
+  body.pc-bags .bags-hero-ref h1,
+  body.pc-boxes .boxes-hero-ref h1{
+    font-size:clamp(31px,2.1vw,40px);
+  }
+
+  body.pc-bags .bags-hero-ref .hero-text,
+  body.pc-boxes .boxes-hero-ref .hero-text{
+    max-width:min(48vw,580px);
+  }
+
+  body.pc-bags .bags-hero-ref .hero-badges{
+    gap:clamp(12px,1.2vw,18px);
+  }
+
+  /* ---------- Bags ---------- */
+  body.pc-bags .tech-compare{
+    max-width:1160px;
+    min-height:clamp(390px,29vw,420px);
+    margin-left:auto;
+    margin-right:auto;
+    padding:clamp(44px,3.7vw,54px) clamp(44px,5vw,70px) clamp(52px,4vw,58px);
+    gap:clamp(30px,3vw,42px);
+  }
+
+  body.pc-bags .tech-copy h2{
+    font-size:clamp(28px,2vw,32px);
+  }
+
+  body.pc-bags .tech-sub{
+    margin-top:clamp(16px,1.5vw,22px);
+    font-size:clamp(15px,1.05vw,17px);
+  }
+
+  body.pc-bags .tech-note{
+    margin-top:clamp(58px,6vw,86px);
+    padding-left:clamp(20px,2vw,28px);
+    padding-right:clamp(20px,2vw,28px);
+    font-size:clamp(16px,1.15vw,18px);
+  }
+
+  body.pc-bags .tech-option{
+    min-height:clamp(270px,20vw,292px);
+    padding:clamp(26px,2.2vw,32px) clamp(28px,2.6vw,38px);
+  }
+
+  body.pc-bags .tech-option .ic{
+    width:clamp(62px,5vw,74px);
+    height:clamp(62px,5vw,74px);
+  }
+
+  body.pc-bags .app-section{
+    padding-top:clamp(52px,4.4vw,64px);
+    padding-bottom:clamp(52px,4.4vw,64px);
+  }
+
+  body.pc-bags .app-section > .container{
+    max-width:1080px;
+  }
+
+  body.pc-bags .app-section .grid.grid-3{
+    gap:clamp(16px,1.6vw,24px);
+  }
+
+  body.pc-bags .case-card .body{
+    padding:clamp(16px,1.4vw,20px);
+  }
+
+  body.pc-bags .bags-benefits-section .container{
+    max-width:1160px;
+  }
+
+  body.pc-bags .bags-benefits-grid{
+    column-gap:clamp(48px,6vw,86px);
+    row-gap:clamp(52px,5vw,70px);
+  }
+
+  body.pc-bags .bags-benefit-item h4{
+    font-size:clamp(25px,1.85vw,30px);
+  }
+
+  /* ---------- Boxes ---------- */
+  body.pc-boxes .boxes-quality-section .container,
+  body.pc-boxes .boxes-promise-section .container{
+    max-width:1160px;
+  }
+
+  body.pc-boxes .boxes-quality-title{
+    margin-bottom:clamp(26px,2.5vw,36px);
+    font-size:clamp(31px,2.35vw,38px);
+  }
+
+  body.pc-boxes .boxes-quality-row + .boxes-quality-row{
+    margin-top:clamp(20px,2vw,28px);
+  }
+
+  body.pc-boxes .boxes-quality-copy{
+    padding:clamp(22px,2vw,28px) clamp(28px,2.7vw,38px);
+  }
+
+  body.pc-boxes .boxes-quality-copy h3{
+    font-size:clamp(22px,1.65vw,26px);
+  }
+
+  body.pc-boxes .boxes-quality-copy > p,
+  body.pc-boxes .boxes-quality-points p{
+    font-size:clamp(13px,.9vw,14px);
+  }
+
+  body.pc-boxes .boxes-promise-main{
+    margin-top:clamp(26px,2.35vw,34px);
+    font-size:clamp(27px,2vw,32px);
+  }
+
+  body.pc-boxes .boxes-promise-sub{
+    font-size:clamp(18px,1.3vw,21px);
+  }
+
+  body.pc-boxes .boxes-promise-panel{
+    min-height:clamp(160px,12vw,174px);
+    padding:clamp(24px,2vw,28px) 24px 34px;
+  }
+
+  body.pc-boxes .boxes-promise-panel h3{
+    font-size:clamp(31px,2.35vw,38px);
+  }
+
+  body.pc-boxes .boxes-promise-panel p{
+    font-size:clamp(17px,1.25vw,20px);
+  }
+
+  body.pc-boxes .boxes-detail-section .container{
+    max-width:1160px;
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference{
+    max-width:1070px;
+    gap:clamp(18px,1.8vw,26px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card{
+    min-height:clamp(198px,15.3vw,218px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card .ph{
+    min-height:clamp(198px,15.3vw,218px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card .txt{
+    padding:clamp(15px,1.25vw,18px) clamp(18px,1.7vw,24px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card h3{
+    font-size:clamp(24px,1.75vw,28px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card b{
+    font-size:clamp(18px,1.25vw,20px);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference .boxes-detail-card p{
+    font-size:clamp(13.5px,.95vw,15px);
+  }
+
+  body.pc-boxes .boxes-detail-cta{
+    min-height:clamp(176px,13.4vw,190px);
+    margin-top:clamp(34px,3.1vw,44px);
+  }
+
+  body.pc-boxes .boxes-detail-cta h3{
+    font-size:clamp(33px,2.5vw,40px);
+  }
+
+  body.pc-boxes .boxes-detail-cta p{
+    font-size:clamp(17px,1.3vw,20px);
+  }
+
+  body.pc-boxes .bags-benefits-section .container{
+    max-width:1160px;
+  }
+
+  body.pc-boxes .bags-benefits-grid{
+    column-gap:clamp(48px,6vw,86px);
+    row-gap:clamp(52px,5vw,70px);
+  }
+
+  body.pc-boxes .bags-benefit-item h4{
+    font-size:clamp(25px,1.85vw,30px);
+  }
+}
+
+/* 1366/1440 desktop density correction. */
+@media (min-width:1081px) and (max-width:1439px){
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes{
+    --product-page-max:1160px;
+  }
+
+  body.pc-labels .hero--inner .container,
+  body.pc-bags .hero--inner .container,
+  body.pc-boxes .hero--inner .container{
+    max-width:1180px;
+  }
+
+  body.pc-labels .labels-service-section .container{
+    max-width:1040px;
+  }
+
+  body.pc-labels .labels-service-flow{
+    grid-template-columns:repeat(5,132px);
+  }
+
+  body.pc-labels .labels-service-flow .flow-node{
+    max-width:132px;
+  }
+
+  body.pc-labels .labels-guarantee-card h4{
+    font-size:29px;
+  }
+
+  body.pc-labels .labels-guarantee-card p{
+    font-size:17px;
+  }
+
+  body.pc-bags .tech-compare{
+    max-width:1120px;
+  }
+
+  body.pc-bags .app-section > .container{
+    max-width:1020px;
+  }
+
+  body.pc-boxes .boxes-quality-section .container,
+  body.pc-boxes .boxes-promise-section .container,
+  body.pc-boxes .boxes-detail-section .container{
+    max-width:1120px;
+  }
+}
+
+/* Full HD and above: keep visual modules capped instead of stretching. */
+@media (min-width:1600px){
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes{
+    --product-page-max:1200px;
+  }
+}
