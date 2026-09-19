@@ -4508,3 +4508,159 @@ input,textarea{ font:inherit; }
     background-position:center center;
   }
 }
+
+
+/* contact thanks structured section v79 */
+.contact-thanks-section{
+  position:relative;
+  min-height:462px;
+  overflow:hidden;
+  background:
+    #20324f
+    url("../img/cta-handshake-bg.png")
+    center center / cover no-repeat;
+  color:#fff;
+}
+
+.contact-thanks-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    90deg,
+    rgba(9,24,47,.70) 0%,
+    rgba(13,31,55,.56) 38%,
+    rgba(15,34,58,.43) 68%,
+    rgba(19,38,62,.54) 100%
+  );
+  pointer-events:none;
+}
+
+.contact-thanks-inner{
+  position:relative;
+  z-index:1;
+  min-height:462px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.contact-thanks-content{
+  width:min(100%,660px);
+  margin:0 auto;
+  transform:translateY(-4px);
+  color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.35);
+}
+
+.contact-thanks-heading{
+  margin-bottom:32px;
+  text-align:center;
+}
+
+.contact-thanks-heading span{
+  display:block;
+  margin-bottom:10px;
+  font-size:15px;
+  line-height:1;
+  font-weight:400;
+  letter-spacing:.08em;
+}
+
+.contact-thanks-heading h2{
+  margin:0;
+  font-size:34px;
+  line-height:1.22;
+  font-weight:400;
+  letter-spacing:.02em;
+  color:#fff;
+}
+
+.contact-thanks-copy{
+  margin:0;
+  font-size:14px;
+  line-height:2.05;
+  font-weight:400;
+  color:#fff;
+}
+
+.contact-thanks-phone{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  margin-top:33px;
+  padding:8px 4px 7px;
+  border-top:1px solid rgba(255,255,255,.78);
+  border-bottom:1px solid rgba(255,255,255,.78);
+  color:#fff;
+  font-size:15px;
+  line-height:1.2;
+  text-decoration:none;
+}
+
+.contact-thanks-phone svg{
+  width:19px;
+  height:19px;
+  flex:0 0 19px;
+}
+
+.contact-thanks-phone:hover{
+  color:#fff;
+  opacity:.88;
+}
+
+@media (max-width:760px){
+  .contact-thanks-section,
+  .contact-thanks-inner{
+    min-height:420px;
+  }
+
+  .contact-thanks-inner{
+    padding:38px 22px;
+  }
+
+  .contact-thanks-content{
+    width:100%;
+    transform:none;
+  }
+
+  .contact-thanks-heading{
+    margin-bottom:24px;
+  }
+
+  .contact-thanks-heading h2{
+    font-size:28px;
+  }
+
+  .contact-thanks-copy{
+    font-size:13px;
+    line-height:1.85;
+  }
+
+  .contact-thanks-copy br{
+    display:none;
+  }
+
+  .contact-thanks-phone{
+    margin-top:26px;
+    font-size:14px;
+  }
+}
+
+@media (max-width:480px){
+  .contact-thanks-section,
+  .contact-thanks-inner{
+    min-height:380px;
+  }
+
+  .contact-thanks-heading span{
+    font-size:12px;
+  }
+
+  .contact-thanks-heading h2{
+    font-size:24px;
+  }
+
+  .contact-thanks-copy{
+    font-size:12px;
+  }
+}
