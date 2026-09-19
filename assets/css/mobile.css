@@ -398,3 +398,485 @@ body.mobile-site .contact-thanks-copy p{
     grid-column:1;
   }
 }
+
+
+/* Mobile homepage refinement v2 */
+body.mobile-home .site-header .container{
+  gap:8px;
+}
+
+/* Hero: mobile is a compact banner, not the PC 100dvh first-screen treatment. */
+body.mobile-home .hero--home{
+  height:320px;
+  min-height:320px;
+  padding:0;
+  align-items:stretch;
+}
+
+body.mobile-home .hero--home .swiper-viewport,
+body.mobile-home .hero--home .swiper-track,
+body.mobile-home .hero--home .swiper-slide{
+  height:320px;
+  min-height:320px;
+}
+
+body.mobile-home .hero--home .swiper-slide img{
+  height:320px;
+}
+
+body.mobile-home .hero--home .container{
+  height:100%;
+  display:flex;
+  align-items:flex-end;
+  padding:0 18px 44px !important;
+}
+
+body.mobile-home .hero--home .hero-text{
+  max-width:300px;
+}
+
+body.mobile-home .hero--home .hero-eyebrow{
+  margin-bottom:7px;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+body.mobile-home .hero--home h1{
+  font-size:22px;
+  line-height:1.32;
+}
+
+body.mobile-home .hero--home .hero-badges{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:6px;
+  margin-top:12px;
+}
+
+body.mobile-home .hero--home .hero-badge{
+  gap:6px;
+  font-size:10.5px;
+}
+
+body.mobile-home .hero--home .hero-badge svg{
+  width:16px;
+  height:16px;
+}
+
+body.mobile-home .hero--home .swiper-arrow{
+  display:none;
+}
+
+body.mobile-home .hero--home .swiper-dots{
+  bottom:12px;
+}
+
+/* About: copy first, compact 2x2 photo wall below. */
+body.mobile-home .two-col{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:22px;
+}
+
+body.mobile-home .two-col > .reveal:first-child .eyebrow{
+  font-size:11px !important;
+  letter-spacing:.1em;
+}
+
+body.mobile-home .two-col > .reveal:first-child h2{
+  margin:4px 0 14px !important;
+  font-size:24px !important;
+}
+
+body.mobile-home .two-col > .reveal:first-child p{
+  font-size:14px !important;
+  line-height:1.85 !important;
+}
+
+body.mobile-home .two-col > .grid-2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+
+body.mobile-home .two-col > .grid-2 .photo-card{
+  border-radius:8px;
+  box-shadow:none;
+}
+
+body.mobile-home .two-col > .grid-2 .photo-card .ph{
+  aspect-ratio:1.22 / 1;
+}
+
+body.mobile-home .social-cta-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+body.mobile-home .social-cta{
+  min-width:0;
+  width:100%;
+  padding:10px 8px;
+  font-size:12px;
+}
+
+body.mobile-home .social-cta .brand-icon{
+  width:23px;
+  height:23px;
+  flex-basis:23px;
+}
+
+/* Product center: each product becomes an independent mobile card. */
+body.mobile-home .product-section{
+  background:#f6f7f9;
+}
+
+body.mobile-home .product-section .product-masonry{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+  border:0;
+  background:transparent;
+}
+
+body.mobile-home .product-section .pm-card,
+body.mobile-home .product-section .pm-01,
+body.mobile-home .product-section .pm-02,
+body.mobile-home .product-section .pm-03,
+body.mobile-home .product-section .pm-04{
+  overflow:hidden;
+  border:1px solid #e7e9ee;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 5px 18px rgba(20,25,40,.055);
+}
+
+body.mobile-home .product-section .pm-01{
+  padding:20px 18px 18px;
+}
+
+body.mobile-home .product-section .pm-01 .ph{
+  margin-top:16px;
+  aspect-ratio:4 / 3;
+  border-radius:8px;
+}
+
+body.mobile-home .product-section .pm-02 .text,
+body.mobile-home .product-section .pm-03 .text,
+body.mobile-home .product-section .pm-04 .text{
+  padding:20px 18px 16px;
+}
+
+body.mobile-home .product-section .pm-02 .ph,
+body.mobile-home .product-section .pm-03 .ph{
+  aspect-ratio:16 / 10;
+}
+
+body.mobile-home .product-section .pm-card .num{
+  font-size:23px;
+}
+
+body.mobile-home .product-section .pm-card h3{
+  margin:6px 0 9px;
+  font-size:19px;
+}
+
+body.mobile-home .product-section .pm-card p{
+  font-size:13.5px;
+  line-height:1.78;
+}
+
+body.mobile-home .product-section .pm-card .arrow{
+  width:34px;
+  height:34px;
+}
+
+body.mobile-home .product-section .pm-01 .foot,
+body.mobile-home .product-section .pm-02 .foot,
+body.mobile-home .product-section .pm-03 .foot,
+body.mobile-home .product-section .pm-04 .foot{
+  margin-top:12px;
+  padding-top:0;
+}
+
+body.mobile-home .product-section .pm-04 .photos{
+  padding:0 12px 18px;
+}
+
+body.mobile-home .product-section .pm-04 .photos .ph{
+  aspect-ratio:4 / 3;
+}
+
+body.mobile-home .service-cta{
+  margin-top:14px;
+  overflow:hidden;
+  border-radius:12px;
+  padding:28px 18px;
+}
+
+body.mobile-home .service-cta-copy h3{
+  font-size:21px;
+}
+
+body.mobile-home .service-cta-copy p{
+  font-size:12px;
+  line-height:1.7;
+}
+
+body.mobile-home .service-cta-features{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:22px 8px;
+}
+
+body.mobile-home .service-cta-feature h4{
+  font-size:15px;
+}
+
+body.mobile-home .service-cta-feature p{
+  font-size:10.5px;
+  white-space:normal;
+}
+
+/* Workshop: horizontal snap cards reduce an excessively long six-card page. */
+body.mobile-home .workshop-section{
+  padding:38px 0 42px;
+}
+
+body.mobile-home .workshop-head{
+  margin-bottom:22px;
+}
+
+body.mobile-home .workshop-grid{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  margin-right:calc(var(--mobile-gutter) * -1);
+  padding:0 var(--mobile-gutter) 8px 0;
+}
+
+body.mobile-home .workshop-grid::-webkit-scrollbar{
+  display:none;
+}
+
+body.mobile-home .workshop-card{
+  flex:0 0 82%;
+  scroll-snap-align:start;
+  overflow:hidden;
+  border:1px solid #e7e9ee;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(20,25,40,.06);
+}
+
+body.mobile-home .workshop-card .ph{
+  aspect-ratio:1.52 / 1;
+}
+
+body.mobile-home .workshop-copy{
+  padding:16px 15px 18px;
+}
+
+body.mobile-home .workshop-copy h3{
+  text-align:left;
+  font-size:16px;
+  font-weight:700;
+}
+
+body.mobile-home .workshop-copy p{
+  margin-top:9px;
+  font-size:13px;
+  line-height:1.7;
+}
+
+/* Walk-in section: image and copy become a normal mobile card instead of overlay geometry. */
+body.mobile-home .walkin-section{
+  padding:34px 0 40px;
+}
+
+body.mobile-home .walkin-hero{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  overflow:hidden;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 7px 22px rgba(20,25,40,.07);
+}
+
+body.mobile-home .walkin-hero::after{
+  display:none;
+}
+
+body.mobile-home .walkin-hero-image{
+  position:static;
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  object-position:center;
+}
+
+body.mobile-home .walkin-copy{
+  position:static;
+  width:auto;
+  padding:20px 18px 22px;
+  background:#fff;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+
+body.mobile-home .walkin-copy h2{
+  display:block;
+  margin:0 0 12px;
+  padding:0;
+  background:none;
+  box-shadow:none;
+  font-size:24px;
+  font-weight:700;
+}
+
+body.mobile-home .walkin-desc{
+  width:auto;
+  margin:0;
+  padding:0;
+  background:none;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+
+body.mobile-home .walkin-desc p{
+  font-size:13.5px;
+  line-height:1.78;
+}
+
+body.mobile-home .walkin-desc p + p{
+  margin-top:8px;
+}
+
+body.mobile-home .walkin-more{
+  margin-top:16px;
+}
+
+body.mobile-home .walkin-block .sample-swiper--source{
+  width:calc(100% - 20px);
+  margin:14px auto 0;
+  padding:10px 10px 28px;
+  border-radius:12px;
+  box-shadow:0 5px 18px rgba(20,25,40,.07);
+}
+
+body.mobile-home .walkin-block + .stats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:28px;
+}
+
+body.mobile-home .walkin-block + .stats .stat{
+  padding:18px 8px;
+  border:1px solid #e7e9ee;
+  border-radius:10px;
+  background:#fff;
+}
+
+body.mobile-home .walkin-block + .stats .stat:last-child{
+  grid-column:1 / -1;
+}
+
+body.mobile-home .walkin-block + .stats .n{
+  font-size:25px;
+}
+
+/* Culture: compact two-column information cards. */
+body.mobile-home .culture-banner{
+  padding:28px 12px;
+  border-radius:14px;
+}
+
+body.mobile-home .culture-banner .eb{
+  font-size:10px;
+  letter-spacing:.12em;
+}
+
+body.mobile-home .culture-banner > h2{
+  font-size:24px;
+}
+
+body.mobile-home .culture-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:20px;
+}
+
+body.mobile-home .culture-grid .glass-card{
+  padding:16px 8px;
+}
+
+body.mobile-home .culture-banner--light .glass-card .ic{
+  width:48px;
+  height:48px;
+  margin-bottom:12px;
+}
+
+body.mobile-home .culture-grid .glass-card h4{
+  font-size:14px;
+}
+
+body.mobile-home .culture-grid .glass-card p{
+  font-size:11px;
+  line-height:1.65;
+}
+
+@media (max-width:480px){
+  body.mobile-home .hero--home,
+  body.mobile-home .hero--home .swiper-viewport,
+  body.mobile-home .hero--home .swiper-track,
+  body.mobile-home .hero--home .swiper-slide{
+    height:290px;
+    min-height:290px;
+  }
+
+  body.mobile-home .hero--home .swiper-slide img{
+    height:290px;
+  }
+
+  body.mobile-home .hero--home .container{
+    padding:0 14px 38px !important;
+  }
+
+  body.mobile-home .hero--home h1{
+    font-size:20px;
+  }
+
+  body.mobile-home .social-cta-list{
+    grid-template-columns:1fr;
+  }
+
+  body.mobile-home .workshop-card{
+    flex-basis:88%;
+  }
+
+  body.mobile-home .walkin-hero-image{
+    height:190px;
+  }
+
+  body.mobile-home .walkin-block + .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  body.mobile-home .culture-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (max-width:360px){
+  body.mobile-home .culture-grid{
+    grid-template-columns:1fr;
+  }
+}
