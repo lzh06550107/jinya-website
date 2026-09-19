@@ -157,8 +157,8 @@ input,textarea{ font:inherit; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:4px;
-  min-width:206px;
+  gap:2px;
+  min-width:202px;
   height:44px;
   padding:0 12px 0 9px;
   flex-shrink:0;
@@ -176,14 +176,15 @@ input,textarea{ font:inherit; }
 .header-phone::before{
   content:"";
   display:block;
-  width:13px;
+  width:10px;
   height:18px;
-  flex:0 0 13px;
-  margin-right:-1px;
+  flex:0 0 10px;
+  margin-right:-5px;
+  transform:translateX(2px);
   background:
-    linear-gradient(#ffd83f,#ffd83f) 3px 2px / 9px 3px no-repeat,
-    linear-gradient(#ffd83f,#ffd83f) 0 7px / 12px 3px no-repeat,
-    linear-gradient(#ffd83f,#ffd83f) 2px 12px / 10px 3px no-repeat;
+    linear-gradient(#ffd83f,#ffd83f) 2px 2px / 8px 3px no-repeat,
+    linear-gradient(#ffd83f,#ffd83f) 0 7px / 10px 3px no-repeat,
+    linear-gradient(#ffd83f,#ffd83f) 2px 12px / 8px 3px no-repeat;
   border-radius:2px;
   filter:drop-shadow(0 1px 0 rgba(111,0,0,.28));
 }
