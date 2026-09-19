@@ -3528,3 +3528,52 @@ input,textarea{ font:inherit; }
     font-size:11px;
   }
 }
+
+
+/* bags application case card footer alignment v50 */
+.app-section .grid.grid-3{
+  align-items:stretch;
+}
+
+.app-section .case-card{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:0;
+}
+
+.app-section .case-card .ph{
+  flex:0 0 auto;
+}
+
+.app-section .case-card .body{
+  display:flex;
+  flex:1 1 auto;
+  flex-direction:column;
+}
+
+.app-section .case-card .body p{
+  flex:1 1 auto;
+  margin-bottom:0;
+}
+
+.app-section .case-card .foot{
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  width:100%;
+  min-height:56px;
+  margin-top:auto;
+}
+
+.app-section .case-card .foot span{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.app-section .case-card .foot a{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
