@@ -1,10 +1,10 @@
-name: Assemble labels product images
+name: Assemble final labels product gallery
 
 on:
   push:
     branches: [main]
     paths:
-      - '.asset-product-chunks-v2/TRIGGER'
+      - '.asset-product-sprite-v58/TRIGGER'
 
 permissions:
   contents: write
@@ -15,42 +15,86 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assemble product WebP images
+      - name: Assemble high-resolution product sprite
         shell: bash
         run: |
           set -euo pipefail
-          for i in 01 02 03 04 05 06 07 08 09; do
-            cat .asset-product-chunks-v2/p${i}-*.b64 | tr -d '\n\r ' | base64 -d > "assets/img/labels-product-${i}.webp"
-            file "assets/img/labels-product-${i}.webp"
-            test "$(stat -c%s "assets/img/labels-product-${i}.webp")" -gt 8000
-          done
+          mkdir -p assets/img
+          cat .asset-product-sprite-v58/sprite-*.b64 | tr -d '\n\r ' | base64 -d > assets/img/labels-products-sprite.webp
+          file assets/img/labels-products-sprite.webp
+          test "$(stat -c%s assets/img/labels-products-sprite.webp)" -gt 200000
 
-      - name: Update labels page image references
+      - name: Point the nine fixed product cards at the original-upload sprite
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           p = Path('labels.html')
           s = p.read_text(encoding='utf-8')
-          for i in range(1, 10):
-              old_jpg = f'assets/img/labels-product-{i:02d}.jpg?v=57'
-              old_webp = f'assets/img/labels-product-{i:02d}.webp?v=57'
-              new = f'assets/img/labels-product-{i:02d}.webp?v=58'
-              s = s.replace(old_jpg, new).replace(old_webp, new)
+
+          style = '''<style id="labels-product-sprite-style">
+          .photo-card .ph.labels-product-sprite img{
+            width:300%!important;
+            height:auto!important;
+            max-width:none!important;
+            object-fit:fill!important;
+            transform:var(--sprite-transform)!important;
+            transform-origin:top left!important;
+            transition:none!important;
+          }
+          .photo-card:hover .ph.labels-product-sprite img{
+            transform:var(--sprite-transform)!important;
+          }
+          </style>
+          '''
+          if 'id="labels-product-sprite-style"' not in s:
+              s = s.replace('</head>', style + '</head>', 1)
+
+          products = [
+              (1, '铜版纸标签', '铜版纸标签', 'translate(0,0)'),
+              (2, '亮银逆向标签', '亮银逆向标签', 'translate(-33.333333%,0)'),
+              (3, 'PVC哑膜标签', 'PVC哑膜', 'translate(-66.666667%,0)'),
+              (4, '亮银标签', '亮银标签', 'translate(0,-33.333333%)'),
+              (5, 'Pe透明标签', 'Pe透明标签', 'translate(-33.333333%,-33.333333%)'),
+              (6, '镭射标签', '镭射标签', 'translate(-66.666667%,-33.333333%)'),
+              (7, '珠光膜标签', '珠光膜标签', 'translate(0,-66.666667%)'),
+              (8, '哑银哑膜标签', '哑银哑膜标签', 'translate(-33.333333%,-66.666667%)'),
+              (9, '合成银增效工艺纳米逆向', '合成银增效工艺纳米逆向', 'translate(-66.666667%,-66.666667%)'),
+          ]
+
+          for i, alt, cap, transform in products:
+              pattern = (
+                  rf'      <div class="photo-card"><div class="ph"><img src="assets/img/labels-product-{i:02d}\.(?:jpg|webp)\?v=57" '
+                  rf'alt="[^"]+" loading="lazy"></div><div class="cap">[^<]+</div></div>'
+              )
+              replacement = (
+                  f'      <div class="photo-card"><div class="ph labels-product-sprite" '
+                  f'style="--sprite-transform:{transform};"><img src="assets/img/labels-products-sprite.webp?v=58" '
+                  f'alt="{alt}" loading="lazy"></div><div class="cap">{cap}</div></div>'
+              )
+              s, count = re.subn(pattern, replacement, s, count=1)
+              if count != 1:
+                  raise SystemExit(f'expected exactly one product card {i:02d}, got {count}')
+
           p.write_text(s, encoding='utf-8')
           PY
 
-      - name: Commit assembled assets
+      - name: Commit final assets and remove staging files
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add labels.html assets/img/labels-product-*.webp
-          git rm -f assets/img/labels-product-*.jpg
-          git rm -r .asset-product-chunks-v2
+
+          git add labels.html assets/img/labels-products-sprite.webp
+          git rm -f assets/img/labels-product-*.jpg assets/img/labels-product-*.webp || true
+          git rm -r .asset-product-sprite-v58
+          git rm -r .asset-product-chunks-v2 || true
           git rm -r .asset-product-chunks || true
           git rm -r .asset-product-chunks-final || true
           git rm .github/workflows/assemble-label-products.yml
-          git commit -m "assets: finalize labels product images from original uploads"
+
+          git commit -m "assets: finalize labels product gallery from original uploads"
           git push
