@@ -4241,3 +4241,27 @@ input,textarea{ font:inherit; }
     font-size:21px;
   }
 }
+
+
+/* about uploaded banner reference v72 */
+.about-upload-hero{
+  position:relative;
+  width:100%;
+  aspect-ratio:2047 / 480;
+  min-height:0;
+  padding:0;
+  overflow:hidden;
+  background:#ffed00;
+}
+
+.about-upload-hero-bg{
+  position:absolute;
+  inset:0;
+  background:#ffed00 url("../img/walkin-reference-hero-v38.png") center center / 100% 100% no-repeat;
+}
+
+@media (max-width:760px){
+  .about-upload-hero{
+    aspect-ratio:2047 / 480;
+  }
+}
