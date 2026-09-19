@@ -7301,3 +7301,351 @@ input,textarea{ font:inherit; }
     --pc-page-gutter:44px;
   }
 }
+
+
+/* Semantic body-shell architecture v102 */
+/* ==========================================================================
+   Semantic body shell
+   body > header + nav + main + footer
+   ========================================================================== */
+
+@media (min-width:769px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:calc(100vw - 32px);
+    --page-content-width:min(1200px,calc(100vw - 80px));
+    --page-gutter:24px;
+
+    width:var(--page-body-width);
+    max-width:100vw;
+    min-width:0;
+    margin-left:auto;
+    margin-right:auto;
+    overflow-x:hidden;
+    background:#fff;
+  }
+
+  body.pc-home > header,
+  body.pc-labels > header,
+  body.pc-bags > header,
+  body.pc-boxes > header,
+  body.pc-about > header,
+  body.pc-news > header,
+  body.pc-news-detail > header,
+  body.pc-contact > header,
+  body.pc-home > nav.site-nav,
+  body.pc-labels > nav.site-nav,
+  body.pc-bags > nav.site-nav,
+  body.pc-boxes > nav.site-nav,
+  body.pc-about > nav.site-nav,
+  body.pc-news > nav.site-nav,
+  body.pc-news-detail > nav.site-nav,
+  body.pc-contact > nav.site-nav,
+  body.pc-home > main,
+  body.pc-labels > main,
+  body.pc-bags > main,
+  body.pc-boxes > main,
+  body.pc-about > main,
+  body.pc-news > main,
+  body.pc-news-detail > main,
+  body.pc-contact > main,
+  body.pc-home > footer,
+  body.pc-labels > footer,
+  body.pc-bags > footer,
+  body.pc-boxes > footer,
+  body.pc-about > footer,
+  body.pc-news > footer,
+  body.pc-news-detail > footer,
+  body.pc-contact > footer{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+  }
+
+  /* Fixed top regions use the same responsive width as body. */
+  body.pc-home > .site-header,
+  body.pc-labels > .site-header,
+  body.pc-bags > .site-header,
+  body.pc-boxes > .site-header,
+  body.pc-about > .site-header,
+  body.pc-news > .site-header,
+  body.pc-news-detail > .site-header,
+  body.pc-contact > .site-header{
+    left:50%;
+    right:auto;
+    width:var(--page-body-width);
+    max-width:100vw;
+    transform:translateX(-50%);
+  }
+
+  body.pc-home > .site-nav,
+  body.pc-labels > .site-nav,
+  body.pc-bags > .site-nav,
+  body.pc-boxes > .site-nav,
+  body.pc-about > .site-nav,
+  body.pc-news > .site-nav,
+  body.pc-news-detail > .site-nav,
+  body.pc-contact > .site-nav{
+    position:fixed;
+    top:0;
+    left:50%;
+    z-index:201;
+    width:var(--page-body-width);
+    max-width:100vw;
+    height:68px;
+    transform:translateX(-50%);
+    background:transparent;
+    pointer-events:none;
+  }
+
+  body.pc-home > .site-nav > .container,
+  body.pc-labels > .site-nav > .container,
+  body.pc-bags > .site-nav > .container,
+  body.pc-boxes > .site-nav > .container,
+  body.pc-about > .site-nav > .container,
+  body.pc-news > .site-nav > .container,
+  body.pc-news-detail > .site-nav > .container,
+  body.pc-contact > .site-nav > .container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    max-width:100%;
+    height:68px;
+    margin:0;
+    padding-left:clamp(210px,16vw,300px);
+    padding-right:clamp(210px,16vw,300px);
+    box-sizing:border-box;
+  }
+
+  body.pc-home > .site-nav .main-nav,
+  body.pc-labels > .site-nav .main-nav,
+  body.pc-bags > .site-nav .main-nav,
+  body.pc-boxes > .site-nav .main-nav,
+  body.pc-about > .site-nav .main-nav,
+  body.pc-news > .site-nav .main-nav,
+  body.pc-news-detail > .site-nav .main-nav,
+  body.pc-contact > .site-nav .main-nav{
+    pointer-events:auto;
+  }
+
+  /* Header/footer content aligns to the responsive content container. */
+  body.pc-home > .site-header > .container,
+  body.pc-labels > .site-header > .container,
+  body.pc-bags > .site-header > .container,
+  body.pc-boxes > .site-header > .container,
+  body.pc-about > .site-header > .container,
+  body.pc-news > .site-header > .container,
+  body.pc-news-detail > .site-header > .container,
+  body.pc-contact > .site-header > .container,
+  body.pc-home > .site-footer > .container,
+  body.pc-labels > .site-footer > .container,
+  body.pc-bags > .site-footer > .container,
+  body.pc-boxes > .site-footer > .container,
+  body.pc-about > .site-footer > .container,
+  body.pc-news > .site-footer > .container,
+  body.pc-news-detail > .site-footer > .container,
+  body.pc-contact > .site-footer > .container,
+  body.pc-home .footer-bottom > .container,
+  body.pc-labels .footer-bottom > .container,
+  body.pc-bags .footer-bottom > .container,
+  body.pc-boxes .footer-bottom > .container,
+  body.pc-about .footer-bottom > .container,
+  body.pc-news .footer-bottom > .container,
+  body.pc-news-detail .footer-bottom > .container,
+  body.pc-contact .footer-bottom > .container{
+    width:var(--page-content-width);
+    max-width:100%;
+    min-width:0;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:0;
+    padding-right:0;
+    box-sizing:border-box;
+  }
+
+  /*
+   * MAIN is always exactly the body width.
+   * Every business section and banner is therefore bounded by body.
+   */
+  body.pc-home > main,
+  body.pc-labels > main,
+  body.pc-bags > main,
+  body.pc-boxes > main,
+  body.pc-about > main,
+  body.pc-news > main,
+  body.pc-news-detail > main,
+  body.pc-contact > main{
+    margin:0;
+    overflow-x:hidden;
+    background:#fff;
+  }
+
+  body.pc-labels > main,
+  body.pc-bags > main,
+  body.pc-boxes > main,
+  body.pc-about > main,
+  body.pc-news > main,
+  body.pc-news-detail > main,
+  body.pc-contact > main{
+    padding-top:68px;
+  }
+
+  body.pc-home > main > section,
+  body.pc-labels > main > section,
+  body.pc-bags > main > section,
+  body.pc-boxes > main > section,
+  body.pc-about > main > section,
+  body.pc-news > main > section,
+  body.pc-news-detail > main > section,
+  body.pc-contact > main > section{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+  }
+
+  body.pc-home main > section > .container,
+  body.pc-labels main > section > .container,
+  body.pc-bags main > section > .container,
+  body.pc-boxes main > section > .container,
+  body.pc-about main > section > .container,
+  body.pc-news main > section > .container,
+  body.pc-news-detail main > section > .container,
+  body.pc-contact main > section > .container{
+    width:var(--page-content-width);
+    max-width:100%;
+    min-width:0;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:0;
+    padding-right:0;
+    box-sizing:border-box;
+  }
+
+  /* Full-bleed visuals are full only inside body, never beyond body. */
+  body.pc-home :is(.hero,.hero--home,.hero--inner),
+  body.pc-labels :is(.hero,.hero--home,.hero--inner),
+  body.pc-bags :is(.hero,.hero--home,.hero--inner),
+  body.pc-boxes :is(.hero,.hero--home,.hero--inner),
+  body.pc-about :is(.hero,.hero--home,.hero--inner,.about-upload-hero,.about-culture-section),
+  body.pc-news :is(.hero,.hero--home,.hero--inner),
+  body.pc-news-detail :is(.hero,.hero--home,.hero--inner),
+  body.pc-contact :is(.hero,.hero--home,.hero--inner,.contact-thanks-section){
+    width:100%;
+    max-width:100%;
+    margin-left:0;
+    margin-right:0;
+    box-sizing:border-box;
+    overflow:hidden;
+  }
+
+  body.pc-home .hero--home{
+    height:auto !important;
+    min-height:0 !important;
+    aspect-ratio:16 / 4.7;
+  }
+
+  body.pc-home .hero--home :is(.hero-swiper,.swiper-viewport,.swiper-track,.swiper-slide),
+  body.pc-home .hero--home .swiper-slide :is(img,video){
+    width:100%;
+    max-width:100%;
+    height:100%;
+  }
+
+  body.pc-home .hero--home .swiper-slide :is(img,video){
+    object-fit:cover;
+  }
+
+  body.pc-home .hero--home > .container,
+  body.pc-labels .hero--inner > .container,
+  body.pc-bags .hero--inner > .container,
+  body.pc-boxes .hero--inner > .container,
+  body.pc-news .hero--inner > .container,
+  body.pc-news-detail .hero--inner > .container,
+  body.pc-contact .hero--inner > .container{
+    width:var(--page-content-width);
+    max-width:100%;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:0;
+    padding-right:0;
+  }
+
+  body.pc-home main :is(img,video,iframe),
+  body.pc-labels main :is(img,video,iframe),
+  body.pc-bags main :is(img,video,iframe),
+  body.pc-boxes main :is(img,video,iframe),
+  body.pc-about main :is(img,video,iframe),
+  body.pc-news main :is(img,video,iframe),
+  body.pc-news-detail main :is(img,video,iframe),
+  body.pc-contact main :is(img,video,iframe){
+    max-width:100%;
+  }
+}
+
+@media (min-width:1600px) and (max-width:1919px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:min(1440px,calc(100vw - 48px));
+    --page-content-width:min(1280px,calc(var(--page-body-width) - 64px));
+  }
+}
+
+@media (min-width:1920px) and (max-width:2559px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:min(1680px,calc(100vw - 64px));
+    --page-content-width:min(1480px,calc(var(--page-body-width) - 72px));
+    --page-gutter:30px;
+  }
+}
+
+@media (min-width:2560px) and (max-width:3199px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:min(2048px,calc(100vw - 80px));
+    --page-content-width:min(1800px,calc(var(--page-body-width) - 88px));
+    --page-gutter:36px;
+  }
+}
+
+@media (min-width:3200px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:min(2560px,calc(100vw - 96px));
+    --page-content-width:min(2200px,calc(var(--page-body-width) - 104px));
+    --page-gutter:44px;
+  }
+}
