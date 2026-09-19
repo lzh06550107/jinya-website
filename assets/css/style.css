@@ -1849,3 +1849,67 @@ input,textarea{ font:inherit; }
   .labels-material-text p{font-size:12.5px;line-height:1.58;margin-bottom:5px}
   .labels-material-media{min-height:0}
 }
+
+
+/* labels material compact height v55 */
+.labels-material-section{
+  padding-top:9px;
+}
+.labels-material-list{
+  gap:8px;
+}
+.labels-material-card{
+  gap:10px;
+  min-height:108px;
+  padding:5px 7px;
+}
+.labels-material-copy{
+  padding:3px 6px;
+}
+.labels-material-copy h3{
+  margin-bottom:4px;
+  font-size:14px;
+  line-height:1.15;
+}
+.labels-material-text p{
+  margin-bottom:1px;
+  font-size:9.6px;
+  line-height:1.28;
+}
+.labels-material-media{
+  gap:5px;
+  min-height:96px;
+}
+.labels-material-media img{
+  border-radius:7px;
+}
+@media (max-width:960px){
+  .labels-material-card,
+  .labels-material-card--reverse{
+    gap:9px;
+    min-height:0;
+  }
+  .labels-material-copy{
+    padding:4px 5px 1px;
+  }
+  .labels-material-copy h3{
+    font-size:15px;
+    margin-bottom:5px;
+  }
+  .labels-material-text p{
+    font-size:10.5px;
+    line-height:1.35;
+    margin-bottom:2px;
+  }
+  .labels-material-media{
+    min-height:150px;
+  }
+}
+@media (max-width:640px){
+  .labels-material-section{padding-top:9px}
+  .labels-material-list{gap:10px}
+  .labels-material-card{padding:8px}
+  .labels-material-copy h3{font-size:16px}
+  .labels-material-text p{font-size:12px;line-height:1.5;margin-bottom:4px}
+  .labels-material-media{min-height:0}
+}
