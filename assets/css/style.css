@@ -5065,3 +5065,71 @@ input,textarea{ font:inherit; }
     text-align:left;
   }
 }
+
+
+/* about quality typography v90 */
+.about-quality-section .section-head{
+  margin-bottom:32px;
+}
+
+.about-quality-section .section-head h2{
+  font-size:34px;
+  line-height:1.35;
+  font-weight:700;
+}
+
+.about-quality-section .value-block > div:not(.ph){
+  padding:24px 30px;
+}
+
+.about-quality-section .value-block h3{
+  margin-bottom:12px;
+  font-size:22px;
+  line-height:1.4;
+  font-weight:700;
+}
+
+.about-quality-section .value-block p{
+  font-size:14px;
+  line-height:1.8;
+  color:#555f6d;
+}
+
+@media (max-width:900px){
+  .about-quality-section .section-head h2{
+    font-size:30px;
+  }
+
+  .about-quality-section .value-block h3{
+    font-size:21px;
+  }
+
+  .about-quality-section .value-block p{
+    font-size:14px;
+    line-height:1.75;
+  }
+}
+
+@media (max-width:760px){
+  .about-quality-section .section-head{
+    margin-bottom:24px;
+  }
+
+  .about-quality-section .section-head h2{
+    font-size:25px;
+    line-height:1.45;
+  }
+
+  .about-quality-section .value-block > div:not(.ph){
+    padding:22px 20px;
+  }
+
+  .about-quality-section .value-block h3{
+    font-size:20px;
+  }
+
+  .about-quality-section .value-block p{
+    font-size:14px;
+    line-height:1.75;
+  }
+}
