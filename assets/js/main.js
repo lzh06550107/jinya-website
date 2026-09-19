@@ -222,6 +222,77 @@
     requestAnimationFrame(step);
   }
 
+  // Homepage product center: reference-style scroll motion.
+  // Title rises first; copy and product imagery enter from opposite sides with
+  // small staggered delays. This is deliberately more granular than .reveal.
+  var productSection = document.querySelector(".product-section");
+  if(productSection && "IntersectionObserver" in window){
+    var productReduceMotion = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if(!productReduceMotion){
+      productSection.classList.add("product-motion-enabled");
+
+      var productTargets = [];
+      function armProductMotion(el, motion, delay){
+        if(!el) return;
+        el.classList.add("product-motion-target", motion);
+        el.style.setProperty("--product-motion-delay", (delay || 0) + "ms");
+        productTargets.push(el);
+      }
+
+      armProductMotion(productSection.querySelector(".section-head"), "product-motion-up", 0);
+
+      var pm01 = productSection.querySelector(".pm-01");
+      if(pm01){
+        armProductMotion(pm01.querySelector(".num"), "product-motion-left", 0);
+        armProductMotion(pm01.querySelector("h3"), "product-motion-left", 65);
+        armProductMotion(pm01.querySelector("p"), "product-motion-left", 130);
+        armProductMotion(pm01.querySelector(".foot"), "product-motion-left", 195);
+        armProductMotion(pm01.querySelector(".ph"), "product-motion-media", 110);
+      }
+
+      [".pm-02", ".pm-03"].forEach(function(selector, rowIndex){
+        var card = productSection.querySelector(selector);
+        if(!card) return;
+        armProductMotion(card.querySelector(".text"), "product-motion-left", rowIndex ? 70 : 20);
+        armProductMotion(card.querySelector(".ph"), "product-motion-right product-motion-media", rowIndex ? 145 : 95);
+      });
+
+      var pm04 = productSection.querySelector(".pm-04");
+      if(pm04){
+        armProductMotion(pm04.querySelector(".text"), "product-motion-left", 20);
+        Array.prototype.forEach.call(pm04.querySelectorAll(".swiper-slide"), function(slide, i){
+          armProductMotion(slide, "product-motion-up product-motion-media", 90 + i * 90);
+        });
+      }
+
+      // The one-stop-service strip belongs visually to product center, so let it
+      // arrive after the product rows rather than appearing abruptly.
+      var serviceCta = productSection.querySelector(".service-cta");
+      if(serviceCta){
+        armProductMotion(serviceCta.querySelector(".service-cta-copy"), "product-motion-left", 0);
+        Array.prototype.forEach.call(serviceCta.querySelectorAll(".service-cta-feature"), function(item, i){
+          armProductMotion(item, "product-motion-up", 80 + i * 65);
+        });
+      }
+
+      var productObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            entry.target.classList.add("is-visible");
+            productObs.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold:0.16,
+        rootMargin:"0px 0px -8% 0px"
+      });
+
+      productTargets.forEach(function(el){ productObs.observe(el); });
+    }
+  }
+
   // Reveal-on-scroll for cards/sections (progressive enhancement — content is
   // visible by default in CSS; only arm the fade-in if we can reliably observe it)
   var revealEls = document.querySelectorAll(".reveal");
