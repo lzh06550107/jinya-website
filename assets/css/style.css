@@ -4735,3 +4735,52 @@ input,textarea{ font:inherit; }
     font-size:12px;
   }
 }
+
+
+/* bags banner light overlay fix v86 */
+.bags-hero-ref{
+  background:#f8e6cf;
+  color:#6b402d;
+}
+
+.bags-hero-ref::after{
+  background:linear-gradient(
+    90deg,
+    rgba(255,248,238,.16) 0%,
+    rgba(255,248,238,.10) 42%,
+    rgba(255,248,238,.02) 68%,
+    rgba(255,248,238,0) 100%
+  );
+}
+
+.bags-hero-ref .inner-hero-bg{
+  background-size:cover;
+  background-position:center center;
+  opacity:1;
+}
+
+.bags-hero-ref h1,
+.bags-hero-ref .lede,
+.bags-hero-ref .hero-badge{
+  color:#6a3f2c;
+  text-shadow:none;
+}
+
+.bags-hero-ref .lede{
+  opacity:1;
+}
+
+.bags-hero-ref .hero-badge svg{
+  color:#6a3f2c;
+}
+
+@media (max-width:640px){
+  .bags-hero-ref::after{
+    background:linear-gradient(
+      90deg,
+      rgba(255,248,238,.68) 0%,
+      rgba(255,248,238,.52) 58%,
+      rgba(255,248,238,.18) 100%
+    );
+  }
+}
