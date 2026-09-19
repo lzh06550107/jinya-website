@@ -5216,3 +5216,42 @@ input,textarea{ font:inherit; }
     transition:none !important;
   }
 }
+
+
+/* PC adaptive foundation v94 */
+@media (min-width:769px){
+  body:not(.mobile-site) .container{
+    width:100%;
+    max-width:1248px;
+    padding-left:24px;
+    padding-right:24px;
+  }
+
+  body:not(.mobile-site) .site-header .container{
+    max-width:1320px;
+  }
+
+  body:not(.mobile-site) .section{
+    padding-top:clamp(48px,3.4vw,66px);
+    padding-bottom:clamp(48px,3.4vw,66px);
+  }
+
+  body:not(.mobile-site) .section--tight{
+    padding-top:clamp(30px,2.2vw,40px);
+    padding-bottom:clamp(30px,2.2vw,40px);
+  }
+
+  body:not(.mobile-site) .section-head h2{
+    font-size:clamp(28px,1.8vw,34px);
+  }
+}
+
+@media (min-width:1920px){
+  body:not(.mobile-site) .container{
+    max-width:1248px;
+  }
+
+  body:not(.mobile-site) .site-header .container{
+    max-width:1320px;
+  }
+}
