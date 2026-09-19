@@ -57,9 +57,9 @@ jobs:
               (1, '铜版纸标签', '铜版纸标签', 'translate(0,0)'),
               (2, '亮银逆向标签', '亮银逆向标签', 'translate(-33.333333%,0)'),
               (3, 'PVC哑膜标签', 'PVC哑膜', 'translate(-66.666667%,0)'),
-              (4, '亮银标签', '亮银标签', 'translate(0,-33.333333%)'),
-              (5, 'Pe透明标签', 'Pe透明标签', 'translate(-33.333333%,-33.333333%)'),
-              (6, '镭射标签', '镭射标签', 'translate(-66.666667%,-33.333333%)'),
+              (4, 'PE合成纸覆光膜标签', 'PE合成纸覆光膜标签', 'translate(0,-33.333333%)'),
+              (5, '镭射素面标签', '镭射素面标签', 'translate(-33.333333%,-33.333333%)'),
+              (6, '纸张逆向标签', '纸张逆向标签', 'translate(-66.666667%,-33.333333%)'),
               (7, '珠光膜标签', '珠光膜标签', 'translate(0,-66.666667%)'),
               (8, '哑银哑膜标签', '哑银哑膜标签', 'translate(-33.333333%,-66.666667%)'),
               (9, '合成银增效工艺纳米逆向', '合成银增效工艺纳米逆向', 'translate(-66.666667%,-66.666667%)'),
@@ -92,7 +92,7 @@ jobs:
           git add labels.html assets/img/labels-products-sprite.webp
           git rm -f assets/img/labels-product-*.jpg assets/img/labels-product-*.webp || true
 
-          for d in             .asset-product-sprite-v61             .asset-product-sprite-v59             .asset-product-sprite-v58             .asset-label-products-v60             .asset-product-chunks-v2             .asset-product-chunks             .asset-product-chunks-final; do
+          for d in             .asset-product-sprite-v61             .asset-product-sprite-v59             .asset-product-sprite-v58             .asset-label-products-v61             .asset-product-chunks-v2             .asset-product-chunks             .asset-product-chunks-final; do
             [ ! -e "$d" ] || git rm -r "$d"
           done
 
