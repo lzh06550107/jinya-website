@@ -6904,3 +6904,215 @@ input,textarea{ font:inherit; }
     padding-bottom:72px;
   }
 }
+
+
+/* PC viewport hard-boundary guard v100 */
+/*
+ * Hard viewport boundary for every PC page.
+ * No layout shell, section, grid or media block may become wider than the
+ * browser viewport, regardless of 4K resolution, DPI scaling or browser zoom.
+ */
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+){
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:hidden;
+}
+
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+) :is(
+  main,
+  main > section,
+  .site-header,
+  .site-footer,
+  .footer-bottom
+){
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+) .container{
+  width:calc(100% - 48px);
+  min-width:0;
+  margin-left:auto;
+  margin-right:auto;
+  box-sizing:border-box;
+}
+
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+) :is(
+  .grid,
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .grid-6,
+  .product-masonry,
+  .product-center-block,
+  .service-cta,
+  .workshop-grid,
+  .workshop-card,
+  .walkin-block,
+  .walkin-hero,
+  .sample-swiper,
+  .media-swiper,
+  .swiper-viewport,
+  .labels-material-list,
+  .labels-material-card,
+  .labels-material-media,
+  .labels-service-flow,
+  .labels-guarantee-grid,
+  .labels-team-gallery,
+  .labels-team-benefits,
+  .tech-compare,
+  .tech-panel,
+  .app-section,
+  .bags-benefits-grid,
+  .boxes-quality-row,
+  .boxes-promise-panel,
+  .boxes-detail-grid,
+  .boxes-detail-grid--reference,
+  .boxes-detail-card,
+  .boxes-detail-cta,
+  .value-block,
+  .stats,
+  .about-culture-grid,
+  .news-item,
+  .news-detail-article,
+  .news-detail-nav,
+  .contact-intro,
+  .contact-cardgrid,
+  .contact-card,
+  .contact-map,
+  .contact-thanks-content,
+  .footer-nav,
+  .footer-grid
+){
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+) :is(img,video,iframe){
+  max-width:100%;
+}
+
+/* Ultra-wide variables themselves are now viewport-safe. */
+@media (min-width:2200px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --uw-shell:min(clamp(1480px,52vw,2000px), calc(100vw - 96px));
+    --uw-wide:min(clamp(1560px,56vw,2160px), calc(100vw - 64px));
+    --uw-module:min(clamp(1360px,46vw,1760px), calc(100vw - 120px));
+    --uw-reading:min(clamp(1040px,34vw,1320px), calc(100vw - 96px));
+  }
+}
+
+@media (min-width:3200px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --uw-shell:min(2000px, calc(100vw - 96px));
+    --uw-wide:min(2160px, calc(100vw - 64px));
+    --uw-module:min(1760px, calc(100vw - 120px));
+    --uw-reading:min(1320px, calc(100vw - 96px));
+  }
+}
+
+/*
+ * Safety for special full-width visual sections:
+ * their background may fill the viewport, but their content cannot create
+ * horizontal scroll.
+ */
+:is(
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact
+) :is(
+  .hero,
+  .hero--home,
+  .hero--inner,
+  .about-upload-hero,
+  .about-culture-section,
+  .contact-thanks-section
+){
+  width:100%;
+  max-width:100vw;
+  overflow-x:hidden;
+}
+
+/* Slightly tighter safe gutter when the CSS viewport itself is narrow. */
+@media (min-width:769px) and (max-width:1365px){
+  :is(
+    body.pc-home,
+    body.pc-labels,
+    body.pc-bags,
+    body.pc-boxes,
+    body.pc-about,
+    body.pc-news,
+    body.pc-news-detail,
+    body.pc-contact
+  ) .container{
+    width:calc(100% - 32px);
+  }
+}
