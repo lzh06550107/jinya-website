@@ -274,18 +274,18 @@
       if(pm01){
         firstTargets.push(
           armProductMotion(pm01.querySelector(".num"), "product-motion-left", 0),
-          armProductMotion(pm01.querySelector("h3"), "product-motion-left", 65),
-          armProductMotion(pm01.querySelector("p"), "product-motion-left", 130),
-          armProductMotion(pm01.querySelector(".foot"), "product-motion-left", 195),
-          armProductMotion(pm01.querySelector(".ph"), "product-motion-media", 110)
+          armProductMotion(pm01.querySelector("h3"), "product-motion-left", 150),
+          armProductMotion(pm01.querySelector("p"), "product-motion-left", 190),
+          armProductMotion(pm01.querySelector(".foot"), "product-motion-left", 285),
+          armProductMotion(pm01.querySelector(".ph"), "product-motion-media", 1110)
         );
       }
 
       var pm02=productSection.querySelector(".pm-02");
       if(pm02){
         firstTargets.push(
-          armProductMotion(pm02.querySelector(".text"), "product-motion-left", 70),
-          armProductMotion(pm02.querySelector(".ph"), "product-motion-right product-motion-media", 145)
+          armProductMotion(pm02.querySelector(".text"), "product-motion-left", 110),
+          armProductMotion(pm02.querySelector(".ph"), "product-motion-right product-motion-media", 210)
         );
       }
       firstTargets=firstTargets.filter(Boolean);
@@ -295,7 +295,7 @@
       if(pm03){
         thirdTargets.push(
           armProductMotion(pm03.querySelector(".text"), "product-motion-left", 20),
-          armProductMotion(pm03.querySelector(".ph"), "product-motion-right product-motion-media", 95)
+          armProductMotion(pm03.querySelector(".ph"), "product-motion-right product-motion-media", 150)
         );
       }
       thirdTargets=thirdTargets.filter(Boolean);
@@ -308,7 +308,7 @@
         );
         Array.prototype.forEach.call(pm04.querySelectorAll(".swiper-slide"), function(slide, i){
           fourthTargets.push(
-            armProductMotion(slide, "product-motion-up product-motion-media", 90 + i * 90)
+            armProductMotion(slide, "product-motion-up product-motion-media", 140 + i * 120)
           );
         });
       }
@@ -322,7 +322,7 @@
         );
         Array.prototype.forEach.call(serviceCta.querySelectorAll(".service-cta-feature"), function(item, i){
           serviceTargets.push(
-            armProductMotion(item, "product-motion-up", 80 + i * 65)
+            armProductMotion(item, "product-motion-up", 80 + i * 150)
           );
         });
       }
