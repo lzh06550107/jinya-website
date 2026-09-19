@@ -2707,3 +2707,211 @@ input,textarea{ font:inherit; }
     background-position:42% center;
   }
 }
+
+
+/* labels printing compact reference layout v63 */
+.labels-print-section.section--tight{
+  min-height:360px;
+  padding:38px 0 34px;
+}
+
+.labels-print-section .container{
+  max-width:1280px;
+}
+
+.labels-print-layout{
+  grid-template-columns:300px minmax(0,1fr);
+  gap:32px;
+  align-items:center;
+}
+
+.labels-print-copy{
+  padding:0;
+}
+
+.labels-print-copy h2{
+  margin:0 0 22px;
+  color:#fff;
+  font-size:34px;
+  line-height:1.15;
+  font-weight:400;
+  letter-spacing:.01em;
+  text-shadow:0 2px 8px rgba(0,0,0,.34);
+}
+
+.labels-print-points{
+  margin:0;
+  padding-left:1.5em;
+  color:rgba(255,255,255,.94);
+  font-size:14px;
+  line-height:1.72;
+  text-shadow:0 1px 5px rgba(0,0,0,.3);
+}
+
+.labels-print-points li{
+  margin:0 0 4px;
+}
+
+.labels-print-nav-hint{
+  display:flex;
+  gap:18px;
+  margin-top:16px;
+}
+
+.labels-print-nav-hint span{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:50%;
+  color:#fff;
+  font-size:24px;
+  font-weight:300;
+  line-height:1;
+}
+
+.labels-print-swiper{
+  padding:0 0 20px;
+}
+
+.labels-print-swiper .swiper-viewport{
+  background:transparent;
+  border-radius:0;
+}
+
+.labels-print-swiper .swiper-track{
+  align-items:stretch;
+}
+
+.labels-print-swiper .swiper-slide{
+  box-sizing:border-box;
+  aspect-ratio:auto;
+  min-height:0;
+  padding:0 9px;
+  overflow:visible;
+  background:transparent;
+}
+
+.labels-print-swiper .swiper-slide img{
+  display:block;
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  object-position:center;
+  border:7px solid #fff;
+  border-bottom:0;
+  background:#fff;
+}
+
+.labels-print-swiper .swiper-slide::after{
+  content:attr(data-caption);
+  display:none;
+}
+
+.labels-print-swiper .swiper-slide{
+  background:#fff;
+  border:1px solid rgba(255,255,255,.95);
+}
+
+.labels-print-swiper .swiper-slide img + *{
+  display:none;
+}
+
+.labels-print-swiper .swiper-slide img{
+  border:6px solid #fff;
+  border-bottom-width:0;
+}
+
+.labels-print-swiper .swiper-slide{
+  padding:0;
+  margin:0 9px;
+}
+
+.labels-print-swiper .swiper-slide img[alt]{
+  margin:0;
+}
+
+.labels-print-swiper .swiper-slide{
+  position:relative;
+}
+
+.labels-print-swiper .swiper-slide::before{
+  content:attr(aria-label);
+  display:none;
+}
+
+.labels-print-swiper .swiper-arrow{
+  display:none;
+}
+
+.labels-print-swiper .swiper-dots{
+  bottom:0;
+}
+
+.labels-print-swiper .swiper-dot{
+  width:7px;
+  height:7px;
+  background:rgba(255,255,255,.48);
+}
+
+.labels-print-swiper .swiper-dot.active{
+  background:#fff;
+}
+
+@media (max-width:900px){
+  .labels-print-section.section--tight{
+    min-height:0;
+    padding:42px 0 36px;
+  }
+
+  .labels-print-layout{
+    grid-template-columns:1fr;
+    gap:24px;
+  }
+
+  .labels-print-copy{
+    text-align:left;
+  }
+
+  .labels-print-copy h2{
+    font-size:30px;
+    margin-bottom:16px;
+  }
+
+  .labels-print-swiper .swiper-slide img{
+    height:220px;
+  }
+}
+
+@media (max-width:640px){
+  .labels-print-section.section--tight{
+    padding:34px 0 30px;
+  }
+
+  .labels-print-copy h2{
+    font-size:26px;
+  }
+
+  .labels-print-points{
+    font-size:13px;
+    line-height:1.65;
+  }
+
+  .labels-print-nav-hint{
+    display:none;
+  }
+
+  .labels-print-swiper .swiper-slide img{
+    height:210px;
+  }
+}
+
+.labels-print-caption{
+  padding:12px 8px 13px;
+  background:#fff;
+  color:#222;
+  font-size:18px;
+  line-height:1.2;
+  text-align:center;
+}
