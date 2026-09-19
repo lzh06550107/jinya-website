@@ -3577,3 +3577,158 @@ input,textarea{ font:inherit; }
   flex:0 0 auto;
   white-space:nowrap;
 }
+
+
+/* boxes high quality packaging reference layout v67 */
+.boxes-quality-section{
+  padding:22px 0 28px;
+  background:#fff;
+}
+
+.boxes-quality-section .container{
+  max-width:1200px;
+}
+
+.boxes-quality-title{
+  margin:0 0 36px;
+  color:#282323;
+  font-size:38px;
+  line-height:1.3;
+  font-weight:500;
+  letter-spacing:.035em;
+  text-align:center;
+}
+
+.boxes-quality-row{
+  display:grid;
+  grid-template-columns:42% 58%;
+  width:100%;
+  overflow:hidden;
+  border:1px solid #d4d4d4;
+  background:#fff;
+}
+
+.boxes-quality-row + .boxes-quality-row{
+  margin-top:28px;
+}
+
+.boxes-quality-row--bottom{
+  grid-template-columns:58% 42%;
+}
+
+.boxes-quality-media{
+  min-width:0;
+  aspect-ratio:1195 / 656;
+  overflow:hidden;
+  background:#f6f6f6;
+}
+
+.boxes-quality-row--bottom .boxes-quality-media{
+  aspect-ratio:1191 / 656;
+}
+
+.boxes-quality-media img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.boxes-quality-copy{
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  justify-content:center;
+  padding:28px 38px;
+  color:#222;
+}
+
+.boxes-quality-copy h3{
+  margin:0 0 14px;
+  color:#242020;
+  font-size:26px;
+  line-height:1.28;
+  font-weight:500;
+}
+
+.boxes-quality-copy > p{
+  margin:0;
+  color:#272727;
+  font-size:14px;
+  line-height:1.8;
+  text-align:left;
+}
+
+.boxes-quality-points{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.boxes-quality-points p{
+  display:flex;
+  margin:0;
+  color:#222;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.boxes-quality-points p span{
+  flex:0 0 auto;
+}
+
+@media (max-width:900px){
+  .boxes-quality-title{
+    margin-bottom:24px;
+    font-size:30px;
+  }
+
+  .boxes-quality-row,
+  .boxes-quality-row--bottom{
+    grid-template-columns:1fr;
+  }
+
+  .boxes-quality-copy{
+    padding:24px 22px;
+  }
+
+  .boxes-quality-row--bottom .boxes-quality-copy{
+    order:1;
+  }
+
+  .boxes-quality-row--bottom .boxes-quality-media{
+    order:2;
+  }
+}
+
+@media (max-width:560px){
+  .boxes-quality-section{
+    padding:18px 0 24px;
+  }
+
+  .boxes-quality-title{
+    margin-bottom:20px;
+    font-size:24px;
+    line-height:1.45;
+  }
+
+  .boxes-quality-row + .boxes-quality-row{
+    margin-top:18px;
+  }
+
+  .boxes-quality-copy{
+    padding:20px 16px;
+  }
+
+  .boxes-quality-copy h3{
+    margin-bottom:12px;
+    font-size:21px;
+  }
+
+  .boxes-quality-copy > p,
+  .boxes-quality-points p{
+    font-size:14px;
+    line-height:1.75;
+  }
+}
