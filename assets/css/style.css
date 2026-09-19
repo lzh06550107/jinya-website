@@ -7649,3 +7649,39 @@ input,textarea{ font:inherit; }
     --page-gutter:44px;
   }
 }
+
+
+/* Header scroll enlargement motion v103 */
+@media (min-width:769px){
+  .site-header{
+    --logo-scroll-scale:1;
+    --phone-scroll-scale:1;
+  }
+
+  .site-header .logo{
+    position:relative;
+    transform:scale(var(--logo-scroll-scale));
+    transform-origin:left center;
+    transition:transform .16s cubic-bezier(.22,.7,.2,1);
+    will-change:transform;
+  }
+
+  .site-header .header-phone{
+    position:relative;
+    transform:scale(var(--phone-scroll-scale));
+    transform-origin:right center;
+    transition:transform .16s cubic-bezier(.22,.7,.2,1);
+    will-change:transform;
+  }
+
+  .site-header .site-logo-img{
+    backface-visibility:hidden;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .site-header .logo,
+  .site-header .header-phone{
+    transition:none !important;
+  }
+}

@@ -13,16 +13,38 @@
     link.setAttribute('href', target.pathname.split('/').pop() + target.search + target.hash);
   });
 
-  // Homepage header: transparent over the banner at the very top;
-  // use the normal white header treatment as soon as the page has scrolled.
-  var homeHeader = document.querySelector(".site-header--home");
-  if(homeHeader){
-    function syncHomeHeaderState(){
-      homeHeader.classList.toggle("is-scrolled", window.scrollY > 0);
+  // Global header scroll motion.
+  // During the first 120px of scrolling, enlarge the logo and emergency
+  // hotline progressively without changing header layout dimensions.
+  var siteHeader = document.querySelector(".site-header");
+  if(siteHeader){
+    var headerMotionTicking = false;
+    var headerMotionRange = 120;
+
+    function syncHeaderScrollMotion(){
+      var y = Math.max(0, window.scrollY || window.pageYOffset || 0);
+      var progress = Math.min(1, y / headerMotionRange);
+      var logoScale = 1 + progress * 0.10;
+      var phoneScale = 1 + progress * 0.08;
+
+      siteHeader.style.setProperty("--logo-scroll-scale", logoScale.toFixed(4));
+      siteHeader.style.setProperty("--phone-scroll-scale", phoneScale.toFixed(4));
+      siteHeader.classList.toggle("is-scrolled", y > 0);
+      siteHeader.classList.toggle("has-scroll-scale", progress > 0);
+
+      headerMotionTicking = false;
     }
-    syncHomeHeaderState();
-    window.addEventListener("scroll", syncHomeHeaderState, { passive:true });
-    window.addEventListener("pageshow", syncHomeHeaderState);
+
+    function requestHeaderScrollMotion(){
+      if(headerMotionTicking) return;
+      headerMotionTicking = true;
+      window.requestAnimationFrame(syncHeaderScrollMotion);
+    }
+
+    syncHeaderScrollMotion();
+    window.addEventListener("scroll", requestHeaderScrollMotion, { passive:true });
+    window.addEventListener("resize", requestHeaderScrollMotion, { passive:true });
+    window.addEventListener("pageshow", requestHeaderScrollMotion);
   }
 
   // Mobile nav toggle
