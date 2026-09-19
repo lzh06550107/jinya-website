@@ -6510,3 +6510,397 @@ input,textarea{ font:inherit; }
     max-width:1120px;
   }
 }
+
+
+/* PC ultra-wide layout strategy v99 */
+/*
+ * 2K / 4K desktop strategy
+ * ------------------------
+ * 1366–1920 keeps the existing layout density.
+ * From 2200px upward, page shells widen progressively instead of remaining
+ * locked to ~1200px. Long-form reading content stays intentionally narrower.
+ */
+@media (min-width:2200px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --uw-shell:clamp(1480px,52vw,2000px);
+    --uw-wide:clamp(1560px,56vw,2160px);
+    --uw-module:clamp(1360px,46vw,1760px);
+    --uw-reading:clamp(1040px,34vw,1320px);
+    --uw-gutter:clamp(28px,1.5vw,46px);
+  }
+
+  /* Global header/footer: these must widen together with page content. */
+  body.pc-home .site-header .container,
+  body.pc-labels .site-header .container,
+  body.pc-bags .site-header .container,
+  body.pc-boxes .site-header .container,
+  body.pc-about .site-header .container,
+  body.pc-news .site-header .container,
+  body.pc-news-detail .site-header .container,
+  body.pc-contact .site-header .container{
+    width:100%;
+    max-width:var(--uw-wide);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-home .site-footer > .container,
+  body.pc-labels .site-footer > .container,
+  body.pc-bags .site-footer > .container,
+  body.pc-boxes .site-footer > .container,
+  body.pc-about .site-footer > .container,
+  body.pc-news .site-footer > .container,
+  body.pc-news-detail .site-footer > .container,
+  body.pc-contact .site-footer > .container,
+  body.pc-home .footer-bottom .container,
+  body.pc-labels .footer-bottom .container,
+  body.pc-bags .footer-bottom .container,
+  body.pc-boxes .footer-bottom .container,
+  body.pc-about .footer-bottom .container,
+  body.pc-news .footer-bottom .container,
+  body.pc-news-detail .footer-bottom .container,
+  body.pc-contact .footer-bottom .container{
+    max-width:var(--uw-shell);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-home .footer-nav--brand,
+  body.pc-labels .footer-nav--brand,
+  body.pc-bags .footer-nav--brand,
+  body.pc-boxes .footer-nav--brand,
+  body.pc-about .footer-nav--brand,
+  body.pc-news .footer-nav--brand,
+  body.pc-news-detail .footer-nav--brand,
+  body.pc-contact .footer-nav--brand{
+    gap:clamp(64px,5vw,120px);
+  }
+
+  /* Banner text should align with the wider page shell. */
+  body.pc-home .hero--home .container,
+  body.pc-labels .hero--inner .container,
+  body.pc-bags .hero--inner .container,
+  body.pc-boxes .hero--inner .container,
+  body.pc-news .hero--inner .container,
+  body.pc-news-detail .hero--inner .container,
+  body.pc-contact .hero--inner .container{
+    max-width:var(--uw-wide);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  /* ---------- Homepage ---------- */
+  body.pc-home main > .section:first-of-type .container.two-col,
+  body.pc-home .product-section > .container,
+  body.pc-home .workshop-section .container,
+  body.pc-home .walkin-section > .container,
+  body.pc-home main > .section:last-of-type > .container{
+    max-width:var(--uw-shell);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-home main > .section:first-of-type .container.two-col{
+    grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+    gap:clamp(54px,3.2vw,90px);
+  }
+
+  body.pc-home .product-masonry{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  }
+
+  body.pc-home .product-section .pm-card,
+  body.pc-home .product-section .pm-02 .text,
+  body.pc-home .product-section .pm-03 .text,
+  body.pc-home .product-section .pm-04 .text{
+    padding:clamp(34px,1.55vw,48px) clamp(36px,1.75vw,54px);
+  }
+
+  body.pc-home .product-section .pm-card h3{
+    font-size:clamp(19px,.72vw,22px);
+  }
+
+  body.pc-home .product-section .pm-card p{
+    font-size:clamp(13px,.5vw,15px);
+  }
+
+  body.pc-home .service-cta{
+    min-height:clamp(285px,10vw,360px);
+    padding:clamp(42px,1.8vw,58px) clamp(54px,2.2vw,72px);
+  }
+
+  body.pc-home .service-cta-copy h3{
+    font-size:clamp(27px,1vw,32px);
+  }
+
+  body.pc-home .workshop-head h2{
+    font-size:clamp(32px,1.15vw,38px);
+  }
+
+  body.pc-home .workshop-copy h3{
+    font-size:clamp(17px,.65vw,20px);
+  }
+
+  body.pc-home .workshop-copy p{
+    font-size:clamp(13px,.5vw,15px);
+  }
+
+  body.pc-home .walkin-hero{
+    min-height:clamp(560px,17vw,650px);
+  }
+
+  body.pc-home .walkin-copy{
+    left:clamp(90px,6.5%,140px);
+    top:clamp(92px,3.1vw,118px);
+    width:min(430px,30%);
+  }
+
+  body.pc-home .walkin-copy h2{
+    font-size:clamp(24px,.9vw,30px);
+  }
+
+  body.pc-home .walkin-desc{
+    width:min(410px,100%);
+  }
+
+  body.pc-home .walkin-desc p{
+    font-size:clamp(12.5px,.47vw,14px);
+  }
+
+  body.pc-home .walkin-block .sample-swiper--source{
+    width:calc(100% - clamp(160px,8vw,260px));
+    margin-top:clamp(-100px,-3vw,-72px);
+  }
+
+  body.pc-home .walkin-block + .stats{
+    max-width:var(--uw-module);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  body.pc-home .culture-banner--light{
+    padding-left:clamp(70px,4vw,120px);
+    padding-right:clamp(70px,4vw,120px);
+  }
+
+  /* ---------- Product pages ---------- */
+  body.pc-labels main > section > .container,
+  body.pc-bags main > section > .container,
+  body.pc-boxes main > section > .container{
+    max-width:var(--uw-shell);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-labels .labels-hero-ref + .section > .container,
+  body.pc-labels .labels-material-section .container,
+  body.pc-labels .labels-craft-section .container,
+  body.pc-labels .labels-print-section .container,
+  body.pc-labels .label-elements .container,
+  body.pc-labels .labels-team-section .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-labels .labels-service-section .container{
+    max-width:var(--uw-shell);
+  }
+
+  body.pc-labels .labels-material-card{
+    min-height:clamp(190px,7vw,260px);
+  }
+
+  body.pc-labels .labels-material-media{
+    min-height:clamp(170px,6.3vw,235px);
+  }
+
+  body.pc-labels .labels-service-flow{
+    max-width:var(--uw-module);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  body.pc-labels .labels-guarantee-grid{
+    max-width:var(--uw-module);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  body.pc-labels .labels-team-gallery,
+  body.pc-labels .labels-team-benefits{
+    max-width:var(--uw-module);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  body.pc-bags .bags-hero-ref + .section > .container,
+  body.pc-boxes .boxes-hero-ref + .section > .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-bags .tech-compare{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-bags .app-section > .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-bags .bags-benefits-section .container,
+  body.pc-boxes .bags-benefits-section .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-bags .bags-benefits-grid,
+  body.pc-boxes .bags-benefits-grid{
+    column-gap:clamp(76px,4vw,130px);
+  }
+
+  body.pc-boxes .boxes-quality-section .container,
+  body.pc-boxes .boxes-promise-section .container,
+  body.pc-boxes .boxes-detail-section .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-boxes .boxes-detail-grid--reference{
+    max-width:calc(var(--uw-module) - 120px);
+  }
+
+  body.pc-boxes .boxes-detail-cta{
+    max-width:calc(var(--uw-module) - 100px);
+  }
+
+  /* ---------- About ---------- */
+  body.pc-about main > section > .container{
+    max-width:var(--uw-shell);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-about .about-quality-section > .container{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-about .about-quality-section .value-block .ph{
+    height:clamp(280px,9vw,350px);
+  }
+
+  body.pc-about .about-culture-inner{
+    max-width:var(--uw-module);
+  }
+
+  body.pc-about .about-culture-card{
+    min-height:clamp(220px,7.6vw,280px);
+  }
+
+  /* ---------- News list ---------- */
+  body.pc-news main > .section > .container{
+    max-width:clamp(1280px,43vw,1640px);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-news .news-item{
+    grid-template-columns:clamp(280px,11vw,380px) minmax(0,1fr) auto;
+    gap:clamp(28px,1.45vw,46px);
+  }
+
+  body.pc-news .news-item h4{
+    font-size:clamp(18px,.7vw,22px);
+  }
+
+  body.pc-news .news-item p{
+    font-size:clamp(13px,.5vw,15px);
+  }
+
+  /* ---------- News detail ----------
+     Deliberately keep article text narrower for readability. */
+  body.pc-news-detail .news-detail-section > .container{
+    max-width:clamp(1240px,42vw,1600px);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-news-detail .news-detail-article{
+    max-width:var(--uw-reading);
+  }
+
+  body.pc-news-detail .news-detail-header h1{
+    max-width:calc(var(--uw-reading) - 80px);
+    font-size:clamp(32px,1vw,38px);
+  }
+
+  body.pc-news-detail .news-detail-body{
+    font-size:clamp(16px,.52vw,18px);
+  }
+
+  body.pc-news-detail .news-detail-body h2{
+    font-size:clamp(22px,.7vw,26px);
+  }
+
+  /* ---------- Contact ---------- */
+  body.pc-contact main > section > .container{
+    max-width:var(--uw-shell);
+    padding-left:var(--uw-gutter);
+    padding-right:var(--uw-gutter);
+  }
+
+  body.pc-contact #contact-info > .container{
+    max-width:clamp(1360px,46vw,1760px);
+  }
+
+  body.pc-contact .contact-cardgrid{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  }
+
+  body.pc-contact .contact-map{
+    min-height:clamp(340px,11vw,430px);
+  }
+
+  body.pc-contact .contact-thanks-inner{
+    max-width:var(--uw-shell);
+  }
+
+  body.pc-contact .contact-thanks-content{
+    max-width:clamp(760px,26vw,1000px);
+  }
+}
+
+/* 4K-specific final cap: maintain the same visual occupancy instead of a 1200px island. */
+@media (min-width:3200px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --uw-shell:2000px;
+    --uw-wide:2160px;
+    --uw-module:1760px;
+    --uw-reading:1320px;
+  }
+
+  body.pc-home .hero--home{
+    height:min(100dvh,1080px);
+    min-height:900px;
+  }
+
+  body.pc-home .section,
+  body.pc-labels .section,
+  body.pc-bags .section,
+  body.pc-boxes .section,
+  body.pc-about .section,
+  body.pc-news .section,
+  body.pc-contact .section{
+    padding-top:72px;
+    padding-bottom:72px;
+  }
+}
