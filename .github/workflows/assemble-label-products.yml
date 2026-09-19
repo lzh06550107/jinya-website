@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.asset-label-products-v60/TRIGGER'
+      - '.asset-product-sprite-v61/TRIGGER'
 
 permissions:
   contents: write
@@ -15,16 +15,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assemble high-resolution product sprite
+      - name: Assemble verified product sprite
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p assets/img
-          cat .asset-label-products-v60/chunk-*.b64 | tr -d '\n\r ' | base64 -d > assets/img/labels-products-sprite.webp
+          cat .asset-product-sprite-v61/chunk-*.b64 | tr -d '\n\r ' | base64 -d > assets/img/labels-products-sprite.webp
           file assets/img/labels-products-sprite.webp
-          test "$(stat -c%s assets/img/labels-products-sprite.webp)" -gt 140000
+          test "$(stat -c%s assets/img/labels-products-sprite.webp)" -eq 150630
+          echo "310de50cf3b7587714b06baedc11acdc58b858a4dc1b9c148e2f7a6d286b1794  assets/img/labels-products-sprite.webp" | sha256sum -c -
 
-      - name: Point the nine fixed product cards at the original-upload sprite
+      - name: Point the nine fixed product cards at the sprite
         shell: bash
         run: |
           python3 - <<'PY'
@@ -90,12 +91,11 @@ jobs:
 
           git add labels.html assets/img/labels-products-sprite.webp
           git rm -f assets/img/labels-product-*.jpg assets/img/labels-product-*.webp || true
-          git rm -r .asset-label-products-v60
-          git rm -r .asset-product-sprite-v59 || true
-          git rm -r .asset-product-sprite-v58 || true
-          git rm -r .asset-product-chunks-v2 || true
-          git rm -r .asset-product-chunks || true
-          git rm -r .asset-product-chunks-final || true
+
+          for d in             .asset-product-sprite-v61             .asset-product-sprite-v59             .asset-product-sprite-v58             .asset-label-products-v60             .asset-product-chunks-v2             .asset-product-chunks             .asset-product-chunks-final; do
+            [ ! -e "$d" ] || git rm -r "$d"
+          done
+
           git rm .github/workflows/assemble-label-products.yml
 
           git commit -m "assets: finalize labels product gallery from original uploads"
