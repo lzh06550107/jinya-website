@@ -3732,3 +3732,161 @@ input,textarea{ font:inherit; }
     line-height:1.75;
   }
 }
+
+
+/* boxes quality promise reference layout v68 */
+.boxes-promise-section{
+  padding:18px 0 54px;
+  background:#fff;
+}
+
+.boxes-promise-section .container{
+  max-width:1200px;
+}
+
+.boxes-promise-head{
+  text-align:center;
+}
+
+.boxes-promise-head h2{
+  margin:0;
+  color:#1f1b1b;
+  font-size:26px;
+  line-height:1.35;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.boxes-promise-main{
+  margin:34px 0 4px;
+  color:#211d1d;
+  font-size:32px;
+  line-height:1.3;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.boxes-promise-sub{
+  margin:0 0 20px;
+  color:#292424;
+  font-size:21px;
+  line-height:1.4;
+  font-weight:400;
+}
+
+.boxes-promise-panel{
+  position:relative;
+  min-height:174px;
+  padding:28px 24px 34px;
+  background:#edf0fa;
+  text-align:center;
+}
+
+.boxes-promise-panel h3{
+  margin:0 0 8px;
+  color:#282323;
+  font-size:38px;
+  line-height:1.25;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.boxes-promise-panel p{
+  margin:0;
+  color:#2a2525;
+  font-size:20px;
+  line-height:1.45;
+  font-weight:400;
+}
+
+.boxes-promise-badge{
+  position:absolute;
+  left:50%;
+  bottom:-36px;
+  width:78px;
+  height:58px;
+  transform:translateX(-50%);
+  color:#7f68aa;
+  text-align:center;
+}
+
+.boxes-promise-badge-icon{
+  display:grid;
+  place-items:center;
+  width:48px;
+  height:48px;
+  margin:0 auto;
+  border:2px solid #fff;
+  border-radius:50%;
+  background:#846bb1;
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(132,107,177,.28);
+}
+
+.boxes-promise-badge-icon svg{
+  width:31px;
+  height:31px;
+}
+
+.boxes-promise-badge span{
+  display:block;
+  margin-top:-1px;
+  font-size:7px;
+  line-height:1;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+@media (max-width:900px){
+  .boxes-promise-main{
+    margin-top:28px;
+    font-size:27px;
+  }
+
+  .boxes-promise-sub{
+    font-size:18px;
+  }
+
+  .boxes-promise-panel h3{
+    font-size:32px;
+  }
+
+  .boxes-promise-panel p{
+    font-size:18px;
+  }
+}
+
+@media (max-width:560px){
+  .boxes-promise-section{
+    padding:16px 0 48px;
+  }
+
+  .boxes-promise-head h2{
+    font-size:23px;
+  }
+
+  .boxes-promise-main{
+    margin-top:24px;
+    font-size:23px;
+    line-height:1.45;
+  }
+
+  .boxes-promise-sub{
+    margin-bottom:16px;
+    font-size:16px;
+  }
+
+  .boxes-promise-panel{
+    min-height:160px;
+    padding:26px 14px 34px;
+  }
+
+  .boxes-promise-panel h3{
+    font-size:27px;
+  }
+
+  .boxes-promise-panel p{
+    font-size:15px;
+    line-height:1.55;
+  }
+}
