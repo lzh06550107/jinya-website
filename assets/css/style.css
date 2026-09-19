@@ -4462,3 +4462,49 @@ input,textarea{ font:inherit; }
     background-position:center center;
   }
 }
+
+
+/* contact generated text-free banner v78 */
+.contact-generated-hero{
+  height:auto;
+  min-height:0;
+  aspect-ratio:2047 / 480;
+  background:#f7c341;
+  color:#2f2f2f;
+}
+.contact-generated-hero::after{
+  background:linear-gradient(90deg,rgba(250,195,63,.06) 0%,rgba(250,195,63,.03) 40%,rgba(255,255,255,0) 68%);
+}
+.contact-generated-hero .contact-generated-hero-bg{
+  background-image:url("../img/contact-banner-clean-v78.jpg");
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+.contact-generated-hero h1,
+.contact-generated-hero .lede{
+  color:#343434;
+  text-shadow:none;
+}
+.contact-generated-hero .lede{
+  opacity:1;
+}
+.contact-generated-hero .hero-cta{
+  background:transparent;
+  color:#444;
+  border:2px solid rgba(60,60,60,.85);
+  box-shadow:0 3px 0 rgba(60,60,60,.55);
+}
+.contact-generated-hero .hero-cta:hover{
+  box-shadow:0 4px 0 rgba(60,60,60,.55);
+}
+@media (max-width:640px){
+  .contact-generated-hero{
+    aspect-ratio:auto;
+    height:320px;
+    min-height:320px;
+  }
+  .contact-generated-hero .contact-generated-hero-bg{
+    background-position:center center;
+  }
+}
