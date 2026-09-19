@@ -3357,3 +3357,174 @@ input,textarea{ font:inherit; }
     min-height:190px;
   }
 }
+
+
+/* labels professional team reference layout v66 */
+.labels-team-section{
+  padding:28px 0 48px;
+  background:#fff;
+}
+
+.labels-team-section .container{
+  max-width:1200px;
+}
+
+.labels-team-head{
+  margin:0 0 24px;
+  text-align:center;
+}
+
+.labels-team-head h2{
+  margin:0;
+  color:#222;
+  font-size:28px;
+  line-height:1.2;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.labels-team-gallery{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:18px;
+  width:100%;
+}
+
+.labels-team-photo{
+  aspect-ratio:1.12 / 1;
+  overflow:hidden;
+  padding:5px;
+  border:1px solid #a7a7a7;
+  background:#fff;
+}
+
+.labels-team-photo img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+.labels-team-benefits{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  column-gap:72px;
+  row-gap:70px;
+  max-width:1080px;
+  margin:72px auto 0;
+}
+
+.labels-team-benefit{
+  min-width:0;
+  text-align:center;
+}
+
+.labels-team-shield{
+  width:64px;
+  height:72px;
+  margin:0 auto 14px;
+  color:#111;
+}
+
+.labels-team-shield svg{
+  display:block;
+  width:100%;
+  height:100%;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.labels-team-shield .shield{
+  stroke-width:3.1;
+}
+
+.labels-team-shield .bar{
+  stroke-width:4;
+}
+
+.labels-team-shield .bar-a{ stroke:#e91e63; }
+.labels-team-shield .bar-b{ stroke:#00bcd4; }
+.labels-team-shield .bar-c{ stroke:#9c27b0; }
+
+.labels-team-benefit h4{
+  margin:0;
+  color:#333;
+  font-size:25px;
+  line-height:1.3;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+
+.labels-team-benefit p{
+  margin:7px 0 0;
+  color:#555;
+  font-size:12px;
+  line-height:1.45;
+  font-weight:400;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+@media (max-width:980px){
+  .labels-team-gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+
+  .labels-team-benefits{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:36px;
+    row-gap:54px;
+    margin-top:54px;
+  }
+
+  .labels-team-benefit h4{
+    font-size:22px;
+  }
+
+  .labels-team-benefit p{
+    white-space:normal;
+  }
+}
+
+@media (max-width:560px){
+  .labels-team-section{
+    padding:34px 0 42px;
+  }
+
+  .labels-team-head{
+    margin-bottom:20px;
+  }
+
+  .labels-team-head h2{
+    font-size:25px;
+  }
+
+  .labels-team-gallery{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .labels-team-photo{
+    aspect-ratio:1.28 / 1;
+  }
+
+  .labels-team-benefits{
+    grid-template-columns:1fr;
+    gap:42px;
+    margin-top:46px;
+  }
+
+  .labels-team-benefit h4{
+    font-size:21px;
+  }
+
+  .labels-team-benefit p{
+    font-size:11px;
+  }
+}
