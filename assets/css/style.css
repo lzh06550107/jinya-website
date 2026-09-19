@@ -2271,3 +2271,129 @@ input,textarea{ font:inherit; }
     margin-bottom:5px !important;
   }
 }
+
+
+/* labels material per-image reference alignment v58 */
+@media (min-width:1201px){
+  /* reference geometry: 35/65 for cards 1-2, 65/35 for cards 3-4 */
+  .labels-material-media--copper,
+  .labels-material-media--pearl{
+    grid-template-columns:minmax(0,35%) minmax(0,65%);
+    gap:10px;
+    height:100%;
+    min-height:0;
+  }
+
+  .labels-material-media--silver,
+  .labels-material-media--laser{
+    grid-template-columns:minmax(0,65%) minmax(0,35%);
+    gap:10px;
+    height:100%;
+    min-height:0;
+  }
+
+  .labels-material-media--copper .labels-material-media-left,
+  .labels-material-media--pearl .labels-material-media-left,
+  .labels-material-media--silver .labels-material-media-side,
+  .labels-material-media--laser .labels-material-media-side{
+    grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+    gap:10px;
+    height:100%;
+    min-height:0;
+  }
+
+  .labels-material-media--copper .labels-material-media-right,
+  .labels-material-media--pearl .labels-material-media-right,
+  .labels-material-media--silver .labels-material-media-main,
+  .labels-material-media--laser .labels-material-media-main{
+    height:100%;
+    min-height:0;
+  }
+
+  .labels-material-card--copper .labels-material-img,
+  .labels-material-card--pearl .labels-material-img,
+  .labels-material-card--silver .labels-material-img,
+  .labels-material-card--laser .labels-material-img{
+    width:100%;
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+    padding:0;
+  }
+
+  .labels-material-card--copper .labels-material-img img,
+  .labels-material-card--pearl .labels-material-img img,
+  .labels-material-card--silver .labels-material-img img,
+  .labels-material-card--laser .labels-material-img img{
+    width:100%;
+    height:100%;
+    min-height:0;
+    display:block;
+    object-fit:cover;
+    padding:0;
+    margin:0;
+  }
+
+  /* card 1 - copper reference */
+  .labels-shot-copper-top img{
+    object-position:center 48%;
+  }
+  .labels-shot-copper-bottom img{
+    object-position:center 52%;
+  }
+  .labels-shot-copper-main img{
+    object-position:center 50%;
+  }
+
+  /* card 2 - pearl/PVC/synthetic reference */
+  .labels-shot-pearl-top img{
+    object-position:center 48%;
+  }
+  .labels-shot-pearl-bottom img{
+    object-position:center 55%;
+  }
+  .labels-shot-pearl-main img{
+    object-position:center 50%;
+  }
+
+  /* card 3 - silver reference */
+  .labels-shot-silver-main img{
+    object-position:center 54%;
+  }
+  .labels-shot-silver-top img{
+    object-position:center 46%;
+  }
+  .labels-shot-silver-bottom img{
+    object-position:center 52%;
+  }
+
+  /* card 4 - laser reference */
+  .labels-shot-laser-main img{
+    object-position:center 52%;
+  }
+  .labels-shot-laser-top img{
+    object-position:center 48%;
+  }
+  .labels-shot-laser-bottom img{
+    object-position:center 52%;
+  }
+}
+
+@media (max-width:1200px){
+  .labels-shot-copper-top img,
+  .labels-shot-copper-bottom img,
+  .labels-shot-copper-main img,
+  .labels-shot-pearl-top img,
+  .labels-shot-pearl-bottom img,
+  .labels-shot-pearl-main img,
+  .labels-shot-silver-main img,
+  .labels-shot-silver-top img,
+  .labels-shot-silver-bottom img,
+  .labels-shot-laser-main img,
+  .labels-shot-laser-top img,
+  .labels-shot-laser-bottom img{
+    object-fit:cover;
+    object-position:center;
+    padding:0;
+  }
+}
