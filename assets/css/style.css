@@ -5255,3 +5255,244 @@ input,textarea{ font:inherit; }
     max-width:1320px;
   }
 }
+
+
+/* PC adaptive convergence v95 */
+@media (min-width:769px){
+  body:not(.mobile-site){
+    --pc-content-max:1248px;
+    --pc-header-max:1320px;
+    --pc-gutter:clamp(20px,1.7vw,24px);
+  }
+
+  body:not(.mobile-site) .container{
+    width:100%;
+    max-width:var(--pc-content-max);
+    padding-left:var(--pc-gutter);
+    padding-right:var(--pc-gutter);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  /* Header: stable from 1366 through large desktop screens. */
+  body:not(.mobile-site) .site-header .container{
+    max-width:var(--pc-header-max);
+    gap:clamp(10px,1.2vw,20px);
+  }
+
+  body:not(.mobile-site) .site-logo-img{
+    width:clamp(176px,13.2vw,190px);
+    height:58px;
+  }
+
+  body:not(.mobile-site) .main-nav{
+    flex:1 1 auto;
+    justify-content:center;
+    min-width:0;
+  }
+
+  body:not(.mobile-site) .main-nav a{
+    padding-left:clamp(8px,.72vw,12px);
+    padding-right:clamp(8px,.72vw,12px);
+    font-size:clamp(14px,1vw,15px);
+  }
+
+  body:not(.mobile-site) .header-phone{
+    min-width:clamp(188px,14.8vw,202px);
+  }
+
+  body:not(.mobile-site) .header-phone .label{
+    font-size:clamp(20px,1.55vw,22px);
+  }
+
+  /* Global desktop rhythm scales slightly, but never grows without limit. */
+  body:not(.mobile-site) .section{
+    padding-top:clamp(48px,3.4vw,66px);
+    padding-bottom:clamp(48px,3.4vw,66px);
+  }
+
+  body:not(.mobile-site) .section--tight{
+    padding-top:clamp(30px,2.15vw,40px);
+    padding-bottom:clamp(30px,2.15vw,40px);
+  }
+
+  body:not(.mobile-site) .section-head{
+    margin-bottom:clamp(26px,2vw,34px);
+  }
+
+  body:not(.mobile-site) .section-head h2{
+    font-size:clamp(28px,1.75vw,34px);
+    line-height:1.35;
+  }
+
+  body:not(.mobile-site) .eyebrow{
+    font-size:clamp(13px,.78vw,14px);
+  }
+
+  /*
+   * Homepage keeps the intended full-screen feel through Full HD,
+   * but stops growing vertically on 2K/4K CSS viewports.
+   */
+  body:not(.mobile-site) .hero--home{
+    height:min(100vh,1080px);
+    height:min(100dvh,1080px);
+    min-height:640px;
+  }
+
+  body:not(.mobile-site) .hero--home .hero-text{
+    max-width:clamp(430px,32vw,560px);
+  }
+
+  body:not(.mobile-site) .hero--home h1{
+    font-size:clamp(30px,2.15vw,42px);
+  }
+
+  body:not(.mobile-site) .hero--home .hero-eyebrow{
+    font-size:clamp(13px,.85vw,15px);
+  }
+
+  body:not(.mobile-site) .hero--home .hero-badge{
+    font-size:clamp(13px,.82vw,14px);
+  }
+
+  /* Inner page banners: consistent visual height from laptop to 2K/4K. */
+  body:not(.mobile-site) .hero--inner{
+    height:clamp(320px,18.75vw,380px);
+    min-height:0;
+  }
+
+  body:not(.mobile-site) .hero--inner h1{
+    font-size:clamp(30px,2.1vw,42px);
+  }
+
+  body:not(.mobile-site) .hero--inner .lede{
+    font-size:clamp(14px,.9vw,16px);
+  }
+
+  body:not(.mobile-site) .hero--inner .container{
+    padding-left:var(--pc-gutter);
+    padding-right:var(--pc-gutter);
+  }
+
+  /* Generated news/contact banners previously grew with their image ratio. */
+  body:not(.mobile-site) .news-generated-hero,
+  body:not(.mobile-site) .contact-generated-hero{
+    height:clamp(320px,18.75vw,380px);
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  /* About uses a very wide source artwork: preserve it but cap large-screen height. */
+  body:not(.mobile-site) .about-upload-hero{
+    height:clamp(300px,23.45vw,430px);
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  body:not(.mobile-site) .about-upload-hero-bg{
+    background-size:cover;
+    background-position:center center;
+  }
+
+  /* Home/product grids keep their desktop structure without stretching on large screens. */
+  body:not(.mobile-site) .product-masonry,
+  body:not(.mobile-site) .workshop-grid,
+  body:not(.mobile-site) .walkin-block,
+  body:not(.mobile-site) .labels-material-list,
+  body:not(.mobile-site) .boxes-detail-grid--reference{
+    min-width:0;
+  }
+
+  body:not(.mobile-site) .product-masonry img,
+  body:not(.mobile-site) .workshop-card img,
+  body:not(.mobile-site) .photo-card img,
+  body:not(.mobile-site) .boxes-quality-media img{
+    max-width:100%;
+  }
+
+  body:not(.mobile-site) .walkin-hero{
+    min-height:clamp(470px,37vw,520px);
+  }
+
+  /* Long-form pages stay comfortably readable on 2K/4K. */
+  body:not(.mobile-site) .news-detail-article{
+    max-width:960px;
+  }
+
+  body:not(.mobile-site) .news-detail-body{
+    font-size:clamp(15px,.9vw,16px);
+  }
+
+  body:not(.mobile-site) .contact-thanks-content{
+    max-width:760px;
+  }
+}
+
+/* 1366/1440 class desktops: save header width without changing the design. */
+@media (min-width:1081px) and (max-width:1439px){
+  body:not(.mobile-site) .site-header .container{
+    width:calc(100% - 28px);
+    max-width:none;
+    padding-left:10px;
+    padding-right:10px;
+    gap:8px;
+  }
+
+  body:not(.mobile-site) .site-logo-img{
+    width:176px;
+  }
+
+  body:not(.mobile-site) .main-nav a{
+    padding-left:8px;
+    padding-right:8px;
+    font-size:14px;
+  }
+
+  body:not(.mobile-site) .header-phone{
+    min-width:188px;
+    padding-left:7px;
+    padding-right:9px;
+  }
+
+  body:not(.mobile-site) .header-phone .label{
+    font-size:20px;
+  }
+}
+
+/* Large desktop: do not let visual modules scale endlessly. */
+@media (min-width:1920px){
+  body:not(.mobile-site) .container{
+    max-width:1248px;
+  }
+
+  body:not(.mobile-site) .site-header .container{
+    max-width:1320px;
+  }
+
+  body:not(.mobile-site) .section{
+    padding-top:64px;
+    padding-bottom:64px;
+  }
+
+  body:not(.mobile-site) .section--tight{
+    padding-top:38px;
+    padding-bottom:38px;
+  }
+}
+
+@media (min-width:2560px){
+  body:not(.mobile-site) .hero--home{
+    height:1080px;
+    min-height:1080px;
+  }
+
+  body:not(.mobile-site) .hero--inner,
+  body:not(.mobile-site) .news-generated-hero,
+  body:not(.mobile-site) .contact-generated-hero{
+    height:380px;
+  }
+
+  body:not(.mobile-site) .about-upload-hero{
+    height:430px;
+  }
+}
