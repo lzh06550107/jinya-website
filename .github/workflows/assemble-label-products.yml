@@ -92,7 +92,7 @@ jobs:
           git add labels.html assets/img/labels-products-sprite.webp
           git rm -f assets/img/labels-product-*.jpg assets/img/labels-product-*.webp || true
 
-          for d in             .asset-product-sprite-v61             .asset-product-sprite-v59             .asset-product-sprite-v58             .asset-label-products-v61             .asset-product-chunks-v2             .asset-product-chunks             .asset-product-chunks-final; do
+          for d in             .asset-product-sprite-v61             .asset-product-sprite-v59             .asset-product-sprite-v58             .asset-product-sprite-v61             .asset-product-chunks-v2             .asset-product-chunks             .asset-product-chunks-final; do
             [ ! -e "$d" ] || git rm -r "$d"
           done
 
