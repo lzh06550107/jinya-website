@@ -5496,3 +5496,216 @@ input,textarea{ font:inherit; }
     height:430px;
   }
 }
+
+
+/* PC homepage resolution convergence v96 */
+@media (min-width:769px){
+  body.pc-home{
+    --home-content-max:1200px;
+    --home-section-gap:clamp(48px,3.4vw,64px);
+  }
+
+  /* Hero text keeps the same relative position as the viewport changes. */
+  body.pc-home .hero--home .container{
+    max-width:1248px;
+    padding-left:clamp(32px,3.4vw,54px);
+    padding-right:clamp(32px,3.4vw,54px);
+  }
+
+  body.pc-home .hero--home .hero-text{
+    width:min(100%,520px);
+  }
+
+  body.pc-home .hero--home h1{
+    font-size:clamp(31px,2.05vw,40px);
+    line-height:1.3;
+  }
+
+  body.pc-home .hero--home .hero-badges{
+    gap:clamp(14px,1.45vw,22px);
+    margin-top:clamp(20px,1.8vw,28px);
+  }
+
+  /* About: keep text and 2×2 gallery visually balanced on 1366–4K. */
+  body.pc-home main > .section:first-of-type .container.two-col{
+    max-width:1180px;
+    grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);
+    gap:clamp(30px,3vw,48px);
+  }
+
+  body.pc-home main > .section:first-of-type .grid-2{
+    gap:clamp(10px,1.15vw,16px);
+  }
+
+  body.pc-home main > .section:first-of-type .photo-card .ph{
+    aspect-ratio:4 / 3;
+  }
+
+  body.pc-home main > .section:first-of-type .social-cta-list{
+    gap:12px;
+    margin-top:clamp(20px,1.8vw,26px);
+  }
+
+  /* Product center remains the reference masonry but scales its internal padding. */
+  body.pc-home .product-section > .container{
+    max-width:1200px;
+  }
+
+  body.pc-home .product-section .pm-card{
+    padding:clamp(26px,2vw,30px) clamp(26px,2.25vw,34px);
+  }
+
+  body.pc-home .product-section .pm-02 .text,
+  body.pc-home .product-section .pm-03 .text,
+  body.pc-home .product-section .pm-04 .text{
+    padding:clamp(26px,2vw,30px) clamp(26px,2.25vw,34px);
+  }
+
+  body.pc-home .product-section .pm-card h3{
+    font-size:clamp(17px,1.12vw,18px);
+  }
+
+  body.pc-home .product-section .pm-card p{
+    font-size:clamp(12.5px,.82vw,13px);
+    line-height:1.82;
+  }
+
+  body.pc-home .service-cta{
+    min-height:clamp(240px,18vw,265px);
+    grid-template-columns:minmax(300px,38%) minmax(0,62%);
+    padding:clamp(28px,2.4vw,34px) clamp(34px,3.2vw,48px);
+  }
+
+  body.pc-home .service-cta-copy h3{
+    font-size:clamp(22px,1.55vw,25px);
+  }
+
+  body.pc-home .service-cta-features{
+    gap:clamp(8px,1vw,14px);
+  }
+
+  body.pc-home .service-cta-feature h4{
+    font-size:clamp(15px,1.05vw,17px);
+  }
+
+  /* Workshop width and gaps remain constant in visual density. */
+  body.pc-home .workshop-section{
+    padding-top:clamp(52px,4vw,64px);
+    padding-bottom:clamp(58px,4.5vw,72px);
+  }
+
+  body.pc-home .workshop-section .container{
+    max-width:1180px;
+  }
+
+  body.pc-home .workshop-grid{
+    column-gap:clamp(18px,1.8vw,26px);
+    row-gap:clamp(26px,2.1vw,32px);
+  }
+
+  body.pc-home .workshop-copy{
+    padding-top:clamp(15px,1.25vw,20px);
+  }
+
+  body.pc-home .workshop-copy h3{
+    font-size:clamp(15px,1vw,16px);
+  }
+
+  body.pc-home .workshop-copy p{
+    font-size:clamp(12px,.8vw,12.5px);
+    line-height:1.85;
+  }
+
+  /* Walk-in hero and overlapping sample strip scale together. */
+  body.pc-home .walkin-section > .container{
+    max-width:1200px;
+  }
+
+  body.pc-home .walkin-hero{
+    min-height:clamp(450px,36vw,520px);
+  }
+
+  body.pc-home .walkin-copy{
+    left:clamp(62px,7.6%,92px);
+    top:clamp(72px,6.25vw,90px);
+    width:min(350px,34%);
+  }
+
+  body.pc-home .walkin-desc{
+    width:min(330px,100%);
+    margin-bottom:clamp(30px,3vw,44px);
+  }
+
+  body.pc-home .walkin-block .sample-swiper--source{
+    width:calc(100% - clamp(112px,11vw,160px));
+    margin-top:clamp(-80px,-5.5vw,-58px);
+  }
+
+  body.pc-home .walkin-block + .stats{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:clamp(10px,1vw,16px);
+    margin-top:clamp(62px,5.8vw,84px);
+  }
+
+  /* Culture cards keep a stable card width and readable density. */
+  body.pc-home main > .section:last-of-type > .container{
+    max-width:1180px;
+  }
+
+  body.pc-home .culture-banner--light{
+    padding:clamp(20px,1.7vw,26px) clamp(34px,5.5vw,64px) clamp(26px,2vw,32px);
+  }
+
+  body.pc-home .culture-grid{
+    gap:clamp(12px,1.25vw,18px);
+  }
+
+  body.pc-home .culture-banner--light .glass-card{
+    min-width:0;
+    padding:clamp(18px,1.5vw,22px) 10px;
+  }
+}
+
+/* 1366/1440 desktop: slightly tighter internals, same overall design. */
+@media (min-width:1081px) and (max-width:1439px){
+  body.pc-home main > .section:first-of-type .container.two-col{
+    max-width:1140px;
+    gap:30px;
+  }
+
+  body.pc-home .product-section > .container,
+  body.pc-home .walkin-section > .container{
+    max-width:1160px;
+  }
+
+  body.pc-home .service-cta{
+    grid-template-columns:36% 64%;
+    padding-left:32px;
+    padding-right:32px;
+  }
+
+  body.pc-home .service-cta-feature p{
+    white-space:normal;
+    line-height:1.45;
+  }
+
+  body.pc-home .workshop-section .container,
+  body.pc-home main > .section:last-of-type > .container{
+    max-width:1140px;
+  }
+}
+
+/* Full HD and larger: stop modules from visually spreading out. */
+@media (min-width:1600px){
+  body.pc-home main > .section:first-of-type .container.two-col,
+  body.pc-home .product-section > .container,
+  body.pc-home .walkin-section > .container{
+    max-width:1200px;
+  }
+
+  body.pc-home .workshop-section .container,
+  body.pc-home main > .section:last-of-type > .container{
+    max-width:1180px;
+  }
+}
