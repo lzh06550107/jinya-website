@@ -154,16 +154,59 @@ input,textarea{ font:inherit; }
 
 .header-phone{
   position:relative;
-  display:flex; align-items:center; gap:6px;
-  background:var(--red); color:#fff; font-weight:700; font-size:13.5px;
-  padding:8px 14px; border-radius:4px; flex-shrink:0;
-  box-shadow:0 6px 16px rgba(226,31,38,.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-width:206px;
+  height:44px;
+  padding:0 12px 0 9px;
+  flex-shrink:0;
+  overflow:visible;
+  background:linear-gradient(180deg,#f32628 0%,#e5141b 100%);
+  border:1px solid #ca1017;
+  border-radius:6px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.30),
+    0 1px 2px rgba(124,0,0,.18);
+  color:#ffd83f;
+  text-decoration:none;
 }
-.header-phone svg{ width:16px; height:16px; flex-shrink:0; }
+
+.header-phone svg{
+  width:23px;
+  height:23px;
+  flex:0 0 23px;
+  color:#ffd83f;
+  filter:drop-shadow(0 1px 0 rgba(111,0,0,.35));
+}
+
+.header-phone .label{
+  display:block;
+  color:#ffd83f;
+  font-size:22px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.015em;
+  white-space:nowrap;
+  text-shadow:0 1px 0 rgba(120,0,0,.45);
+}
+
 .header-phone .tag{
-  position:absolute; top:-9px; right:-6px;
-  background:var(--ink); color:#ffd479; font-size:9px; font-weight:600;
-  padding:2px 6px; border-radius:8px; letter-spacing:.02em; white-space:nowrap;
+  position:absolute;
+  top:-10px;
+  right:8px;
+  padding:2px 8px 2px;
+  border:1px solid #dac985;
+  border-radius:9px 9px 7px 7px;
+  background:linear-gradient(180deg,#fff6c8 0%,#eadf9d 100%);
+  color:#8a3a14;
+  font-size:10px;
+  line-height:1.15;
+  font-weight:700;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  text-shadow:none;
 }
 
 .nav-toggle{
@@ -181,7 +224,15 @@ input,textarea{ font:inherit; }
   .main-nav a{ padding:16px 6px; border-bottom:1px solid var(--line); border-radius:0; font-size:16px; }
   .main-nav a.active{ background:none; color:var(--red); }
   .nav-toggle{ display:flex; }
-  .header-phone .label{ display:none; }
+  .header-phone{
+    min-width:44px;
+    width:44px;
+    height:40px;
+    padding:0;
+  }
+  .header-phone .label,
+  .header-phone .tag{ display:none; }
+  .header-phone svg{ width:21px; height:21px; flex-basis:21px; }
 }
 @media (max-width:520px){
   .site-header .container{ height:64px; }
