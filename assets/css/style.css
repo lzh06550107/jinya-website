@@ -2146,3 +2146,128 @@ input,textarea{ font:inherit; }
     border-radius:10px;
   }
 }
+
+
+/* labels material image-height + text alignment v57 */
+@media (min-width:1201px){
+  .labels-material-card--copper,
+  .labels-material-card--pearl,
+  .labels-material-card--silver,
+  .labels-material-card--laser{
+    align-items:stretch;
+    overflow:hidden;
+  }
+
+  .labels-material-copy--copper,
+  .labels-material-copy--pearl,
+  .labels-material-copy--silver,
+  .labels-material-copy--laser{
+    align-self:stretch;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:0;
+    overflow:hidden;
+  }
+
+  .labels-material-media--copper,
+  .labels-material-media--pearl,
+  .labels-material-media--silver,
+  .labels-material-media--laser{
+    align-self:stretch;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:hidden;
+  }
+
+  .labels-material-media--copper .labels-material-media-left,
+  .labels-material-media--pearl .labels-material-media-left,
+  .labels-material-media--copper .labels-material-media-right,
+  .labels-material-media--pearl .labels-material-media-right,
+  .labels-material-media--silver .labels-material-media-main,
+  .labels-material-media--laser .labels-material-media-main,
+  .labels-material-media--silver .labels-material-media-side,
+  .labels-material-media--laser .labels-material-media-side{
+    height:100%;
+    min-height:0;
+    overflow:hidden;
+  }
+
+  .labels-material-card--copper .labels-material-img,
+  .labels-material-card--pearl .labels-material-img,
+  .labels-material-card--silver .labels-material-img,
+  .labels-material-card--laser .labels-material-img{
+    min-height:0;
+    height:100%;
+  }
+
+  .labels-material-card--copper .labels-material-img img,
+  .labels-material-card--pearl .labels-material-img img,
+  .labels-material-card--silver .labels-material-img img,
+  .labels-material-card--laser .labels-material-img img{
+    height:100%;
+    min-height:0;
+    object-fit:cover;
+  }
+
+  /* reference-like text inset */
+  .labels-material-copy--copper,
+  .labels-material-copy--pearl{
+    padding-left:clamp(18px,2vw,34px);
+    padding-right:clamp(8px,1vw,18px);
+  }
+
+  .labels-material-copy--silver,
+  .labels-material-copy--laser{
+    padding-left:clamp(22px,2.2vw,38px);
+    padding-right:clamp(10px,1.1vw,20px);
+  }
+
+  .labels-material-copy--copper h3,
+  .labels-material-copy--pearl h3,
+  .labels-material-copy--silver h3,
+  .labels-material-copy--laser h3{
+    margin:0 0 8px;
+  }
+
+  .labels-material-copy--copper .labels-material-text p,
+  .labels-material-copy--pearl .labels-material-text p,
+  .labels-material-copy--silver .labels-material-text p,
+  .labels-material-copy--laser .labels-material-text p{
+    margin:0 0 3px;
+    line-height:1.38;
+  }
+
+  .labels-gap-before{
+    margin-top:6px !important;
+  }
+
+  .labels-gap-after{
+    margin-bottom:6px !important;
+  }
+
+  .labels-hanging-label{
+    padding-left:3.25em;
+    text-indent:-3.25em;
+  }
+
+  .labels-hanging-number{
+    padding-left:1.65em;
+    text-indent:-1.65em;
+  }
+}
+
+@media (max-width:1200px){
+  .labels-hanging-label,
+  .labels-hanging-number{
+    padding-left:0;
+    text-indent:0;
+  }
+  .labels-gap-before{
+    margin-top:4px !important;
+  }
+  .labels-gap-after{
+    margin-bottom:5px !important;
+  }
+}
