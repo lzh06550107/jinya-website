@@ -1913,3 +1913,236 @@ input,textarea{ font:inherit; }
   .labels-material-text p{font-size:12px;line-height:1.5;margin-bottom:4px}
   .labels-material-media{min-height:0}
 }
+
+
+/* labels material reference-specific cards v56 */
+.labels-material-section{
+  padding:12px 0 4px;
+  background:#f3f3f3;
+}
+.labels-material-list{
+  gap:12px;
+}
+
+/* card 1 + 2: left text / stacked small images / large image */
+.labels-material-card--copper,
+.labels-material-card--pearl{
+  display:grid;
+  grid-template-columns:minmax(0,40%) minmax(0,60%);
+  gap:14px;
+  align-items:center;
+  min-height:0;
+  padding:10px 12px;
+  background:#f3f3f3;
+  border:1px solid #e1e1e1;
+}
+.labels-material-copy--copper,
+.labels-material-copy--pearl{
+  padding:4px 6px;
+}
+.labels-material-copy--copper h3,
+.labels-material-copy--pearl h3{
+  margin:0 0 10px;
+  font-size:22px;
+  line-height:1.18;
+  font-weight:800;
+  color:#222;
+}
+.labels-material-copy--copper .labels-material-text p,
+.labels-material-copy--pearl .labels-material-text p{
+  margin:0 0 5px;
+  font-size:13px;
+  line-height:1.48;
+  color:#333;
+}
+.labels-material-copy--copper .labels-material-text .labels-material-em,
+.labels-material-copy--pearl .labels-material-text .labels-material-em{
+  color:#e25042;
+  font-weight:600;
+}
+.labels-material-media--copper,
+.labels-material-media--pearl{
+  display:grid;
+  grid-template-columns:minmax(0,34%) minmax(0,66%);
+  gap:10px;
+  min-height:210px;
+}
+.labels-material-media--copper .labels-material-media-left,
+.labels-material-media--pearl .labels-material-media-left{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  gap:10px;
+}
+.labels-material-media--copper .labels-material-media-right,
+.labels-material-media--pearl .labels-material-media-right{
+  height:100%;
+}
+
+/* card 3 + 4: large image / stacked small images / right text */
+.labels-material-card--silver,
+.labels-material-card--laser{
+  display:grid;
+  grid-template-columns:minmax(0,56%) minmax(0,44%);
+  gap:14px;
+  align-items:center;
+  min-height:0;
+  padding:10px 12px;
+  background:#f3f3f3;
+  border:1px solid #e1e1e1;
+}
+.labels-material-media--silver,
+.labels-material-media--laser{
+  display:grid;
+  grid-template-columns:minmax(0,63%) minmax(0,37%);
+  gap:10px;
+  min-height:210px;
+}
+.labels-material-media--silver .labels-material-media-side,
+.labels-material-media--laser .labels-material-media-side{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  gap:10px;
+}
+.labels-material-media--silver .labels-material-media-main,
+.labels-material-media--laser .labels-material-media-main{
+  height:100%;
+}
+.labels-material-copy--silver,
+.labels-material-copy--laser{
+  padding:4px 6px 4px 12px;
+}
+.labels-material-copy--silver h3,
+.labels-material-copy--laser h3{
+  margin:0 0 10px;
+  font-size:22px;
+  line-height:1.18;
+  font-weight:800;
+  color:#222;
+}
+.labels-material-copy--silver .labels-material-text p,
+.labels-material-copy--laser .labels-material-text p{
+  margin:0 0 5px;
+  font-size:13px;
+  line-height:1.48;
+  color:#333;
+}
+.labels-material-copy--silver .labels-material-text .labels-material-em,
+.labels-material-copy--laser .labels-material-text .labels-material-em{
+  color:#e25042;
+  font-weight:600;
+}
+
+/* shared reference image treatment */
+.labels-material-card--copper .labels-material-img,
+.labels-material-card--pearl .labels-material-img,
+.labels-material-card--silver .labels-material-img,
+.labels-material-card--laser .labels-material-img{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  border-radius:14px;
+  background:#eaeaea;
+}
+.labels-material-card--copper .labels-material-img img,
+.labels-material-card--pearl .labels-material-img img,
+.labels-material-card--silver .labels-material-img img,
+.labels-material-card--laser .labels-material-img img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+
+/* desktop proportions matched to uploaded 2048x600 references */
+@media (min-width:1201px){
+  .labels-material-card--copper,
+  .labels-material-card--pearl,
+  .labels-material-card--silver,
+  .labels-material-card--laser{
+    aspect-ratio:2048 / 600;
+  }
+  .labels-material-media--copper,
+  .labels-material-media--pearl,
+  .labels-material-media--silver,
+  .labels-material-media--laser{
+    min-height:0;
+    height:100%;
+    max-height:100%;
+  }
+}
+
+/* tablet */
+@media (max-width:1200px){
+  .labels-material-card--copper,
+  .labels-material-card--pearl,
+  .labels-material-card--silver,
+  .labels-material-card--laser{
+    grid-template-columns:1fr;
+    aspect-ratio:auto;
+    gap:12px;
+  }
+  .labels-material-copy--silver,
+  .labels-material-copy--laser{
+    order:-1;
+    padding-left:6px;
+  }
+  .labels-material-media--copper,
+  .labels-material-media--pearl,
+  .labels-material-media--silver,
+  .labels-material-media--laser{
+    min-height:240px;
+  }
+}
+
+/* mobile */
+@media (max-width:640px){
+  .labels-material-section{padding-top:8px}
+  .labels-material-list{gap:10px}
+  .labels-material-card--copper,
+  .labels-material-card--pearl,
+  .labels-material-card--silver,
+  .labels-material-card--laser{
+    padding:9px;
+    gap:10px;
+  }
+  .labels-material-copy--copper h3,
+  .labels-material-copy--pearl h3,
+  .labels-material-copy--silver h3,
+  .labels-material-copy--laser h3{
+    font-size:18px;
+    margin-bottom:8px;
+  }
+  .labels-material-copy--copper .labels-material-text p,
+  .labels-material-copy--pearl .labels-material-text p,
+  .labels-material-copy--silver .labels-material-text p,
+  .labels-material-copy--laser .labels-material-text p{
+    font-size:12px;
+    line-height:1.55;
+    margin-bottom:4px;
+  }
+  .labels-material-media--copper,
+  .labels-material-media--pearl{
+    grid-template-columns:minmax(0,34%) minmax(0,66%);
+    min-height:180px;
+    gap:8px;
+  }
+  .labels-material-media--silver,
+  .labels-material-media--laser{
+    grid-template-columns:minmax(0,63%) minmax(0,37%);
+    min-height:180px;
+    gap:8px;
+  }
+  .labels-material-media--copper .labels-material-media-left,
+  .labels-material-media--pearl .labels-material-media-left,
+  .labels-material-media--silver .labels-material-media-side,
+  .labels-material-media--laser .labels-material-media-side{
+    gap:8px;
+  }
+  .labels-material-card--copper .labels-material-img,
+  .labels-material-card--pearl .labels-material-img,
+  .labels-material-card--silver .labels-material-img,
+  .labels-material-card--laser .labels-material-img{
+    border-radius:10px;
+  }
+}
