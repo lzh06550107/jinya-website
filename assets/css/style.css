@@ -6143,3 +6143,370 @@ input,textarea{ font:inherit; }
     --product-page-max:1200px;
   }
 }
+
+
+/* PC secondary pages resolution convergence v98 */
+@media (min-width:769px){
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --secondary-page-max:1200px;
+  }
+
+  body.pc-about main > section > .container,
+  body.pc-news main > section > .container,
+  body.pc-contact main > section > .container{
+    max-width:var(--secondary-page-max);
+  }
+
+  body.pc-news-detail .news-detail-section > .container{
+    max-width:1160px;
+  }
+
+  /* ---------- About ---------- */
+  body.pc-about .about-upload-hero{
+    height:clamp(300px,23.45vw,430px);
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  body.pc-about .about-upload-hero-bg{
+    background-size:cover;
+    background-position:center center;
+  }
+
+  body.pc-about .about-quality-section > .container{
+    max-width:1160px;
+  }
+
+  body.pc-about .about-quality-section .section-head{
+    margin-bottom:clamp(24px,2.1vw,32px);
+  }
+
+  body.pc-about .about-quality-section .section-head h2{
+    font-size:clamp(29px,2.1vw,34px);
+  }
+
+  body.pc-about .about-quality-section .value-block{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+
+  body.pc-about .about-quality-section .value-block .ph{
+    height:clamp(228px,18vw,260px);
+  }
+
+  body.pc-about .about-quality-section .value-block > div:not(.ph){
+    padding:clamp(20px,1.8vw,24px) clamp(24px,2.2vw,30px);
+  }
+
+  body.pc-about .about-quality-section .value-block h3{
+    font-size:clamp(19px,1.4vw,22px);
+  }
+
+  body.pc-about .about-quality-section .value-block p{
+    font-size:clamp(13px,.9vw,14px);
+    line-height:1.78;
+  }
+
+  body.pc-about .section--alt .stats{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:clamp(10px,1.2vw,18px);
+  }
+
+  body.pc-about .about-culture-section{
+    min-height:clamp(390px,30vw,432px);
+  }
+
+  body.pc-about .about-culture-inner{
+    max-width:900px;
+    padding-top:clamp(34px,2.8vw,40px);
+    padding-bottom:clamp(40px,3.4vw,48px);
+  }
+
+  body.pc-about .about-culture-heading{
+    margin-bottom:clamp(42px,4vw,64px);
+  }
+
+  body.pc-about .about-culture-heading h2{
+    font-size:clamp(27px,1.9vw,31px);
+  }
+
+  body.pc-about .about-culture-grid{
+    gap:clamp(12px,1.2vw,16px);
+  }
+
+  body.pc-about .about-culture-card{
+    min-height:clamp(196px,15vw,220px);
+    padding:clamp(24px,2vw,31px) clamp(14px,1.25vw,18px) clamp(20px,1.7vw,24px);
+  }
+
+  body.pc-about .about-culture-card h3{
+    font-size:clamp(15px,1vw,16px);
+  }
+
+  body.pc-about .about-culture-card p{
+    font-size:clamp(10.5px,.72vw,11px);
+  }
+
+  /* ---------- News list ---------- */
+  body.pc-news .news-generated-hero,
+  body.pc-news-detail .news-generated-hero{
+    height:clamp(320px,18.75vw,380px);
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  body.pc-news .news-generated-hero .container,
+  body.pc-news-detail .news-generated-hero .container,
+  body.pc-contact .contact-generated-hero .container{
+    max-width:1248px;
+  }
+
+  body.pc-news .news-generated-hero .hero-text,
+  body.pc-news-detail .news-generated-hero .hero-text{
+    max-width:min(48vw,620px);
+  }
+
+  body.pc-news .news-generated-hero h1,
+  body.pc-news-detail .news-generated-hero h1{
+    font-size:clamp(31px,2.15vw,42px);
+  }
+
+  body.pc-news main > .section > .container{
+    max-width:1100px;
+  }
+
+  body.pc-news .gallery-tabs{
+    margin-bottom:clamp(24px,2.2vw,32px);
+  }
+
+  body.pc-news .news-item{
+    grid-template-columns:clamp(220px,18vw,260px) minmax(0,1fr) auto;
+    gap:clamp(20px,1.8vw,26px);
+    padding:clamp(22px,1.9vw,28px) 0;
+  }
+
+  body.pc-news .news-item h4{
+    font-size:clamp(16px,1.05vw,17px);
+  }
+
+  body.pc-news .news-item p{
+    font-size:clamp(12.5px,.82vw,13px);
+    line-height:1.82;
+  }
+
+  body.pc-news .news-date{
+    padding-left:clamp(18px,1.8vw,26px);
+  }
+
+  body.pc-news .pagination{
+    margin-top:clamp(18px,1.6vw,24px);
+  }
+
+  /* ---------- News detail ---------- */
+  body.pc-news-detail .news-detail-article{
+    max-width:940px;
+  }
+
+  body.pc-news-detail .news-detail-breadcrumb{
+    margin-bottom:clamp(20px,1.7vw,24px);
+  }
+
+  body.pc-news-detail .news-detail-header{
+    padding-top:clamp(8px,.8vw,10px);
+    padding-bottom:clamp(22px,1.8vw,26px);
+  }
+
+  body.pc-news-detail .news-detail-header h1{
+    max-width:840px;
+    font-size:clamp(28px,2vw,32px);
+  }
+
+  body.pc-news-detail .news-detail-meta{
+    margin-top:clamp(13px,1vw,16px);
+  }
+
+  body.pc-news-detail .news-detail-lead{
+    margin:clamp(24px,2vw,28px) 0;
+    padding:clamp(16px,1.25vw,18px) clamp(18px,1.55vw,22px);
+    font-size:clamp(14px,.95vw,15px);
+  }
+
+  body.pc-news-detail .news-detail-cover{
+    margin-bottom:clamp(24px,2.1vw,30px);
+  }
+
+  body.pc-news-detail .news-detail-cover img{
+    max-height:520px;
+    object-fit:cover;
+  }
+
+  body.pc-news-detail .news-detail-body{
+    font-size:clamp(15px,.95vw,16px);
+    line-height:1.95;
+  }
+
+  body.pc-news-detail .news-detail-body h2{
+    margin-top:clamp(28px,2.35vw,34px);
+    font-size:clamp(20px,1.35vw,22px);
+  }
+
+  body.pc-news-detail .news-detail-nav{
+    gap:clamp(10px,1vw,14px);
+    margin-top:clamp(36px,3vw,44px);
+  }
+
+  /* ---------- Contact ---------- */
+  body.pc-contact .contact-generated-hero{
+    height:clamp(320px,18.75vw,380px);
+    min-height:0;
+    aspect-ratio:auto;
+  }
+
+  body.pc-contact .contact-generated-hero .hero-text{
+    max-width:min(45vw,560px);
+  }
+
+  body.pc-contact .contact-generated-hero h1{
+    font-size:clamp(31px,2.15vw,42px);
+  }
+
+  body.pc-contact #contact-info > .container{
+    max-width:1120px;
+  }
+
+  body.pc-contact .contact-intro{
+    grid-template-columns:clamp(82px,6.6vw,96px) minmax(0,1fr);
+    gap:clamp(18px,1.7vw,24px);
+  }
+
+  body.pc-contact .contact-avatar{
+    width:clamp(82px,6.6vw,96px);
+    height:clamp(82px,6.6vw,96px);
+  }
+
+  body.pc-contact .contact-intro h3{
+    font-size:clamp(18px,1.2vw,19px);
+  }
+
+  body.pc-contact .contact-intro p{
+    font-size:clamp(13px,.88vw,13.5px);
+    line-height:1.95;
+  }
+
+  body.pc-contact .contact-cardgrid{
+    grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+    gap:clamp(20px,2vw,28px);
+    margin-top:clamp(28px,2.5vw,36px);
+    align-items:stretch;
+  }
+
+  body.pc-contact .contact-card,
+  body.pc-contact .contact-map{
+    min-width:0;
+  }
+
+  body.pc-contact .contact-card .head{
+    padding:clamp(14px,1.1vw,16px) clamp(18px,1.5vw,22px);
+  }
+
+  body.pc-contact .contact-card .body{
+    padding:clamp(18px,1.55vw,22px);
+    gap:clamp(13px,1.1vw,16px);
+  }
+
+  body.pc-contact .contact-map{
+    min-height:clamp(260px,20vw,310px);
+  }
+
+  body.pc-contact .contact-thanks-section,
+  body.pc-contact .contact-thanks-inner{
+    min-height:clamp(410px,31vw,458px);
+  }
+
+  body.pc-contact .contact-thanks-inner{
+    max-width:1200px;
+    padding-left:24px;
+    padding-right:24px;
+  }
+
+  body.pc-contact .contact-thanks-content{
+    max-width:760px;
+  }
+
+  body.pc-contact .contact-thanks-heading{
+    margin-bottom:clamp(26px,2.3vw,34px);
+  }
+
+  body.pc-contact .contact-thanks-heading h2{
+    font-size:clamp(29px,2.15vw,34px);
+  }
+
+  body.pc-contact .contact-thanks-copy p{
+    font-size:clamp(13px,.88vw,14px);
+    line-height:1.72;
+  }
+
+  body.pc-contact .contact-thanks-phone{
+    margin-top:clamp(26px,2.3vw,34px);
+    font-size:clamp(14px,.95vw,15px);
+  }
+}
+
+/* 1366/1440 desktops */
+@media (min-width:1081px) and (max-width:1439px){
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --secondary-page-max:1160px;
+  }
+
+  body.pc-about .about-quality-section > .container{
+    max-width:1120px;
+  }
+
+  body.pc-about .about-culture-inner{
+    max-width:860px;
+  }
+
+  body.pc-news main > .section > .container{
+    max-width:1040px;
+  }
+
+  body.pc-news-detail .news-detail-section > .container{
+    max-width:1080px;
+  }
+
+  body.pc-news-detail .news-detail-article{
+    max-width:900px;
+  }
+
+  body.pc-contact #contact-info > .container{
+    max-width:1080px;
+  }
+}
+
+/* Full HD and larger: keep reading widths bounded. */
+@media (min-width:1600px){
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --secondary-page-max:1200px;
+  }
+
+  body.pc-news main > .section > .container{
+    max-width:1100px;
+  }
+
+  body.pc-news-detail .news-detail-article{
+    max-width:940px;
+  }
+
+  body.pc-contact #contact-info > .container{
+    max-width:1120px;
+  }
+}
