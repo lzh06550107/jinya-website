@@ -314,12 +314,29 @@ const deadCssTokens = [
   ".btn-outline",
   ".pagination",
   ".pg-next",
-  ".pg-last"
+  ".pg-last",
+  "--gold-deep:",
+  "--gold:",
+  "--gold-light:",
+  "--shadow-lg:",
+  "--home-content-max:",
+  "--home-section-gap:",
+  "--page-gutter:"
 ];
 for (const token of deadCssTokens) {
   if (css.includes(token)) {
     fail("assets/css/style.css", `检测到已清理的废弃选择器: ${token}`);
   }
+}
+
+
+const printTrackStretchCount =
+  (css.match(/\.labels-print-swiper \.swiper-track\s*\{\s*align-items:stretch;\s*\}/g) || []).length;
+if (printTrackStretchCount !== 1) {
+  fail(
+    "assets/css/style.css",
+    `labels print swiper 的 align-items:stretch 应唯一，当前数量: ${printTrackStretchCount}`
+  );
 }
 
 const importantCount = (css.match(/!important/g) || []).length;

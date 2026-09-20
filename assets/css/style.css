@@ -30,9 +30,6 @@
   --pink:#dc9fd0;
   --pink-light:#f2cfe0;
 
-  --gold-deep:#e0a530;
-  --gold:#f2c94c;
-  --gold-light:#ffe4a3;
 
   --radius-sm:2px;
   --radius:3px;
@@ -40,7 +37,6 @@
   --container:1200px;
   --shadow-sm:0 2px 10px rgba(20,25,40,.06);
   --shadow:0 10px 30px rgba(20,25,40,.09);
-  --shadow-lg:0 20px 50px rgba(20,25,40,.14);
 
   --ease:cubic-bezier(.22,.7,.2,1);
 }
@@ -2815,10 +2811,6 @@ input,textarea{ font:inherit; }
   border-radius:0;
 }
 
-.labels-print-swiper .swiper-track{
-  align-items:stretch;
-}
-
 .labels-print-swiper .swiper-slide{
   box-sizing:border-box;
   aspect-ratio:auto;
@@ -5415,8 +5407,6 @@ input,textarea{ font:inherit; }
 /* PC homepage resolution convergence v96 */
 @media (min-width:769px){
   body.pc-home{
-    --home-content-max:1200px;
-    --home-section-gap:clamp(48px,3.4vw,64px);
   }
 
   /* Hero text keeps the same relative position as the viewport changes. */
@@ -6439,7 +6429,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:calc(100vw - 32px);
     --page-content-width:min(1200px,calc(100vw - 80px));
-    --page-gutter:24px;
     --header-bar-height:var(--header-bar-height);
     --header-logo-slot:clamp(210px,16vw,300px);
     --header-phone-slot:clamp(210px,16vw,300px);
@@ -6771,7 +6760,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:min(1680px,calc(100vw - 64px));
     --page-content-width:min(1480px,calc(var(--page-body-width) - 72px));
-    --page-gutter:30px;
   }
 }
 
@@ -6786,7 +6774,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:min(2048px,calc(100vw - 80px));
     --page-content-width:min(1800px,calc(var(--page-body-width) - 88px));
-    --page-gutter:36px;
   }
 }
 
@@ -6801,7 +6788,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:min(2560px,calc(100vw - 96px));
     --page-content-width:min(2200px,calc(var(--page-body-width) - 104px));
-    --page-gutter:44px;
   }
 }
 
@@ -7229,7 +7215,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:min(90vw,calc(100vw - 96px));
     --page-content-width:min(84vw,calc(var(--page-body-width) - 120px));
-    --page-gutter:clamp(36px,1.25vw,48px);
     --header-bar-height:80px;
   }
 
@@ -7500,7 +7485,6 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:min(94vw,calc(100vw - 96px));
     --page-content-width:min(86vw,calc(var(--page-body-width) - 144px));
-    --page-gutter:48px;
     --header-bar-height:88px;
   }
 
