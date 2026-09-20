@@ -3,15 +3,15 @@
     <input type="hidden" name="row[position]" value="{$row.position|default='hero'|htmlentities}">
     <div class="page-header"><h4>标题与文案（选填）</h4><p class="text-muted">配置后叠加显示在 Banner 图片上；PC 标题和副标题都留空时，PC 页面只显示背景图片。移动端仍按现有回退规则处理。</p></div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">PC 标题（显示文字）:</label>
-        <div class="col-xs-12 col-sm-8"><input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|default=''|htmlentities}"><p class="help-block">选填；填写后显示 PC Banner 主标题，留空则不显示。</p></div>
+        <label class="control-label col-xs-12 col-sm-2">PC 标题（第一行大标题）:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|default=''|htmlentities}"><p class="help-block">首页第一张 Banner 左侧第一行大标题；留空则不显示。</p></div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">移动标题（显示文字）:</label>
         <div class="col-xs-12 col-sm-8"><input id="c-mobile_title" class="form-control" name="row[mobile_title]" type="text" value="{$row.mobile_title|default=''|htmlentities}" placeholder="留空时使用 Banner 名称"><p class="help-block">仅移动端使用；留空时按当前前台兼容规则回退到已有标题。</p></div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">PC 副标题（显示文字）:</label>
+        <label class="control-label col-xs-12 col-sm-2">PC 副标题（第二行大标题）:</label>
         <div class="col-xs-12 col-sm-8"><input id="c-subtitle" class="form-control" name="row[subtitle]" type="text" value="{$row.subtitle|default=''|htmlentities}"></div>
     </div>
     <div class="form-group">

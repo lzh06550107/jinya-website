@@ -34,14 +34,27 @@ abstract class AbstractRenderService
             }
             $highlightItems = $this->bannerHighlights->forTerminal($highlightItems, $context->terminal());
 
+            $title = $mobile && !empty($row['mobile_title'])
+                ? $row['mobile_title']
+                : (isset($row['title']) ? $row['title'] : '');
+            $subtitle = $mobile && !empty($row['mobile_subtitle'])
+                ? $row['mobile_subtitle']
+                : (isset($row['subtitle']) ? $row['subtitle'] : '');
+            // Upgrade only the exact historical PC baseline copy. Any copy
+            // changed by an administrator remains authoritative.
+            if (!$mobile
+                && (string)$pageKey === 'home'
+                && (string)$position === 'hero'
+                && trim((string)$title) === '高品质包装印刷 一站式按需定制'
+                && trim((string)$subtitle) === 'JINYA PACKAGE · 一站式按需定制') {
+                $title = '高质量无版印刷';
+                $subtitle = '不干胶·包装袋 一站式按需定制';
+            }
+
             $out[] = [
                 'id' => (int)$row['id'],
-                'title' => $mobile && !empty($row['mobile_title'])
-                    ? $row['mobile_title']
-                    : (isset($row['title']) ? $row['title'] : ''),
-                'subtitle' => $mobile && !empty($row['mobile_subtitle'])
-                    ? $row['mobile_subtitle']
-                    : (isset($row['subtitle']) ? $row['subtitle'] : ''),
+                'title' => $title,
+                'subtitle' => $subtitle,
                 'description' => $mobile && !empty($row['mobile_description'])
                     ? $row['mobile_description']
                     : (isset($row['description']) ? $row['description'] : ''),
