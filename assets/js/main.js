@@ -35,18 +35,71 @@
     window.addEventListener("pageshow", requestHeaderScrollMotion);
   }
 
-  // Mobile nav toggle
+  // Mobile navigation accessibility and state synchronization.
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".main-nav");
   if(toggle && nav){
+    var mobileNavQuery = window.matchMedia ? window.matchMedia("(max-width:768px)") : null;
+
+    function navIsMobile(){
+      return mobileNavQuery ? mobileNavQuery.matches : window.innerWidth <= 768;
+    }
+
+    function syncNavState(){
+      var mobile = navIsMobile();
+      var open = mobile && nav.classList.contains("open");
+
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
+
+      if(mobile){
+        nav.setAttribute("aria-hidden", open ? "false" : "true");
+        if("inert" in nav) nav.inert = !open;
+      }else{
+        nav.classList.remove("open");
+        nav.removeAttribute("aria-hidden");
+        if("inert" in nav) nav.inert = false;
+      }
+    }
+
+    function closeNav(){
+      nav.classList.remove("open");
+      syncNavState();
+    }
+
     toggle.addEventListener("click", function(){
       nav.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", nav.classList.contains("open") ? "true" : "false");
+      syncNavState();
     });
+
     nav.querySelectorAll("a").forEach(function(a){
-      a.addEventListener("click", function(){ nav.classList.remove("open"); });
+      a.addEventListener("click", closeNav);
     });
+
+    document.addEventListener("keydown", function(event){
+      if(event.key === "Escape" && nav.classList.contains("open")){
+        closeNav();
+        toggle.focus();
+      }
+    });
+
+    if(mobileNavQuery){
+      if(mobileNavQuery.addEventListener) mobileNavQuery.addEventListener("change", syncNavState);
+      else if(mobileNavQuery.addListener) mobileNavQuery.addListener(syncNavState);
+    }else{
+      window.addEventListener("resize", syncNavState, { passive:true });
+    }
+
+    syncNavState();
   }
+
+  // Placeholder links must not unexpectedly jump the page to the top.
+  // They automatically become active again once a real href replaces "#".
+  document.querySelectorAll('a[href="#"]').forEach(function(link){
+    link.setAttribute("aria-disabled", "true");
+    link.setAttribute("tabindex", "-1");
+    link.addEventListener("click", function(event){ event.preventDefault(); });
+  });
 
   // Reusable image/video swiper. Each instance controls only its own slides,
   // so the hero, product gallery and sample gallery can behave independently.
@@ -131,7 +184,7 @@
 
     function restart(){
       window.clearInterval(timer);
-      if(autoplay > 0 && !reduceMotion){
+      if(autoplay > 0 && !reduceMotion && !document.hidden){
         timer = window.setInterval(function(){ go(index >= maxIndex() ? 0 : index + 1, false); }, autoplay);
       }
     }
@@ -174,6 +227,10 @@
       });
     });
     window.addEventListener("resize", layout);
+    document.addEventListener("visibilitychange", function(){
+      if(document.hidden) window.clearInterval(timer);
+      else restart();
+    });
     layout();
     restart();
   });
