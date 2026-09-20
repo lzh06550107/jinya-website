@@ -49,16 +49,31 @@ for (const job of jobs) {
   const response = await page.goto(`http://127.0.0.1:4173/${job.page}`, { waitUntil:"networkidle" });
   if (!response || response.status() !== 200) problems.push(`document status: ${response?.status()}`);
   await page.screenshot({ path:path.join(out, `${job.tag}-${job.page.replaceAll("/","-")}.png`), fullPage:true });
-  const metrics = await page.evaluate(() => ({
-    scrollWidth: document.documentElement.scrollWidth,
-    clientWidth: document.documentElement.clientWidth,
-    mainCount: document.querySelectorAll("main").length,
-    header: !!document.querySelector(".site-header"),
-    footer: !!document.querySelector(".site-footer"),
-  }));
+  const metrics = await page.evaluate(() => {
+    const headerEl = document.querySelector(".site-header");
+    const firstMainSection = document.querySelector("main > section");
+    const headerRect = headerEl ? headerEl.getBoundingClientRect() : null;
+    const firstRect = firstMainSection ? firstMainSection.getBoundingClientRect() : null;
+    return {
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      mainCount: document.querySelectorAll("main").length,
+      header: !!headerEl,
+      footer: !!document.querySelector(".site-footer"),
+      headerBottom: headerRect ? headerRect.bottom : null,
+      firstSectionTop: firstRect ? firstRect.top : null,
+    };
+  });
   if (metrics.scrollWidth > metrics.clientWidth + 2) problems.push(`horizontal overflow ${metrics.scrollWidth} > ${metrics.clientWidth}`);
   if (metrics.mainCount !== 1) problems.push(`main count = ${metrics.mainCount}`);
   if (!metrics.header || !metrics.footer) problems.push("missing site header/footer");
+  if (job.tag.startsWith("desktop") && job.page !== "index.html") {
+    if (metrics.headerBottom == null || metrics.firstSectionTop == null) {
+      problems.push("cannot measure fixed header / first banner clearance");
+    } else if (metrics.firstSectionTop + 1 < metrics.headerBottom) {
+      problems.push(`first banner overlaps fixed header: top ${metrics.firstSectionTop}px < header bottom ${metrics.headerBottom}px`);
+    }
+  }
   if (problems.length) {
     failed = true;
     console.error(`VIEWPORT FAIL [${job.tag} ${job.page}]\n - ${problems.join("\n - ")}`);
