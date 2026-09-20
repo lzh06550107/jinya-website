@@ -143,4 +143,24 @@ for (const token of ["about.config.social_url_1", "about.config.social_url_2", "
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
 
+
+// HTML baseline seed is part of the runtime contract.
+{
+  const baselineSql = read("database/cms_html_baseline.sql");
+  const installer = read("application/common/service/cms/InstallerService.php");
+  for (const token of [
+    "/assets/jinya/img/home-banner-01.png",
+    "/assets/jinya/img/labels-banner-clean-v83.webp",
+    "/assets/jinya/img/bags-banner-clean-v85.webp",
+    "/assets/jinya/img/boxes-banner-clean-v87.webp",
+    "/assets/jinya/img/about-banner-upload-20260919.jpg",
+    "/assets/jinya/img/contact-banner-clean-v78.jpg",
+    "html-baseline:news:"
+  ]) {
+    expect(baselineSql.includes(token), `HTML baseline SQL missing ${token}`);
+  }
+  expect(installer.includes("renderHtmlBaselineSql($prefix)"), "Installer must execute the HTML baseline seed");
+  expect(installer.includes("cms_html_baseline.sql"), "Installer must load database/cms_html_baseline.sql");
+}
+
 if (!process.exitCode) console.log("Dynamic view contract audit: OK");
