@@ -23,3 +23,33 @@ jobs:
 
       - name: Run static site audit
         run: node scripts/site-audit.mjs
+
+  viewport-audit:
+    needs: static-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run viewport audit
+        run: node scripts/viewport-audit.mjs
+
+      - name: Upload viewport audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewport-audit-${{ github.sha }}
+          path: artifacts/viewport-audit
+          if-no-files-found: warn
+          retention-days: 14
