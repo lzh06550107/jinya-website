@@ -98,3 +98,37 @@ PR 必须至少通过：
 - `node scripts/viewport-audit.mjs`：2048×1536 PC、多页面移动端以及首页 4K 视口截图与溢出检查。
 
 新增或修改 HTML 区块时，应同步更新对应动态字段契约与审计规则。
+
+
+## HTML 基线数据库初始化
+
+`database/cms_html_baseline.sql` 是当前动态 CMS 的最终内容基线，数据直接对应
+`html/` 与 `html/mobile/` 的静态参考页面。它保存的是业务内容与静态资源引用，
+不保存 DOM/CSS/JS；页面结构仍由 View 和 `public/assets/jinya/` 负责。
+
+`InstallerService` 在以下步骤完成后最后执行该脚本：
+
+```
+cms.sql
+→ cms_clone_content.sql
+→ cms_jinya_product_catalog.sql
+→ 数据表/Markdown/Page Schema 迁移
+→ cms_html_baseline.sql
+→ refreshSiteConfig
+```
+
+因此新数据库执行 `php think cms:install` 后，首页 Banner、首页模块、labels、bags、
+boxes、about、contact、新闻、Header/Footer 和站点公共信息均以当前 HTML 基线为准。
+
+页面区块和首页模块如果已经被后台管理员编辑（`edited_by_admin=1`），基线脚本尽量
+保留管理员内容；规范导航和站点公共信息属于本项目初始化基线，会同步为金亚包装当前值。
+
+当前 HTML 静态资源统一写为 `/assets/jinya/...`，对应
+`public/assets/jinya/` 中由 `html/assets/` 发布的同一批文件。
+
+初始化/修复入口：
+
+```bash
+php think cms:install
+php think cms:health
+```
