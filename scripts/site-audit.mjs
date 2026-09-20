@@ -303,6 +303,30 @@ if (!js.includes("function syncNavState()")) {
   fail("assets/js/main.js", "缺少导航 aria/open 状态同步");
 }
 
+
+const deadCssTokens = [
+  ".site-header:not(.site-header--home) + main",
+  ".logo-tagline",
+  ".hero--gold",
+  ".hero--prodbg",
+  ".hero-figure",
+  ".btn-primary",
+  ".btn-outline",
+  ".pagination",
+  ".pg-next",
+  ".pg-last"
+];
+for (const token of deadCssTokens) {
+  if (css.includes(token)) {
+    fail("assets/css/style.css", `检测到已清理的废弃选择器: ${token}`);
+  }
+}
+
+const importantCount = (css.match(/!important/g) || []).length;
+if (importantCount > 127) {
+  fail("assets/css/style.css", `!important 数量回升到 ${importantCount}，当前上限为 127`);
+}
+
 console.log(`[site-audit] checked ${allPages.length} HTML pages`);
 console.log(`[site-audit] style.css v${[...pcStyles][0] || "?"}, main.js v${[...pcScripts][0] || "?"}`);
 
