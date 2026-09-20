@@ -1,4 +1,6 @@
 <form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <input type="hidden" name="row[page_key]" value="{$row.page_key|default='home'|htmlentities}">
+    <input type="hidden" name="row[position]" value="{$row.position|default='hero'|htmlentities}">
     <div class="page-header"><h4>标题与文案（选填）</h4><p class="text-muted">配置后叠加显示在 Banner 图片上；PC 标题和副标题都留空时，PC 页面只显示背景图片。移动端仍按现有回退规则处理。</p></div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">PC 标题（显示文字）:</label>
@@ -29,8 +31,30 @@
                     <span class="text-muted pull-right">当前 <span data-banner-highlight-count>0 / 5</span></span>
                 </div>
             </div>
-            <p class="help-block">推荐 3 条，最多 5 条。单条建议 6～16 个中文字符，过长会影响 Banner 排版。图标建议 64×64 或 128×128，PNG/WebP 透明背景，建议 ≤100 KB；图标可留空。</p>
+            <p class="help-block">推荐 3 条，最多 5 条。单条建议 6～16 个中文字符，过长会影响 Banner 排版。前三条图标可在下方直接上传；保存时会自动写回 highlights_json。</p>
         </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">第 1 条图标:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group">
+            <input id="c-highlight_icon_1" class="form-control" name="row[highlight_icon_1]" type="text" value="{$row.highlight_icon_1|default='/assets/jinya/img/home-highlight-team.png'|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页 Banner 第 1 条卖点图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP/SVG" data-media-transparent="true">
+            <div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-highlight_icon_1" class="btn btn-danger faupload" data-input-id="c-highlight_icon_1" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-highlight_icon_1" class="btn btn-primary fachoose" data-input-id="c-highlight_icon_1" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div>
+        </div><p class="help-block">默认：团队 icon。可上传 PNG/WebP/SVG 透明图片。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">第 2 条图标:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group">
+            <input id="c-highlight_icon_2" class="form-control" name="row[highlight_icon_2]" type="text" value="{$row.highlight_icon_2|default='/assets/jinya/img/home-highlight-quality.png'|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页 Banner 第 2 条卖点图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP/SVG" data-media-transparent="true">
+            <div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-highlight_icon_2" class="btn btn-danger faupload" data-input-id="c-highlight_icon_2" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-highlight_icon_2" class="btn btn-primary fachoose" data-input-id="c-highlight_icon_2" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div>
+        </div><p class="help-block">默认：品质 icon。可上传 PNG/WebP/SVG 透明图片。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">第 3 条图标:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group">
+            <input id="c-highlight_icon_3" class="form-control" name="row[highlight_icon_3]" type="text" value="{$row.highlight_icon_3|default='/assets/jinya/img/home-highlight-delivery.png'|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页 Banner 第 3 条卖点图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP/SVG" data-media-transparent="true">
+            <div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-highlight_icon_3" class="btn btn-danger faupload" data-input-id="c-highlight_icon_3" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-highlight_icon_3" class="btn btn-primary fachoose" data-input-id="c-highlight_icon_3" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div>
+        </div><p class="help-block">默认：发货 icon。可上传 PNG/WebP/SVG 透明图片。</p></div>
     </div>
 
     <div class="page-header"><h4>PC / Mobile 展示媒体</h4><p class="text-muted">PC 与移动端可分别选择图片或视频；移动端选择“继承 PC”时沿用 PC 媒体类型。切换类型只改变字段视觉强调，不会自动清空已有图片或视频。</p></div>
