@@ -7685,3 +7685,327 @@ input,textarea{ font:inherit; }
     transition:none !important;
   }
 }
+
+
+/* 2K and 4K visual scale optimization v104 */
+/*
+ * The semantic body shell remains the hard outer boundary.
+ * On 2K/4K displays we use a percentage-based body width so the site does
+ * not collapse into a narrow centered column.
+ */
+@media (min-width:2560px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --page-body-width:min(90vw,calc(100vw - 96px));
+    --page-content-width:min(84vw,calc(var(--page-body-width) - 120px));
+    --page-gutter:clamp(36px,1.25vw,48px);
+  }
+
+  /* Override historical 1100-1248px module caps on ultra-wide screens. */
+  body.pc-home > main .container,
+  body.pc-labels > main .container,
+  body.pc-bags > main .container,
+  body.pc-boxes > main .container,
+  body.pc-about > main .container,
+  body.pc-news > main .container,
+  body.pc-news-detail > main .container,
+  body.pc-contact > main .container{
+    width:var(--page-content-width) !important;
+    max-width:100% !important;
+    min-width:0;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box;
+  }
+
+  body.pc-home > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-labels > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-bags > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-boxes > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-about > main > :is(.hero,.hero--home,.hero--inner,.about-upload-hero,.about-culture-section),
+  body.pc-news > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-news-detail > main > :is(.hero,.hero--home,.hero--inner),
+  body.pc-contact > main > :is(.hero,.hero--home,.hero--inner,.contact-thanks-section){
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  /* Major nested visual modules may fill content width, never body width. */
+  body.pc-home > main :is(
+    .product-center-block,
+    .product-masonry,
+    .service-cta,
+    .workshop-grid,
+    .walkin-block,
+    .walkin-hero,
+    .culture-banner
+  ),
+  body.pc-labels > main :is(
+    .labels-material-list,
+    .labels-service-flow,
+    .labels-guarantee-grid,
+    .labels-team-gallery,
+    .labels-team-benefits
+  ),
+  body.pc-bags > main :is(
+    .tech-compare,
+    .app-section,
+    .bags-benefits-grid
+  ),
+  body.pc-boxes > main :is(
+    .boxes-quality-row,
+    .boxes-promise-panel,
+    .boxes-detail-grid--reference,
+    .boxes-detail-cta,
+    .bags-benefits-grid
+  ){
+    width:100%;
+    max-width:100% !important;
+    min-width:0;
+    box-sizing:border-box;
+  }
+
+  /* Header and separated navigation scale with the larger desktop canvas. */
+  body.pc-home > .site-header > .container,
+  body.pc-labels > .site-header > .container,
+  body.pc-bags > .site-header > .container,
+  body.pc-boxes > .site-header > .container,
+  body.pc-about > .site-header > .container,
+  body.pc-news > .site-header > .container,
+  body.pc-news-detail > .site-header > .container,
+  body.pc-contact > .site-header > .container,
+  body.pc-home > .site-nav > .container,
+  body.pc-labels > .site-nav > .container,
+  body.pc-bags > .site-nav > .container,
+  body.pc-boxes > .site-nav > .container,
+  body.pc-about > .site-nav > .container,
+  body.pc-news > .site-nav > .container,
+  body.pc-news-detail > .site-nav > .container,
+  body.pc-contact > .site-nav > .container{
+    height:80px;
+  }
+
+  body.pc-home > .site-header,
+  body.pc-labels > .site-header,
+  body.pc-bags > .site-header,
+  body.pc-boxes > .site-header,
+  body.pc-about > .site-header,
+  body.pc-news > .site-header,
+  body.pc-news-detail > .site-header,
+  body.pc-contact > .site-header,
+  body.pc-home > .site-nav,
+  body.pc-labels > .site-nav,
+  body.pc-bags > .site-nav,
+  body.pc-boxes > .site-nav,
+  body.pc-about > .site-nav,
+  body.pc-news > .site-nav,
+  body.pc-news-detail > .site-nav,
+  body.pc-contact > .site-nav{
+    height:80px;
+  }
+
+  body.pc-labels > main,
+  body.pc-bags > main,
+  body.pc-boxes > main,
+  body.pc-about > main,
+  body.pc-news > main,
+  body.pc-news-detail > main,
+  body.pc-contact > main{
+    padding-top:80px;
+  }
+
+  .site-header .site-logo-img{
+    width:225px;
+    height:68px;
+  }
+
+  .site-header .header-phone{
+    min-width:235px;
+    height:50px;
+    padding-left:12px;
+    padding-right:14px;
+  }
+
+  .site-header .header-phone .label{
+    font-size:25px;
+  }
+
+  .site-nav .main-nav a{
+    padding-left:14px;
+    padding-right:14px;
+    font-size:17px;
+  }
+
+  /* Shared typography: avoid tiny 13-14px copy on a true 4K CSS viewport. */
+  body.pc-home .section-head h2,
+  body.pc-labels .section-head h2,
+  body.pc-bags .section-head h2,
+  body.pc-boxes .section-head h2,
+  body.pc-about .section-head h2,
+  body.pc-news .section-head h2,
+  body.pc-contact .section-head h2{
+    font-size:clamp(36px,1.15vw,44px);
+  }
+
+  body.pc-home .eyebrow,
+  body.pc-labels .eyebrow,
+  body.pc-bags .eyebrow,
+  body.pc-boxes .eyebrow,
+  body.pc-about .eyebrow,
+  body.pc-news .eyebrow,
+  body.pc-contact .eyebrow{
+    font-size:clamp(15px,.5vw,18px);
+  }
+
+  body.pc-home .section,
+  body.pc-labels .section,
+  body.pc-bags .section,
+  body.pc-boxes .section,
+  body.pc-about .section,
+  body.pc-news .section,
+  body.pc-contact .section{
+    padding-top:clamp(68px,2.2vw,86px);
+    padding-bottom:clamp(68px,2.2vw,86px);
+  }
+
+  /* Homepage-specific scale correction visible in the supplied 4K capture. */
+  body.pc-home main > .section:first-of-type .container.two-col{
+    max-width:100% !important;
+    grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+    gap:clamp(56px,2.3vw,90px);
+  }
+
+  body.pc-home main > .section:first-of-type .reveal:first-child h2{
+    font-size:clamp(36px,1.05vw,42px) !important;
+  }
+
+  body.pc-home main > .section:first-of-type .reveal:first-child p{
+    font-size:clamp(16px,.5vw,18px) !important;
+    line-height:1.9 !important;
+  }
+
+  body.pc-home .product-section .pm-card,
+  body.pc-home .product-section .pm-02 .text,
+  body.pc-home .product-section .pm-03 .text,
+  body.pc-home .product-section .pm-04 .text{
+    padding:clamp(38px,1.3vw,52px) clamp(42px,1.5vw,60px);
+  }
+
+  body.pc-home .product-section .pm-card .num{
+    font-size:clamp(29px,.9vw,34px);
+  }
+
+  body.pc-home .product-section .pm-card h3{
+    font-size:clamp(22px,.7vw,26px);
+  }
+
+  body.pc-home .product-section .pm-card p{
+    font-size:clamp(15px,.48vw,17px);
+  }
+
+  body.pc-home .service-cta{
+    min-height:clamp(310px,10vw,390px);
+    padding:clamp(48px,1.6vw,64px) clamp(60px,2vw,82px);
+  }
+
+  body.pc-home .service-cta-copy h3{
+    font-size:clamp(29px,.95vw,35px);
+  }
+
+  body.pc-home .service-cta-copy p,
+  body.pc-home .service-cta-feature p{
+    font-size:clamp(14px,.45vw,16px);
+  }
+
+  body.pc-home .service-cta-feature h4{
+    font-size:clamp(18px,.58vw,21px);
+  }
+
+  body.pc-home .workshop-head h2{
+    font-size:clamp(36px,1.1vw,42px);
+  }
+
+  body.pc-home .workshop-grid{
+    column-gap:clamp(28px,1.2vw,46px);
+    row-gap:clamp(38px,1.5vw,56px);
+  }
+
+  body.pc-home .workshop-copy h3{
+    font-size:clamp(18px,.6vw,22px);
+  }
+
+  body.pc-home .workshop-copy p{
+    font-size:clamp(14px,.46vw,16px);
+  }
+
+  body.pc-home .walkin-hero{
+    min-height:clamp(620px,18vw,760px);
+  }
+
+  body.pc-home .walkin-copy{
+    width:min(520px,31%);
+    left:clamp(110px,6%,180px);
+    top:clamp(100px,3vw,140px);
+  }
+
+  body.pc-home .walkin-copy h2{
+    font-size:clamp(30px,.95vw,36px);
+  }
+
+  body.pc-home .walkin-desc{
+    width:min(500px,100%);
+  }
+
+  body.pc-home .walkin-desc p{
+    font-size:clamp(15px,.48vw,17px);
+  }
+
+  body.pc-home .walkin-block + .stats .n{
+    font-size:clamp(30px,.95vw,36px);
+  }
+
+  body.pc-home .walkin-block + .stats .l{
+    font-size:clamp(13px,.42vw,15px);
+  }
+
+  body.pc-home .culture-banner--light{
+    padding:clamp(34px,1.2vw,48px) clamp(80px,3vw,120px) clamp(40px,1.4vw,56px);
+  }
+
+  body.pc-home .culture-banner--light > h2{
+    font-size:clamp(34px,1.05vw,40px);
+  }
+
+  body.pc-home .culture-grid .glass-card h4{
+    font-size:clamp(17px,.55vw,20px);
+  }
+
+  body.pc-home .culture-grid .glass-card p{
+    font-size:clamp(12px,.4vw,14px);
+  }
+
+  /* Footer should visually match the enlarged body instead of shrinking. */
+  .site-footer .footer-grid{
+    gap:clamp(44px,2vw,76px);
+  }
+
+  .site-footer .footer-col h5{
+    font-size:clamp(17px,.55vw,20px);
+  }
+
+  .site-footer .footer-col p,
+  .site-footer .footer-contact-sub{
+    font-size:clamp(13px,.42vw,15px);
+    line-height:1.85;
+  }
+
+  .site-footer .footer-contact-row{
+    font-size:clamp(15px,.48vw,17px);
+  }
+}
