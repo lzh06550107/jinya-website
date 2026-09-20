@@ -106,6 +106,17 @@ for (const file of cmsBackendControllers) {
   );
 }
 
+const iconPickerCssPath = path.join(root, "public", "assets", "css", "cms-icon-picker.css");
+expect(fs.existsSync(iconPickerCssPath), "Missing CMS icon picker stylesheet: public/assets/css/cms-icon-picker.css");
+if (fs.existsSync(iconPickerCssPath)) {
+  const iconPickerCss = fs.readFileSync(iconPickerCssPath, "utf8");
+  expect(iconPickerCss.includes(".cms-icon-picker-font-grid"), "CMS icon picker stylesheet missing font grid styles");
+  expect(iconPickerCss.includes(".cms-icon-picker-tab-pane"), "CMS icon picker stylesheet missing tab pane styles");
+}
+const iconPickerJs = read("public/assets/js/backend/cms/icon_picker.js");
+expect(iconPickerJs.includes("input.parent('.input-group')"), "CMS icon picker must reuse an existing Bootstrap input-group");
+expect(iconPickerJs.includes("cms-icon-picker.css' + version"), "CMS icon picker stylesheet URL must be cache-busted with the site version");
+
 const route = read("application/route.php");
 for (const token of [
   "'index.html$'", "'labels.html$'", "'bags.html$'", "'boxes.html$'",

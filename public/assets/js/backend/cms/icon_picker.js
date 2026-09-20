@@ -8,7 +8,8 @@ define(['jquery','form'], function ($, Form) {
     var ensureStyle = function () {
         if ($('#cms-icon-picker-style').length) { return; }
         var base = (window.Config && Config.site && Config.site.cdnurl) ? Config.site.cdnurl : '';
-        $('<link id="cms-icon-picker-style" rel="stylesheet">').attr('href', base + '/assets/css/cms-icon-picker.css').appendTo('head');
+        var version = (window.Config && Config.site && Config.site.version) ? ('?v=' + encodeURIComponent(Config.site.version)) : '';
+        $('<link id="cms-icon-picker-style" rel="stylesheet">').attr('href', base + '/assets/css/cms-icon-picker.css' + version).appendTo('head');
     };
 
     var ensureId = function (input) {
@@ -114,12 +115,19 @@ define(['jquery','form'], function ($, Form) {
         if (input.attr('data-cms-icon-picker-ready') === '1') { render(input); return; }
         ensureStyle();
         var id = ensureId(input);
-        var group = input.closest('.input-group');
-        if (!group.length || !group.hasClass('cms-icon-picker-input-group')) {
-            input.wrap('<div class="input-group cms-icon-picker-input-group"></div>');
+        // Reuse an existing Bootstrap input-group when the field already has
+        // upload/choose controls. Wrapping only the input in a second
+        // input-group breaks Bootstrap's table-cell layout and pushes the
+        // icon picker button away from the field.
+        var group = input.parent('.input-group');
+        if (!group.length) {
             group = input.closest('.input-group');
-        } else {
+        }
+        if (group.length) {
             group.addClass('cms-icon-picker-input-group');
+        } else {
+            input.wrap('<div class="input-group cms-icon-picker-input-group"></div>');
+            group = input.parent('.input-group');
         }
         var groupMaxWidth = $.trim(String(input.attr('data-cms-icon-picker-group-max-width') || ''));
         if (groupMaxWidth) {
