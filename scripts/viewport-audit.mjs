@@ -172,6 +172,54 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     const hero = document.querySelector(".hero--home, .hero--inner");
 
     const heroRect = hero ? hero.getBoundingClientRect() : null;
+
+    function rectInfo(el) {
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return {
+        left: r.left,
+        top: r.top,
+        right: r.right,
+        bottom: r.bottom,
+        width: r.width,
+        height: r.height
+      };
+    }
+
+    function visible(el) {
+      if (!el) return false;
+      const s = getComputedStyle(el);
+      return s.display !== "none" && s.visibility !== "hidden" && Number(s.opacity || 1) !== 0;
+    }
+
+    function overlap(a, b) {
+      if (!a || !b) return 0;
+      const w = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));
+      const h = Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+      return w * h;
+    }
+
+    const logo = document.querySelector(".logo");
+    const phone = document.querySelector(".header-phone");
+    const floatSide = document.querySelector(".float-side");
+
+    const logoRect = visible(logo) ? rectInfo(logo) : null;
+    const phoneRect = visible(phone) ? rectInfo(phone) : null;
+    const navRect = visible(mainNav) ? rectInfo(mainNav) : null;
+    const toggleRect = visible(toggle) ? rectInfo(toggle) : null;
+    const floatRect = visible(floatSide) ? rectInfo(floatSide) : null;
+
+    const clippedText = Array.from(document.querySelectorAll(
+      "h1,h2,h3,h4,.main-nav a,.header-phone .label,.hero-cta,.btn,.app-tabs button,.gallery-tabs button"
+    ))
+      .filter((el) => visible(el))
+      .filter((el) => el.clientWidth > 0 && el.clientHeight > 0)
+      .filter((el) => el.scrollWidth > el.clientWidth + 2 || el.scrollHeight > el.clientHeight + 2)
+      .map((el) => {
+        const text = (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 80);
+        return `${el.tagName.toLowerCase()}.${String(el.className || "").replace(/\s+/g, ".")}: ${text}`;
+      });
+
     const htmlWidth = document.documentElement.scrollWidth;
     const bodyWidth = document.body ? document.body.scrollWidth : htmlWidth;
 
@@ -194,7 +242,20 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
       navDisplay: mainNav ? style(mainNav).display : null,
       navAriaHidden: mainNav ? mainNav.getAttribute("aria-hidden") : null,
       expectedMobile: isMobile,
-      currentPath: location.pathname
+      currentPath: location.pathname,
+      logoRect,
+      phoneRect,
+      navRect,
+      toggleRect,
+      floatRect,
+      headerOverlap: {
+        logoNav: overlap(logoRect, navRect),
+        navPhone: overlap(navRect, phoneRect),
+        logoPhone: overlap(logoRect, phoneRect),
+        logoToggle: overlap(logoRect, toggleRect),
+        phoneToggle: overlap(phoneRect, toggleRect)
+      },
+      clippedText
     };
   }, mobile);
 
@@ -211,7 +272,37 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     );
   }
 
+  function rectOutsideViewport(rect) {
+    if (!rect) return false;
+    return rect.left < -2 || rect.right > viewport.width + 2 || rect.top < -2;
+  }
+
+  [state.logoRect, state.phoneRect, state.navRect, state.toggleRect].forEach((rect, idx) => {
+    if (rectOutsideViewport(rect)) {
+      const names = ["Logo", "电话区", "主导航", "菜单按钮"];
+      addFailure(pageName, viewport, `${names[idx]} 超出可视区域`);
+    }
+  });
+
+  if (state.floatRect && state.floatRect.right > viewport.width + 2) {
+    addFailure(pageName, viewport, "右侧浮动工具栏超出视口");
+  }
+
+  state.clippedText.forEach((item) => {
+    addFailure(pageName, viewport, `关键文字可能被裁切: ${item}`);
+  });
+
   if (mobile) {
+    if (state.headerOverlap.logoToggle > 1) {
+      addFailure(pageName, viewport, "Mobile Logo 与菜单按钮发生重叠");
+    }
+    if (state.headerOverlap.phoneToggle > 1) {
+      addFailure(pageName, viewport, "Mobile 电话入口与菜单按钮发生重叠");
+    }
+    if (state.headerOverlap.logoPhone > 1) {
+      addFailure(pageName, viewport, "Mobile Logo 与电话入口发生重叠");
+    }
+
     if (state.toggleDisplay === "none") addFailure(pageName, viewport, "Mobile 导航按钮不可见");
     if (state.toggleExpanded !== "false") {
       addFailure(pageName, viewport, `Mobile 初始 aria-expanded 异常: ${state.toggleExpanded}`);
@@ -220,6 +311,16 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
       addFailure(pageName, viewport, `Mobile 初始导航 aria-hidden 异常: ${state.navAriaHidden}`);
     }
   } else {
+    if (state.headerOverlap.logoNav > 1) {
+      addFailure(pageName, viewport, "PC Logo 与主导航发生重叠");
+    }
+    if (state.headerOverlap.navPhone > 1) {
+      addFailure(pageName, viewport, "PC 主导航与电话区发生重叠");
+    }
+    if (state.headerOverlap.logoPhone > 1) {
+      addFailure(pageName, viewport, "PC Logo 与电话区发生重叠");
+    }
+
     if (state.toggleDisplay !== "none") addFailure(pageName, viewport, "PC 导航按钮不应显示");
     if (state.navDisplay === "none") addFailure(pageName, viewport, "PC 主导航不可见");
     if (state.navAriaHidden === "true") addFailure(pageName, viewport, "PC 主导航不应 aria-hidden=true");
