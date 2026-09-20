@@ -140,6 +140,12 @@ class PageBlockViewModelFactory
 
     private function renderExtraMarkdown(array $extra, $terminal)
     {
+        foreach (['print_points'] as $scalarMarkdownKey) {
+            if (isset($extra[$scalarMarkdownKey]) && trim((string)$extra[$scalarMarkdownKey]) !== '') {
+                $extra[$scalarMarkdownKey . '_html'] = MarkdownRenderer::render($extra[$scalarMarkdownKey]);
+                $extra[$scalarMarkdownKey . '_inline_html'] = MarkdownRenderer::renderInline($extra[$scalarMarkdownKey]);
+            }
+        }
         if (isset($extra['items']) && is_array($extra['items'])) {
             foreach ($extra['items'] as $index => $entry) {
                 if (!is_array($entry)) continue;
