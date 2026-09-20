@@ -61,6 +61,51 @@ for (const file of [
   expect(fs.existsSync(path.join(root, file)), `${file} must be published from html/assets`);
 }
 
+// FastAdmin loads one RequireJS controller per CMS backend route. If these files
+// disappear, the PHP view can render while the content area remains uninitialized/blank.
+const cmsBackendControllers = [
+  "about_page_block_editor.js",
+  "advantages_items_editor.js",
+  "article.js",
+  "article_category.js",
+  "bags_page_block_editor.js",
+  "banner.js",
+  "banner_highlight_editor.js",
+  "boxes_page_block_editor.js",
+  "contact_page_block_editor.js",
+  "content.js",
+  "culture_items_editor.js",
+  "home_section.js",
+  "home_section_reference.js",
+  "icon_picker.js",
+  "inquiry.js",
+  "label_page_block_editor.js",
+  "layout_component.js",
+  "markdown_editor.js",
+  "media_items_editor.js",
+  "media_preview.js",
+  "metrics_editor.js",
+  "navigation.js",
+  "page.js",
+  "page_block.js",
+  "page_config.js",
+  "page_content_block.js",
+  "page_content_block_editor_schema.js",
+  "product.js",
+  "product_category.js",
+  "product_image.js",
+  "product_parameter.js",
+  "product_section.js",
+  "site_config.js",
+  "workshop_items_editor.js",
+];
+for (const file of cmsBackendControllers) {
+  expect(
+    fs.existsSync(path.join(root, "public", "assets", "js", "backend", "cms", file)),
+    `Missing CMS backend RequireJS controller: public/assets/js/backend/cms/${file}`,
+  );
+}
+
 const route = read("application/route.php");
 for (const token of [
   "'index.html$'", "'labels.html$'", "'bags.html$'", "'boxes.html$'",
