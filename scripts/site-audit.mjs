@@ -345,11 +345,18 @@ const deadCssTokens = [
   ".team-benefit-icon"
 ];
 for (const token of deadCssTokens) {
-  if (css.includes(token)) {
-    fail("assets/css/style.css", `检测到已清理的废弃选择器: ${token}`);
+  let found;
+  if (token.startsWith(".")) {
+    const escapedToken = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    found = new RegExp(escapedToken + "(?![\\w-])").test(css);
+  } else {
+    found = css.includes(token);
+  }
+
+  if (found) {
+    fail("assets/css/style.css", `检测到已清理的废弃选择器/变量: ${token}`);
   }
 }
-
 
 const printTrackStretchCount =
   (css.match(/\.labels-print-swiper \.swiper-track\s*\{\s*align-items:stretch;\s*\}/g) || []).length;
