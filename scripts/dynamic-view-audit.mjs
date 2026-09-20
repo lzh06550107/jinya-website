@@ -211,6 +211,15 @@ const bannerModel = read("application/common/model/cms/Banner.php");
 for (const token of ["highlight_icon_1", "highlight_icon_2", "highlight_icon_3"]) {
   expect(bannerModel.includes(token), `Banner model missing admin highlight icon accessor ${token}`);
 }
+// ThinkPHP 5 Loader::parseName only camel-cases underscores followed by letters.
+// Numeric suffixes stay underscored, so highlight_icon_1 resolves to
+// getHighlightIcon_1Attr (not getHighlightIcon1Attr).
+for (const method of ["getHighlightIcon_1Attr", "getHighlightIcon_2Attr", "getHighlightIcon_3Attr"]) {
+  expect(bannerModel.includes("function " + method + "("), `Banner model missing ThinkPHP 5 virtual accessor ${method}`);
+}
+for (const invalidMethod of ["getHighlightIcon1Attr", "getHighlightIcon2Attr", "getHighlightIcon3Attr"]) {
+  expect(!bannerModel.includes("function " + invalidMethod + "("), `Banner model must not use incompatible accessor ${invalidMethod}`);
+}
 const abstractRender = read("application/common/service/cms/render/AbstractRenderService.php");
 expect(abstractRender.includes("bannerHighlights->homeHero"), "Home hero render must upgrade legacy banner highlight icons");
 for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png"]) {

@@ -8,17 +8,17 @@ class Banner extends BaseModel
 
     protected $append = ['status_text', 'highlight_icon_1', 'highlight_icon_2', 'highlight_icon_3'];
 
-    public function getHighlightIcon1Attr($value, $data)
+    public function getHighlightIcon_1Attr($value, $data)
     {
         return $this->highlightIconAt($data, 0);
     }
 
-    public function getHighlightIcon2Attr($value, $data)
+    public function getHighlightIcon_2Attr($value, $data)
     {
         return $this->highlightIconAt($data, 1);
     }
 
-    public function getHighlightIcon3Attr($value, $data)
+    public function getHighlightIcon_3Attr($value, $data)
     {
         return $this->highlightIconAt($data, 2);
     }
