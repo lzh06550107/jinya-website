@@ -27,6 +27,9 @@ jobs:
       - name: Run dynamic view contract audit
         run: node scripts/dynamic-view-audit.mjs
 
+      - name: Compile html-baseline ThinkPHP views
+        run: php tests/cms_html_baseline_template_compile_test.php
+
   viewport-audit:
     needs: static-audit
     runs-on: ubuntu-latest
