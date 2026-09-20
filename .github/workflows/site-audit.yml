@@ -24,6 +24,9 @@ jobs:
       - name: Run static site audit
         run: node scripts/site-audit.mjs
 
+      - name: Run dynamic view contract audit
+        run: node scripts/dynamic-view-audit.mjs
+
   viewport-audit:
     needs: static-audit
     runs-on: ubuntu-latest
