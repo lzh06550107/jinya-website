@@ -118,6 +118,9 @@ class InstallerService
         $this->retireStrictCloneBodies($connection, $prefix);
         $this->migrateMarkdownBodies($connection, $prefix);
         $this->syncPageSchema($connection, $prefix);
+        // Apply the current html/ + html/mobile/ content baseline last so a fresh
+        // CMS install renders the same copy and media as the approved static pages.
+        $pdo->exec($this->renderHtmlBaselineSql($prefix));
 
         $missing = $this->missingTables($connection, $prefix);
         if ($missing) {
@@ -638,7 +641,9 @@ class InstallerService
             . "\n\n"
             . $this->renderCloneSql($prefix)
             . "\n\n"
-            . $this->renderJinyaProductCatalogSql($prefix);
+            . $this->renderJinyaProductCatalogSql($prefix)
+            . "\n\n"
+            . $this->renderHtmlBaselineSql($prefix);
     }
 
     /**
@@ -702,6 +707,29 @@ class InstallerService
             throw new \RuntimeException('金亚产品目录脚本为空：database/cms_jinya_product_catalog.sql');
         }
         return str_replace('fa_', $prefix, $catalogSql);
+    }
+
+    /**
+     * 渲染当前 html/ 静态页面对应的 CMS 内容基线。
+     *
+     * 必须在结构升级、克隆数据、产品目录和页面 Schema 同步之后执行，
+     * 使初始化数据库最终数据以当前静态参考页面为准。
+     *
+     * @param string $prefix
+     * @return string
+     */
+    public function renderHtmlBaselineSql($prefix)
+    {
+        $prefix = $this->normalizePrefix($prefix);
+        $file = ROOT_PATH . 'database' . DS . 'cms_html_baseline.sql';
+        if (!is_file($file)) {
+            throw new \RuntimeException('找不到 HTML 基线 CMS 脚本：database/cms_html_baseline.sql');
+        }
+        $sql = file_get_contents($file);
+        if ($sql === false || trim($sql) === '') {
+            throw new \RuntimeException('HTML 基线 CMS 脚本为空：database/cms_html_baseline.sql');
+        }
+        return str_replace('fa_', $prefix, $sql);
     }
 
     /**
