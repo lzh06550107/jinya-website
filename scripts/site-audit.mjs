@@ -37,5 +37,60 @@ for (const rel of pages) {
     if (!fs.existsSync(target)) fail(`html/${rel} references missing local asset: ${match[1]}`);
   }
 }
+
+const footerSocialIcons = [
+  "social-wechat.png",
+  "social-douyin.png",
+  "social-xiaohongshu.png",
+  "social-channels.png",
+];
+
+const validPng = (buffer) => {
+  const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  if (buffer.length < 24 || !signature.every((byte, index) => buffer[index] === byte)) return null;
+  const width = buffer.readUInt32BE(16);
+  const height = buffer.readUInt32BE(20);
+  let offset = 8;
+  let hasIend = false;
+  while (offset + 12 <= buffer.length) {
+    const chunkLength = buffer.readUInt32BE(offset);
+    const type = buffer.toString("ascii", offset + 4, offset + 8);
+    const next = offset + 12 + chunkLength;
+    if (next > buffer.length) return null;
+    if (type === "IEND") {
+      hasIend = true;
+      break;
+    }
+    offset = next;
+  }
+  return hasIend ? { width, height } : null;
+};
+
+for (const name of footerSocialIcons) {
+  const source = path.join(root, "assets", "img", name);
+  const published = path.join(process.cwd(), "public", "assets", "jinya", "img", name);
+  if (!fs.existsSync(source)) {
+    fail(`Missing footer social icon: html/assets/img/${name}`);
+    continue;
+  }
+  if (!fs.existsSync(published)) {
+    fail(`Missing published footer social icon: public/assets/jinya/img/${name}`);
+    continue;
+  }
+  const sourceBytes = fs.readFileSync(source);
+  const publishedBytes = fs.readFileSync(published);
+  const png = validPng(sourceBytes);
+  if (!png) {
+    fail(`Footer social icon is not a complete PNG: html/assets/img/${name}`);
+    continue;
+  }
+  if (png.width < 60 || png.height < 60) {
+    fail(`Footer social icon resolution is too small: ${name} (${png.width}x${png.height})`);
+  }
+  if (!sourceBytes.equals(publishedBytes)) {
+    fail(`Footer social icon differs between html/assets and public/assets: ${name}`);
+  }
+}
+
 if (failed) process.exit(1);
 console.log(`Static html audit: OK (${pages.length} pages)`);
