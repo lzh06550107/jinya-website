@@ -277,7 +277,16 @@ input,textarea{ font:inherit; }
 .hero-tags span{ font-size:13.5px; opacity:.92; }
 .hero-badges{ display:flex; gap:22px; margin-top:28px; flex-wrap:wrap; }
 .hero-badge{ display:flex; align-items:center; gap:8px; font-size:13px; opacity:.95; }
-.hero-badge svg{ width:26px; height:26px; flex-shrink:0; }
+.hero-badge svg,
+.hero-badge img{ width:26px; height:26px; flex:0 0 26px; object-fit:contain; }
+.hero-badge i{
+  width:26px;
+  min-width:26px;
+  text-align:center;
+  font-size:23px;
+  line-height:1;
+  flex:0 0 26px;
+}
 .hero-cta{
   display:inline-flex; align-items:center; gap:8px; margin-top:26px;
   background:#fff; color:var(--ink); font-weight:700; font-size:14px;
@@ -5246,8 +5255,17 @@ input,textarea{ font:inherit; }
   }
 
   body.pc-home .hero--home .hero-badges{
-    gap:clamp(14px,1.45vw,22px);
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:clamp(10px,.85vw,14px);
     margin-top:clamp(20px,1.8vw,28px);
+  }
+
+  body.pc-home .hero--home .hero-badge{
+    width:auto;
+    min-height:26px;
+    white-space:nowrap;
   }
 
   /* About: keep text and 2×2 gallery visually balanced on 1366–4K. */
