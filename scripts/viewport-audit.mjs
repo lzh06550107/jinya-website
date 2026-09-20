@@ -140,25 +140,23 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
   const target = `${baseUrl}/${pageName}`;
   await page.goto(target, { waitUntil: "networkidle" });
 
-  // In the acceptance audit, force lazy images to load so an off-screen or
-  // inactive swiper slide is not mistaken for a broken asset.
-  await page.evaluate(async () => {
-    const images = Array.from(document.images);
-    images.forEach((img) => {
-      img.loading = "eager";
-      img.removeAttribute("fetchpriority");
-    });
+  // Probe every image URL independently. This validates actual decoding
+  // without depending on lazy-loading position or an inactive swiper slide.
+  const imageProbeFailures = await page.evaluate(async () => {
+    const urls = Array.from(new Set(
+      Array.from(document.images)
+        .map((img) => img.currentSrc || img.src)
+        .filter(Boolean)
+    ));
 
-    await Promise.race([
-      Promise.all(images.map((img) => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve) => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
-        });
-      })),
-      new Promise((resolve) => setTimeout(resolve, 5000))
-    ]);
+    const results = await Promise.all(urls.map((src) => new Promise((resolve) => {
+      const probe = new Image();
+      probe.onload = () => resolve(null);
+      probe.onerror = () => resolve(src);
+      probe.src = src;
+    })));
+
+    return results.filter(Boolean);
   });
 
   await scrollThrough(page);
@@ -177,10 +175,6 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     const htmlWidth = document.documentElement.scrollWidth;
     const bodyWidth = document.body ? document.body.scrollWidth : htmlWidth;
 
-    const brokenImages = Array.from(document.images)
-      .filter((img) => !img.complete || img.naturalWidth === 0)
-      .map((img) => img.getAttribute("src") || "(no src)");
-
     const shellOrderOk = !!(
       header && shellNav && main && footer &&
       (header.compareDocumentPosition(shellNav) & Node.DOCUMENT_POSITION_FOLLOWING) &&
@@ -195,7 +189,6 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
       overflow: Math.max(htmlWidth, bodyWidth) - window.innerWidth,
       heroLeft: heroRect ? heroRect.left : null,
       heroRight: heroRect ? heroRect.right : null,
-      brokenImages,
       toggleDisplay: toggle ? style(toggle).display : null,
       toggleExpanded: toggle ? toggle.getAttribute("aria-expanded") : null,
       navDisplay: mainNav ? style(mainNav).display : null,
@@ -232,7 +225,9 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     if (state.navAriaHidden === "true") addFailure(pageName, viewport, "PC 主导航不应 aria-hidden=true");
   }
 
-  state.brokenImages.forEach((src) => addFailure(pageName, viewport, `图片加载失败: ${src}`));
+  imageProbeFailures.forEach((src) => {
+    addFailure(pageName, viewport, `图片解码失败: ${src.replace(baseUrl, "")}`);
+  });
   consoleErrors.forEach((message) => addFailure(pageName, viewport, `console.error: ${message}`));
   pageErrors.forEach((message) => addFailure(pageName, viewport, `pageerror: ${message}`));
   badResponses.forEach((message) => addFailure(pageName, viewport, `本地资源请求失败: ${message}`));
