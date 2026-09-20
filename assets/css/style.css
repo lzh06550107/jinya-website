@@ -6857,6 +6857,108 @@ input,textarea{ font:inherit; }
 }
 
 
+/* PC compact header/navigation geometry v109 */
+/*
+ * The site switches to dedicated mobile pages at 768px. 769-1080px is
+ * therefore still desktop UI, but it needs denser header geometry to keep
+ * all seven navigation items between the logo and hotline without overlap.
+ */
+@media (min-width:769px) and (max-width:899px){
+  body.pc-home,
+  body.pc-labels,
+  body.pc-bags,
+  body.pc-boxes,
+  body.pc-about,
+  body.pc-news,
+  body.pc-news-detail,
+  body.pc-contact{
+    --header-logo-slot:155px;
+    --header-phone-slot:155px;
+  }
+
+  body:not(.mobile-site) .site-header .container{
+    gap:6px;
+  }
+
+  body:not(.mobile-site) .site-logo-img{
+    width:145px;
+    height:50px;
+  }
+
+  body:not(.mobile-site) .header-phone{
+    min-width:145px;
+    height:42px;
+    padding-left:5px;
+    padding-right:6px;
+    gap:1px;
+  }
+
+  body:not(.mobile-site) .header-phone::before{
+    width:8px;
+    flex-basis:8px;
+    margin-right:-4px;
+    transform:translateX(1px) scale(.9);
+  }
+
+  body:not(.mobile-site) .header-phone svg{
+    width:19px;
+    height:19px;
+    flex-basis:19px;
+  }
+
+  body:not(.mobile-site) .header-phone .label{
+    font-size:14px;
+  }
+
+  body:not(.mobile-site) .header-phone .tag{
+    top:-8px;
+    right:4px;
+    padding:1px 5px;
+    font-size:8px;
+  }
+
+  body:not(.mobile-site) .main-nav{
+    gap:1px;
+  }
+
+  body:not(.mobile-site) .main-nav a{
+    padding-left:clamp(3px,.45vw,4px);
+    padding-right:clamp(3px,.45vw,4px);
+    font-size:clamp(10.5px,1.3vw,11.5px);
+  }
+}
+
+@media (min-width:900px) and (max-width:1080px){
+  body:not(.mobile-site) .site-header .container{
+    gap:8px;
+  }
+
+  body:not(.mobile-site) .site-logo-img{
+    width:clamp(160px,17vw,176px);
+  }
+
+  body:not(.mobile-site) .header-phone{
+    min-width:clamp(168px,18.5vw,188px);
+    padding-left:6px;
+    padding-right:8px;
+  }
+
+  body:not(.mobile-site) .header-phone .label{
+    font-size:clamp(17px,1.9vw,20px);
+  }
+
+  body:not(.mobile-site) .main-nav{
+    gap:1px;
+  }
+
+  body:not(.mobile-site) .main-nav a{
+    padding-left:clamp(4px,.55vw,6px);
+    padding-right:clamp(4px,.55vw,6px);
+    font-size:clamp(11.5px,1.25vw,13px);
+  }
+}
+
+
 /* Header scroll enlargement motion v103 */
 @media (min-width:769px){
   .site-header{
