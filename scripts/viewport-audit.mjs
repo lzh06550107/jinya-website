@@ -139,6 +139,28 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
 
   const target = `${baseUrl}/${pageName}`;
   await page.goto(target, { waitUntil: "networkidle" });
+
+  // In the acceptance audit, force lazy images to load so an off-screen or
+  // inactive swiper slide is not mistaken for a broken asset.
+  await page.evaluate(async () => {
+    const images = Array.from(document.images);
+    images.forEach((img) => {
+      img.loading = "eager";
+      img.removeAttribute("fetchpriority");
+    });
+
+    await Promise.race([
+      Promise.all(images.map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      })),
+      new Promise((resolve) => setTimeout(resolve, 5000))
+    ]);
+  });
+
   await scrollThrough(page);
 
   const state = await page.evaluate((isMobile) => {
