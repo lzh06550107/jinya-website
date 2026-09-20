@@ -6,8 +6,7 @@
 </section>
 <section class="section"><div class="container">
   <div class="gallery-tabs">
-    <button class="{if empty($content.currentCategory)}active{/if}" type="button" onclick="window.location.href='{$mobileBase|htmlentities}/news'">全部资讯</button>
-    {volist name="content.categories" id="category"}<button class="{if !empty($content.currentCategory) && $content.currentCategory.id==$category.id}active{/if}" type="button" onclick="window.location.href='{$mobileBase|htmlentities}/news-list/{$category.slug|htmlentities}'">{$category.name|htmlentities}</button>{/volist}
+    {volist name="content.categories" id="category" key="categoryIndex"}<button class="{if (!empty($content.currentCategory) && $content.currentCategory.id==$category.id) || (empty($content.currentCategory) && $categoryIndex==1)}active{/if}" type="button" onclick="window.location.href='{$mobileBase|htmlentities}/news-list/{$category.slug|htmlentities}'">{$category.name|htmlentities}</button>{/volist}
   </div>
   {notempty name="content.articles.items"}
   {volist name="content.articles.items" id="item"}
