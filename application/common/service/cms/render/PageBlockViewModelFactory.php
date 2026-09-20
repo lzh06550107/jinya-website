@@ -77,7 +77,7 @@ class PageBlockViewModelFactory
             if ($badge !== '' && preg_match('/^fa\s+fa-[a-z0-9-]+$/i', $badge)) {
                 $entry['icon_kind'] = 'font';
                 $entry['icon_value'] = strtolower(preg_replace('/\s+/', ' ', $badge));
-            } elseif ($badge !== '' && preg_match('#^(?:https?://|//|/uploads/|uploads/)#i', $badge)) {
+            } elseif ($badge !== '' && preg_match('#^(?:https?://|//|/uploads/|uploads/|/assets/|assets/)#i', $badge)) {
                 $entry['icon_kind'] = 'image';
                 $entry['icon_value'] = $badge;
             }
