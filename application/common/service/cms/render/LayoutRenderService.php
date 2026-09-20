@@ -160,7 +160,7 @@ class LayoutRenderService
     {
         $icons = [
             '微信' => '/assets/jinya/img/social-wechat.png?v=20260920-r3',
-            '抖音' => '/assets/jinya/img/social-douyin.png?v=20260920-r3',
+            '抖音' => '/assets/jinya/img/social-douyin.png?v=20260920-r4',
             '小红书' => '/assets/jinya/img/social-xiaohongshu.png?v=20260920-r3',
             '微信视频号' => '/assets/jinya/img/social-channels.png?v=20260920-r3',
         ];
