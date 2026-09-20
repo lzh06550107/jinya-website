@@ -1,1 +1,23 @@
-<section class="section"><div class="container">{volist name="block.extra.items" id="item"}<div class="craft-row label-capability-row {if condition="$item.group eq 'reverse'"}rev{/if}"><div class="label-capability-copy"><h4>{$item.title|htmlentities}</h4><p>{$item.text_inline_html}</p></div>{if condition="!empty($item.image) or !empty($item.image_top) or !empty($item.image_bottom)"}<div class="label-capability-collage {if condition="!empty($item.image) and empty($item.image_top) and empty($item.image_bottom)"}is-single{/if}">{if condition="!empty($item.image_top)"}<div class="label-capability-slot label-capability-slot--top"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image_top|htmlentities}"></div>{/if}{if condition="!empty($item.image_bottom)"}<div class="label-capability-slot label-capability-slot--bottom"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image_bottom|htmlentities}"></div>{/if}{if condition="!empty($item.image)"}<div class="label-capability-slot label-capability-slot--main"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div>{/if}</div>{/if}</div>{/volist}</div></section>
+<section class="section labels-material-section">
+  <div class="container"><div class="labels-material-list">
+    {volist name="block.extra.items" id="item" key="materialIndex"}
+    <article class="labels-material-card{if condition="$materialIndex==1"} labels-material-card--copper{elseif condition="$materialIndex==2" /} labels-material-card--pearl{elseif condition="$materialIndex==3" /} labels-material-card--silver{elseif condition="$materialIndex==4" /} labels-material-card--laser{/if}">
+      {if condition="$item.group eq 'reverse'"}
+      <div class="labels-material-media{if condition="$materialIndex==3"} labels-material-media--silver{elseif condition="$materialIndex==4" /} labels-material-media--laser{/if}">
+        <div class="labels-material-media-main">{notempty name="item.image"}<div class="labels-material-img labels-material-img--main"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div>
+        <div class="labels-material-media-side">{notempty name="item.image_top"}<div class="labels-material-img labels-material-img--top"><img src="{$item.image_top|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}{notempty name="item.image_bottom"}<div class="labels-material-img labels-material-img--bottom"><img src="{$item.image_bottom|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div>
+      </div>
+      {/if}
+      <div class="labels-material-copy{if condition="$materialIndex==1"} labels-material-copy--copper{elseif condition="$materialIndex==2" /} labels-material-copy--pearl{elseif condition="$materialIndex==3" /} labels-material-copy--silver{elseif condition="$materialIndex==4" /} labels-material-copy--laser{/if}">
+        <h3>{$item.title|htmlentities}</h3><div class="labels-material-text">{$item.text_inline_html}</div>
+      </div>
+      {if condition="$item.group neq 'reverse'"}
+      <div class="labels-material-media{if condition="$materialIndex==1"} labels-material-media--copper{elseif condition="$materialIndex==2" /} labels-material-media--pearl{/if}">
+        <div class="labels-material-media-left">{notempty name="item.image_top"}<div class="labels-material-img labels-material-img--top"><img src="{$item.image_top|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}{notempty name="item.image_bottom"}<div class="labels-material-img labels-material-img--bottom"><img src="{$item.image_bottom|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div>
+        <div class="labels-material-media-right">{notempty name="item.image"}<div class="labels-material-img labels-material-img--main"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div>
+      </div>
+      {/if}
+    </article>
+    {/volist}
+  </div></div>
+</section>

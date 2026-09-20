@@ -1,1 +1,22 @@
-<section class="hero hero--lav hero--prodbg cms-structured-mobile-hero">{notempty name="block.image"}<div class="prod-bg" role="img" aria-label="{$block.title|htmlentities}" style="background-image:url('{$block.image|htmlentities}');"></div>{/notempty}<div class="container"><div class="hero-text"><h1>{$block.title|htmlentities|nl2br}</h1><p class="lede">{$block.content_inline_html}</p><div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/label/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div></div></div></section>
+<section class="hero hero--inner hero--lav labels-hero-ref">
+  <div class="inner-hero-bg"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{else /} style="background-image:url('__CDN__/assets/jinya/img/labels-banner-clean-v83.webp?v=83');"{/notempty}></div>
+  <div class="container">
+    <div class="hero-text labels-hero-copy">
+      <div class="labels-hero-title-row">
+        <h1>{$block.title|default='不干胶/卷筒标签'|htmlentities}</h1>
+        {notempty name="block.subtitle"}<span>{$block.subtitle|htmlentities}</span>{/notempty}
+      </div>
+      {notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}
+      {notempty name="block.extra.items"}
+      <div class="labels-hero-features">
+        {volist name="block.extra.items" id="item"}
+        <div class="labels-hero-feature">
+          {include file="cms/page/label/icon" /}
+          <strong>{$item.title|htmlentities}</strong>{notempty name="item.text"}<span>{$item.text|htmlentities}</span>{/notempty}
+        </div>
+        {/volist}
+      </div>
+      {/notempty}
+    </div>
+  </div>
+</section>

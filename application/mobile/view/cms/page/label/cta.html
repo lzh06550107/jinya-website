@@ -1,1 +1,3 @@
-<section class="section section--alt"><div class="container"><div class="cta-designer"><img alt="一站式定制服务" loading="lazy" src="{$block.image|htmlentities}"></div></div></section>
+<section class="section section--alt">
+  <div class="container"><div class="cta-designer">{notempty name="block.image"}<img src="{$block.image|htmlentities}" alt="{$block.title|default='设计印刷制作一站式服务'|htmlentities}" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/cta-designer.jpg" alt="设计印刷制作一站式服务" loading="lazy">{/notempty}</div></div>
+</section>

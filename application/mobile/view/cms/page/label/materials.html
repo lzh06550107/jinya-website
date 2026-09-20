@@ -1,1 +1,29 @@
-<section class="section section--alt" id="materials"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div><div class="grid grid-3">{volist name="block.extra.items" id="item"}{if condition="$item.group eq 'craft-image'"}<div class="photo-card"><div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div><div class="cap">{$item.title|htmlentities}</div></div>{/if}{/volist}</div><div class="materials-notes-area"><div class="materials-notes-container"><div class="label-craft-notes">{volist name="block.extra.items" id="item"}{if condition="$item.group eq 'craft-note'"}<article class="label-craft-note"><h3><span>{$item.title|htmlentities}</span></h3><p>{$item.text|htmlentities}</p></article>{/if}{/volist}</div></div></div></div></section>
+<section class="section section--alt labels-craft-section" id="materials">
+  <div class="container">
+    <div class="section-head"><h2>{$block.title|default='常用工艺'|htmlentities}</h2><div class="dash"></div></div>
+    <div class="grid grid-3">
+      {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'craft-image' or $item.group eq 'print-image'"}<div class="photo-card"><div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div><div class="cap">{$item.title|htmlentities}</div></div>{/if}{/volist}
+    </div>
+    <div class="mt-lg"></div>
+    {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'craft-note'"}<div class="craft-desc"><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities}</p></div>{/if}{/volist}
+  </div>
+</section>
+<section class="section section--tight labels-print-section">
+  <div class="container">
+    <div class="media-swiper labels-print-swiper" data-swiper data-autoplay="4500" data-per-view="3" data-tablet-per-view="2" data-mobile-per-view="1" aria-label="不干胶印刷图片轮播">
+      <div class="labels-print-layout">
+        <div class="labels-print-copy">
+          <h2>{$block.subtitle|default='不干胶印刷'|htmlentities}</h2>
+          {notempty name="block.content_inline_html"}<div class="labels-print-points">{$block.content_inline_html}</div>{else /}
+          <ol class="labels-print-points"><li>应用广泛：农化、食品、饮料、中药保健品、宠物类产品。</li><li>粘贴方便：不干胶水，撕下即贴，十分方便，且对商品外观无任何污染，独立成卷，易于摆放和整理。</li><li>贴标速度：机器速度快、效率高，也可手持贴标。</li><li>具有耐久性：粘着牢固、耐热耐潮、不易老化，色彩明亮美观等。</li></ol>
+          {/notempty}
+          <div class="labels-print-nav"><button class="swiper-arrow swiper-prev" type="button" aria-label="上一张"><span>‹</span></button><button class="swiper-arrow swiper-next" type="button" aria-label="下一张"><span>›</span></button></div>
+        </div>
+        <div class="swiper-viewport"><div class="swiper-track">
+          {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'craft-image' or $item.group eq 'print-image'"}<div class="swiper-slide"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"><div class="labels-print-caption">{$item.title|htmlentities}</div></div>{/if}{/volist}
+        </div></div>
+      </div>
+      <div class="swiper-dots" aria-label="轮播分页"></div>
+    </div>
+  </div>
+</section>
