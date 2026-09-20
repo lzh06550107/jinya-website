@@ -396,6 +396,12 @@ SELECT @page_id,'contact_thanks','contact_section','感恩1000+客户的支持',
 伙伴，同心开拓崭新商机。','/assets/jinya/img/cta-handshake-bg.png','/assets/jinya/img/cta-handshake-bg.png','','','{"phone":"18903716652","items":[]}','html-baseline:contact:contact_thanks',0,1,1,100,'normal',@html_now,@html_now
 WHERE NOT EXISTS(SELECT 1 FROM `fa_cms_page_content_block` WHERE `page_id`=@page_id AND `block_key`='contact_thanks');
 
+-- HTML 基线新闻列表配置：静态页展示完整摘要，避免默认 PC 75 / Mobile 28 字截断。
+UPDATE `fa_cms_page_block`
+SET `config_json`='{"page_size":10,"pc_page_size":10,"mobile_page_size":10,"sort_mode":"publish_time_desc","show_cover":1,"show_date":1,"show_summary":1,"summary_length":500,"pc_summary_length":500,"mobile_summary_length":500,"pc_visible":1,"mobile_visible":1,"enabled":1}',
+    `pc_visible`=1,`mobile_visible`=1,`status`='normal',`updatetime`=@html_now
+WHERE `page_key` IN ('news.index','news.category') AND `block_key`='list';
+
 -- 新闻基线
 UPDATE `fa_cms_article_category` SET `status`='hidden' WHERE `slug`<>'html-news';
 INSERT INTO `fa_cms_article_category`(`parent_id`,`name`,`slug`,`description`,`weigh`,`status`,`createtime`,`updatetime`) VALUES(0,'新闻咨询','html-news','金亚包装新闻咨询',1000,'normal',@html_now,@html_now)
