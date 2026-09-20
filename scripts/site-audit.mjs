@@ -9,6 +9,17 @@ const pcPages = [
 ];
 const mobilePages = pcPages.map((name) => `mobile/${name}`);
 const allPages = [...pcPages, ...mobilePages];
+const canonicalBase = "https://jinya.ink";
+const pageMeta = {
+  "index.html":        { body:"pc-home",        canonical:`${canonicalBase}/`,                 mobile:`${canonicalBase}/mobile/` },
+  "labels.html":       { body:"pc-labels",      canonical:`${canonicalBase}/labels.html`,      mobile:`${canonicalBase}/mobile/labels.html` },
+  "bags.html":         { body:"pc-bags",        canonical:`${canonicalBase}/bags.html`,        mobile:`${canonicalBase}/mobile/bags.html` },
+  "boxes.html":        { body:"pc-boxes",       canonical:`${canonicalBase}/boxes.html`,       mobile:`${canonicalBase}/mobile/boxes.html` },
+  "about.html":        { body:"pc-about",       canonical:`${canonicalBase}/about.html`,       mobile:`${canonicalBase}/mobile/about.html` },
+  "news.html":         { body:"pc-news",        canonical:`${canonicalBase}/news.html`,        mobile:`${canonicalBase}/mobile/news.html` },
+  "news-detail.html":  { body:"pc-news-detail", canonical:`${canonicalBase}/news-detail.html`, mobile:`${canonicalBase}/mobile/news-detail.html` },
+  "contact.html":      { body:"pc-contact",     canonical:`${canonicalBase}/contact.html`,     mobile:`${canonicalBase}/mobile/contact.html` }
+};
 
 let errors = [];
 let warnings = [];
@@ -71,6 +82,49 @@ for (const page of allPages) {
   if (!html.includes('aria-controls="main-navigation"')) fail(page, "nav-toggle 缺少 aria-controls");
   if (count(html, /id="main-navigation"/g) !== 1) fail(page, "main-navigation id 必须且只能出现一次");
 
+
+  const baseName = page.replace(/^mobile\//, "");
+  const meta = pageMeta[baseName];
+  const isMobile = page.startsWith("mobile/");
+  const expectedBodyClass = isMobile ? `mobile-site mobile-${meta.body.replace(/^pc-/, "")}` : meta.body;
+  if (!html.includes(`<body class="${expectedBodyClass}">`)) {
+    fail(page, `body class 不符合约定，应为 "${expectedBodyClass}"`);
+  }
+
+  const mainNavMatch = html.match(/<div class="main-nav" id="main-navigation">([\s\S]*?)<\/div>/);
+  if (!mainNavMatch) {
+    fail(page, "无法解析主导航");
+  } else {
+    const navHtml = mainNavMatch[1];
+    if (count(navHtml, /<a\b/g) !== 7) fail(page, "主导航必须保持 7 个入口");
+    if (count(navHtml, /class="nav-link active"/g) !== 1) fail(page, "主导航必须且只能有一个 active 项");
+    if (count(navHtml, /aria-current="page"/g) !== 1) fail(page, "active 导航必须声明 aria-current=\"page\"");
+  }
+
+  const canonicalMatch = html.match(/<link rel="canonical" href="([^"]+)">/);
+  if (!canonicalMatch) {
+    fail(page, "缺少 canonical");
+  } else if (canonicalMatch[1] !== meta.canonical) {
+    fail(page, `canonical 不正确: ${canonicalMatch[1]}`);
+  }
+
+  if (!isMobile) {
+    const alternateMatch = html.match(/<link rel="alternate" media="only screen and \(max-width: 768px\)" href="([^"]+)">/);
+    if (!alternateMatch) {
+      fail(page, "PC 页面缺少 Mobile alternate");
+    } else if (alternateMatch[1] !== meta.mobile) {
+      fail(page, `Mobile alternate 不正确: ${alternateMatch[1]}`);
+    }
+  }
+
+  if (!html.includes("邮箱：973123908@qq.com")) {
+    fail(page, "Footer 邮箱文案不统一");
+  }
+
+  if (baseName === "news.html" && /class="pagination"/.test(html)) {
+    fail(page, "新闻数据不足时不得显示无功能分页");
+  }
+
   const images = [...html.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
   images.forEach((tag, i) => {
     if (!/\balt="/.test(tag)) fail(page, `第 ${i + 1} 个 <img> 缺少 alt`);
@@ -130,6 +184,33 @@ if ([...pcStyles][0] !== [...mobileStyles][0]) {
 }
 if ([...pcScripts][0] !== [...mobileScripts][0]) {
   fail("PC/Mobile", "main.js 版本必须一致");
+}
+
+const robotsPath = path.join(root, "robots.txt");
+const sitemapPath = path.join(root, "sitemap.xml");
+if (!fs.existsSync(robotsPath)) {
+  fail("robots.txt", "文件不存在");
+} else {
+  const robots = read("robots.txt");
+  if (!robots.includes("Sitemap: https://jinya.ink/sitemap.xml")) {
+    fail("robots.txt", "缺少正确的 Sitemap 地址");
+  }
+}
+if (!fs.existsSync(sitemapPath)) {
+  fail("sitemap.xml", "文件不存在");
+} else {
+  const sitemap = read("sitemap.xml");
+  for (const url of [
+    "https://jinya.ink/",
+    "https://jinya.ink/labels.html",
+    "https://jinya.ink/bags.html",
+    "https://jinya.ink/boxes.html",
+    "https://jinya.ink/about.html",
+    "https://jinya.ink/news.html",
+    "https://jinya.ink/contact.html"
+  ]) {
+    if (!sitemap.includes(`<loc>${url}</loc>`)) fail("sitemap.xml", `缺少 URL: ${url}`);
+  }
 }
 
 const css = read("assets/css/style.css");
