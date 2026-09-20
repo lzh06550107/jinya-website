@@ -142,10 +142,29 @@ class LayoutRenderService
             }
             $qrKey = isset($item['qr_key']) ? trim((string)$item['qr_key']) : '';
             $item['qr_image'] = $qrKey !== '' && isset($siteView[$qrKey]) ? (string)$siteView[$qrKey] : '';
+            $title = isset($item['title']) ? trim((string)$item['title']) : '';
+            $footerSocialIcon = $this->footerSocialIcon($title);
+            if ($footerSocialIcon !== '') {
+                // Footer social icons are fixed site assets. Override legacy/broken
+                // database icon paths so existing databases immediately use the
+                // uploaded high-resolution artwork without reinstalling CMS data.
+                $item['icon'] = $footerSocialIcon;
+            }
             $visibleItems[] = $item;
         }
         $component['config']['items'] = $this->decorateIconItems($visibleItems);
         return $component;
+    }
+
+    private function footerSocialIcon($title)
+    {
+        $icons = [
+            '微信' => '/assets/jinya/img/social-wechat.png?v=20260920-r3',
+            '抖音' => '/assets/jinya/img/social-douyin.png?v=20260920-r3',
+            '小红书' => '/assets/jinya/img/social-xiaohongshu.png?v=20260920-r3',
+            '微信视频号' => '/assets/jinya/img/social-channels.png?v=20260920-r3',
+        ];
+        return isset($icons[$title]) ? $icons[$title] : '';
     }
 
     private function iconComponent(array $components, $key)
