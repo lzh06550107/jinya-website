@@ -1,1 +1,18 @@
-<section class="section section--alt"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><p class="eyebrow">{$block.subtitle|htmlentities}</p><div class="dash"></div></div><div class="grid grid-4">{volist name="block.extra.items" id="item"}<div class="photo-card"><div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div><div class="cap"><b>0{$i}</b> {$item.title|htmlentities}{notempty name="item.text"}<br><small>{$item.text|htmlentities}</small>{/notempty}</div></div>{/volist}</div></div></section>
+<section class="boxes-detail-section"><div class="container">
+  <div class="section-head boxes-detail-head"><h2>{$block.title|htmlentities}</h2>{notempty name="block.subtitle"}<p class="eyebrow">{$block.subtitle|htmlentities}</p>{/notempty}<div class="dash"></div></div>
+  <div class="boxes-detail-grid boxes-detail-grid--reference">
+    {volist name="block.extra.items" id="item"}
+    <div class="boxes-detail-card{if condition="$item.group eq 'reverse'"} rev{/if}">
+      <div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>
+      <div class="txt">{notempty name="item.subtitle"}<span class="tag">{$item.subtitle|htmlentities}</span>{/notempty}<h3>{$item.title|htmlentities|nl2br}</h3><b>#</b>{notempty name="item.text"}<p>{$item.text|htmlentities}</p>{/notempty}</div>
+    </div>
+    {/volist}
+  </div>
+  {if condition="!empty($block.extra.secondary_title) || !empty($block.extra.secondary_text)"}
+  <div class="boxes-detail-cta">
+    <h3>{$block.extra.secondary_title|default=''|htmlentities}</h3>
+    {notempty name="block.extra.secondary_text"}<div class="boxes-detail-cta-copy">{$block.extra.secondary_text|htmlentities|nl2br}</div>{/notempty}
+    {notempty name="block.extra.badge_text"}<div class="boxes-detail-cta-badge" aria-hidden="true"><div class="boxes-detail-cta-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="10" y="20" width="28" height="20" rx="2"/><path d="M8 15h32v8H8zM24 15v25"/></svg></div><span>{$block.extra.badge_text|htmlentities}</span></div>{/notempty}
+  </div>
+  {/if}
+</div></section>

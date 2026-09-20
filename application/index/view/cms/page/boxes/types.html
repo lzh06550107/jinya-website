@@ -1,1 +1,4 @@
-<section class="section"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><p class="eyebrow">{$block.subtitle|htmlentities}</p><div class="dash"></div></div><div class="boxtype-panel"><img alt="{$block.title|htmlentities}" loading="lazy" src="{$block.image|htmlentities}"></div></div></section>
+<section class="section"><div class="container">
+  <div class="section-head"><h2>{$block.title|htmlentities}</h2>{notempty name="block.subtitle"}<p class="eyebrow">{$block.subtitle|htmlentities}</p>{/notempty}<div class="dash"></div></div>
+  <div class="boxtype-panel"><img src="{$block.image|htmlentities}" alt="{$block.title|htmlentities}" loading="lazy"></div>
+</div></section>

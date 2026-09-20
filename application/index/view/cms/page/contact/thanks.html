@@ -1,8 +1,7 @@
-<section class="section section--alt"><div class="container">
-<div class="thanks-banner" style="background-image:url('{$block.image|default=''|htmlentities}');">
-<p class="eb">{$block.subtitle|default=''|htmlentities}</p>
-<h2>{$block.title|default=''|htmlentities}</h2>
-<div class="thanks-copy">{$block.content_html}</div>
-<div class="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>咨询热线：{$block.extra.phone|default=''|htmlentities}</div>
-</div>
-</div></section>
+<section class="contact-thanks-section"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}>
+  <div class="contact-thanks-overlay"></div><div class="container contact-thanks-inner"><div class="contact-thanks-content">
+    <div class="contact-thanks-heading">{notempty name="block.subtitle"}<span>{$block.subtitle|htmlentities}</span>{/notempty}<h2>{$block.title|htmlentities}</h2></div>
+    <div class="contact-thanks-copy">{$block.content_html}</div>
+    {notempty name="block.extra.phone"}<a class="contact-thanks-phone" href="tel:{$block.extra.phone|htmlentities}" aria-label="拨打咨询热线 {$block.extra.phone|htmlentities}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.19z"/></svg><span>咨询热线：{$block.extra.phone|htmlentities}</span></a>{/notempty}
+  </div></div>
+</section>
