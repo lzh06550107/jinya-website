@@ -321,7 +321,28 @@ const deadCssTokens = [
   "--shadow-lg:",
   "--home-content-max:",
   "--home-section-gap:",
-  "--page-gutter:"
+  "--page-gutter:",
+  ".boxes-benefit",
+  ".boxes-benefit-icon",
+  ".boxes-benefits",
+  ".boxes-benefits-section",
+  ".chip-grid",
+  ".cta-banner",
+  ".cta-banner-inner",
+  ".cta-lines",
+  ".cta-lines--muted",
+  ".diagram-row",
+  ".gradient-bar",
+  ".label-print-reference",
+  ".labels-material-media--stack-left",
+  ".labels-material-media--stack-right",
+  ".labels-print-nav-hint",
+  ".material-media--stack-left",
+  ".pcard",
+  ".print-showcase",
+  ".print-showcase-text",
+  ".source-banner",
+  ".team-benefit-icon"
 ];
 for (const token of deadCssTokens) {
   if (css.includes(token)) {
@@ -342,6 +363,12 @@ if (printTrackStretchCount !== 1) {
 const importantCount = (css.match(/!important/g) || []).length;
 if (importantCount > 127) {
   fail("assets/css/style.css", `!important 数量回升到 ${importantCount}，当前上限为 127`);
+}
+
+
+const emptyMediaBlocks = css.match(/@media[^\{]+\{\s*\}/g) || [];
+if (emptyMediaBlocks.length) {
+  fail("assets/css/style.css", `存在 ${emptyMediaBlocks.length} 个空 @media 块`);
 }
 
 console.log(`[site-audit] checked ${allPages.length} HTML pages`);
