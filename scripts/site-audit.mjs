@@ -193,6 +193,13 @@ for (const page of allPages) {
     }
   }
 
+  const buttons = [...html.matchAll(/<button\b[^>]*>/g)].map((m) => m[0]);
+  buttons.forEach((tag, i) => {
+    if (!/\btype="(?:button|submit|reset)"/.test(tag)) {
+      fail(page, `第 ${i + 1} 个 <button> 缺少显式 type`);
+    }
+  });
+
   const images = [...html.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
   images.forEach((tag, i) => {
     if (!/\balt="/.test(tag)) fail(page, `第 ${i + 1} 个 <img> 缺少 alt`);
@@ -413,6 +420,10 @@ if (importantCount > 127) {
 const emptyMediaBlocks = css.match(/@media[^\{]+\{\s*\}/g) || [];
 if (emptyMediaBlocks.length) {
   fail("assets/css/style.css", `存在 ${emptyMediaBlocks.length} 个空 @media 块`);
+}
+
+if (!css.includes('button[aria-disabled="true"]') || !css.includes("pointer-events:none")) {
+  fail("assets/css/style.css", "静态分类按钮必须禁用指针交互");
 }
 
 console.log(`[site-audit] checked ${allPages.length} HTML pages`);

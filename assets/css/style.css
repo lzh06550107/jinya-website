@@ -449,13 +449,15 @@ input,textarea{ font:inherit; }
   padding:11px 26px; border-radius:24px; font-size:14px; font-weight:600;
   transition:all .2s var(--ease);
 }
-.gallery-tabs button.active,.gallery-tabs button:hover{
+.gallery-tabs button.active,
+.gallery-tabs button:not([aria-disabled="true"]):hover{
   background:var(--blue); border-color:var(--blue); color:#fff;
 }
 
 .gallery-tabs button[aria-disabled="true"],
 .app-tabs button[aria-disabled="true"]{
   cursor:default;
+  pointer-events:none;
 }
 
 
@@ -1149,7 +1151,8 @@ input,textarea{ font:inherit; }
   background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.35); color:#fff;
   padding:12px 28px; border-radius:24px; font-size:14px; font-weight:600; transition:all .2s var(--ease);
 }
-.app-tabs button.active,.app-tabs button:hover{ background:#fff; color:var(--ink); }
+.app-tabs button.active,
+.app-tabs button:not([aria-disabled="true"]):hover{ background:#fff; color:var(--ink); }
 .case-card{
   background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.2); border-radius:var(--radius);
   overflow:hidden; backdrop-filter:blur(4px);
