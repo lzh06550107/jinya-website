@@ -1,0 +1,13 @@
+{if $parentExists}
+<div class="alert alert-info" style="margin-bottom:15px;">
+    <i class="fa fa-link"></i>
+    <strong>{$parentContextLabel|htmlentities}：</strong>
+    {$parentTitle|htmlentities}
+    <span class="text-muted" style="margin-left:8px;">ID: {$parentId}</span>
+</div>
+{else /}
+<div class="alert alert-danger" style="margin-bottom:15px;">
+    <i class="fa fa-warning"></i>
+    <strong>所属内容不存在（ID: {$parentId}）</strong>。历史数据仍可查看和清理，但不能继续新增。
+</div>
+{/if}

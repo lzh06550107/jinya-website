@@ -1,0 +1,12 @@
+{include file="cms/common/strict_header" /}
+<link href="__CDN__/assets/css/cms/clone-search-mobile.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+<div class="m1-content">
+<div class="blk"></div>
+<div class="blk"><form class="m2-search-1 clearafter p-trl" action="{$mobileBase}/search" method="get"><span class="m2-search-1-bt"></span><button class="m2-search-1-in" type="submit" aria-label="搜索"></button><div class="m2-search-1-ipt"><input class="m2-search-1-key" id="key" name="key" placeholder="请输入关键词" type="text" value="{$content.keyword|htmlentities}"></div></form></div>
+<div class="t1-search-result">
+<div class="pin-wrapper"><div class="t1-mt"><ul class="t1-fore-1"><li id="all" class="t1-current"><a class="t1-first-link" href="javascript:void(0)">所有 ({$content.total})</a></li></ul><div class="t1-fore-2" id="sxdiv"><div class="t1-fore-2-box"><dl class="t1-time"><dt>选择范围：</dt><dd class="current">不限时间</dd></dl><div class="t1-btn-close"></div><i class="t1-decoration"></i></div></div><span class="t1-filtrate">筛选</span></div></div>
+<div class="t1-mc"><div class="t1-search-result-list"><b class="t1-search-result-list-hd">满足条件的搜索结果</b><ul class="t1-search-result-list-bd">
+{volist name="content.items" id="item"}<li class="t1-adaptive">{notempty name="item.cover"}<div class="t1-article-pic"><a href="{$mobileBase}{$item.url|htmlentities}" title="{$item.title|htmlentities}"><img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}" title="{$item.title|htmlentities}"></a></div>{/notempty}<div class="t1-article-info"><h4><i class="t1-icon"></i><a class="t1-article-link" href="{$mobileBase}{$item.url|htmlentities}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a>{notempty name="item.publish_date"}<span>{$item.publish_date|htmlentities}</span>{/notempty}<span>【{if condition="$item.type=='product'"}产品{elseif condition="$item.type=='article'" /}文章{else /}页面{/if}】</span></h4><div class="t1-article-info-desc">{$item.summary|htmlentities}</div></div></li>{/volist}
+</ul>{notempty name="content.pagination.next_url"}<a class="t1-btn-more" href="{$mobileBase}{$content.pagination.next_url|htmlentities}">查看更多...</a>{/notempty}</div></div>
+</div></div>
+{include file="cms/common/strict_footer" /}

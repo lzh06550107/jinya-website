@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head lang="en" data-base="/">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache,must-revalidate">
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+<meta http-equiv="expires" content="0">
+<meta name="applicable-device" content="pc">
+<meta name="viewport" content="width=1200">
+<title>{$title|default=$cmsSite.name|htmlentities}</title>
+<meta name="keywords" content="{$keywords|default=''|htmlentities}">
+<meta name="description" content="{$description|default=''|htmlentities}">
+<meta name="robots" content="{$robots|default='index,follow'|htmlentities}">
+{if !empty($canonical)}<link rel="canonical" href="{$canonical|htmlentities}">{/if}
+<meta name="mobile-agent" content="format=html5;url={$cmsMobileUrl|htmlentities}">
+<meta name="mobile-agent" content="format=xhtml;url={$cmsMobileUrl|htmlentities}">
+<link rel="alternate" media="only screen and (max-width:640px)" href="{$cmsMobileUrl|htmlentities}">
+{if $pcStrictHome}
+<link href="__CDN__{$pcAssetBase}/css/index.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+<link href="__CDN__{$pcAssetBase}/css/animate.min.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+<link href="__CDN__{$pcAssetBase}/css/swiper-3.3.1.min.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+{else /}
+<link href="__CDN__{$pcAssetBase}/css/reset.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+{/if}
+<link href="__CDN__{$pcAssetBase}/{$pcStrictBundle|htmlentities}.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+<link href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v=4.7.0" rel="stylesheet">
+<link href="__CDN__/assets/css/cms-icon-render.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+<link href="__CDN__/assets/css/cms-floating-service.css?v={$cmsSite.version|default='1.0'}&layout=reference-20260816&wechat-consult=r1" rel="stylesheet">
+<link href="__CDN__/assets/css/cms-pc-header-layout.css?v={$cmsSite.version|default='1.0'}&layout=header-presets-r9-nav-hover-active-unified" rel="stylesheet">
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-banner-copy.css?v={$cmsSite.version|default='1.0'}&layout=banner-copy" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-about-media-grid.css?v={$cmsSite.version|default='1.0'}&layout=about-media-grid" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-product-cover-fit.css?v={$cmsSite.version|default='1.0'}&layout=dynamic-product-cover-fit" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-workshop.css?v={$cmsSite.version|default='1.0'}&layout=source-clone-workshop" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-cases-alignment.css?v={$cmsSite.version|default='1.0'}&layout=case-grid-alignment" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-company-metrics.css?v={$cmsSite.version|default='1.0'}&layout=company-metrics" rel="stylesheet">{/if}
+{if $pcStrictHome}<link href="__CDN__/assets/css/cms-home-culture.css?v={$cmsSite.version|default='1.0'}&layout=source-clone-culture" rel="stylesheet">{/if}
+<link href="__CDN__/assets/css/cms-home-friend-links.css?v={$cmsSite.version|default='1.0'}&layout=friend-links-r2" rel="stylesheet">
+{if $pcThemeCss=='article-list'}<link href="__CDN__/assets/css/cms-news-list-clone.css?v={$cmsSite.version|default='1.0'}&layout=32.8" rel="stylesheet">{/if}
+{if $pcThemeCss=='article-detail'}<link href="__CDN__/assets/css/cms-news-detail-clean.css?v={$cmsSite.version|default='1.0'}&layout=clean-20260817" rel="stylesheet">{/if}
+{if $pcThemeCss=='search'}<link href="__CDN__/assets/css/cms-search-list-clone.css?v={$cmsSite.version|default='1.0'}&layout=32.11" rel="stylesheet">{/if}
+{if in_array($pcThemeCss, ['product-list','product-category'])}<link href="__CDN__/assets/css/cms-product-card.css?v={$cmsSite.version|default='1.0'}&dep=product-card-align-r1" rel="stylesheet">{/if}
+{if $pcThemeCss=='product-detail'}<link href="__CDN__/assets/css/cms-product-detail-jinya.css?v={$cmsSite.version|default='1.0'}&layout=jinya-product-detail-v1&compact=r2&detail=v31&grid-align=r3" rel="stylesheet">{/if}
+{if $pcThemeCss=='label-page'}<link href="__CDN__/assets/css/cms-label-page.css?v={$cmsSite.version|default='1.0'}&layout=v12-r88" rel="stylesheet">{/if}
+</head>
+<body class="{$pcBodyClass|default=''}">
+{if !empty($isPreview)}<div style="position:fixed;left:0;right:0;top:0;z-index:99999;background:#fff3cd;color:#856404;text-align:center;padding:8px;">预览模式：此内容尚未正式发布。</div>{/if}
+<!-- 严格保留目标站头部 DOM，仅将 Logo、电话和导航替换为 CMS 数据。 -->
+<div>
+<div class="head cms-header-layout-{$cmsPcHeaderLayoutMode|default='default'|htmlentities} cms-logo-size-control cms-hotline-size-control{if $pcStrictHome} cms-home-hotline{/if}" id="head" style="--cms-nav-active-background-color:{$cmsPcNavActiveBackgroundColor|default='#f48101'|htmlentities};--cms-logo-top-width:{$cmsPcLogoTopWidthRem|default='10.6'|htmlentities}rem;--cms-logo-scrolled-width:{$cmsPcLogoScrolledWidthRem|default='9'|htmlentities}rem;--cms-hotline-top-width:{$cmsPcHotlineTopWidthRem|default='20'|htmlentities}rem;--cms-hotline-scrolled-width:{$cmsPcHotlineScrolledWidthRem|default='16'|htmlentities}rem;--cms-hotline-top-offset-y:{$cmsPcHotlineTopOffsetYRem|default='0'|htmlentities}rem;--cms-hotline-scrolled-offset-y:{$cmsPcHotlineScrolledOffsetYRem|default='0'|htmlentities}rem;--cms-hotline-badge-top-font-size:{$cmsPcHotlineBadgeTopFontSizeRem|default='0.8'|htmlentities}rem;--cms-hotline-badge-scrolled-font-size:{$cmsPcHotlineBadgeScrolledFontSizeRem|default='0.65'|htmlentities}rem;--cms-hotline-icon-top-size:{$cmsPcHotlineIconTopSizeRem|default='2.45'|htmlentities}rem;--cms-hotline-icon-scrolled-size:{$cmsPcHotlineIconScrolledSizeRem|default='1.95'|htmlentities}rem;--cms-hotline-number-top-font-size:{$cmsPcHotlineNumberTopFontSizeRem|default='1.7'|htmlentities}rem;--cms-hotline-number-scrolled-font-size:{$cmsPcHotlineNumberScrolledFontSizeRem|default='1.3'|htmlentities}rem;--cms-hotline-number-font-weight:{$cmsPcHotlineNumberFontWeight|default='700'|htmlentities};--cms-hotline-background-color:{$cmsPcHotlineBackgroundColor|default='#ef202d'|htmlentities};--cms-hotline-number-color:{$cmsPcHotlineNumberColor|default='#ffd65a'|htmlentities};--cms-hotline-badge-background-color:{$cmsPcHotlineBadgeBackgroundColor|default='#ffb918'|htmlentities};--cms-hotline-badge-text-color:{$cmsPcHotlineBadgeTextColor|default='#333333'|htmlentities};">
+<div class="h_nr">
+<div class="logo">
+<h1 class="t_logo wow fadeInLeft2 fl"><a href="/" title="{$cmsSite.name|default=''|htmlentities}">{if !empty($cmsSite.logo)}<img alt="{$cmsSite.name|default=''|htmlentities}" src="{$cmsSite.logo|htmlentities}" title="{$cmsSite.name|default=''|htmlentities}">{else /}<img alt="" src="__CDN__{$pcAssetBase}/images/logo.png" title="">{/if}</a></h1>
+</div>
+<div class="h_con">
+<a class="hea-tel cms-hotline-card" href="tel:{$cmsSite.hotline|default=''|htmlentities}" title="{$cmsSite.hotline|default=''|htmlentities}" aria-label="拨打急单专线 {$cmsSite.hotline|default=''|htmlentities}">
+<span class="cms-hotline-badge">{$layout.header.config.hotline_badge_text|default='急单专线'|htmlentities}</span>
+<span class="cms-hotline-icon" aria-hidden="true">{if condition="!empty($layout.header.config.hotline_icon_view) && $layout.header.config.hotline_icon_view.type eq 'font'"}<i class="{$layout.header.config.hotline_icon_view.class|htmlentities}"></i>{elseif condition="!empty($layout.header.config.hotline_icon_view) && $layout.header.config.hotline_icon_view.type eq 'image' && !empty($layout.header.config.hotline_icon_view.url)" /}<img src="{$layout.header.config.hotline_icon_view.url|htmlentities}" alt="">{else /}<svg viewBox="0 0 58 56" focusable="false"><rect x="1" y="9" width="25" height="7" rx="3.5"></rect><rect x="1" y="24" width="19" height="7" rx="3.5"></rect><rect x="8" y="39" width="17" height="7" rx="3.5"></rect><path d="M36 2 23 29h12l-4 25 25-33H43l5-19z"></path></svg>{/if}</span>
+<span class="cms-hotline-number">{$cmsSite.hotline|default=''|htmlentities}</span>
+</a>
+<div class="nav menu"><ul>
+{notempty name="cmsNavigationTree"}
+{volist name="cmsNavigationTree" id="nav"}
+<li class="{if !empty($nav.url) && $cmsCurrentPath==$nav.url}cur{/if}"><a href="{$nav.url|default='#'|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" title="{$nav.title|htmlentities}"> {$nav.title|htmlentities} </a>{notempty name="nav.children"}<div class="nav-two">{volist name="nav.children" id="child"}<a href="{$child.url|default='#'|htmlentities}" target="{$child.target|default='_self'|htmlentities}" title="{$child.title|htmlentities}"> {$child.title|htmlentities} </a>{/volist}</div>{/notempty}</li>
+{/volist}
+{/notempty}
+</ul></div>
+</div>
+</div>
+</div>
+</div>

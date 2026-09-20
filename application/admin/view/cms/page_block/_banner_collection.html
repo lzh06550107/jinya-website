@@ -1,0 +1,66 @@
+<form id="page-block-form" class="form-horizontal real-source-form" role="form" data-toggle="validator" method="POST" action="" data-real-source="banner_collection">
+    {:token()}
+    <div class="alert alert-info">
+        <i class="fa fa-link"></i>
+        当前直接编辑前台真实 Banner 数据：<strong>{$bannerPageKey|htmlentities} / {$bannerPosition|htmlentities}</strong>。这里保存后前台立即读取同一批资源，不再使用功能块 config_json 中的图片副本。<br><small>图片建议：PC 1920×800、移动端 750×422；视频优先 MP4/H.264。图片尺寸属于运营建议，比例不匹配只提醒、不阻止保存。</small>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">功能块:</label>
+        <div class="col-xs-12 col-sm-8">
+            <p class="form-control-static"><strong>{$row.block_name|htmlentities}</strong>（{$row.page_key|htmlentities}.{$row.block_key|htmlentities}）</p>
+        </div>
+    </div>
+    <div id="real-banner-list">
+        {foreach name="bannerRows" item="banner" key="bannerIndex"}
+        <div class="panel panel-default banner-row" data-banner-row data-banner-index="{$bannerIndex|htmlentities}">
+            <div class="panel-heading clearfix">
+                <strong>Banner #<span class="banner-row-number">{$bannerIndex+1}</span></strong>
+                <button type="button" class="btn btn-xs btn-danger pull-right btn-remove-banner"><i class="fa fa-trash"></i> 删除</button>
+            </div>
+            <div class="panel-body">
+                <input type="hidden" name="real[banners][{$bannerIndex}][id]" value="{$banner.id|default='0'|htmlentities}">
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 标题（显示文字）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][title]" value="{$banner.title|default=''|htmlentities}"></div><label class="control-label col-xs-12 col-sm-2">移动标题（显示文字）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_title]" value="{$banner.mobile_title|default=''|htmlentities}"></div></div>
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 副标题（显示文字）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][subtitle]" value="{$banner.subtitle|default=''|htmlentities}"></div><label class="control-label col-xs-12 col-sm-2">移动副标题（显示文字）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_subtitle]" value="{$banner.mobile_subtitle|default=''|htmlentities}"></div></div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2">卖点标签:</label>
+                    <div class="col-xs-12 col-sm-10">
+                        <div class="cms-banner-highlights-editor" data-banner-highlights-editor>
+                            <input type="hidden" name="real[banners][{$bannerIndex}][highlights_json]" value="{$banner.highlights_json|default='[]'|htmlentities}" data-banner-highlights-input>
+                            <div data-banner-highlights-list></div>
+                            <div class="clearfix" style="margin-top:8px"><button type="button" class="btn btn-success btn-sm" data-banner-highlight-add><i class="fa fa-plus"></i> 新增卖点</button><span class="text-muted pull-right">当前 <span data-banner-highlight-count>0 / 5</span></span></div>
+                        </div>
+                        <p class="help-block">推荐 3 条，最多 5 条。单条建议 6～16 个中文字符；图标建议 64×64 或 128×128，PNG/WebP 透明背景，建议 ≤100 KB。PC/Mobile 可逐条控制显示。</p>
+                    </div>
+                </div>
+                <div class="form-group cms-banner-media-type-row" style="margin-bottom:6px;">
+                    <label class="control-label col-xs-12 col-sm-2">PC 媒体类型:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <select id="real-banner-{$bannerIndex}-pc-media-type" class="form-control cms-banner-media-type-control" name="real[banners][{$bannerIndex}][media_type]" data-banner-media-type-control="pc"><option value="image" {if condition="!isset($banner.media_type) || $banner.media_type eq 'image'"}selected{/if}>图片</option><option value="video" {if condition="isset($banner.media_type) && $banner.media_type eq 'video'"}selected{/if}>视频</option></select>
+                    </div>
+                    <label class="control-label col-xs-12 col-sm-2">移动媒体类型:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <select id="real-banner-{$bannerIndex}-mobile-media-type" class="form-control cms-banner-media-type-control" name="real[banners][{$bannerIndex}][mobile_media_type]" data-banner-media-type-control="mobile"><option value="" {if condition="empty($banner.mobile_media_type)"}selected{/if}>继承 PC</option><option value="image" {if condition="isset($banner.mobile_media_type) && $banner.mobile_media_type eq 'image'"}selected{/if}>图片</option><option value="video" {if condition="isset($banner.mobile_media_type) && $banner.mobile_media_type eq 'video'"}selected{/if}>视频</option></select>
+                    </div>
+                </div>
+                <div class="form-group cms-banner-media-fields">
+                    <label class="control-label col-xs-12 col-sm-2">PC 图片:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <input id="real-banner-{$bannerIndex}-image" class="form-control" name="real[banners][{$bannerIndex}][image]" value="{$banner.image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页 Banner 图片" data-media-recommended-width="1920" data-media-recommended-height="800" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                    </div>
+                    <label class="control-label col-xs-12 col-sm-2">移动图片:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <input id="real-banner-{$bannerIndex}-mobile-image" class="form-control" name="real[banners][{$bannerIndex}][mobile_image]" value="{$banner.mobile_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页 Banner 图片" data-media-recommended-width="750" data-media-recommended-height="422" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                    </div>
+                </div>
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 视频:</label><div class="col-xs-12 col-sm-4"><input id="real-banner-{$bannerIndex}-video" class="form-control" name="real[banners][{$bannerIndex}][video_url]" value="{$banner.video_url|default=''|htmlentities}" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" data-media-usage="PC 首页 Banner 视频"></div><label class="control-label col-xs-12 col-sm-2">移动视频:</label><div class="col-xs-12 col-sm-4"><input id="real-banner-{$bannerIndex}-mobile-video" class="form-control" name="real[banners][{$bannerIndex}][mobile_video_url]" value="{$banner.mobile_video_url|default=''|htmlentities}" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" data-media-usage="移动首页 Banner 视频"></div></div>
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">叠加图片:</label><div class="col-xs-12 col-sm-4"><input id="real-banner-{$bannerIndex}-overlay" class="form-control" name="real[banners][{$bannerIndex}][overlay_image]" value="{$banner.overlay_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="Banner 视频叠加文案图片" data-media-recommended-format="PNG/WebP" data-media-max-kb="800" data-media-transparent="true"></div><label class="control-label col-xs-12 col-sm-2">按钮文字:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][button_text]" value="{$banner.button_text|default=''|htmlentities}"></div></div>
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 链接:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][link_url]" value="{$banner.link_url|default=''|htmlentities}"></div><label class="control-label col-xs-12 col-sm-2">移动链接:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_link_url]" value="{$banner.mobile_link_url|default=''|htmlentities}"></div></div>
+                <div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">站内地址建议以 / 开头，例如 /page/label；站外地址填写完整 https://...。移动链接留空时使用公共/PC 链接。移动媒体类型选择“继承 PC”时不需要重复配置媒体类型。</p></div></div>
+                <div class="form-group"><label class="control-label col-xs-12 col-sm-2">显示:</label><div class="col-xs-12 col-sm-4"><input type="hidden" name="real[banners][{$bannerIndex}][pc_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" name="real[banners][{$bannerIndex}][pc_visible]" value="1" {if condition="!isset($banner.pc_visible) || $banner.pc_visible"}checked{/if}> PC</label><input type="hidden" name="real[banners][{$bannerIndex}][mobile_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" name="real[banners][{$bannerIndex}][mobile_visible]" value="1" {if condition="!isset($banner.mobile_visible) || $banner.mobile_visible"}checked{/if}> 移动端</label></div><label class="control-label col-xs-12 col-sm-2">排序:</label><div class="col-xs-12 col-sm-2"><input class="form-control" type="number" name="real[banners][{$bannerIndex}][weigh]" value="{$banner.weigh|default='0'|htmlentities}"></div><div class="col-xs-12 col-sm-2"><select class="form-control" name="real[banners][{$bannerIndex}][status]"><option value="normal" {if condition="!isset($banner.status) || $banner.status eq 'normal'"}selected{/if}>正常</option><option value="hidden" {if condition="isset($banner.status) && $banner.status eq 'hidden'"}selected{/if}>隐藏</option></select></div></div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    <div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="button" id="btn-add-real-banner" class="btn btn-success"><i class="fa fa-plus"></i> 新增 Banner</button></div></div>
+    <div class="form-group layer-footer"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存并立即生效</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
+</form>

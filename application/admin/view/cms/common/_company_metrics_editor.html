@@ -1,0 +1,99 @@
+<div class="form-group cms-metrics-field cms-company-metrics-field">
+    <label class="control-label col-xs-12 col-sm-2">企业指标:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-metrics-editor" data-metrics-editor data-item-label="企业指标" data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-metrics-list" data-metrics-list>
+                {foreach name="[metrics]" item="metric" key="metricIndex"}
+                <div class="panel panel-default cms-metric-item" data-metric-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-metric-item-label>企业指标</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业指标操作">
+                            <button type="button" class="btn btn-default" data-metric-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-metric-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-metric-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">数值:</label>
+                            <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="value" name="[inputPrefix][{$metricIndex}][value]" value="{$metric.value|default=''|htmlentities}" placeholder="例如：10000"></div>
+                            <label class="control-label col-xs-12 col-sm-2">单位:</label>
+                            <div class="col-xs-12 col-sm-4"><div class="input-group" data-metric-unit-combobox>
+                                    <input class="form-control" data-metric-field="unit" name="[inputPrefix][{$metricIndex}][unit]" value="{$metric.unit|default=''|htmlentities}" placeholder="可输入或选择单位">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-metric-unit-toggle title="选择常用单位" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="javascript:;" data-metric-unit-option="m²">m²</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="㎡">㎡</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="万+">万+</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="条">条</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="小时">小时</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="台">台</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="个">个</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="人">人</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="年">年</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="%">%</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="家">家</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="套">套</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="吨">吨</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="件/天">件/天</a></li>
+                                        </ul>
+                                    </div>
+                                </div></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">说明:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-metric-field="text" name="[inputPrefix][{$metricIndex}][text]" value="{$metric.text|default=''|htmlentities}" placeholder="例如：印刷生产基地"></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            <script type="text/template" data-metric-item-template>
+                <div class="panel panel-default cms-metric-item" data-metric-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-metric-item-label>企业指标</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业指标操作">
+                            <button type="button" class="btn btn-default" data-metric-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-metric-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-metric-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">数值:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="value" value="" placeholder="例如：10000"></div>
+                            <label class="control-label col-xs-12 col-sm-2">单位:</label><div class="col-xs-12 col-sm-4"><div class="input-group" data-metric-unit-combobox>
+                                    <input class="form-control" data-metric-field="unit" value="" placeholder="可输入或选择单位">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-metric-unit-toggle title="选择常用单位" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="javascript:;" data-metric-unit-option="m²">m²</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="㎡">㎡</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="万+">万+</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="条">条</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="小时">小时</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="台">台</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="个">个</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="人">人</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="年">年</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="%">%</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="家">家</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="套">套</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="吨">吨</a></li>
+                                            <li><a href="javascript:;" data-metric-unit-option="件/天">件/天</a></li>
+                                        </ul>
+                                    </div>
+                                </div></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">说明:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-metric-field="text" value="" placeholder="例如：印刷生产基地"></div>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <button type="button" class="btn btn-success" data-metric-item-add><i class="fa fa-plus"></i> 添加企业指标</button>
+            <p class="help-block">用于首页“走进科创美”底部数据展示。推荐 5 项；每项填写数值、单位和说明；单位可直接输入，也可从常用单位下拉选择。使用上移/下移调整显示顺序。留空则前台不显示指标区域。</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+<input type="hidden" name="row[section_key]" value="{$row.section_key|default=''|htmlentities}">
+<input type="hidden" name="row[section_name]" value="{$row.section_name|default=''|htmlentities}">
+<div class="alert alert-info"><i class="fa fa-pencil"></i> 正在编辑：首页 → <strong>{$row.section_name|default=''|htmlentities}</strong>。保存后立即更新网站首页。
+{if !empty($row.section_key)}
+    {if condition="$row.section_key eq 'products'"}<a class="btn btn-xs btn-primary pull-right" href="{:url('cms/home_section_reference/index',['section_key'=>$row.section_key])}">管理首页推荐产品</a>
+    {elseif condition="$row.section_key eq 'cases'" /}<a class="btn btn-xs btn-primary pull-right" href="{:url('cms/home_section_reference/index',['section_key'=>$row.section_key])}">管理首页工程案例</a>
+    {elseif condition="$row.section_key eq 'news'" /}<a class="btn btn-xs btn-primary pull-right" href="{:url('cms/home_section_reference/index',['section_key'=>$row.section_key])}">管理首页新闻</a>
+    {/if}
+{/if}
+</div>
+{if condition="$row.section_key eq 'about'"}
+{include file="cms/common/_home_about_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'products'" /}
+{include file="cms/common/_home_products_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'service'" /}
+{include file="cms/common/_home_service_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'workshop'" /}
+{include file="cms/common/_home_workshop_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'cases'" /}
+{include file="cms/common/_home_cases_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'advantages'" /}
+{include file="cms/common/_home_advantages_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'news'" /}
+{include file="cms/common/_home_news_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'company'" /}
+{include file="cms/common/_home_company_fields" rowVar="row" inputPrefix="row" /}
+{elseif condition="$row.section_key eq 'culture'" /}
+{include file="cms/common/_home_culture_fields" rowVar="row" inputPrefix="row" /}
+{else /}
+<div class="alert alert-danger">当前功能块没有可用的编辑 Schema，禁止使用通用字段保存。首页轮播请使用“首页轮播”管理入口。</div>
+{/if}
+{if condition="$row.section_key neq 'hero'"}
+{include file="cms/common/_home_common_fields" rowVar="row" inputPrefix="row" /}
+{/if}
+<div class="form-group layer-footer"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
+</form>

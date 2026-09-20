@@ -1,0 +1,21 @@
+<section class="hero hero--lav hero--prodbg cms-pc-inner-banner{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"} has-copy{/if}" style="background-image:url('{$block.image|default=''|htmlentities}');">
+{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"}
+<div class="container"><div class="hero-text">
+{notempty name="block.title"}<h1>{$block.title|default=''|htmlentities|nl2br}</h1>{/notempty}
+{notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}
+{notempty name="block.extra.items"}<div class="hero-badges">
+{volist name="block.extra.items" id="item"}
+<div class="hero-badge">
+{switch name="item.badge"}
+{case value="custom"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></svg>{/case}
+{case value="team"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>{/case}
+{case value="layers"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg>{/case}
+{case value="truck"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>{/case}
+{default /}{if condition="$item.icon_kind eq 'font'"}<i class="{$item.icon_value|htmlentities} cms-page-picked-icon" aria-hidden="true"></i>{elseif condition="$item.icon_kind eq 'image'"}<img class="cms-page-picked-icon" src="{$item.icon_value|htmlentities}" alt="" aria-hidden="true">{else /}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>{/if}
+{/switch}
+<span>{$item.title|default=''|htmlentities}</span>
+</div>
+{/volist}
+</div>{/notempty}</div></div>
+{/if}
+</section>

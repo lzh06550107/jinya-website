@@ -1,0 +1,43 @@
+{include file="cms/common/strict_header" /}
+{include file="cms/common/strict_channel_header" /}
+<div class="blk-main clearafter">
+    <div class="p102-fdh-1">
+        <div class="p102-fdh-1-nav" navvicefocus1="">
+            {volist name="content.category_navigation" id="group"}
+            <div class="p102-fdh-1-nav-one">
+                <h3><a href="{$group.url|htmlentities}" title="{$group.name|htmlentities}">{$group.name|htmlentities}：</a></h3>
+                <dl>
+                    {volist name="group.items" id="navItem"}
+                    <dd>
+                        <a href="{$navItem.url|htmlentities}" title="{$navItem.title|htmlentities}">{$navItem.title|htmlentities}</a>
+                        {notempty name="navItem.children"}
+                        <div class="three-list">
+                            {volist name="navItem.children" id="third"}
+                            <a href="{$third.url|htmlentities}" title="{$third.title|htmlentities}">{$third.title|htmlentities}</a>
+                            {/volist}
+                        </div>
+                        {/notempty}
+                    </dd>
+                    {/volist}
+                </dl>
+                <div class="clear"></div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+    <div class="p102-pros-1" id="seecontent">
+        <div class="p102-pros-1-list">
+            {volist name="content.products.items" id="item" mod="3"}
+            <dl>
+                <dt><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" title="{$item.title|htmlentities}">{/notempty}</a></dt>
+                <dd><h4 class="cms-product-card-title"><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4>{notempty name="item.summary"}<div class="p102-pros-1-desc cms-product-card-summary">{$item.summary|htmlentities}</div>{/notempty}</dd>
+            </dl>
+            {eq name="mod" value="2"}<div class="clear"></div>{/eq}
+            {/volist}
+            {if condition="empty($content.products.items)"}<div class="cms-empty"><p>{$content.products.empty_message|htmlentities}</p></div>{/if}
+            <div class="clear"></div>
+        </div>
+    </div>
+    {include file="cms/common/strict_pagination" /}
+</div>
+{include file="cms/common/strict_footer" /}

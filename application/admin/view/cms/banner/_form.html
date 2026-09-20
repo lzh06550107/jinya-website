@@ -1,0 +1,104 @@
+<form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="page-header"><h4>标题与文案（选填）</h4><p class="text-muted">配置后叠加显示在 Banner 图片上；PC 标题和副标题都留空时，PC 页面只显示背景图片。移动端仍按现有回退规则处理。</p></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">PC 标题（显示文字）:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|default=''|htmlentities}"><p class="help-block">选填；填写后显示 PC Banner 主标题，留空则不显示。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">移动标题（显示文字）:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-mobile_title" class="form-control" name="row[mobile_title]" type="text" value="{$row.mobile_title|default=''|htmlentities}" placeholder="留空时使用 Banner 名称"><p class="help-block">仅移动端使用；留空时按当前前台兼容规则回退到已有标题。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">PC 副标题（显示文字）:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-subtitle" class="form-control" name="row[subtitle]" type="text" value="{$row.subtitle|default=''|htmlentities}"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">移动副标题（显示文字）:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-mobile_subtitle" class="form-control" name="row[mobile_subtitle]" type="text" value="{$row.mobile_subtitle|default=''|htmlentities}" placeholder="留空时使用 PC 副标题"><p class="help-block">留空时使用 PC 副标题。</p></div>
+    </div>
+
+    <div class="page-header"><h4>卖点标签</h4><p class="text-muted">用于首页 Banner 标题下方的白色圆角卖点胶囊；图标可留空，PC 与 Mobile 可逐条控制。</p></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">卖点:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="cms-banner-highlights-editor" data-banner-highlights-editor>
+                <input type="hidden" name="row[highlights_json]" value="{$row.highlights_json|default='[]'|htmlentities}" data-banner-highlights-input>
+                <div data-banner-highlights-list></div>
+                <div class="clearfix" style="margin-top:8px">
+                    <button type="button" class="btn btn-success btn-sm" data-banner-highlight-add><i class="fa fa-plus"></i> 新增卖点</button>
+                    <span class="text-muted pull-right">当前 <span data-banner-highlight-count>0 / 5</span></span>
+                </div>
+            </div>
+            <p class="help-block">推荐 3 条，最多 5 条。单条建议 6～16 个中文字符，过长会影响 Banner 排版。图标建议 64×64 或 128×128，PNG/WebP 透明背景，建议 ≤100 KB；图标可留空。</p>
+        </div>
+    </div>
+
+    <div class="page-header"><h4>PC / Mobile 展示媒体</h4><p class="text-muted">PC 与移动端可分别选择图片或视频；移动端选择“继承 PC”时沿用 PC 媒体类型。切换类型只改变字段视觉强调，不会自动清空已有图片或视频。</p></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">PC 媒体类型:</label>
+        <div class="col-xs-12 col-sm-3"><select id="c-media_type" class="form-control selectpicker" name="row[media_type]"><option value="image" {if !isset($row.media_type) || $row.media_type=='image'}selected{/if}>图片</option><option value="video" {if isset($row.media_type) && $row.media_type=='video'}selected{/if}>视频</option></select><p class="help-block">PC 首页使用的媒体类型。</p></div>
+        <label class="control-label col-xs-12 col-sm-2">移动媒体类型:</label>
+        <div class="col-xs-12 col-sm-3"><select id="c-mobile_media_type" class="form-control selectpicker" name="row[mobile_media_type]"><option value="" {if !isset($row.mobile_media_type) || $row.mobile_media_type==''}selected{/if}>继承 PC</option><option value="image" {if isset($row.mobile_media_type) && $row.mobile_media_type=='image'}selected{/if}>图片</option><option value="video" {if isset($row.mobile_media_type) && $row.mobile_media_type=='video'}selected{/if}>视频</option></select><p class="help-block">留空表示继承 PC；如需移动端独立视频/图片再选择对应类型。</p></div>
+    </div>
+    <div class="form-group cms-banner-pc-image-settings">
+        <label class="control-label col-xs-12 col-sm-2">PC 图片:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group">
+            <input id="c-image" class="form-control" name="row[image]" type="text" value="{$row.image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页 Banner 图片" data-media-recommended-width="1920" data-media-recommended-height="800" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+            <div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-image" class="btn btn-danger faupload" data-input-id="c-image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div>
+        </div><p class="help-block">建议 1920×800（2.4:1），JPG/WebP，≤1.5 MB；属于当前项目运营建议，不要求像素完全一致。</p></div>
+    </div>
+    <div class="form-group cms-banner-mobile-image-settings">
+        <label class="control-label col-xs-12 col-sm-2">移动图片:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group">
+            <input id="c-mobile_image" class="form-control" name="row[mobile_image]" type="text" value="{$row.mobile_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页 Banner 图片" data-media-recommended-width="750" data-media-recommended-height="422" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+            <div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-mobile_image" class="btn btn-danger faupload" data-input-id="c-mobile_image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-mobile_image" class="btn btn-primary fachoose" data-input-id="c-mobile_image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div>
+        </div><p class="help-block">建议 750×422（约 16:9），JPG/WebP，≤800 KB。移动端图片为空时按前台现有兼容规则处理。</p></div>
+    </div>
+
+    <div class="page-header"><h4>视频设置</h4><p class="text-muted">建议 MP4/H.264 横屏视频。移动视频留空时按现有前台规则回退 PC 视频；直接媒体地址与播放器页面 URL 的预览方式不同。</p></div>
+    <div class="form-group cms-banner-pc-video-settings">
+        <label class="control-label col-xs-12 col-sm-2">PC 视频:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-video_url" class="form-control" name="row[video_url]" type="text" value="{$row.video_url|default=''|htmlentities}" placeholder="/uploads/banner.mp4 或 HTTPS MP4 地址" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" data-media-usage="PC 首页 Banner 视频"><p class="help-block">MP4/WebM/OGG 直接文件会使用 video 播放；播放器页面 URL 会使用 iframe 预览。优先推荐 MP4/H.264。</p></div>
+    </div>
+    <div class="form-group cms-banner-mobile-video-settings">
+        <label class="control-label col-xs-12 col-sm-2">移动视频:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-mobile_video_url" class="form-control" name="row[mobile_video_url]" type="text" value="{$row.mobile_video_url|default=''|htmlentities}" placeholder="留空时使用 PC 视频" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" data-media-usage="移动首页 Banner 视频"><p class="help-block">仅移动端覆盖 PC 视频；留空时按现有前台规则使用 PC 视频。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">视频叠加图片:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group"><input id="c-overlay_image" class="form-control" name="row[overlay_image]" type="text" value="{$row.overlay_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="Banner 视频叠加文案图片" data-media-recommended-format="PNG/WebP" data-media-max-kb="800" data-media-transparent="true"><div class="input-group-addon no-border no-padding"><span><button type="button" id="faupload-overlay_image" class="btn btn-danger faupload" data-input-id="c-overlay_image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span><span><button type="button" id="fachoose-overlay_image" class="btn btn-primary fachoose" data-input-id="c-overlay_image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span></div></div><p class="help-block">用于视频上方的透明文案/装饰层；建议 PNG/WebP 透明背景，尽量 ≤800 KB。</p></div>
+    </div>
+
+    <div class="page-header"><h4>点击跳转</h4></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">链接:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-link_url" class="form-control" name="row[link_url]" type="text" value="{$row.link_url|default=''|htmlentities}" placeholder="例如：/page/label"><p class="help-block">站内地址建议以 / 开头，例如 /page/label；站外链接填写完整 https://... 地址。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">手机端链接:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-mobile_link_url" class="form-control" name="row[mobile_link_url]" type="text" value="{$row.mobile_link_url|default=''|htmlentities}" placeholder="留空时使用公共链接"><p class="help-block">仅移动端覆盖公共链接；留空时使用公共链接。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">按钮文字:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-button_text" class="form-control" name="row[button_text]" type="text" value="{$row.button_text|default=''|htmlentities}"><p class="help-block">前台存在按钮位置时显示；留空表示不额外指定按钮文案。</p></div>
+    </div>
+
+    <div class="page-header"><h4>投放时间</h4><p class="text-muted">用于限制 Banner 生效时间；开始/结束时间留空表示不限制对应边界。</p></div>
+    <div class="form-group"><label class="control-label col-xs-12 col-sm-2">开始时间:</label><div class="col-xs-12 col-sm-8"><input class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" name="row[start_time]" value="{if isset($row.start_time) && $row.start_time}{$row.start_time|date='Y-m-d H:i:s',###}{/if}"><p class="help-block">到达该时间后才进入有效期；留空表示立即具备开始条件。</p></div></div>
+    <div class="form-group"><label class="control-label col-xs-12 col-sm-2">结束时间:</label><div class="col-xs-12 col-sm-8"><input class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" name="row[end_time]" value="{if isset($row.end_time) && $row.end_time}{$row.end_time|date='Y-m-d H:i:s',###}{/if}"><p class="help-block">超过该时间后不再处于有效期；留空表示不限制结束时间。</p></div></div>
+
+    <div class="page-header"><h4>发布设置</h4></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">终端显示:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="hidden" name="row[pc_visible]" value="0">
+            <label class="checkbox-inline"><input type="checkbox" name="row[pc_visible]" value="1" {if !isset($row.pc_visible) || $row.pc_visible}checked{/if}> PC 显示</label>
+            <input type="hidden" name="row[mobile_visible]" value="0">
+            <label class="checkbox-inline"><input type="checkbox" name="row[mobile_visible]" value="1" {if !isset($row.mobile_visible) || $row.mobile_visible}checked{/if}> 移动端显示</label>
+            <p class="help-block">可只投放 PC、只投放移动端或双端同时显示；取消勾选只影响对应终端，不删除 Banner。</p>
+        </div>
+    </div>
+    <div class="form-group"><label class="control-label col-xs-12 col-sm-2">排序:</label><div class="col-xs-12 col-sm-8"><input id="c-weigh" class="form-control" name="row[weigh]" type="text" value="{$row.weigh|default=''|htmlentities}" data-rule="integer"><p class="help-block">数值越大通常越靠前；同一位置的 Banner 按当前后台排序规则展示。</p></div></div>
+    <div class="form-group"><label class="control-label col-xs-12 col-sm-2">状态:</label><div class="col-xs-12 col-sm-8">{:build_radios('row[status]', $statusList, isset($row['status'])?$row['status']:'normal')}<p class="help-block">隐藏后前台不展示该 Banner，但内容不会删除。</p></div></div>
+    <div class="form-group layer-footer"><label class="control-label col-xs-12 col-sm-2"></label><div class="col-xs-12 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
+</form>

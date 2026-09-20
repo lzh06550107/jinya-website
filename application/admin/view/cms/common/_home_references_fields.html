@@ -1,0 +1,32 @@
+<hr>
+{if condition="$homeContentType eq 'product'"}
+<div class="page-header"><h4>首页推荐产品 <a class="btn btn-xs btn-primary pull-right" href="{:url('cms/home_section_reference/index',['section_key'=>'products'])}"><i class="fa fa-picture-o"></i> 管理首页推荐产品展示图</a></h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 推荐产品:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-pc" class="form-control selectpage" name="real[references][pc]" type="text" value="{$homePcReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">第 1 条进入 PC 主卡片，第 2、3 条进入右侧卡片，第 4 条以后进入下方产品轮播。</p></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端推荐产品:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-mobile" class="form-control selectpage" name="real[references][mobile]" type="text" value="{$homeMobileReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">按选择顺序进入移动端产品轮播。</p></div>
+</div>
+{elseif condition="$homeContentType eq 'case'" /}
+<div class="page-header"><h4>首页工程案例</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 工程案例:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-pc" class="form-control selectpage" name="real[references][pc]" type="text" value="{$homePcReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">按选择顺序输出到 PC 首页案例区域；显示数量还会受当前区块“PC 显示上限”控制。</p></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端工程案例:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-mobile" class="form-control selectpage" name="real[references][mobile]" type="text" value="{$homeMobileReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">按选择顺序输出到移动首页案例区域；显示数量还会受“移动端显示上限”控制。</p></div>
+</div>
+{elseif condition="$homeContentType eq 'article'" /}
+<div class="page-header"><h4>首页新闻</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 新闻:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-pc" class="form-control selectpage" name="real[references][pc]" type="text" value="{$homePcReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">顺序会影响 PC 首页重点新闻与后续列表位置。</p></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端新闻:</label>
+    <div class="col-xs-12 col-sm-8"><input id="real-home-ref-mobile" class="form-control selectpage" name="real[references][mobile]" type="text" value="{$homeMobileReferenceIds|htmlentities}" data-source="{$homeReferenceSource|htmlentities}" data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc"><p class="help-block">按选择顺序输出到移动首页。</p></div>
+</div>
+{/if}

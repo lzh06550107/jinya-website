@@ -1,0 +1,71 @@
+<div class="f_bg"><div class="footer"><div class="content01">
+<div class="f_nav"><h2><a href="/" title="{$cmsSite.name|default=''|htmlentities}">{if !empty($cmsSite.logo)}<img alt="{$cmsSite.name|default=''|htmlentities}" src="{$cmsSite.logo|htmlentities}">{else /}<span class="cms-footer-logo-text">{$cmsSite.name|default=''|htmlentities}</span>{/if}</a></h2><ul>
+{notempty name="layout.navigation.footer"}
+{volist name="layout.navigation.footer" id="nav"}<li><a href="{$nav.url|default='#'|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" title="{$nav.title|htmlentities}"> {$nav.title|htmlentities} </a></li>{/volist}
+{else /}
+{notempty name="cmsNavigationTree"}{volist name="cmsNavigationTree" id="nav"}<li><a href="{$nav.url|default='#'|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" title="{$nav.title|htmlentities}"> {$nav.title|htmlentities} </a></li>{/volist}{/notempty}
+{/notempty}
+</ul></div>
+<div class="f_con">
+<div class="f_xx"><h3>{$layout.footer_company.title|default=''|htmlentities}</h3><p>{$layout.footer_company.content|default=$cmsSite.slogan|default=''|htmlentities}</p><ul class="clearfix"><li>版权所有© {$cmsSite.cms_copyright_year|default=''|htmlentities} {$cmsSite.name|default=''|htmlentities}{$layout.footer_company.config.copyright_suffix|default=''|htmlentities}</li>{if !empty($cmsSite.beian)}<li>备案号：<a href="https://beian.miit.gov.cn/#/Integrated/index" rel="nofollow" target="_blank">{$cmsSite.beian|htmlentities}</a></li>{/if}{if !empty($cmsSite.cms_tech_support)}<li>技术支持：{$cmsSite.cms_tech_support|htmlentities}</li>{/if}</ul></div>
+<div class="gsxx"><h3>{$layout.footer_contact.title|default=''|htmlentities}</h3><p><img alt="" src="__CDN__{$pcAssetBase}/images/foot_ph.png">{$cmsSite.hotline|default=''|htmlentities}</p><ul class="clearfix"><li>联系邮箱：<br>{$cmsSite.email|default=''|htmlentities}</li><li>公司地址：<br>{$cmsSite.address|default=''|htmlentities}</li></ul></div>
+<div class="f_er"><h3>{$layout.footer_qrcode.title|default=''|htmlentities}</h3><div class="f_ma clearfix"><ul class="clearfix">
+{notempty name="layout.footer_qrcode.config.items"}
+{volist name="layout.footer_qrcode.config.items" id="item"}
+<li title="{$item.title|default=''|htmlentities}">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon cms-footer-social-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img alt="{$item.title|default=''|htmlentities}" src="{$item.icon_view.url|htmlentities}">{/if}{notempty name="item.qr_image"}<b><img alt="{$item.title|default=''|htmlentities}" src="{$item.qr_image|htmlentities}"></b>{/notempty}</li>
+{/volist}
+{/notempty}
+</ul></div></div>
+</div></div></div></div>
+{if condition="!empty($layout.friend_links.config.items)"}<div class="links cms-home-friend-links"><div class="content01 cms-home-friend-links-inner"><b>{$layout.friend_links.title|default='友情链接：'|htmlentities}</b>{volist name="layout.friend_links.config.items" id="item"}<a href="{$item.url|default='#'|htmlentities}" target="{$item.target|default='_blank'|htmlentities}" rel="noopener noreferrer" title="{$item.title|default=''|htmlentities}">{$item.title|default=''|htmlentities}</a>{/volist}</div></div>{/if}
+<div class="client-2 cms-floating-service"><ul id="client-2">
+{if condition="!empty($layout.floating_service.config.show_online_consult) && !empty($cmsSite.cms_service_wecom_url)"}<li class="cms-float-item cms-float-consult"><a data-cms-online-consult href="{$cmsSite.cms_service_wecom_url|htmlentities}" target="_blank" rel="noopener noreferrer" title="在线咨询"><i class="fa fa-comment-o" aria-hidden="true"></i><span>在线咨询</span></a></li>{/if}
+{if condition="!empty($layout.floating_service.config.show_online_message)"}<li class="cms-float-item cms-float-message"><a data-cms-message-open href="#cms-inquiry-modal" title="在线留言" role="button"><i class="fa fa-commenting-o" aria-hidden="true"></i><span>在线留言</span></a></li>{/if}
+{if condition="!empty($layout.floating_service.config.show_wechat_consult) && !empty($cmsSite.cms_service_wechat_qr)"}<li class="my-kefu-weixin cms-float-item cms-float-wechat"><a data-cms-wechat-toggle href="javascript:;" title="微信咨询" aria-label="微信咨询" aria-expanded="false"><i class="fa fa-qrcode" aria-hidden="true"></i><span>微信咨询</span></a><div class="cont cms-wechat-card" data-cms-wechat-card><strong>微信扫码咨询</strong><img alt="客服企业微信二维码" src="{$cmsSite.cms_service_wechat_qr|htmlentities}"><b>{$cmsSite.cms_service_wechat_name|default='金亚包装业务客服'|htmlentities}</b>{if !empty($cmsSite.cms_service_wechat_tip)}<span>{$cmsSite.cms_service_wechat_tip|htmlentities}</span>{/if}{if !empty($cmsSite.cms_service_hours)}<em>工作时间 {$cmsSite.cms_service_hours|htmlentities}</em>{/if}</div></li>{/if}
+{if condition="!empty($layout.floating_service.config.show_back_top)"}<li class="my-kefu-ftop cms-float-item cms-float-top"><a href="javascript:;" title="返回顶部" aria-label="返回顶部"><i class="fa fa-angle-up" aria-hidden="true"></i><span>TOP</span></a></li>{/if}
+</ul></div>
+<div id="cms-inquiry-modal" class="cms-inquiry-modal" data-cms-inquiry-modal aria-hidden="true">
+<div class="cms-inquiry-backdrop" data-cms-inquiry-close></div>
+<div class="cms-inquiry-dialog" role="dialog" aria-modal="true" aria-labelledby="cms-inquiry-title">
+<button class="cms-inquiry-close" type="button" data-cms-inquiry-close aria-label="关闭在线留言">×</button>
+<h3 id="cms-inquiry-title">在线留言</h3><p class="cms-inquiry-intro">留下您的需求，我们会尽快与您联系</p>
+<form class="cms-floating-inquiry-form" method="post" action="/inquiry/submit" data-cms-inquiry-form><input type="hidden" name="__token__" value="{$cmsInquiryToken|default=''|htmlentities}"><input type="hidden" name="source_title" value="">
+<div class="cms-inquiry-field"><label for="cms-float-inquiry-name">姓名 <em>*</em></label><input id="cms-float-inquiry-name" name="name" type="text" maxlength="100" autocomplete="name" required></div>
+<div class="cms-inquiry-field"><label for="cms-float-inquiry-mobile">手机号 <em>*</em></label><input id="cms-float-inquiry-mobile" name="mobile" type="tel" maxlength="11" inputmode="numeric" autocomplete="tel" required></div>
+<div class="cms-inquiry-field"><label for="cms-float-inquiry-company">公司名称</label><input id="cms-float-inquiry-company" name="company" type="text" maxlength="200" autocomplete="organization"></div>
+<div class="cms-inquiry-field"><label for="cms-float-inquiry-content">咨询需求 <em>*</em></label><textarea id="cms-float-inquiry-content" name="content" rows="4" maxlength="2000" required></textarea></div>
+<button class="cms-inquiry-submit" type="submit">提交咨询</button><span class="cms-inquiry-message" data-cms-inquiry-message aria-live="polite"></span>
+</form></div></div>
+{if condition="!empty($cmsSite.cms_service_wechat_qr)"}<div class="cms-wechat-consult-modal" data-cms-wechat-consult-modal aria-hidden="true">
+<div class="cms-wechat-consult-backdrop" data-cms-wechat-consult-close></div>
+<div class="cms-wechat-consult-dialog" role="dialog" aria-modal="true" aria-labelledby="cms-wechat-consult-title">
+<button class="cms-wechat-consult-close" type="button" data-cms-wechat-consult-close aria-label="关闭微信咨询">×</button>
+<h3 id="cms-wechat-consult-title">微信扫码咨询</h3>
+<p class="cms-wechat-consult-intro">扫码即可咨询产品、报价、工艺与交期</p>
+<img class="cms-wechat-consult-qr" alt="客服企业微信二维码" src="{$cmsSite.cms_service_wechat_qr|htmlentities}">
+<strong>{$cmsSite.cms_service_wechat_name|default='金亚包装业务客服'|htmlentities}</strong>
+{if !empty($cmsSite.cms_service_wechat_tip)}<span>{$cmsSite.cms_service_wechat_tip|htmlentities}</span>{/if}
+{if !empty($cmsSite.cms_service_hours)}<em>工作时间 {$cmsSite.cms_service_hours|htmlentities}</em>{/if}
+{if !empty($cmsSite.cms_service_wecom_url)}<a class="cms-wechat-consult-link" href="{$cmsSite.cms_service_wecom_url|htmlentities}" target="_blank" rel="noopener noreferrer">在手机上打开微信客服</a>{/if}
+</div></div>{/if}
+{if $pcStrictHome}
+<script src="__CDN__{$pcAssetBase}/js/JQuery.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__{$pcAssetBase}/js/jquery.SuperSlide.2.1.3.source.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__{$pcAssetBase}/js/index.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__{$pcAssetBase}/js/swiper-3.3.1.jquery.min.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__{$pcAssetBase}/js/wow.min.js?v={$cmsSite.version|default='1.0'}"></script>
+{else /}
+<script src="__CDN__{$pcAssetBase}/js/nsw.pc.min.js?v={$cmsSite.version|default='1.0'}&dep=nobdshare-r1"></script>
+{/if}
+<script src="__CDN__{$pcAssetBase}/js/public.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__/assets/js/cms-floating-service.js?v={$cmsSite.version|default='1.0'}&layout=consultation-r2"></script>
+<script src="__CDN__{$pcAssetBase}/{$pcStrictBundle|htmlentities}.js?v={$cmsSite.version|default='1.0'}&fix=banner-video-null-r1"></script>
+{if $pcStrictHome}<script src="__CDN__/assets/js/cms-home-media.js?v={$cmsSite.version|default='1.0'}&layout=video-first-carousel-r2"></script>{/if}
+{if $pcStrictHome}<script src="__CDN__/assets/js/cms-home-source-blocks.js?v={$cmsSite.version|default='1.0'}&layout=source-clone"></script>{/if}
+{if $pcThemeCss=='product-detail'}<script src="__CDN__/assets/js/cms-product-detail-jinya.js?v={$cmsSite.version|default='1.0'}&layout=jinya-product-detail-v1&detail=v3"></script>{/if}
+{if $pcThemeCss=='article-list'}<script src="__CDN__/assets/js/cms-news-list-clone.js?v={$cmsSite.version|default='1.0'}&layout=32.9"></script>{/if}
+{if $pcThemeCss=='search'}<script src="__CDN__/assets/js/cms-search-list-clone.js?v={$cmsSite.version|default='1.0'}&layout=32.11"></script>{/if}
+{if $pcThemeCss=='label-page'}<script src="__CDN__/assets/js/cms-label-page.js?v={$cmsSite.version|default='1.0'}&layout=v12-r88"></script>{/if}
+<script src="__CDN__{$pcAssetBase}/js/strict-dynamic.js?v={$cmsSite.version|default='1.0'}"></script>
+<script src="__CDN__/assets/js/cms-navigation-active.js?v={$cmsSite.version|default='1.0'}&layout=nav-active-r1"></script>
+</body></html>

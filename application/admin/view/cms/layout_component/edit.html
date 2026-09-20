@@ -1,0 +1,425 @@
+<form id="layout-component-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {:token()}
+    <input type="hidden" name="row[version]" value="{$row.version|htmlentities}">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>{$row.component_name|htmlentities}</strong>
+            <span class="text-muted">（{$row.component_key|htmlentities}）</span>
+        </div>
+        <div class="panel-body">
+            <p class="help-block">在这里统一编辑该公共布局关联的内容、导航/列表和显示规则。共享内容会直接写回原有全局数据源，不生成重复副本。</p>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#tab-content" data-toggle="tab">内容设置</a></li>
+        {if condition="$hasListTab"}<li><a href="#tab-list" data-toggle="tab">导航/列表设置</a></li>{/if}
+        <li><a href="#tab-display" data-toggle="tab">显示控制</a></li>
+    </ul>
+
+    <div class="tab-content" style="padding-top:20px;">
+        <div class="tab-pane active" id="tab-content">
+            {notempty name="editor.definition.component_fields"}
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>组件内容</strong></div>
+                <div class="panel-body">
+                    {foreach name="editor.definition.component_fields" item="componentField"}
+                    {if condition="$componentField eq 'title'"}
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input class="form-control" name="row[component][title]" type="text" value="{$editor.component_values.title|htmlentities}">
+                        </div>
+                    </div>
+                    {/if}
+                    {if condition="$componentField eq 'content'"}
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">正文:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <textarea class="form-control" name="row[component][content]" rows="5">{$editor.component_values.content|htmlentities}</textarea>
+                        </div>
+                    </div>
+                    {/if}
+                    {/foreach}
+                </div>
+            </div>
+            {/notempty}
+
+            {notempty name="contentSiteFields"}
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>共享站点内容</strong></div>
+                <div class="panel-body">
+                    {foreach name="contentSiteFields" item="siteField" key="siteName"}
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">{$siteField.definition.title|htmlentities}:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            {if condition="$siteField.definition.type eq 'image'"}
+                            <div class="input-group">
+                                <input id="layout-site-{$siteName|htmlentities}" class="form-control" name="row[site][{$siteName|htmlentities}]" type="text" value="{$siteField.value|htmlentities}" data-media-preview="image" data-media-upload="true" {if condition="$siteField.definition.rule"}data-rule="{$siteField.definition.rule|htmlentities}"{/if}>
+                                <div class="input-group-addon no-border no-padding">
+                                    <span><button type="button" class="btn btn-danger faupload" data-input-id="layout-site-{$siteName|htmlentities}" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                                    <span><button type="button" class="btn btn-primary fachoose" data-input-id="layout-site-{$siteName|htmlentities}" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                                </div>
+                            </div>
+                            {else /}
+                            <input class="form-control" name="row[site][{$siteName|htmlentities}]" type="text" value="{$siteField.value|htmlentities}" {if condition="$siteField.definition.rule"}data-rule="{$siteField.definition.rule|htmlentities}"{/if}>
+                            {/if}
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+            {/notempty}
+
+            {if condition="$row.component_key eq 'layout.header.pc'"}
+            <div class="panel panel-default cms-header-navigation-style-panel">
+                <div class="panel-heading"><strong>导航样式</strong></div>
+                <div class="panel-body">
+                    <p class="help-block"><i class="fa fa-info-circle"></i> 这里直接配置 PC 通用 Header 的 Hover 与当前选中菜单高亮背景色，所有页面同步生效。</p>
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">导航 Hover / 选中高亮颜色:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input class="form-control" style="width:90px;padding:3px;" name="row[config][nav_active_background_color]" type="color" value="{$editor.layout_config.nav_active_background_color|default='#f48101'|htmlentities}">
+                            <p class="help-block">统一控制导航 Hover 与当前选中菜单（cur）的背景色；两种状态文字均保持白色，顶部态与滚动后的 Header 使用同一颜色。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default cms-hotline-content-panel">
+                <div class="panel-heading"><strong>联系电话区域</strong></div>
+                <div class="panel-body">
+                    <p class="help-block"><i class="fa fa-info-circle"></i> 这里配置电话区内部内容和视觉样式；“显示控制”只负责整个电话组件的显示、宽度和整体上下偏移，不提供角标/图标/号码独立坐标，避免破坏相对布局。</p>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">电话号码:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input class="form-control" style="max-width:360px;" name="row[site][cms_phone]" type="text" value="{$siteFields.cms_phone.value|default=''|htmlentities}" placeholder="例如 400-006-8683 / 18903716652">
+                            <p class="help-block">全站 PC 通用 Header 使用同一服务热线；修改后其它使用该站点电话的公共区域也会同步读取。</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">急单专线文字:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input class="form-control" style="max-width:360px;" name="row[config][hotline_badge_text]" type="text" maxlength="8" value="{$editor.layout_config.hotline_badge_text|default='急单专线'|htmlentities}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">急单专线字号:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-inline">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">顶部</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_badge_top_font_size]" type="number" min="10" max="28" value="{$editor.layout_config.hotline_badge_top_font_size|default='16'|htmlentities}">
+                                <span class="text-muted" style="margin:0 18px 0 6px;">px</span>
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">滚动后</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_badge_scrolled_font_size]" type="number" min="9" max="24" value="{$editor.layout_config.hotline_badge_scrolled_font_size|default='13'|htmlentities}">
+                                <span class="text-muted" style="margin-left:6px;">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">图标:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <input id="layout-hotline-icon" class="form-control" data-cms-icon-picker="true" data-cms-icon-default-preview="fa fa-bolt" data-cms-icon-default-label="当前默认图标" data-cms-icon-picker-group-max-width="650px" data-media-usage="PC Header 图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP" data-media-max-kb="100" data-media-transparent="true" name="row[config][hotline_icon]" type="text" value="{$editor.layout_config.hotline_icon|default=''|htmlentities}" placeholder="留空使用当前默认闪电；也可从图标库选择或上传自定义图标">
+                            <p class="help-block">留空时保持当前多段闪电图形；选择 Font Awesome 或上传透明 PNG/WebP 后，全站 PC Header 同步替换。</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">图标大小:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-inline">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">顶部</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_icon_top_size]" type="number" min="24" max="80" value="{$editor.layout_config.hotline_icon_top_size|default='49'|htmlentities}">
+                                <span class="text-muted" style="margin:0 18px 0 6px;">px</span>
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">滚动后</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_icon_scrolled_size]" type="number" min="20" max="64" value="{$editor.layout_config.hotline_icon_scrolled_size|default='39'|htmlentities}">
+                                <span class="text-muted" style="margin-left:6px;">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">电话号码字号:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-inline">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">顶部</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_number_top_font_size]" type="number" min="20" max="56" value="{$editor.layout_config.hotline_number_top_font_size|default='34'|htmlentities}">
+                                <span class="text-muted" style="margin:0 18px 0 6px;">px</span>
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">滚动后</label>
+                                <input class="form-control" style="width:110px;" name="row[config][hotline_number_scrolled_font_size]" type="number" min="16" max="44" value="{$editor.layout_config.hotline_number_scrolled_font_size|default='26'|htmlentities}">
+                                <span class="text-muted" style="margin-left:6px;">px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">电话号码字重:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <select class="form-control" style="max-width:220px;" name="row[config][hotline_number_font_weight]">
+                                {foreach name="editor.content_layout_field_definitions.hotline_number_font_weight.options" item="weightTitle" key="weightValue"}
+                                <option value="{$weightValue|htmlentities}" {if condition="$editor.layout_config.hotline_number_font_weight eq $weightValue"}selected{/if}>{$weightTitle|htmlentities}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">颜色:</label>
+                        <div class="col-xs-12 col-sm-10">
+                            <div class="form-inline cms-hotline-color-row">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">电话区背景</label>
+                                <input class="form-control" style="width:70px;padding:3px;" name="row[config][hotline_background_color]" type="color" value="{$editor.layout_config.hotline_background_color|default='#ef202d'|htmlentities}">
+                                <label class="text-muted" style="font-weight:normal;margin:0 6px 0 18px;">电话号码</label>
+                                <input class="form-control" style="width:70px;padding:3px;" name="row[config][hotline_number_color]" type="color" value="{$editor.layout_config.hotline_number_color|default='#ffd65a'|htmlentities}">
+                                <label class="text-muted" style="font-weight:normal;margin:0 6px 0 18px;">角标背景</label>
+                                <input class="form-control" style="width:70px;padding:3px;" name="row[config][hotline_badge_background_color]" type="color" value="{$editor.layout_config.hotline_badge_background_color|default='#ffb918'|htmlentities}">
+                                <label class="text-muted" style="font-weight:normal;margin:0 6px 0 18px;">角标文字</label>
+                                <input class="form-control" style="width:70px;padding:3px;" name="row[config][hotline_badge_text_color]" type="color" value="{$editor.layout_config.hotline_badge_text_color|default='#333333'|htmlentities}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/if}
+
+            {notempty name="relatedComponents"}
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>页尾分区内容</strong></div>
+                <div class="panel-body">
+                    {foreach name="relatedComponents" item="relatedRow" key="relatedKey"}
+                    <input type="hidden" name="row[related_components][{$relatedKey|htmlentities}][id]" value="{$relatedRow.id|htmlentities}">
+                    <input type="hidden" name="row[related_components][{$relatedKey|htmlentities}][version]" value="{$relatedRow.version|htmlentities}">
+                    <div class="well well-sm">
+                        <h4 style="margin-top:0;">{$relatedRow.component_name|htmlentities}</h4>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <input class="form-control" name="row[related_components][{$relatedKey|htmlentities}][title]" type="text" value="{$relatedRow.title|htmlentities}">
+                            </div>
+                        </div>
+                        {if condition="$relatedKey eq 'layout.footer.company'"}
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">公司简介:</label>
+                            <div class="col-xs-12 col-sm-8">
+                                <textarea class="form-control" name="row[related_components][{$relatedKey|htmlentities}][content]" rows="4">{$relatedRow.content|htmlentities}</textarea>
+                            </div>
+                        </div>
+                        {/if}
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+            {/notempty}
+        </div>
+
+        {if condition="$hasListTab"}
+        <div class="tab-pane" id="tab-list">
+            {if condition="$editor.definition.navigation_position neq null"}
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <strong>导航设置</strong>
+                    <button type="button" class="btn btn-success btn-xs pull-right add-editor-row" data-list-type="navigation"><i class="fa fa-plus"></i> 新增导航</button>
+                </div>
+                <div class="panel-body table-responsive">
+                    <p class="help-block"><i class="fa fa-info-circle"></i> 同级导航可拖拽排序；一级导航只能与一级导航互换，同一父导航下的子导航只能在自己的兄弟项之间拖动。拖拽后点击“保存并立即生效”。</p>
+                    <table class="table table-bordered table-hover" data-editor-list="navigation">
+                        <thead><tr><th class="text-center" style="width:54px;">拖拽</th><th>名称</th><th>URL</th><th>父导航</th><th>打开方式</th><th>PC</th><th>移动</th><th style="width:72px;">顺序</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {foreach name="navigationRows" item="navRow" key="navIndex"}
+                        <tr class="editor-row navigation-editor-row" draggable="false">
+                            <td class="text-center"><button type="button" class="btn btn-xs btn-primary navigation-drag-handle" data-navigation-drag-handle title="按住拖动，仅可调整同级导航" style="cursor:move;"><i class="fa fa-arrows"></i></button></td>
+                            <td>
+                                <input type="hidden" name="row[navigation][{$navIndex}][id]" value="{$navRow.id|htmlentities}">
+                                <input class="form-control input-sm" name="row[navigation][{$navIndex}][title]" type="text" value="{$navRow.title|htmlentities}" data-rule="required">
+                            </td>
+                            <td><input class="form-control input-sm" name="row[navigation][{$navIndex}][url]" type="text" value="{$navRow.url|htmlentities}"></td>
+                            <td>
+                                <select class="form-control input-sm navigation-parent" name="row[navigation][{$navIndex}][parent_id]">
+                                    <option value="0">顶级导航</option>
+                                    {foreach name="navigationRows" item="parentRow"}
+                                    {if condition="$parentRow.id neq $navRow.id"}<option value="{$parentRow.id|htmlentities}" {if condition="$parentRow.id eq $navRow.parent_id"}selected{/if}>{$parentRow.title|htmlentities}</option>{/if}
+                                    {/foreach}
+                                </select>
+                            </td>
+                            <td><select class="form-control input-sm" name="row[navigation][{$navIndex}][target]"><option value="_self" {if condition="$navRow.target eq '_self'"}selected{/if}>当前窗口</option><option value="_blank" {if condition="$navRow.target eq '_blank'"}selected{/if}>新窗口</option></select></td>
+                            <td class="text-center"><input type="hidden" name="row[navigation][{$navIndex}][pc_visible]" value="0"><input type="checkbox" name="row[navigation][{$navIndex}][pc_visible]" value="1" {if condition="$navRow.pc_visible"}checked{/if}></td>
+                            <td class="text-center"><input type="hidden" name="row[navigation][{$navIndex}][mobile_visible]" value="0"><input type="checkbox" name="row[navigation][{$navIndex}][mobile_visible]" value="1" {if condition="$navRow.mobile_visible"}checked{/if}></td>
+                            <td class="text-center"><input class="navigation-weigh" name="row[navigation][{$navIndex}][weigh]" type="hidden" value="{$navRow.weigh|htmlentities}"><span class="label label-default navigation-order-number">{$navIndex+1}</span></td>
+                            <td><select class="form-control input-sm" name="row[navigation][{$navIndex}][status]"><option value="normal" {if condition="$navRow.status eq 'normal'"}selected{/if}>显示</option><option value="hidden" {if condition="$navRow.status eq 'hidden'"}selected{/if}>隐藏</option></select></td>
+                            <td class="text-nowrap"><button type="button" class="btn btn-xs btn-danger delete-editor-row" title="删除导航"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+
+            {if condition="$editor.definition.list_type eq 'hot_search'"}
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix"><strong>热搜关键词</strong><button type="button" class="btn btn-success btn-xs pull-right add-editor-row" data-list-type="hot_search"><i class="fa fa-plus"></i> 新增关键词</button></div>
+                <div class="panel-body table-responsive">
+                    <input type="hidden" name="row[hot_search_items][_present]" value="1">
+                    <table class="table table-bordered table-hover" data-editor-list="hot_search">
+                        <thead><tr><th>关键词</th><th>链接</th><th>排序</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {foreach name="hotSearchItems" item="searchRow" key="searchIndex"}
+                        <tr class="editor-row">
+                            <td><input class="form-control input-sm" name="row[hot_search_items][{$searchIndex}][title]" type="text" value="{$searchRow.title|htmlentities}" data-rule="required"></td>
+                            <td><input class="form-control input-sm" name="row[hot_search_items][{$searchIndex}][url]" type="text" value="{$searchRow.url|htmlentities}"></td>
+                            <td><input class="form-control input-sm editor-weigh" name="row[hot_search_items][{$searchIndex}][weigh]" type="number" value="{$searchRow.weigh|htmlentities}"></td>
+                            <td><select class="form-control input-sm" name="row[hot_search_items][{$searchIndex}][status]"><option value="normal" {if condition="$searchRow.status eq 'normal'"}selected{/if}>显示</option><option value="hidden" {if condition="$searchRow.status eq 'hidden'"}selected{/if}>隐藏</option></select></td>
+                            <td class="text-nowrap"><button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="up"><i class="fa fa-arrow-up"></i></button> <button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="down"><i class="fa fa-arrow-down"></i></button> <button type="button" class="btn btn-xs btn-danger delete-editor-row"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+
+            {if condition="$hasFriendLinksEditor"}
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix"><strong>友情链接</strong><button type="button" class="btn btn-success btn-xs pull-right add-editor-row" data-list-type="friend_links"><i class="fa fa-plus"></i> 新增友情链接</button></div>
+                <div class="panel-body table-responsive">
+                    <p class="help-block"><i class="fa fa-info-circle"></i> 首页底部红色友情链接栏。外部链接建议使用“新窗口”；排序数值越大越靠前，隐藏项不会在前台显示。没有可显示链接时整条友情链接栏自动隐藏。</p>
+                    <input type="hidden" name="row[friend_link_items][_present]" value="1">
+                    <table class="table table-bordered table-hover" data-editor-list="friend_links">
+                        <thead><tr><th>链接名称</th><th>链接 URL</th><th>打开方式</th><th>排序</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {foreach name="friendLinkItems" item="friendRow" key="friendIndex"}
+                        <tr class="editor-row">
+                            <td><input class="form-control input-sm" name="row[friend_link_items][{$friendIndex}][title]" type="text" value="{$friendRow.title|htmlentities}" data-rule="required"></td>
+                            <td><input class="form-control input-sm" name="row[friend_link_items][{$friendIndex}][url]" type="text" value="{$friendRow.url|htmlentities}" placeholder="https://example.com"></td>
+                            <td><select class="form-control input-sm" name="row[friend_link_items][{$friendIndex}][target]"><option value="_blank" {if condition="$friendRow.target eq '_blank'"}selected{/if}>新窗口</option><option value="_self" {if condition="$friendRow.target eq '_self'"}selected{/if}>当前窗口</option></select></td>
+                            <td><input class="form-control input-sm editor-weigh" name="row[friend_link_items][{$friendIndex}][weigh]" type="number" value="{$friendRow.weigh|htmlentities}"></td>
+                            <td><select class="form-control input-sm" name="row[friend_link_items][{$friendIndex}][status]"><option value="normal" {if condition="$friendRow.status eq 'normal'"}selected{/if}>显示</option><option value="hidden" {if condition="$friendRow.status eq 'hidden'"}selected{/if}>隐藏</option></select></td>
+                            <td class="text-nowrap"><button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="up"><i class="fa fa-arrow-up"></i></button> <button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="down"><i class="fa fa-arrow-down"></i></button> <button type="button" class="btn btn-xs btn-danger delete-editor-row"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+
+            {if condition="$hasSocialEditor"}
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix"><strong>社交关注</strong><button type="button" class="btn btn-success btn-xs pull-right add-editor-row" data-list-type="social"><i class="fa fa-plus"></i> 新增自定义平台</button></div>
+                <div class="panel-body table-responsive">
+                    <input type="hidden" name="row[social_items][_present]" value="1">
+                    <table class="table table-bordered table-hover" data-editor-list="social">
+                        <thead><tr><th>平台名称</th><th>图标</th><th>二维码</th><th>链接</th><th>排序</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {foreach name="socialItems" item="socialRow" key="socialIndex"}
+                        <tr class="editor-row">
+                            <td><input class="form-control input-sm" name="row[social_items][{$socialIndex}][title]" type="text" value="{$socialRow.title|htmlentities}" data-rule="required"><input type="hidden" name="row[social_items][{$socialIndex}][qr_key]" value="{$socialRow.qr_key|htmlentities}"></td>
+                            <td>
+                                <input id="social-icon-{$socialIndex}" class="form-control" data-cms-icon-picker="true" name="row[social_items][{$socialIndex}][icon]" type="text" value="{$socialRow.icon|htmlentities}" placeholder="优先从图标库选择；没有合适图标时再上传">
+                            </td>
+                            <td>
+                                {if condition="$socialRow.qr_key"}
+                                <div class="input-group input-group-sm">
+                                    <input id="social-qr-{$socialIndex}" class="form-control" name="row[social_items][{$socialIndex}][qr_value]" type="text" value="{$socialRow.qr_value|htmlentities}" data-media-preview="image" data-media-upload="true">
+                                    <div class="input-group-addon no-border no-padding"><span><button type="button" class="btn btn-danger faupload" data-input-id="social-qr-{$socialIndex}" data-multiple="false"><i class="fa fa-upload"></i></button></span><span><button type="button" class="btn btn-primary fachoose" data-input-id="social-qr-{$socialIndex}" data-multiple="false"><i class="fa fa-list"></i></button></span></div>
+                                </div>
+                                {else /}<span class="text-muted">自定义项不绑定全局二维码</span>{/if}
+                            </td>
+                            <td><input class="form-control input-sm" name="row[social_items][{$socialIndex}][link_url]" type="text" value="{$socialRow.link_url|htmlentities}"></td>
+                            <td><input class="form-control input-sm editor-weigh" name="row[social_items][{$socialIndex}][weigh]" type="number" value="{$socialRow.weigh|htmlentities}"></td>
+                            <td><select class="form-control input-sm" name="row[social_items][{$socialIndex}][status]"><option value="normal" {if condition="$socialRow.status eq 'normal'"}selected{/if}>显示</option><option value="hidden" {if condition="$socialRow.status eq 'hidden'"}selected{/if}>隐藏</option></select></td>
+                            <td class="text-nowrap"><button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="up"><i class="fa fa-arrow-up"></i></button> <button type="button" class="btn btn-xs btn-default move-editor-row" data-direction="down"><i class="fa fa-arrow-down"></i></button> <button type="button" class="btn btn-xs btn-danger delete-editor-row"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {/if}
+        </div>
+        {/if}
+
+        <div class="tab-pane" id="tab-display">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong>显示控制</strong></div>
+                <div class="panel-body">
+                    {foreach name="editor.display_layout_field_definitions" item="layoutField" key="layoutName"}
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">{$layoutField.title|htmlentities}:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            {if condition="$layoutField.type eq 'number'"}
+                            <input class="form-control" style="max-width:160px;" name="row[config][{$layoutName|htmlentities}]" type="number" {if condition="isset($layoutField.min)"}min="{$layoutField.min|htmlentities}"{/if} {if condition="isset($layoutField.max)"}max="{$layoutField.max|htmlentities}"{/if} value="{$editor.layout_config[$layoutName]|htmlentities}">
+                            {if condition="$layoutName eq 'hotline_top_width'"}
+                            <p class="help-block">全站 PC 顶部导航栏电话区宽度。组件固定宽高比 5.5:1，只允许调整宽度，高度自动计算，避免热线区域被拉伸变形。</p>
+                            <div class="form-inline cms-hotline-auto-height-row" style="margin-top:8px;">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">自动高度</label>
+                                <input class="form-control input-sm" style="width:110px;" type="text" value="72.7 px" readonly data-hotline-auto-height="top">
+                                <span class="text-muted" style="margin-left:8px;">固定宽高比 5.5:1</span>
+                            </div>
+                            {/if}
+                            {if condition="$layoutName eq 'hotline_scrolled_width'"}
+                            <p class="help-block">全站 PC Header 滚动固定后的电话区宽度。固定宽高比 5.5:1，高度自动计算；建议小于顶部状态宽度，为导航留出空间。</p>
+                            <div class="form-inline cms-hotline-auto-height-row" style="margin-top:8px;">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">自动高度</label>
+                                <input class="form-control input-sm" style="width:110px;" type="text" value="58.2 px" readonly data-hotline-auto-height="scrolled">
+                                <span class="text-muted" style="margin-left:8px;">固定宽高比 5.5:1</span>
+                            </div>
+                            {/if}
+                            {if condition="$layoutName eq 'hotline_top_offset_y'"}
+                            <p class="help-block">在系统自动避让“急单专线”角标的基础上，额外整体上下移动顶部状态电话组件，单位 px；不会改变内部相对位置。</p>
+                            {/if}
+                            {if condition="$layoutName eq 'hotline_scrolled_offset_y'"}
+                            <p class="help-block">在系统自动避让角标的基础上，额外整体上下移动滚动固定状态电话组件，单位 px；不会改变内部元素相对布局。</p>
+                            {/if}
+                            {if condition="$layoutName eq 'logo_top_width'"}
+                            <p class="help-block">页面位于顶部时的 PC Logo 显示宽度，推荐 212 px，可设置 80–320 px。高度按当前 Logo 原始比例自动计算，无法单独修改，因此不会拉伸变形。</p>
+                            <div class="form-inline cms-logo-auto-height-row" style="margin-top:8px;">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">自动高度</label>
+                                <input class="form-control input-sm" style="width:110px;" type="text" value="约 45 px" readonly data-logo-auto-height="top">
+                                <span class="text-muted" style="margin-left:8px;" data-logo-ratio-summary>按 Logo 原图比例</span>
+                            </div>
+                            {/if}
+                            {if condition="$layoutName eq 'logo_scrolled_width'"}
+                            <p class="help-block">页面滚动、Header 固定后使用的 Logo 宽度，推荐 180 px。高度按当前 Logo 原始比例自动计算；建议宽度小于顶部状态，为导航和急单专线留出空间。</p>
+                            <div class="form-inline cms-logo-auto-height-row" style="margin-top:8px;">
+                                <label class="text-muted" style="font-weight:normal;margin-right:6px;">自动高度</label>
+                                <input class="form-control input-sm" style="width:110px;" type="text" value="约 38 px" readonly data-logo-auto-height="scrolled">
+                            </div>
+                            {/if}
+                            {elseif condition="$layoutField.type eq 'text'" /}
+                            <input class="form-control" style="max-width:360px;" name="row[config][{$layoutName|htmlentities}]" type="text" value="{$editor.layout_config[$layoutName]|htmlentities}" {if condition="isset($layoutField.max_length)"}maxlength="{$layoutField.max_length|htmlentities}"{/if}>
+                            {elseif condition="$layoutField.type eq 'select'" /}
+                            <select class="form-control" style="max-width:360px;" name="row[config][{$layoutName|htmlentities}]">
+                                {foreach name="layoutField.options" item="optionTitle" key="optionValue"}
+                                <option value="{$optionValue|htmlentities}" {if condition="$editor.layout_config[$layoutName] eq $optionValue"}selected{/if}>{$optionTitle|htmlentities}</option>
+                                {/foreach}
+                            </select>
+                            {if condition="$layoutName eq 'layout_mode'"}
+                            <p class="help-block">默认保持当前排版；“适中”会让 Logo 与服务热线向中间收缩一档；“紧凑”进一步收缩。仅影响 PC 页头，不影响移动端。</p>
+                            {/if}
+                            {else /}
+                            <label class="radio-inline"><input type="radio" name="row[config][{$layoutName|htmlentities}]" value="1" {if condition="$editor.layout_config[$layoutName]"}checked{/if}> 是</label>
+                            <label class="radio-inline"><input type="radio" name="row[config][{$layoutName|htmlentities}]" value="0" {if condition="!$editor.layout_config[$layoutName]"}checked{/if}> 否</label>
+                            {/if}
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group layer-footer" style="margin-top:20px;">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">保存并立即生效</button>
+            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+        </div>
+    </div>
+</form>

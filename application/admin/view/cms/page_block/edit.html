@@ -1,0 +1,7 @@
+{if condition="$realSourceMode eq 'banner_collection'"}
+{include file="cms/page_block/_banner_collection" /}
+{elseif condition="$realSourceMode eq 'home_section'" /}
+{include file="cms/page_block/_home_section" /}
+{else /}
+{include file="cms/page_block/_form" /}
+{/if}

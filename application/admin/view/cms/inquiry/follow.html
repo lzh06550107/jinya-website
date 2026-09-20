@@ -1,0 +1,30 @@
+<form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">客户:</label>
+        <div class="col-xs-12 col-sm-8"><p class="form-control-static">{$row.name|htmlentities} / {$row.mobile_masked|htmlentities}</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">跟进方式:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('follow_type', $followTypeList, 'phone', ['class'=>'form-control selectpicker'])}</div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">跟进结果:</label>
+        <div class="col-xs-12 col-sm-8"><textarea class="form-control" name="content" rows="5" data-rule="required"></textarea></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">客户状态:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('status', $statusList, $row.status, ['class'=>'form-control selectpicker'])}</div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">下次跟进:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control datetimepicker" name="next_follow_time" data-date-format="YYYY-MM-DD HH:mm:ss" autocomplete="off"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3">附件:</label>
+        <div class="col-xs-12 col-sm-8"><div class="input-group"><input id="c-attachment" class="form-control" name="attachment"><div class="input-group-addon no-border no-padding"><button type="button" class="btn btn-danger faupload" data-input-id="c-attachment"><i class="fa fa-upload"></i> 上传</button><button type="button" class="btn btn-primary fachoose" data-input-id="c-attachment"><i class="fa fa-list"></i> 选择</button></div></div></div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-3"></label>
+        <div class="col-xs-12 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存跟进</button></div>
+    </div>
+</form>

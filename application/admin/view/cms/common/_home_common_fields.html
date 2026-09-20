@@ -1,0 +1,31 @@
+<div class="page-header"><h4>发布设置</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">终端显示:</label>
+    <div class="col-xs-12 col-sm-4">
+        <input type="hidden" name="[inputPrefix][pc_visible]" value="0">
+        <label class="checkbox-inline"><input type="checkbox" name="[inputPrefix][pc_visible]" value="1" {if condition="$[rowVar].pc_visible"}checked{/if}> PC 显示</label>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <input type="hidden" name="[inputPrefix][mobile_visible]" value="0">
+        <label class="checkbox-inline"><input type="checkbox" name="[inputPrefix][mobile_visible]" value="1" {if condition="$[rowVar].mobile_visible"}checked{/if}> 移动端显示</label>
+    </div>
+    <div class="col-xs-12 col-sm-offset-2 col-sm-8"><p class="help-block">可分别控制 PC 与移动端是否展示；取消某端显示不会删除该端已经保存的配置。</p></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">显示顺序:</label>
+    <div class="col-xs-12 col-sm-8">
+        <input type="hidden" name="[inputPrefix][weigh]" value="{$[rowVar].weigh|default='0'|htmlentities}">
+        <p class="form-control-static">请在首页功能块列表拖拽调整；首页轮播固定第一位，PC 与移动端共用同一顺序。</p>
+        <p class="help-block">这里不再手工填写排序数字，避免编辑页和列表拖拽形成两套顺序来源。</p>
+    </div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">全局状态:</label>
+    <div class="col-xs-12 col-sm-8">
+        <select class="form-control" name="[inputPrefix][status]">
+            <option value="normal" {if condition="$[rowVar].status eq 'normal'"}selected{/if}>正常</option>
+            <option value="hidden" {if condition="$[rowVar].status eq 'hidden'"}selected{/if}>隐藏</option>
+        </select>
+        <p class="help-block">设置为“隐藏”后，PC 与移动端均不显示该区块，但当前内容和历史配置仍保留；恢复“正常”后可继续使用。</p>
+    </div>
+</div>

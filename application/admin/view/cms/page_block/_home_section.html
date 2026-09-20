@@ -1,0 +1,33 @@
+<form id="page-block-form" class="form-horizontal real-source-form" role="form" data-toggle="validator" method="POST" action="" data-real-source="home_section">
+    {:token()}
+    <div class="alert alert-info"><i class="fa fa-pencil"></i> 正在编辑：首页 → <strong>{$row.block_name|htmlentities}</strong>。保存后立即更新网站首页。</div>
+    {if condition="$homeSection.section_key eq 'about'"}
+    {include file="cms/common/_home_about_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'products'" /}
+    {include file="cms/common/_home_products_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'service'" /}
+    {include file="cms/common/_home_service_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'workshop'" /}
+    {include file="cms/common/_home_workshop_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'cases'" /}
+    {include file="cms/common/_home_cases_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'advantages'" /}
+    {include file="cms/common/_home_advantages_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'news'" /}
+    {include file="cms/common/_home_news_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'company'" /}
+    {include file="cms/common/_home_company_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {elseif condition="$homeSection.section_key eq 'culture'" /}
+    {include file="cms/common/_home_culture_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+    {else /}
+    <div class="alert alert-danger">当前功能块没有可用的编辑 Schema，禁止使用通用字段保存。首页轮播请使用独立 Banner 管理入口。</div>
+    {/if}
+
+    {if condition="!empty($homeHasReferences)"}
+    {include file="cms/common/_home_references_fields" /}
+    {/if}
+
+    {include file="cms/common/_home_common_fields" rowVar="homeSection" inputPrefix="real[section]" /}
+
+    <div class="form-group layer-footer"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存并立即生效</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
+</form>

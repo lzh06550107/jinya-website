@@ -1,0 +1,15 @@
+{
+  "generated_from": "frozen clone sources",
+  "pc": {
+    "files": 489,
+    "html_files": 344,
+    "inventory_sha256": "b1c3a352db2cb7890c77fc3b25b9bff94e2e503f3d9fdf4a36c52b4480e29d31",
+    "homepage_sha256": "3171edefe338f9d7c282e1b34ef90782e8a02f88b63d95bc1793dfc4fc656718"
+  },
+  "mobile": {
+    "files": 420,
+    "html_files": 368,
+    "inventory_sha256": "ef5cd955062652a983edadc49dd3e52402bc8e44e14a6a224a6edbb2e5a7b8fd",
+    "homepage_sha256": "e5b03affdbd85db0f739fd1e1455ab39436f0d29334b71e4cdeae61eb9d1048a"
+  }
+}

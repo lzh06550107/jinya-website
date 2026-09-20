@@ -1,0 +1,55 @@
+<div class="form-group cms-culture-items-field">
+    <label class="control-label col-xs-12 col-sm-2">文化卡片:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-culture-items-editor" data-culture-items-editor data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-culture-items-list" data-culture-items-list>
+                {foreach name="[items]" item="cultureItem" key="cultureIndex"}
+                <div class="panel panel-default cms-culture-item" data-culture-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-culture-item-label>企业文化</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业文化卡片操作">
+                            <button type="button" class="btn btn-default" data-culture-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-culture-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-culture-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图标:</label>
+                            <div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-culture-field="icon" data-media-usage="首页企业文化图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP" data-media-max-kb="100" name="[inputPrefix][{$cultureIndex}][icon]" value="{$cultureItem.icon|default=''|htmlentities}" placeholder="优先从图标库选择；也可上传 64×64 / 128×128 图片图标"><p class="help-block">优先使用 Font Awesome 图标库；需要品牌定制时可上传 64×64 或 128×128 透明 PNG/WebP，建议 ≤100 KB。</p></div>
+                        </div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-culture-field="title" name="[inputPrefix][{$cultureIndex}][title]" value="{$cultureItem.title|default=''|htmlentities}" placeholder="例如：企业愿景"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">说明:</label><div class="col-xs-12 col-sm-10"><textarea class="form-control" rows="3" data-culture-field="text" name="[inputPrefix][{$cultureIndex}][text]" placeholder="填写企业文化说明，可换行">{$cultureItem.text|default=''|htmlentities}</textarea></div></div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">终端显示:</label>
+                            <div class="col-xs-12 col-sm-4"><input type="hidden" data-culture-field="pc_visible" name="[inputPrefix][{$cultureIndex}][pc_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" data-culture-field="pc_visible" name="[inputPrefix][{$cultureIndex}][pc_visible]" value="1" {if condition="!isset($cultureItem.pc_visible) || $cultureItem.pc_visible"}checked{/if}> PC 显示</label></div>
+                            <div class="col-xs-12 col-sm-4"><input type="hidden" data-culture-field="mobile_visible" name="[inputPrefix][{$cultureIndex}][mobile_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" data-culture-field="mobile_visible" name="[inputPrefix][{$cultureIndex}][mobile_visible]" value="1" {if condition="!isset($cultureItem.mobile_visible) || $cultureItem.mobile_visible"}checked{/if}> 移动端显示</label></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            <script type="text/template" data-culture-item-template>
+                <div class="panel panel-default cms-culture-item" data-culture-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-culture-item-label>企业文化</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业文化卡片操作">
+                            <button type="button" class="btn btn-default" data-culture-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-culture-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-culture-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">图标:</label><div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-culture-field="icon" data-media-usage="首页企业文化图标" data-media-recommended-width="128" data-media-recommended-height="128" data-media-recommended-format="PNG/WebP" data-media-max-kb="100" value="" placeholder="优先从图标库选择；也可上传 64×64 / 128×128 图片图标"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-culture-field="title" value="" placeholder="例如：企业愿景"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">说明:</label><div class="col-xs-12 col-sm-10"><textarea class="form-control" rows="3" data-culture-field="text" placeholder="填写企业文化说明，可换行"></textarea></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">终端显示:</label><div class="col-xs-12 col-sm-4"><input type="hidden" data-culture-field="pc_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-culture-field="pc_visible" value="1" checked> PC 显示</label></div><div class="col-xs-12 col-sm-4"><input type="hidden" data-culture-field="mobile_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-culture-field="mobile_visible" value="1" checked> 移动端显示</label></div></div>
+                    </div>
+                </div>
+            </script>
+            <button type="button" class="btn btn-success" data-culture-item-add><i class="fa fa-plus"></i> 添加企业文化</button>
+            <p class="help-block">数组顺序就是前台卡片顺序；可使用“上移/下移”调整。图标、标题和说明两端共用，每张卡片可独立控制 PC / 移动端显示。</p>
+        </div>
+    </div>
+</div>

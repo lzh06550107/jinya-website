@@ -1,0 +1,121 @@
+<form id="page-config-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {:token()}
+    <input type="hidden" name="row[version]" value="{$row.version|htmlentities}">
+
+    <div class="alert alert-warning">
+        <i class="fa fa-warning"></i>
+        保存后立即生效。修改公共页头或页尾绑定会直接影响当前页面的 PC 或移动端展示。
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">页面:</label>
+        <div class="col-xs-12 col-sm-8">
+            <p class="form-control-static"><strong>{$row.page_name|htmlentities}</strong>（{$row.page_key|htmlentities}）</p>
+            <p class="help-block">模板类型：{$row.page_type|htmlentities}；路由基准：{$row.route_pattern|htmlentities}</p>
+        </div>
+    </div>
+
+    {if condition="!empty($pageContent.content_url)"}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">页面正文内容:</label>
+        <div class="col-xs-12 col-sm-8">
+            {if condition="$pageContent.content_mode eq 'single'"}
+            <a class="btn btn-primary btn-dialog" href="{$pageContent.content_url|htmlentities}" title="{$pageContent.content_title|htmlentities}"><i class="fa fa-file-text-o"></i> 编辑页面内容</a>
+            {else /}
+            <a class="btn btn-primary btn-addtabs" href="{$pageContent.content_url|htmlentities}" title="{$pageContent.content_title|htmlentities}"><i class="fa fa-files-o"></i> 管理页面内容库</a>
+            {/if}
+            <p class="help-block">正文、封面、单页 SEO 和发布状态仍直接保存在页面内容数据源中，不会复制到页面配置。</p>
+        </div>
+    </div>
+    {/if}
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">PC 公共页头:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" name="row[pc_header_key]" data-rule="required">
+                {foreach name="pcHeaderList" item="name" key="key"}
+                <option value="{$key|htmlentities}" {if condition="$row.pc_header_key eq $key"}selected{/if}>{$name|htmlentities}（{$key|htmlentities}）</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">PC 公共页尾:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" name="row[pc_footer_key]" data-rule="required">
+                {foreach name="pcFooterList" item="name" key="key"}
+                <option value="{$key|htmlentities}" {if condition="$row.pc_footer_key eq $key"}selected{/if}>{$name|htmlentities}（{$key|htmlentities}）</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">移动端公共页头:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" name="row[mobile_header_key]" data-rule="required">
+                {foreach name="mobileHeaderList" item="name" key="key"}
+                <option value="{$key|htmlentities}" {if condition="$row.mobile_header_key eq $key"}selected{/if}>{$name|htmlentities}（{$key|htmlentities}）</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">移动端公共页尾:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" name="row[mobile_footer_key]" data-rule="required">
+                {foreach name="mobileFooterList" item="name" key="key"}
+                <option value="{$key|htmlentities}" {if condition="$row.mobile_footer_key eq $key"}selected{/if}>{$name|htmlentities}（{$key|htmlentities}）</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 标题:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control" name="row[config][seo_title]" type="text" maxlength="255" value="{$pageConfig.seo_title|htmlentities}"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 关键词:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control" name="row[config][seo_keywords]" type="text" maxlength="255" value="{$pageConfig.seo_keywords|htmlentities}"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 描述:</label>
+        <div class="col-xs-12 col-sm-8"><textarea class="form-control" name="row[config][seo_description]" rows="4" maxlength="500">{$pageConfig.seo_description|htmlentities}</textarea></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">Canonical 地址:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control" name="row[config][canonical_url]" type="text" maxlength="500" value="{$pageConfig.canonical_url|htmlentities}" placeholder="留空时使用当前规范地址"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">搜索引擎规则:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select class="form-control selectpicker" name="row[config][robots]">
+                <option value="index,follow" {if condition="$pageConfig.robots eq 'index,follow'"}selected{/if}>index,follow</option>
+                <option value="noindex,follow" {if condition="$pageConfig.robots eq 'noindex,follow'"}selected{/if}>noindex,follow</option>
+                <option value="noindex,nofollow" {if condition="$pageConfig.robots eq 'noindex,nofollow'"}selected{/if}>noindex,nofollow</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">页面功能块:</label>
+        <div class="col-xs-12 col-sm-8">
+            <a class="btn btn-success btn-addtabs" href="{$pageBlocks.blocks_url|htmlentities}" title="{$pageBlocks.blocks_title|htmlentities}">
+                <i class="fa fa-th-large"></i> 配置页面功能块
+            </a>
+            <p class="help-block">不干胶/卷标等结构化单页直接维护真实页面区块；其他固定页面仍按页面注册表维护功能块配置。</p>
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">保存</button>
+            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,13 @@
+<div class="page-header"><h4>标题与文案</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][title]" value="{$[rowVar].title|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动标题（留空继承 PC）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_title]" value="{$[rowVar].mobile_title|default=''|htmlentities}" placeholder="留空时使用 PC 标题"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 副标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][subtitle]" value="{$[rowVar].subtitle|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动副标题（留空继承 PC）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_subtitle]" value="{$[rowVar].mobile_subtitle|default=''|htmlentities}" placeholder="留空时使用 PC 副标题"></div>
+</div>
+<div class="page-header"><h4>企业优势卡片</h4></div>
+<div class="cms-advantages-items-editor-section">
+{include file="cms/common/_advantages_items_editor" items="[rowVar].config_items" inputPrefix="[inputPrefix][config_items]" /}
+</div>

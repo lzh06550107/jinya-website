@@ -1,0 +1,41 @@
+<form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="page-header"><h4>导航结构</h4><p class="text-muted">设置导航显示名称和层级。父导航决定当前项属于一级菜单还是某个二级菜单。</p></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">导航名称:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|default=''|htmlentities}" data-rule="required"><p class="help-block">前台菜单中直接显示的文字，建议保持简短。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">父导航:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('row[parent_id]', $parentList, isset($row['parent_id'])?$row['parent_id']:0, ['class'=>'form-control selectpicker'])}<p class="help-block">选择“顶级”表示一级导航；选择已有导航后，当前项作为其子导航显示。不要通过手工 URL 模拟层级。</p></div>
+    </div>
+
+    <div class="page-header"><h4>跳转设置</h4></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">链接地址:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-url" class="form-control" name="row[url]" type="text" value="{$row.url|default=''|htmlentities}" placeholder="例如：/page/label" data-rule="required"><p class="help-block">站内地址建议以 / 开头，例如 /page/label、/news；站外链接填写完整 https://... 地址。这里是导航跳转地址，不是 URL 重定向规则。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">打开方式:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('row[target]', ['_self'=>'当前窗口','_blank'=>'新窗口'], isset($row['target'])?$row['target']:'_self', ['class'=>'form-control selectpicker'])}<p class="help-block">站内页面一般使用“当前窗口”；确需跳转外部网站时可使用“新窗口”。</p></div>
+    </div>
+
+    <div class="page-header"><h4>展示设置</h4></div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">位置:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('row[position]', $positionList, isset($row['position'])?$row['position']:'header', ['class'=>'form-control selectpicker'])}<p class="help-block">顶部用于网站主导航；底部用于页脚导航。具体可选值以当前系统配置为准。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">图标:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-icon" class="form-control" data-cms-icon-picker="true" name="row[icon]" type="text" value="{$row.icon|default=''|htmlentities}"><p class="help-block">优先从图标库选择；仅当前台模板实际读取图标时生效，普通文字导航可留空。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">排序:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-weigh" class="form-control" name="row[weigh]" type="text" value="{$row.weigh|default=''|htmlentities}" data-rule="integer"><p class="help-block">同一父级、同一位置下，数值越大通常越靠前。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">状态:</label>
+        <div class="col-xs-12 col-sm-8">{:build_radios('row[status]', $statusList, isset($row['status'])?$row['status']:'normal')}<p class="help-block">隐藏后该导航不在前台菜单显示，但配置内容仍保留。</p></div>
+    </div>
+
+    <div class="form-group layer-footer"><label class="control-label col-xs-12 col-sm-2"></label><div class="col-xs-12 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
+</form>

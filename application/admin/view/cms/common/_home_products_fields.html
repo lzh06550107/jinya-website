@@ -1,0 +1,44 @@
+<div class="page-header"><h4>标题与文案</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 标题:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][title]" value="{$[rowVar].title|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动标题（留空继承 PC）:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_title]" value="{$[rowVar].mobile_title|default=''|htmlentities}" placeholder="留空时使用 PC 标题"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 副标题:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][subtitle]" value="{$[rowVar].subtitle|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动副标题（留空继承 PC）:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_subtitle]" value="{$[rowVar].mobile_subtitle|default=''|htmlentities}" placeholder="留空时使用 PC 副标题"></div>
+</div>
+<div class="page-header"><h4>区块跳转</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">模块标题跳转 URL:</label>
+    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][more_url]" value="{$[rowVar].more_url|default=''|htmlentities}" placeholder="例如：# 或 /page/label"><p class="help-block">站内地址建议以 / 开头；站外地址填写完整 https://...。用于首页产品模块标题/入口跳转。</p></div>
+</div>
+<div class="page-header"><h4>移动端专属</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端产品卡片按钮文字:</label>
+    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][more_text]" value="{$[rowVar].more_text|default=''|htmlentities}" placeholder="例如：了解更多"><p class="help-block">当前仅移动首页产品卡片使用。</p></div>
+</div>
+<div class="page-header"><h4>PC 其他产品卡片</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">标题:</label>
+    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][config_other_title]" value="{$[rowVar].config_other_title|default=''|htmlentities}" placeholder="例如：其他涂料"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">说明:</label>
+    <div class="col-xs-12 col-sm-10"><textarea class="form-control" rows="3" name="[inputPrefix][config_other_summary]" placeholder="填写补充产品说明">{$[rowVar].config_other_summary|default=''|htmlentities}</textarea></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">跳转 URL:</label>
+    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][config_other_url]" value="{$[rowVar].config_other_url|default=''|htmlentities}" placeholder="例如：# 或 /page/label"><p class="help-block">这是 PC 首页固定的“其他产品”补充卡片，不是产品资料记录。跳转地址规则同上：站内使用 / 开头路径，站外使用完整 https://...。</p></div>
+</div>
+<div class="page-header"><h4>首页推荐产品</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 显示上限（0 = 全部）:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" type="number" min="0" name="[inputPrefix][pc_display_count]" value="{$[rowVar].pc_display_count|default='0'|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动端显示上限（0 = 全部）:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" type="number" min="0" name="[inputPrefix][mobile_display_count]" value="{$[rowVar].mobile_display_count|default='0'|htmlentities}"></div>
+</div>
+<div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">显示上限 0 表示展示全部已选择内容。PC 第 1 条进入主卡片，第 2、3 条进入右侧卡片，第 4 条以后进入下方产品轮播；移动端按选择顺序进入产品轮播。产品内容及顺序由“首页推荐产品”配置管理。</p></div></div>

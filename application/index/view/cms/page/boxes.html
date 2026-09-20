@@ -1,0 +1,22 @@
+{include file="cms/common/strict_header" /}
+<link rel="stylesheet" href="__CDN__/assets/css/cms-boxes-page.css?v={$cmsSite.version|default='1.0'}&source=20260816-boxes">
+<link rel="stylesheet" href="__CDN__/assets/css/cms-pc-inner-banner.css?v={$cmsSite.version|default='1.0'}&layout=background-copy-optional-r1">
+<div class="cms-boxes-page" data-page="boxes"><main>
+{volist name="content.blocks" id="block"}
+{switch name="block.key"}
+{case value="boxes_hero"}{include file="cms/page/boxes/hero" /}{/case}
+{case value="boxes_products"}{include file="cms/page/boxes/products" /}{/case}
+{case value="boxes_value"}{include file="cms/page/boxes/value" /}{/case}
+{case value="boxes_promise"}{include file="cms/page/boxes/promise" /}{/case}
+{case value="boxes_details"}{include file="cms/page/boxes/details" /}{/case}
+{case value="boxes_purchase"}{include file="cms/page/boxes/purchase" /}{/case}
+{case value="boxes_applications"}{include file="cms/page/boxes/applications" /}{/case}
+{case value="boxes_craft_material"}{include file="cms/page/boxes/craft_material" /}{/case}
+{case value="boxes_team"}{include file="cms/page/boxes/team" /}{/case}
+{case value="boxes_types"}{include file="cms/page/boxes/types" /}{/case}
+{case value="boxes_services"}{include file="cms/page/boxes/services" /}{/case}
+{/switch}
+{/volist}
+</main></div>
+<script src="__CDN__/assets/js/cms-boxes-page.js?v={$cmsSite.version|default='1.0'}&source=20260816-boxes"></script>
+{include file="cms/common/strict_footer" /}

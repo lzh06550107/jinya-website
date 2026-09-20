@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>客户资料</strong></div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>姓名</dt><dd>{$row.name|htmlentities}</dd>
+            <dt>手机号</dt><dd>{$row.mobile|htmlentities}</dd>
+            <dt>公司</dt><dd>{$row.company|htmlentities}</dd>
+            <dt>地区</dt><dd>{$row.province|htmlentities} {$row.city|htmlentities}</dd>
+            <dt>咨询内容</dt><dd>{$row.content|htmlentities}</dd>
+            <dt>负责人</dt><dd>{if condition="$row.assigned_admin"}{$row.assigned_admin.nickname|htmlentities}{else /}<span class="text-muted">未分配</span>{/if}</dd>
+            <dt>来源页面</dt><dd>{if condition="$row.source_url"}<a href="{$row.source_url|htmlentities}" target="_blank" rel="noopener noreferrer">{$row.source_title|default=$row.source_url|htmlentities}</a>{else /}-{/if}</dd>
+            <dt>状态</dt><dd>{$row.status_text|htmlentities}</dd>
+        </dl>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>跟进时间线</strong></div>
+    <div class="panel-body">
+        <ul class="list-group">
+            {volist name="row.followups" id="vo"}
+            <li class="list-group-item">
+                <strong>{$vo.follow_type|htmlentities}</strong>
+                {$vo.content|htmlentities}
+                {if condition="$vo.admin"}<small class="text-muted">— {$vo.admin.nickname|htmlentities}</small>{/if}
+                {if condition="$vo.attachment"}<a class="btn btn-xs btn-default" href="{$vo.attachment|htmlentities}" target="_blank" rel="noopener noreferrer">附件</a>{/if}
+                <span class="text-muted pull-right">{$vo.createtime|date='Y-m-d H:i',###}</span>
+            </li>
+            {/volist}
+            {empty name="row.followups"}<li class="list-group-item text-muted">暂无跟进记录</li>{/empty}
+        </ul>
+    </div>
+</div>

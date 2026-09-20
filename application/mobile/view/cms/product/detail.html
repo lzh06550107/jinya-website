@@ -1,0 +1,173 @@
+{include file="cms/common/strict_header" /}
+<main class="mpd-v3">
+    <section class="mpd-hero">
+        <div class="mpd-gallery p101-pro-1-showcase">
+            <div class="mpd-gallery-stage p101-pro-1-pic swiper-container-horizontal">
+                <a class="mpd-back" href="javascript:history.back(-1);" aria-label="返回上一页"></a>
+                <ul class="swiper-wrapper">
+                    {volist name="content.gallery" id="image"}
+                    <li class="swiper-slide">
+                        {if condition="$image.type=='video'"}
+                        <video controls playsinline src="{$image.video_url|htmlentities}" width="100%"></video>
+                        {else /}
+                        <img alt="{$image.alt|default=$content.product.title|htmlentities}" src="{$image.image|htmlentities}">
+                        {/if}
+                    </li>
+                    {/volist}
+                    {if condition="empty($content.gallery) && !empty($content.product.cover)"}
+                    <li class="swiper-slide"><img alt="{$content.product.title|htmlentities}" src="{$content.product.cover|htmlentities}"></li>
+                    {/if}
+                </ul>
+                <div class="mpd-gallery-page p101-pro-1-page swiper-pagination-fraction"><span class="swiper-pagination-current">1</span><i>/</i><span class="swiper-pagination-total">{:max(1,count($content.gallery))}</span></div>
+            </div>
+        </div>
+        <div class="mpd-summary">
+            <div class="mpd-meta-row">
+                {notempty name="content.product.category.name"}<span>{$content.product.category.name|htmlentities}</span>{/notempty}
+                {notempty name="content.product.product_code"}<span>编号 {$content.product.product_code|htmlentities}</span>{/notempty}
+            </div>
+            <h1>{$content.product.title|htmlentities}</h1>
+            {notempty name="content.product.summary"}<p class="mpd-lead">{$content.product.summary|htmlentities}</p>{/notempty}
+            {notempty name="content.summaryParameters"}
+            <div class="mpd-summary-grid">
+                {volist name="content.summaryParameters" id="parameter"}
+                <div class="mpd-summary-item"><span>{$parameter.parameter_name|htmlentities}</span><strong>{$parameter.parameter_value|htmlentities}{notempty name="parameter.unit"}<small>{$parameter.unit|htmlentities}</small>{/notempty}</strong></div>
+                {/volist}
+            </div>
+            {/notempty}
+            <div class="mpd-primary-actions">
+                {notempty name="content.contact"}<a class="mpd-btn mpd-btn-primary" href="{$content.contact.link_url|default='javascript:;'|htmlentities}">{$content.contact.button_text|default='立即咨询'|htmlentities}</a>{/notempty}
+                {notempty name="layout.site.hotline"}<a class="mpd-btn mpd-btn-outline" href="tel:{$layout.site.hotline|htmlentities}"><i class="fa fa-phone" aria-hidden="true"></i> 电话咨询</a>{/notempty}
+            </div>
+        </div>
+    </section>
+
+    {if condition="!empty($content.sectionGroups.introduction) || !empty($content.product.content_html)"}
+    <section class="mpd-section mpd-introduction">
+        <div class="mpd-section-head"><span>PRODUCT INTRODUCTION</span><h2>产品简介</h2></div>
+        {notempty name="content.sectionGroups.introduction"}
+        <div class="mpd-rich-stack">
+            {volist name="content.sectionGroups.introduction" id="section"}
+            <article class="mpd-rich-card">
+                {notempty name="section.title"}<h3>{$section.title|htmlentities}</h3>{/notempty}
+                {notempty name="section.subtitle"}<p class="mpd-subtitle">{$section.subtitle|htmlentities}</p>{/notempty}
+                {if condition="!empty($section.image) && (empty($content.product.cover) || $section.image!=$content.product.cover)"}<figure><img src="{$section.image|htmlentities}" alt="{$section.title|default=$content.product.title|htmlentities}"></figure>{/if}
+                <div class="mpd-rich-text">{$section.content_html}</div>
+            </article>
+            {/volist}
+        </div>
+        {else /}
+        <div class="mpd-rich-card"><div class="mpd-rich-text">{$content.product.content_html}</div></div>
+        {/notempty}
+    </section>
+    {/if}
+
+    {notempty name="content.featureItems"}
+    <section class="mpd-section mpd-features">
+        <div class="mpd-section-head"><span>PRODUCT FEATURES</span><h2>产品特点</h2><p>从材质、工艺与使用场景出发，突出产品核心能力。</p></div>
+        <div class="mpd-feature-grid">
+            {volist name="content.featureItems" id="feature" key="featureIndex"}
+            <article class="mpd-feature-card"><em>{if condition="$featureIndex<10"}0{/if}{$featureIndex}</em><i class="fa fa-check-circle-o" aria-hidden="true"></i><p>{$feature|htmlentities}</p></article>
+            {/volist}
+        </div>
+    </section>
+    {/notempty}
+
+    {notempty name="content.parameters"}
+    <section class="mpd-section mpd-parameters">
+        <div class="mpd-section-head"><span>SPECIFICATIONS</span><h2>规格参数</h2><p>具体尺寸、材质、数量与工艺以最终确认订单为准。</p></div>
+        <div class="mpd-parameter-groups">
+            {volist name="content.parameters" id="group"}
+            {notempty name="group.items"}
+            <article class="mpd-parameter-group">
+                <h3>{$group.name|default='产品参数'|htmlentities}</h3>
+                <dl class="mpd-parameter-list">
+                    {volist name="group.items" id="parameter"}
+                    <div><dt>{$parameter.parameter_name|htmlentities}</dt><dd>{$parameter.parameter_value|htmlentities}{notempty name="parameter.unit"}<small>{$parameter.unit|htmlentities}</small>{/notempty}</dd></div>
+                    {notempty name="parameter.paired_name"}<div><dt>{$parameter.paired_name|htmlentities}</dt><dd>{$parameter.paired_value|htmlentities}</dd></div>{/notempty}
+                    {/volist}
+                </dl>
+            </article>
+            {/notempty}
+            {/volist}
+        </div>
+    </section>
+    {/notempty}
+
+    {notempty name="content.applicationItems"}
+    <section class="mpd-section mpd-applications">
+        <div class="mpd-section-head"><span>APPLICATIONS</span><h2>适用范围</h2><p>匹配不同包装、贴标及终端使用场景。</p></div>
+        <div class="mpd-application-grid">
+            {volist name="content.applicationItems" id="application" key="applicationIndex"}
+            <article class="mpd-application-card"><span>{if condition="$applicationIndex<10"}0{/if}{$applicationIndex}</span><p>{$application|htmlentities}</p></article>
+            {/volist}
+        </div>
+    </section>
+    {/notempty}
+
+    {notempty name="content.processSteps"}
+    <section class="mpd-section mpd-process">
+        <div class="mpd-section-head"><span>CUSTOM PROCESS</span><h2>定制流程</h2><p>从需求确认到生产交付，每一步围绕最终使用效果展开。</p></div>
+        <ol class="mpd-process-list">
+            {volist name="content.processSteps" id="step" key="stepIndex"}
+            <li><span class="mpd-process-number">{if condition="$stepIndex<10"}0{/if}{$stepIndex}</span><div>{notempty name="step.title"}<h3>{$step.title|htmlentities}</h3>{/notempty}<p>{$step.description|htmlentities}</p></div></li>
+            {/volist}
+        </ol>
+    </section>
+    {/notempty}
+
+    {if condition="empty($content.processSteps) && !empty($content.sections)"}
+    {volist name="content.sections" id="section"}
+    {if condition="$section.type=='custom_text'"}
+    <section class="mpd-section mpd-custom-section">
+        <div class="mpd-section-head"><span>CUSTOM CONTENT</span><h2>{$section.title|default='定制说明'|htmlentities}</h2>{notempty name="section.subtitle"}<p>{$section.subtitle|htmlentities}</p>{/notempty}</div>
+        <article class="mpd-rich-card">{notempty name="section.image"}<figure><img src="{$section.image|htmlentities}" alt="{$section.title|htmlentities}"></figure>{/notempty}<div class="mpd-rich-text">{$section.content_html}</div></article>
+    </section>
+    {/if}
+    {/volist}
+    {/if}
+
+    {notempty name="content.sectionGroups.precautions"}
+    <section class="mpd-section mpd-notes">
+        <div class="mpd-section-head"><span>NOTES</span><h2>注意事项</h2></div>
+        <div class="mpd-note-list">
+            {volist name="content.sectionGroups.precautions" id="section"}
+            <article>{notempty name="section.title"}<h3>{$section.title|htmlentities}</h3>{/notempty}<div class="mpd-rich-text">{$section.content_html}</div></article>
+            {/volist}
+        </div>
+    </section>
+    {/notempty}
+
+    {if condition="empty($content.sectionGroups.introduction) && empty($content.featureItems) && empty($content.parameters) && empty($content.applicationItems) && empty($content.processSteps) && empty($content.sectionGroups.precautions)"}
+    <section class="mpd-section"><div class="mpd-rich-card"><div class="mpd-rich-text">{$content.product.content_html}</div></div></section>
+    {/if}
+
+    {notempty name="content.contact"}
+    <section class="mpd-section mpd-consult">
+        <div class="mpd-consult-card">
+            <span>定制咨询</span>
+            <h2>{$content.contact.title|default='需要匹配材质、规格或印刷工艺？'|htmlentities}</h2>
+            <p>把尺寸、数量和使用场景告诉我们，我们会结合实际生产条件给出建议。</p>
+            <div>
+                <a class="mpd-btn mpd-btn-primary" href="{$content.contact.link_url|default='javascript:;'|htmlentities}">{$content.contact.button_text|default='获取报价'|htmlentities}</a>
+                {notempty name="layout.site.hotline"}<a class="mpd-consult-phone" href="tel:{$layout.site.hotline|htmlentities}"><i class="fa fa-phone" aria-hidden="true"></i>{$layout.site.hotline|htmlentities}</a>{/notempty}
+            </div>
+        </div>
+    </section>
+    {/notempty}
+
+    {notempty name="content.relatedProducts"}
+    <section class="mpd-section mpd-related">
+        <div class="mpd-section-head mpd-section-head-row"><div><span>RELATED PRODUCTS</span><h2>推荐产品</h2></div><a href="{$mobileBase}/products">更多产品</a></div>
+        <div class="mpd-related-grid">
+            {volist name="content.relatedProducts" id="item"}
+            <a class="mpd-related-card" href="{$mobileBase}{$item.url|htmlentities}" title="{$item.title|htmlentities}">
+                <figure>{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</figure>
+                <div><h3>{$item.title|htmlentities}</h3>{notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}<span>查看详情 <i class="fa fa-angle-right" aria-hidden="true"></i></span></div>
+            </a>
+            {/volist}
+        </div>
+    </section>
+    {/notempty}
+</main>
+{include file="cms/common/strict_footer" /}

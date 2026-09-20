@@ -1,0 +1,8 @@
+{if $channelBannerVisible}<div class="p101-ad-1">{notempty name="mobileChannelBanner"}<img src="{$mobileChannelBanner|htmlentities}" alt="{$channelTitle|default=''|htmlentities}">{/notempty}</div>{/if}
+<div class="p101-fdh-1">
+{if $mobileSection=='news'}
+<div class="p101-fdh-1-title"><span>{$channelTitle|default='新闻动态'|htmlentities}</span><i></i></div><ul class="p101-fdh-1-list">{notempty name="content.categories"}{volist name="content.categories" id="cat"}<li><i></i><a href="{$mobileBase}/news-list/{$cat.slug|htmlentities}">{$cat.name|htmlentities}</a>{notempty name="cat.children"}<p>{volist name="cat.children" id="child"}<a href="{$mobileBase}/news-list/{$child.slug|htmlentities}">{$child.name|htmlentities}</a>{/volist}</p>{/notempty}</li>{/volist}{else /}<li><i></i><a href="{$mobileBase}/news">新闻动态</a></li>{/notempty}</ul>
+{else /}
+<div class="p101-fdh-1-title"><span>{$channelTitle|default='走进金亚'|htmlentities}</span><i></i></div><ul class="p101-fdh-1-list"><li><a href="{$mobileBase}/page/about">走进金亚</a></li><li><a href="{$mobileBase}/page/contact">联系我们</a></li></ul>
+{/if}
+</div>

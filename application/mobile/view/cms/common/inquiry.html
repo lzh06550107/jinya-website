@@ -1,0 +1,13 @@
+<section class="cms-inquiry-form" id="cms-inquiry">
+<h3>{$inquiryTitle|default='在线咨询'|htmlentities}</h3>
+{if !empty($inquirySubtitle)}<p>{$inquirySubtitle|htmlentities}</p>{/if}
+<form method="post" action="{$mobileBase}/inquiry/submit" data-cms-inquiry><input type="hidden" name="__token__" value="{$cmsInquiryToken|default=''|htmlentities}">
+<input type="hidden" name="source_url" value="{$cmsCurrentPath|htmlentities}">
+<input type="hidden" name="source_title" value="{$title|default=''|htmlentities}">
+<input type="text" name="name" placeholder="您的姓名" required>
+<input type="tel" name="mobile" placeholder="联系电话" required>
+<input type="text" name="company" placeholder="公司名称">
+<textarea name="content" rows="4" maxlength="2000" required placeholder="请描述产品、施工面积或项目需求"></textarea>
+<button type="submit">{$inquiryButtonText|default='提交咨询'|htmlentities}</button>
+</form>
+</section>

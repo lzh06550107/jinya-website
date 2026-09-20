@@ -1,0 +1,77 @@
+{include file="cms/common/strict_header" /}
+<section class="g-bd">
+{notempty name="hero"}<div class="g-adv swiper-container"><ul class="swiper-wrapper">{volist name="hero.items" id="banner"}<li class="swiper-slide"><a href="{$banner.link_url|default='javascript:;'|htmlentities}" title="{$banner.title|htmlentities}">{if condition="$banner.media_type eq 'video' && !empty($banner.video_url)"}<video autoplay loop muted playsinline{if !empty($banner.image)} poster="{$banner.image|htmlentities}"{/if} style="display:block;width:100%;height:100%;object-fit:cover;"><source src="{$banner.video_url|htmlentities}" type="video/mp4"></video>{elseif !empty($banner.image) /}<img alt="{$banner.title|htmlentities}" src="{$banner.image|htmlentities}">{/if}{if !empty($banner.title) || !empty($banner.subtitle) || !empty($banner.highlights)}{if !empty($banner.highlights)}<div class="cms-home-banner-copy has-highlights">{else /}<div class="cms-home-banner-copy">{/if}{notempty name="banner.title"}<strong class="cms-home-banner-title">{$banner.title|htmlentities}</strong>{/notempty}{notempty name="banner.subtitle"}<span class="cms-home-banner-subtitle">{$banner.subtitle|htmlentities}</span>{/notempty}{notempty name="banner.highlights"}<div class="cms-home-banner-highlights">{volist name="banner.highlights" id="highlight"}<span class="cms-home-banner-highlight">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities} cms-font-icon cms-home-banner-highlight-icon" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img class="cms-home-banner-highlight-icon" src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span class="cms-home-banner-highlight-text">{$highlight.text|htmlentities}</span></span>{/volist}</div>{/notempty}</div>{/if}</a></li>{/volist}</ul><div class="swiper-pagination"></div></div>{/notempty}
+{volist name="section_order" id="homeSectionKey"}
+{switch name="homeSectionKey"}
+{case value="about"}
+{notempty name="about"}<div class="yz"><dl class="yz_con clearfix"><dd><h2 class="wow fadeInDown2"><a href="{$about.more_url|default='/page/about'|htmlentities}"><span>{$about.title|htmlentities}</span></a></h2><p>{$about.content_text|htmlentities}</p></dd><dt class="wow fadeInUp1">{notempty name="about.background"}<img src="{$about.background|htmlentities}" alt="{$about.title|htmlentities}">{/notempty}</dt></dl></div>{/notempty}
+{/case}
+{case value="products"}
+{notempty name="products"}<div class="pro cms-home-products-mobile"><h2 class="tit wow fadeInDown2"><a href="{$products.more_url|default='#'|htmlentities}"><span>{$products.title|htmlentities}</span><i>{$products.subtitle|htmlentities}</i></a></h2><div class="pro_bd"><div class="pro_con swiper-container"><div class="swiper-wrapper">{volist name="products.items" id="item" key="i"}<dl class="swiper-slide cms-home-product-card"><a href="{$item.url|htmlentities}"><dt class="pic cms-home-product-media">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</dt><dd class="cms-home-product-copy"><h4><i>0{$i}</i>{$item.title|htmlentities}</h4><p>{$item.summary|htmlentities}</p><em>{$products.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/pro_jt.png"></em></dd></a></dl>{/volist}</div><div class="swiper-pagination"></div></div><i class="sprev"><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/sprev.png"></i><i class="snext"><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/snext.png"></i></div></div>{/notempty}
+{/case}
+{case value="service"}
+{notempty name="service"}<div class="td"><h2 class="wow fadeInDown2"><span>{$service.title|htmlentities}</span><i>{$service.subtitle|htmlentities}</i></h2>{if condition="!empty($cmsSite.cms_service_wecom_url)"}<a class="more wow fadeInUp1" href="{$cmsSite.cms_service_wecom_url|htmlentities}" target="_blank" rel="noopener noreferrer" title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/td_jt.png"></a>{else /}<a class="more wow fadeInUp1" href="{$service.more_url|default='javascript:;'|htmlentities}"{if !empty($service.more_url) && strpos($service.more_url,'http')===0} target="_blank" rel="noopener noreferrer"{/if} title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/td_jt.png"></a>{/if}<ul class="wow fadeInUp1">{volist name="service.config.metrics" id="metric"}<li>{if condition="$metric.icon_view.type eq 'font'"}<i class="{$metric.icon_view.class|htmlentities} cms-font-icon cms-service-font-icon" aria-hidden="true"></i>{elseif condition="$metric.icon_view.type eq 'image'" /}<img alt="" src="{$metric.icon_view.url|htmlentities}">{/if}<span><em>{$metric.value|htmlentities}</em>{$metric.unit|default=''|htmlentities}</span><i>{$metric.text|default=''}</i></li>{/volist}</ul></div>{/notempty}
+{/case}
+{case value="workshop"}
+{notempty name="workshop"}
+<section class="section section--alt cms-home-workshop-source">
+<div class="container">
+<div class="section-head">
+<h2>{$workshop.title|htmlentities}</h2>
+{notempty name="workshop.subtitle"}<p class="eyebrow">{$workshop.subtitle|htmlentities}</p>{/notempty}
+<div class="dash"></div>
+</div>
+{notempty name="workshop.items"}
+<div class="grid grid-3 reveal">
+{volist name="workshop.items" id="item"}
+<div class="photo-card">
+{notempty name="item.resolved_image"}<div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.resolved_image|htmlentities}"></div>{/notempty}
+<div class="cap">{$item.title|htmlentities}</div>
+</div>
+{/volist}
+</div>
+{/notempty}
+</div>
+</section>
+{/notempty}
+{/case}
+{case value="cases"}
+{notempty name="cases"}<div class="case"><h2 class="tit wow fadeInDown2"><a href="{$cases.more_url|default='#'|htmlentities}"><span>{$cases.title|htmlentities}</span><i>{$cases.subtitle|htmlentities}</i></a></h2><div class="case_con wow fadeInUp1 swiper-container"><div class="swiper-wrapper">{volist name="cases.items" id="item"}<div class="swiper-slide"><dl><dt><a href="{$item.url|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</a></dt><dd class="cms-home-product-copy"><h4><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.summary|htmlentities}</p><a href="{$item.url|htmlentities}">{$cases.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/case_jt.png"></a></dd></dl></div>{/volist}</div></div></div>{/notempty}
+{/case}
+{case value="advantages"}
+{notempty name="advantages"}<div class="sl"><h2 class="tit wow fadeInDown2"><span>{$advantages.title|htmlentities}</span><i>{$advantages.subtitle|htmlentities}</i></h2><div class="sl_con swiper-container wow fadeInUp1"><div class="swiper-wrapper">{volist name="advantages.config.items" id="item"}<dl class="swiper-slide"><dt>{notempty name="item.image"}<img alt="{$item.title|htmlentities}" src="{$item.image|htmlentities}">{/notempty}</dt><dd>{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon cms-advantage-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img alt="" src="{$item.icon_view.url|htmlentities}">{/if}<h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities}</p></dd></dl>{/volist}</div><div class="swiper-pagination"></div></div></div>{/notempty}
+{/case}
+{case value="news"}
+{notempty name="news"}<div class="news"><h2 class="tit wow fadeInDown2"><a href="{$news.more_url|default='/news'|htmlentities}"><span>{$news.title|htmlentities}</span><i>{$news.subtitle|htmlentities}</i></a></h2><div class="news_con wow fadeInUp1">{volist name="news.items" id="item"}<dl><dt><a href="{$item.url|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</a></dt><dd class="cms-home-product-copy"><h4><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.publish_date|htmlentities}</p></dd></dl>{/volist}</div></div>{/notempty}
+{/case}
+{case value="company"}
+{notempty name="company"}<div class="abt"><h2 class="wow fadeInDown2"><a href="{$company.more_url|default='/page/about'|htmlentities}"><span>{$company.title|htmlentities}</span></a></h2><dl class="wow fadeInUp1"><dd><p>{$company.content_text|htmlentities}</p><div class="yz_s clearfix"><a class="more1" href="{$company.more_url|default='/page/about'|htmlentities}">{$company.more_text|htmlentities}<em><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/abt_ic1.png"></em></a></div></dd><dt>{notempty name="company.background"}<a href="{$company.more_url|default='/page/about'|htmlentities}"><img alt="{$company.title|htmlentities}" src="{$company.background|htmlentities}"></a>{/notempty}</dt></dl>{notempty name="company.config.metrics"}<div class="cms-home-company-metrics-mobile wow fadeInUp1"><ul>{volist name="company.config.metrics" id="metric"}<li><div class="cms-home-company-metric-value"><strong>{$metric.value|htmlentities}</strong>{notempty name="metric.unit"}<span>{$metric.unit|default=''|htmlentities}</span>{/notempty}</div>{notempty name="metric.text"}<p>{$metric.text|default=''|htmlentities}</p>{/notempty}</li>{/volist}</ul></div>{/notempty}</div>{/notempty}
+{/case}
+{case value="culture"}
+{notempty name="culture"}
+<section class="section cms-home-culture-source">
+<div class="container">
+{notempty name="culture.background"}<div class="culture-banner reveal" style="background-image:url('{$culture.background|htmlentities}');">{else /}<div class="culture-banner reveal">{/notempty}
+{notempty name="culture.subtitle"}<p class="eb">{$culture.subtitle|htmlentities}</p>{/notempty}
+<h2>{$culture.title|htmlentities}</h2>
+{notempty name="culture.items"}
+<div class="culture-grid">
+{volist name="culture.items" id="item"}
+<div class="glass-card">
+<div class="ic">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img src="{$item.icon_view.url|htmlentities}" alt="">{/if}</div>
+<h4>{$item.title|htmlentities}</h4>
+<p>{$item.text|htmlentities|nl2br}</p>
+</div>
+{/volist}
+</div>
+{/notempty}
+</div>
+</div>
+</section>
+{/notempty}
+{/case}
+{/switch}
+{/volist}
+</section>
+
+{include file="cms/common/strict_footer" /}

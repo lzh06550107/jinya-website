@@ -1,0 +1,66 @@
+<form class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <input type="hidden" name="row[section_key]" value="{:isset($row['section_key'])?$row['section_key']:$parentValue}">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">内容类型:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('row[content_type]', $contentTypeList, isset($row['content_type'])?$row['content_type']:'product', ['class'=>'form-control selectpicker'])}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">内容 ID:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control" name="row[content_id]" value="{$row.content_id|default=''|htmlentities}" data-rule="required;integer"></div>
+    </div>
+
+    {if condition="(isset($row['section_key']) && $row['section_key'] eq 'products') || $parentValue eq 'products'"}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">首页 PC 展示图:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-pc_image" class="form-control" name="row[pc_image]" type="text" value="{$row.pc_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页产品中心 PC 专用展示图" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                <div class="input-group-addon no-border no-padding">
+                    <button type="button" class="btn btn-danger faupload" data-input-id="c-pc_image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                    <button type="button" class="btn btn-primary fachoose" data-input-id="c-pc_image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                </div>
+            </div>
+            <p class="help-block">仅影响首页产品中心，不修改产品自身封面。01 主展示位建议约 5:6；02/03 横向展示位建议约 2.3:1。留空时自动使用产品封面。</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">首页移动端展示图:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-mobile_image" class="form-control" name="row[mobile_image]" type="text" value="{$row.mobile_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页产品中心移动端专用展示图" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                <div class="input-group-addon no-border no-padding">
+                    <button type="button" class="btn btn-danger faupload" data-input-id="c-mobile_image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                    <button type="button" class="btn btn-primary fachoose" data-input-id="c-mobile_image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                </div>
+            </div>
+            <p class="help-block">移动首页优先使用此图；留空时依次使用 PC 展示图 → 产品移动封面 → 产品封面。</p>
+        </div>
+    </div>
+    {/if}
+
+    {if condition="(isset($row['section_key']) && $row['section_key'] eq 'products') || $parentValue eq 'products'"}
+    <input type="hidden" name="row[terminal]" value="all">
+    {else /}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">终端:</label>
+        <div class="col-xs-12 col-sm-8">{:build_select('row[terminal]', $terminalList, isset($row['terminal'])?$row['terminal']:'all', ['class'=>'form-control selectpicker'])}</div>
+    </div>
+    {/if}
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">排序:</label>
+        <div class="col-xs-12 col-sm-8"><input class="form-control" name="row[weigh]" value="{$row.weigh|default='0'|htmlentities}" data-rule="integer"></div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">状态:</label>
+        <div class="col-xs-12 col-sm-8">{:build_radios('row[status]', $statusList, isset($row['status'])?$row['status']:'normal')}</div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存</button></div>
+    </div>
+</form>

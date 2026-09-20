@@ -1,0 +1,11 @@
+<section class="section section--tight" id="elements"><div class="container">
+{volist name="block.extra.items" id="item"}
+{if condition="$item.group eq 'intro-direction' or $item.group eq 'intro-core' or $item.group eq 'intro-diameter'"}
+<div class="diagram-block">
+<h4>{$item.title|htmlentities}</h4>
+{if condition="!empty($item.text)"}<p class="diagram-note">{$item.text|htmlentities}</p>{/if}
+{if condition="!empty($item.image)"}<div class="diagram-image"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/if}
+</div>
+{/if}
+{/volist}
+</div></section>

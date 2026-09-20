@@ -1,0 +1,36 @@
+<section class="section">
+    <div class="container">
+        <div class="app-section">
+            <div class="container" data-tab-scope data-case-carousel>
+                <div class="section-head">
+                    <h2>{$block.title|htmlentities}</h2>
+                    <p>{$block.subtitle|htmlentities}</p>
+                </div>
+                {if condition="!empty($block.extra.tabs_items)"}
+                <div class="app-tabs" data-tabs>
+                    {volist name="block.extra.tabs_items" id="tab"}
+                    <button type="button" data-tab="{$tab.value|htmlentities}" {if condition="$i eq 1"}class="active"{/if}>{$tab.label|htmlentities}</button>
+                    {/volist}
+                </div>
+                {/if}
+                <div class="case-carousel-shell">
+                    <button class="case-carousel-arrow case-carousel-prev" type="button" data-case-prev aria-label="上一个案例"><i class="fa fa-angle-left" aria-hidden="true"></i></button>
+                    <div class="case-carousel-viewport" data-case-viewport tabindex="0" aria-label="应用案例，可左右滑动">
+                        <div class="case-carousel-track" data-case-track>
+                            {volist name="block.extra.items" id="item"}
+                            <article class="case-card" data-case-slide data-tab-groups="{$item.group|default=''|htmlentities}">
+                                <a class="case-card-media" href="{$item.url|default='#'|htmlentities}" aria-label="查看{$item.title|htmlentities}详情"><span class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></span></a>
+                                <div class="body"><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities}</p></div>
+                                <div class="foot"><span>{$item.subtitle|htmlentities}</span><a href="{$item.url|default='#'|htmlentities}">MORE+</a></div>
+                            </article>
+                            {/volist}
+                        </div>
+                    </div>
+                    <button class="case-carousel-arrow case-carousel-next" type="button" data-case-next aria-label="下一个案例"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="case-carousel-pagination" data-case-pagination aria-label="案例分页"></div>
+                {notempty name="block.link_url"}<div class="case-more-products"><a href="{$block.link_url|htmlentities}">{$block.link_text|default='查看更多产品'|htmlentities}<i class="fa fa-angle-right" aria-hidden="true"></i></a></div>{/notempty}
+            </div>
+        </div>
+    </div>
+</section>

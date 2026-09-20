@@ -1,0 +1,10 @@
+{include file="cms/common/strict_header" /}
+{include file="cms/common/strict_channel_header" /}
+<div class="blk-main cms-search-result-clone" data-search-key="{$content.keyword|default=''|htmlentities}"><div class="clear"></div><div class="blk-md"><div class="blk-main">
+<div class="xnznr-search-1-tit tit-md"><h3>搜索结果</h3></div>
+<div class="xnznr-search-1-main">
+{volist name="content.items" id="item"}<dl>{notempty name="item.cover"}<dt><a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}"><img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}" title="{$item.title|htmlentities}"></a></dt>{/notempty}<dd><h4><a class="t1-article-link" href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4><div class="xnznr-search-1-desc">{$item.summary|htmlentities}</div></dd></dl>{/volist}
+</div><div class="clear"></div>
+<div class="xnznr-page-main">{if condition="!empty($content.pagination) && $content.pagination.last_page > 1"}{notempty name="content.pagination.previous_url"}<a class="page_pre" href="{$content.pagination.previous_url|htmlentities}">上一页</a>{/notempty}{volist name="content.pagination.items" id="pageItem"}{if $pageItem.current}<span class="laypage_curr">{$pageItem.page}</span>{else /}<a href="{$pageItem.url|htmlentities}">{$pageItem.page}</a>{/if}{/volist}{notempty name="content.pagination.next_url"}<a class="page_next" href="{$content.pagination.next_url|htmlentities}">下一页</a>{/notempty}{/if}</div><div id="saveid" style="display:none;"></div>
+</div></div><div class="clear"></div></div>
+{include file="cms/common/strict_footer" /}

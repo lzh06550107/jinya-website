@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="zh"><head data-base="/">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache,must-revalidate">
+<meta name="applicable-device" content="mobile">
+<title>{$title|default=$cmsSite.name|htmlentities}</title>
+<meta name="keywords" content="{$keywords|default=''|htmlentities}">
+<meta name="description" content="{$description|default=''|htmlentities}">
+<meta name="robots" content="{$robots|default='index,follow'|htmlentities}">
+{if !empty($canonical)}<link rel="canonical" href="{$canonical|htmlentities}">{/if}
+{if !empty($mobileStrictHome)}
+<link href="__CDN__{$mobileStrictAssetBase}/css/swiper-3.3.1.min.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+<link href="__CDN__{$mobileStrictAssetBase}/css/index.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+<link href="__CDN__{$mobileStrictAssetBase}/css/animate.min.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+<script src="__CDN__{$mobileStrictAssetBase}/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="__CDN__{$mobileStrictAssetBase}/js/swiper-3.3.1.jquery.min.js" type="text/javascript"></script>
+<script src="__CDN__{$mobileStrictAssetBase}/js/pxloader-all.min.js" type="text/javascript"></script>
+{else /}
+<link href="__CDN__{$mobileStrictAssetBase}/css/reset750.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+{if !empty($mobileStrictUsesSwiper)}<link href="__CDN__{$mobileStrictAssetBase}/css/swiper.min.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">{/if}
+<script src="__CDN__{$mobileStrictAssetBase}/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+{if !empty($mobileStrictUsesSwiper)}<script src="__CDN__{$mobileStrictAssetBase}/js/swiper-3.3.1.jquery.min.js" type="text/javascript"></script>{/if}
+{/if}
+<link href="__CDN__{$mobileStrictAssetBase}/{$mobileStrictBundle|htmlentities}.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet" type="text/css">
+<link href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v=4.7.0" rel="stylesheet">
+<link href="__CDN__/assets/css/cms-icon-render.css?v={$cmsSite.version|default='1.0'}" rel="stylesheet">
+{if !empty($mobileStrictHome)}<link href="__CDN__/assets/css/cms-mobile-home-banner-copy.css?v={$cmsSite.version|default='1.0'}&layout=banner-copy" rel="stylesheet" type="text/css">{/if}
+{if !empty($mobileStrictHome)}<link href="__CDN__/assets/css/cms-mobile-home-products.css?v={$cmsSite.version|default='1.0'}&layout=products-card-v2" rel="stylesheet" type="text/css">{/if}
+{if !empty($mobileStrictHome)}<link href="__CDN__/assets/css/cms-home-workshop.css?v={$cmsSite.version|default='1.0'}&layout=source-clone-workshop" rel="stylesheet" type="text/css">{/if}
+{if !empty($mobileStrictHome)}<link href="__CDN__/assets/css/cms-home-company-metrics.css?v={$cmsSite.version|default='1.0'}&layout=company-metrics" rel="stylesheet" type="text/css">{/if}
+{if !empty($mobileStrictHome)}<link href="__CDN__/assets/css/cms-home-culture.css?v={$cmsSite.version|default='1.0'}&layout=source-clone-culture" rel="stylesheet" type="text/css">{/if}
+<link href="__CDN__/assets/css/cms-home-friend-links.css?v={$cmsSite.version|default='1.0'}&layout=friend-links-r2" rel="stylesheet" type="text/css">
+{if $mobileThemeCss=='label-page'}<link href="__CDN__/assets/css/cms-label-page.css?v={$cmsSite.version|default='1.0'}&layout=v12-r88" rel="stylesheet" type="text/css">{/if}
+{if $mobileThemeCss=='product-detail'}<link href="__CDN__/assets/css/cms-mobile-product-detail-v3.css?v={$cmsSite.version|default='1.0'}&layout=mobile-product-detail-v3-header-r1" rel="stylesheet" type="text/css">{/if}
+</head><body>
+{if !empty($mobileStrictHome)}<div class="wrap">{/if}
+{if !empty($isPreview)}<div style="background:#f48101;color:#fff;text-align:center;padding:.5rem;font-size:1.2rem;">移动端预览模式，链接将在 5 分钟后失效。</div>{/if}
+<div>
+<header class="g-hd">
+<h1 class="logo fl wow fadeInLeft1"><a href="{$mobileHomeUrl|htmlentities}" title="{$cmsSite.name|default=''|htmlentities}">{if !empty($cmsSite.logo)}<img alt="{$cmsSite.name|default=''|htmlentities}" src="{$cmsSite.logo|htmlentities}" title="{$cmsSite.name|default=''|htmlentities}">{else /}<img alt="{$cmsSite.name|default=''|htmlentities}" src="__CDN__{$mobileStrictAssetBase}/images/logo.png" title="{$cmsSite.name|default=''|htmlentities}">{/if}</a></h1>
+<div class="m-nav2"><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/menu_ic.png"></div>
+<ul class="h_nav" id="oneNav">
+{volist name="cmsNavigation" id="nav" length="2"}<li><a href="{$nav.url|htmlentities}">{$nav.title|htmlentities}</a></li>{/volist}
+</ul>
+<div class="menu2"><div class="erji" style="display:none;"><ul class="clearfix">
+{notempty name="cmsNavigation"}{volist name="cmsNavigation" id="nav"}<li><a href="{$nav.url|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" title="{$nav.title|htmlentities}"><em>{$nav.title|htmlentities}</em></a></li>{/volist}{/notempty}
+</ul></div></div>
+</header>
+</div>

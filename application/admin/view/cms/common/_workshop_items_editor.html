@@ -1,0 +1,58 @@
+<div class="form-group cms-workshop-items-field">
+    <label class="control-label col-xs-12 col-sm-2">车间项目:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-workshop-items-editor" data-workshop-items-editor data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-workshop-items-list" data-workshop-items-list>
+                {foreach name="[items]" item="workshopItem" key="workshopIndex"}
+                <div class="panel panel-default cms-workshop-item" data-workshop-item draggable="false">
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-workshop-item-label>生产车间项目</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="生产车间项目操作">
+                            <button type="button" class="btn btn-default" data-workshop-drag-handle title="拖动排序"><i class="fa fa-arrows"></i> 拖动</button>
+                            <button type="button" class="btn btn-default" data-workshop-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-workshop-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-workshop-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" data-workshop-field="url" name="[inputPrefix][{$workshopIndex}][url]" value="{$workshopItem.url|default=''|htmlentities}">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="title" name="[inputPrefix][{$workshopIndex}][title]" value="{$workshopItem.title|default=''|htmlentities}" placeholder="例如：高速高精度印刷机"></div></div>
+                        <input type="hidden" data-workshop-field="text" name="[inputPrefix][{$workshopIndex}][text]" value="{$workshopItem.text|default=''|htmlentities}">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="image" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" name="[inputPrefix][{$workshopIndex}][image]" value="{$workshopItem.image|default=''|htmlentities}" placeholder="建议 4:3，与上传网站原版卡片比例一致"><p class="help-block">推荐 JPG/WebP，建议单图 ≤800 KB；原站前台仅展示图片和标题，并按 4:3 等比例裁切。</p></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">移动图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="mobile_image" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" name="[inputPrefix][{$workshopIndex}][mobile_image]" value="{$workshopItem.mobile_image|default=''|htmlentities}" placeholder="留空时继承 PC 图片"><p class="help-block">移动端可单独裁图；留空时自动使用 PC 图片。</p></div></div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">终端显示:</label>
+                            <div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="pc_visible" name="[inputPrefix][{$workshopIndex}][pc_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="pc_visible" name="[inputPrefix][{$workshopIndex}][pc_visible]" value="1" {if condition="!isset($workshopItem.pc_visible) || $workshopItem.pc_visible"}checked{/if}> PC 显示</label></div>
+                            <div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="mobile_visible" name="[inputPrefix][{$workshopIndex}][mobile_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="mobile_visible" name="[inputPrefix][{$workshopIndex}][mobile_visible]" value="1" {if condition="!isset($workshopItem.mobile_visible) || $workshopItem.mobile_visible"}checked{/if}> 移动端显示</label></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            <script type="text/template" data-workshop-item-template>
+                <div class="panel panel-default cms-workshop-item" data-workshop-item draggable="false">
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-workshop-item-label>生产车间项目</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="生产车间项目操作">
+                            <button type="button" class="btn btn-default" data-workshop-drag-handle title="拖动排序"><i class="fa fa-arrows"></i> 拖动</button>
+                            <button type="button" class="btn btn-default" data-workshop-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-workshop-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-workshop-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" data-workshop-field="url" value="">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="title" value="" placeholder="例如：高速高精度印刷机"></div></div>
+                        <input type="hidden" data-workshop-field="text" value="">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="image" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" value="" placeholder="建议 4:3，与上传网站原版卡片比例一致"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">移动图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="mobile_image" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" value="" placeholder="留空时继承 PC 图片"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">终端显示:</label><div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="pc_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="pc_visible" value="1" checked> PC 显示</label></div><div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="mobile_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="mobile_visible" value="1" checked> 移动端显示</label></div></div>
+                    </div>
+                </div>
+            </script>
+            <button type="button" class="btn btn-success" data-workshop-item-add><i class="fa fa-plus"></i> 添加生产车间项目</button>
+            <p class="help-block">数组顺序就是前台顺序。可拖动排序，也可使用“上移/下移”；原站前台仅展示图片和标题。历史说明/链接字段继续隐藏保留，保存本模块不会主动清空；取消某端显示不会删除图片与标题。</p>
+        </div>
+    </div>
+</div>

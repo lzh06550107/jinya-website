@@ -1,0 +1,44 @@
+<div class="page-header"><h4>标题与正文</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 标题:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][title]" value="{$[rowVar].title|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动标题（留空继承 PC）:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_title]" value="{$[rowVar].mobile_title|default=''|htmlentities}" placeholder="留空时使用 PC 标题"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">企业简介正文:</label>
+    <div class="col-xs-12 col-sm-10">
+        <textarea class="form-control cms-markdown" data-markdown-upload="1" rows="8" name="[inputPrefix][content]">{$[rowVar].content|default=''|htmlentities}</textarea>
+        <p class="help-block">PC / 移动端共用，支持 Markdown。</p>
+    </div>
+</div>
+<div class="page-header"><h4>移动端</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端配图:</label>
+    <div class="col-xs-12 col-sm-10">
+        <input class="form-control" name="[inputPrefix][mobile_background_image]" value="{$[rowVar].mobile_background_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页顶部企业简介配图" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+        <p class="help-block">仅移动首页顶部企业简介使用；建议 JPG/WebP，尽量 ≤800 KB。当前模板未定义统一固定像素尺寸，上传后请结合预览确认裁切效果。</p>
+    </div>
+</div>
+<div class="page-header"><h4>跳转设置</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">标题跳转 URL:</label>
+    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][more_url]" value="{$[rowVar].more_url|default=''|htmlentities}" placeholder="例如：/page/about"><p class="help-block">站内地址建议以 / 开头；站外地址填写完整 https://...。该地址用于点击模块标题/入口时跳转。</p></div>
+</div>
+<div class="page-header"><h4>PC 社交入口</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">社交入口 1 图标:</label>
+    <div class="col-xs-12 col-sm-4"><input data-cms-icon-picker="true" class="form-control" name="[inputPrefix][config_social_icon_1]" value="{$[rowVar].config_social_icon_1|default=''|htmlentities}" placeholder="优先从图标库选择；没有合适图标时再上传" data-media-usage="PC 首页社交入口图标" data-media-recommended-format="PNG/WebP" data-media-max-kb="300" data-media-transparent="true"></div>
+    <label class="control-label col-xs-12 col-sm-2">显示文字:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][config_social_text_1]" value="{$[rowVar].config_social_text_1|default=''|htmlentities}" placeholder="例如：关注科创美抖音"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">社交入口 2 图标:</label>
+    <div class="col-xs-12 col-sm-4"><input data-cms-icon-picker="true" class="form-control" name="[inputPrefix][config_social_icon_2]" value="{$[rowVar].config_social_icon_2|default=''|htmlentities}" placeholder="优先从图标库选择；没有合适图标时再上传" data-media-usage="PC 首页社交入口图标" data-media-recommended-format="PNG/WebP" data-media-max-kb="300" data-media-transparent="true"></div>
+    <label class="control-label col-xs-12 col-sm-2">显示文字:</label>
+    <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][config_social_text_2]" value="{$[rowVar].config_social_text_2|default=''|htmlentities}" placeholder="例如：关注科创美视频号"></div>
+</div>
+<div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">仅 PC 首页显示；建议使用透明 PNG/WebP，小图标尽量 ≤300 KB。图标为空时沿用克隆站默认图标。</p></div></div>
+<div class="page-header"><h4>PC 媒体内容</h4></div>
+<div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">仅 PC 首页顶部企业简介媒体区域使用。</p></div></div>
+{include file="cms/common/_media_items_editor" mediaItems="[rowVar].config_media_items" inputPrefix="[inputPrefix][config_media_items]" /}

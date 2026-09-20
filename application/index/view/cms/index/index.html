@@ -1,0 +1,303 @@
+{include file="cms/common/strict_header" /}
+
+{notempty name="hero"}
+<div class="banner"><div class="swiper-container swiper0" id="banner-swiper"><div class="swiper-wrapper">
+{volist name="hero.items" id="banner" key="bannerIndex"}
+{if !empty($banner.image) || ($banner.media_type eq 'video' && !empty($banner.video_url))}
+<div class="{if $bannerIndex==1}ban1 {/if}swiper-slide" data-swiper-autoplay="5000">
+{if condition="$banner.media_type eq 'video' && !empty($banner.video_url)"}<video autoplay id="{if $bannerIndex==1}sVideo{else /}sVideo{$bannerIndex}{/if}" loop muted playsinline{if !empty($banner.image)} poster="{$banner.image|htmlentities}"{/if}><source src="{$banner.video_url|htmlentities}" type="video/mp4"></video>{if !empty($banner.overlay_image)}<i class="ban_txt"><img alt="{$banner.title|htmlentities}" src="{$banner.overlay_image|htmlentities}"></i>{/if}{elseif !empty($banner.image) /}<a href="{$banner.link_url|default='javascript:;'|htmlentities}" title="{$banner.title|htmlentities}"><img src="{$banner.image|htmlentities}" alt="{$banner.title|htmlentities}"></a>{/if}
+{if !empty($banner.title) || !empty($banner.subtitle) || !empty($banner.highlights)}
+{if !empty($banner.highlights)}<div class="cms-home-banner-copy has-highlights">{else /}<div class="cms-home-banner-copy">{/if}
+{notempty name="banner.title"}<strong class="cms-home-banner-title">{$banner.title|htmlentities}</strong>{/notempty}
+{notempty name="banner.subtitle"}<span class="cms-home-banner-subtitle">{$banner.subtitle|htmlentities}</span>{/notempty}
+{notempty name="banner.highlights"}<div class="cms-home-banner-highlights">{volist name="banner.highlights" id="highlight"}<span class="cms-home-banner-highlight">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities} cms-font-icon cms-home-banner-highlight-icon" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img class="cms-home-banner-highlight-icon" src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span class="cms-home-banner-highlight-text">{$highlight.text|htmlentities}</span></span>{/volist}</div>{/notempty}
+</div>
+{/if}
+</div>
+{/if}
+{/volist}
+</div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div></div>
+{/notempty}
+
+{volist name="section_order" id="homeSectionKey"}
+{switch name="homeSectionKey"}
+{case value="about"}
+{notempty name="about"}
+<div class="yz">
+<div class="content01">
+<div class="yz_con{if count($about['config']['media_items']) == 4} media-count-4-layout{/if} clearfix">
+<div class="yz_l wow fadeInLeft2">
+<h3><a href="{$about.more_url|default='/page/about'|htmlentities}">{$about.title|htmlentities}</a></h3>
+<div class="cms-home-about-copy">{$about.content_html}</div>
+<div class="yz_s clearfix">
+<a class="more1" href="javascript:;"><em>{if condition="$about.config.social_icon_1_view.type eq 'font'"}<i class="{$about.config.social_icon_1_view.class|htmlentities} cms-font-icon cms-about-social-font-icon" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_1_view.type eq 'image'" /}<img alt="" src="{$about.config.social_icon_1_view.url|htmlentities}">{else /}<img alt="" src="__CDN__{$pcAssetBase}/images/yz_ic1.png">{/if}</em>{$about.config.social_text_1|default=''|htmlentities}{notempty name="cmsDouyinQr"}<b><img alt="" src="{$cmsDouyinQr|htmlentities}"></b>{/notempty}</a>
+<a class="more2" href="javascript:;"><em>{if condition="$about.config.social_icon_2_view.type eq 'font'"}<i class="{$about.config.social_icon_2_view.class|htmlentities} cms-font-icon cms-about-social-font-icon" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_2_view.type eq 'image'" /}<img alt="" src="{$about.config.social_icon_2_view.url|htmlentities}">{else /}<img alt="" src="__CDN__{$pcAssetBase}/images/yz_ic2.png">{/if}</em>{$about.config.social_text_2|default=''|htmlentities}{notempty name="cmsVideoQr"}<b><img alt="" src="{$cmsVideoQr|htmlentities}"></b>{/notempty}</a>
+</div>
+</div>
+<ul class="yz_r{if count($about['config']['media_items']) >= 1 && count($about['config']['media_items']) <= 5} media-count-{$about.config.media_items|count}{/if} clearfix wow fadeInRight1">
+{volist name="about.config.media_items" id="item" key="i"}
+<li class="{if $i==1}cur{/if}">
+{if condition="$item.display_type eq 'video'"}
+<video class="cms-home-media-player" controls="controls" preload="metadata" playsinline="playsinline"{if $i==1} autoplay="autoplay" loop="loop" muted="muted"{/if}><source src="{$item.display_url|htmlentities}" type="{$item.video_mime|htmlentities}"></video>
+{elseif condition="$item.display_type eq 'video_embed'" /}
+<iframe class="cms-home-media-player" allowfullscreen frameborder="0" loading="lazy" src="{$item.display_url|htmlentities}"></iframe>
+{elseif condition="$item.display_type eq 'image'" /}
+<i><img alt="{$item.title|htmlentities}" src="{$item.display_url|htmlentities}"></i>
+{/if}
+<span><img alt="" src="__CDN__{$pcAssetBase}/images/yzt.png">{$item.title|htmlentities}</span>
+</li>
+{/volist}
+</ul>
+</div>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="products"}
+{notempty name="products"}
+<div class="pro">
+<div class="content01">
+<h2 class="tit wow fadeInDown2"><a href="{$products.more_url|default='#'|htmlentities}"><span>{$products.title|htmlentities}</span><i>{$products.subtitle|htmlentities}</i></a></h2>
+<div class="pro_t">
+{volist name="products.items" id="item" offset="0" length="1" key="i"}
+<dl class="pro_l wow fadeInLeft2">
+<a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">
+<dt>{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{else /}<img alt="{$item.title|htmlentities}" src="__CDN__{$pcAssetBase}/images/pro1.jpg">{/notempty}</dt>
+<dd><h4><i>01</i>{$item.title|htmlentities}</h4><p>{$item.home_summary|htmlentities}</p><em><img alt="" src="__CDN__{$pcAssetBase}/images/prot.png"><img alt="" src="__CDN__{$pcAssetBase}/images/pro_th.png"></em></dd>
+</a>
+</dl>
+{/volist}
+<div class="pro_r wow fadeInRight1">
+{volist name="products.items" id="item" offset="1" length="1"}
+<dl>
+<a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">
+<dt>{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{else /}<img alt="{$item.title|htmlentities}" src="__CDN__{$pcAssetBase}/images/pro2.jpg">{/notempty}</dt>
+<dd><h4><i>02</i>{$item.title|htmlentities}</h4><p>{$item.home_summary|htmlentities}</p><em><img alt="" src="__CDN__{$pcAssetBase}/images/prot.png"><img alt="" src="__CDN__{$pcAssetBase}/images/pro_th.png"></em></dd>
+</a>
+</dl>
+{/volist}
+{volist name="products.items" id="item" offset="2" length="1"}
+<dl>
+<a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">
+<dt>{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{else /}<img alt="{$item.title|htmlentities}" src="__CDN__{$pcAssetBase}/images/pro3.jpg">{/notempty}</dt>
+<dd><h4><i>03</i>{$item.title|htmlentities}</h4><p>{$item.home_summary|htmlentities}</p><em><img alt="" src="__CDN__{$pcAssetBase}/images/prot.png"><img alt="" src="__CDN__{$pcAssetBase}/images/pro_th.png"></em></dd>
+</a>
+</dl>
+{/volist}
+</div>
+</div>
+</div>
+<div class="content01 wow fadeInUp1">
+<div class="pro_c">
+<div class="pro_con">
+<dl>
+<dd>
+<a href="{$products.config.other_url|default=$products.more_url|default='#'|htmlentities}" title="{$products.config.other_title|default=''|htmlentities}"><h4><i>04</i>{$products.config.other_title|default=''|htmlentities}</h4><p>{$products.config.other_summary|default=''|htmlentities}</p><em><img alt="" src="__CDN__{$pcAssetBase}/images/prot.png"><img alt="" src="__CDN__{$pcAssetBase}/images/pro_th.png"></em></a>
+</dd>
+<dt>
+<div class="pro_z">
+<div class="pro_bd swiper-container">
+<ul class="swiper-wrapper">
+{volist name="products.items" id="item" offset="3"}
+<li class="swiper-slide"><a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}<span>{$item.title|htmlentities}</span></a></li>
+{/volist}
+</ul>
+</div>
+<i class="sprev"><img alt="" src="__CDN__{$pcAssetBase}/images/sprev.png"></i>
+<i class="snext"><img alt="" src="__CDN__{$pcAssetBase}/images/snext.png"></i>
+</div>
+</dt>
+</dl>
+</div>
+</div>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="service"}
+{notempty name="service"}
+<div class="td"{notempty name="service.background"} style="background-image:url('{$service.background|htmlentities}')"{/notempty}>
+<div class="content01">
+<div class="td_con">
+<div class="td_l wow fadeInLeft2">
+<h2><span>{$service.title|htmlentities}</span><i>{$service.subtitle|htmlentities}</i></h2>
+{if condition="!empty($cmsSite.cms_service_wecom_url) || !empty($cmsSite.cms_service_wechat_qr)"}<a class="more" data-cms-home-wechat-consult data-cms-wechat-has-qr="{if condition="!empty($cmsSite.cms_service_wechat_qr)"}1{else /}0{/if}" href="{if condition="!empty($cmsSite.cms_service_wecom_url)"}{$cmsSite.cms_service_wecom_url|htmlentities}{else /}javascript:;{/if}"{if condition="!empty($cmsSite.cms_service_wecom_url)"} target="_blank" rel="noopener noreferrer"{/if} title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$pcAssetBase}/images/td_jt.png"></a>{else /}<a class="more" href="{$service.more_url|default='javascript:;'|htmlentities}"{if !empty($service.more_url) && strpos($service.more_url,'http')===0} target="_blank" rel="noopener noreferrer"{/if} title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$pcAssetBase}/images/td_jt.png"></a>{/if}
+</div>
+<div class="td_r wow fadeInRight1">
+<ul>
+{volist name="service.config.metrics" id="metric" key="i"}
+<li>{if condition="$metric.icon_view.type eq 'font'"}<i class="{$metric.icon_view.class|htmlentities} cms-font-icon cms-service-font-icon" aria-hidden="true"></i>{elseif condition="$metric.icon_view.type eq 'image'" /}<img alt="" src="{$metric.icon_view.url|htmlentities}">{else /}<img alt="" src="__CDN__{$pcAssetBase}/images/td_ic{$i}.png">{/if}<span>{$metric.prefix|default=''|htmlentities}<em>{$metric.value|htmlentities}</em>{$metric.unit|default=''|htmlentities}</span><i>{$metric.text|default=''}</i></li>
+{/volist}
+</ul>
+</div>
+</div>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="workshop"}
+{notempty name="workshop"}
+<section class="section section--alt cms-home-workshop-source">
+<div class="container">
+<div class="section-head">
+<h2>{$workshop.title|htmlentities}</h2>
+{notempty name="workshop.subtitle"}<p class="eyebrow">{$workshop.subtitle|htmlentities}</p>{/notempty}
+<div class="dash"></div>
+</div>
+{notempty name="workshop.items"}
+<div class="grid grid-3 reveal">
+{volist name="workshop.items" id="item"}
+<div class="photo-card">
+{notempty name="item.resolved_image"}<div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.resolved_image|htmlentities}"></div>{/notempty}
+<div class="cap">{$item.title|htmlentities}</div>
+</div>
+{/volist}
+</div>
+{/notempty}
+</div>
+</section>
+{/notempty}
+{/case}
+{case value="cases"}
+{notempty name="cases"}
+<div class="case">
+<div class="content01">
+<div class="case_con clearfix">
+<h2 class="tit wow fadeInDown2"><a href="{$cases.more_url|default='#'|htmlentities}"><span>{$cases.title|htmlentities}</span><i>{$cases.subtitle|htmlentities}</i></a></h2>
+<div class="case_bd wow fadeInUp1 clearfix">
+{volist name="cases.items" id="item" key="i"}
+<dl class="wow fadeInUp1" data-wow-delay="0.{$i}s">
+<dt class="pic"><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</a></dt>
+<dd><em></em><h4><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.summary|htmlentities}</p><span></span></dd>
+</dl>
+{/volist}
+</div>
+</div>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="advantages"}
+{notempty name="advantages"}
+<div class="ys">
+<h2 class="tit wow fadeInDown2"><span>{$advantages.title|htmlentities}</span><i>{$advantages.subtitle|htmlentities}</i></h2>
+<div class="ys_con wow fadeInUp1 swiper-container">
+<div class="swiper-wrapper">
+{volist name="advantages.config.items" id="item" key="i"}
+<div class="swiper-slide">
+<dl>
+<dt class="pic">{notempty name="item.image"}<img alt="{$item.title|htmlentities}" src="{$item.image|htmlentities}">{else /}<img alt="{$item.title|htmlentities}" src="__CDN__{$pcAssetBase}/images/ys{$i}.jpg">{/notempty}</dt>
+<dd><h4>{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon cms-advantage-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img alt="" src="{$item.icon_view.url|htmlentities}">{else /}<img alt="" src="__CDN__{$pcAssetBase}/images/ys_ic{$i}.png">{/if}<span>{$item.title|htmlentities}</span><i>{$item.subtitle|default=''|htmlentities}</i></h4><p>{$item.text|htmlentities}</p></dd>
+</dl>
+<em><b>0{$i}</b>04</em>
+</div>
+{/volist}
+</div>
+<div class="swiper-pagination"></div>
+<i class="prev5"><img alt="" src="__CDN__{$pcAssetBase}/images/prev5.png"></i>
+<i class="next5"><img alt="" src="__CDN__{$pcAssetBase}/images/next5.png"></i>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="news"}
+{notempty name="news"}
+<div class="news">
+<div class="content01">
+<h2 class="tit wow fadeInDown2"><a href="{$news.more_url|default='/news'|htmlentities}" title="{$news.title|htmlentities}"><span>{$news.title|htmlentities}</span><i>{$news.subtitle|htmlentities}</i></a></h2>
+<div class="news_con clearfix">
+<div class="news_l wow fadeInLeft2">
+<h3><span><a href="{$news.config.left_url|default=$news.more_url|default='/news'|htmlentities}" title="{$news.config.left_title|default=''|htmlentities}">{$news.config.left_title|default=''|htmlentities}</a></span><em><a href="{$news.config.left_url|default=$news.more_url|default='/news'|htmlentities}">{$news.more_text|htmlentities}<img alt="" src="__CDN__{$pcAssetBase}/images/news_ic.png"></a></em></h3>
+<div class="news_bd">
+{notempty name="news.featured"}
+<dl class="clearfix">
+<dt class="pic"><a href="{$news.featured.url|htmlentities}" title="{$news.featured.title|htmlentities}">{notempty name="news.featured.cover"}<img alt="{$news.featured.title|htmlentities}" src="{$news.featured.cover|htmlentities}" target="_blank">{/notempty}</a></dt>
+<dd><i>{$news.featured.publish_date|htmlentities}</i><h4><a href="{$news.featured.url|htmlentities}" target="_blank" title="{$news.featured.title|htmlentities}">{$news.featured.title|htmlentities}</a></h4><p>{$news.featured.summary|htmlentities}</p><a class="more" href="{$news.featured.url|htmlentities}" target="_blank"><img alt="" src="__CDN__{$pcAssetBase}/images/news_dd.png"></a></dd>
+</dl>
+{/notempty}
+<ul class="news_z clearfix">
+{volist name="news.secondary" id="item"}
+<li><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}"><i>{$item.publish_date|htmlentities}</i><h4>{$item.title|htmlentities}</h4><p>{$item.summary|htmlentities}</p></a></li>
+{/volist}
+</ul>
+</div>
+</div>
+<div class="news_r wow fadeInRight1">
+<h3><span><a href="{$news.config.right_url|default=$news.more_url|default='/news'|htmlentities}" title="{$news.config.right_title|default=''|htmlentities}">{$news.config.right_title|default=''|htmlentities}</a></span><em><a href="{$news.config.right_url|default=$news.more_url|default='/news'|htmlentities}">{$news.more_text|htmlentities}<img alt="" src="__CDN__{$pcAssetBase}/images/news_ic.png"></a></em></h3>
+<div class="news_s"><ul class="clearfix">
+{volist name="news.list" id="item"}
+<li><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}"><h4>{$item.home_title|htmlentities}</h4><p>{$item.home_summary|htmlentities}</p></a></li>
+{/volist}
+</ul></div>
+</div>
+</div>
+</div>
+</div>
+{/notempty}
+{/case}
+{case value="company"}
+{notempty name="company"}
+<div class="abt">
+{notempty name="company.background"}<div class="abt_t" style="background-image:url('{$company.background|htmlentities}')">{else /}<div class="abt_t">{/notempty}
+<div class="content01">
+<h2 class="wow fadeInDown2"><a href="{$company.more_url|default='/page/about'|htmlentities}">{$company.title|htmlentities}</a></h2>
+<p class="wow fadeInUp1">{$company.content_text|htmlentities}</p>
+<a class="more" href="{$company.more_url|default='/page/about'|htmlentities}">{$company.more_text|htmlentities}<img alt="" src="__CDN__{$pcAssetBase}/images/abt_jt.png"></a>
+</div>
+</div>
+<div class="abt_con wow fadeInUp1">
+<div class="content01">
+<div class="abt_z">
+<div class="abt_bd swiper-container">
+<ul class="swiper-wrapper">
+{volist name="company.config.media_items" id="item"}
+<li class="swiper-slide">{if condition="$item.display_type eq 'video'"}<video class="cms-home-media-player" controls="controls" preload="metadata" playsinline="playsinline"><source src="{$item.display_url|htmlentities}" type="{$item.video_mime|htmlentities}"></video>{elseif condition="$item.display_type eq 'video_embed'" /}<iframe class="cms-home-media-player" allowfullscreen frameborder="0" loading="lazy" src="{$item.display_url|htmlentities}"></iframe>{elseif condition="$item.display_type eq 'image'" /}<img alt="{$item.title|htmlentities}" src="{$item.display_url|htmlentities}">{/if}<span><a href="{$item.url|default='#'|htmlentities}">{$item.title|htmlentities}</a></span></li>
+{/volist}
+</ul>
+</div>
+<i class="prev4"><img alt="" src="__CDN__{$pcAssetBase}/images/prev3.png"></i>
+<i class="next4"><img alt="" src="__CDN__{$pcAssetBase}/images/next3.png"></i>
+</div>
+</div>
+</div>
+{notempty name="company.config.metrics"}
+<div class="cms-home-company-metrics wow fadeInUp1">
+<div class="content01">
+<ul>
+{volist name="company.config.metrics" id="metric"}
+<li><div class="cms-home-company-metric-value"><strong>{$metric.value|htmlentities}</strong>{notempty name="metric.unit"}<span>{$metric.unit|default=''|htmlentities}</span>{/notempty}</div>{notempty name="metric.text"}<p>{$metric.text|default=''|htmlentities}</p>{/notempty}</li>
+{/volist}
+</ul>
+</div>
+</div>
+{/notempty}
+</div>
+{/notempty}
+{/case}
+{case value="culture"}
+{notempty name="culture"}
+<section class="section cms-home-culture-source">
+<div class="container">
+{notempty name="culture.background"}<div class="culture-banner reveal" style="background-image:url('{$culture.background|htmlentities}');">{else /}<div class="culture-banner reveal">{/notempty}
+{notempty name="culture.subtitle"}<p class="eb">{$culture.subtitle|htmlentities}</p>{/notempty}
+<h2>{$culture.title|htmlentities}</h2>
+{notempty name="culture.items"}
+<div class="culture-grid">
+{volist name="culture.items" id="item"}
+<div class="glass-card">
+<div class="ic">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img src="{$item.icon_view.url|htmlentities}" alt="">{/if}</div>
+<h4>{$item.title|htmlentities}</h4>
+<p>{$item.text|htmlentities|nl2br}</p>
+</div>
+{/volist}
+</div>
+{/notempty}
+</div>
+</div>
+</section>
+{/notempty}
+{/case}
+{/switch}
+{/volist}
+
+{include file="cms/common/strict_footer" /}

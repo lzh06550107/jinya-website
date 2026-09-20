@@ -1,0 +1,67 @@
+<div class="form-group cms-metrics-field">
+    <label class="control-label col-xs-12 col-sm-2">服务指标:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-metrics-editor" data-metrics-editor data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-metrics-list" data-metrics-list>
+                {foreach name="[metrics]" item="metric" key="metricIndex"}
+                <div class="panel panel-default cms-metric-item" data-metric-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-metric-item-label>服务指标</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="服务指标操作">
+                            <button type="button" class="btn btn-default" data-metric-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-metric-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-metric-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">前缀:</label>
+                            <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="prefix" name="[inputPrefix][{$metricIndex}][prefix]" value="{$metric.prefix|default=''|htmlentities}" placeholder="例如：超"></div>
+                            <label class="control-label col-xs-12 col-sm-2">数值:</label>
+                            <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="value" name="[inputPrefix][{$metricIndex}][value]" value="{$metric.value|default=''|htmlentities}" placeholder="例如：20"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">单位:</label>
+                            <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="unit" name="[inputPrefix][{$metricIndex}][unit]" value="{$metric.unit|default=''|htmlentities}" placeholder="例如：年"></div>
+                            <label class="control-label col-xs-12 col-sm-2">说明:</label>
+                            <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="text" name="[inputPrefix][{$metricIndex}][text]" value="{$metric.text|default=''|htmlentities}" placeholder="例如：行业经验"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图标:</label>
+                            <div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-metric-field="icon" name="[inputPrefix][{$metricIndex}][icon]" value="{$metric.icon|default=''|htmlentities}" placeholder="优先从图标库选择；没有合适图标时再上传图片图标"></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            <script type="text/template" data-metric-item-template>
+                <div class="panel panel-default cms-metric-item" data-metric-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-metric-item-label>服务指标</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="服务指标操作">
+                            <button type="button" class="btn btn-default" data-metric-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-metric-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-metric-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">前缀:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="prefix" value="" placeholder="例如：超"></div>
+                            <label class="control-label col-xs-12 col-sm-2">数值:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="value" value="" placeholder="例如：20"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">单位:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="unit" value="" placeholder="例如：年"></div>
+                            <label class="control-label col-xs-12 col-sm-2">说明:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="text" value="" placeholder="例如：行业经验"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图标:</label><div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-metric-field="icon" value="" placeholder="优先从图标库选择；没有合适图标时再上传图片图标"></div>
+                        </div>
+                    </div>
+                </div>
+            </script>
+            <button type="button" class="btn btn-success" data-metric-item-add><i class="fa fa-plus"></i> 添加服务指标</button>
+            <p class="help-block">前缀当前仅 PC 首页使用；数值、单位、说明和图标按现有前台模板输出。使用上移/下移调整显示顺序。</p>
+        </div>
+    </div>
+</div>

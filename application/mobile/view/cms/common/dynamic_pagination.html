@@ -1,0 +1,10 @@
+{if condition="!empty($pagination) && $pagination.last_page > 1"}
+<div class="mc-page-1">
+    <div class="mc-page-1-size">{$pagination.page}<em>/</em><span>{$pagination.last_page}</span></div>
+    <div class="mc-page-1-pn">
+        {notempty name="pagination.previous_url"}<a class="page_first" href="{$mobileBase}{$pagination.first_url|htmlentities}">首页</a><a class="page_pre" href="{$mobileBase}{$pagination.previous_url|htmlentities}">上一页</a>{/notempty}
+        {volist name="pagination.items" id="pageItem"}{if $pageItem.current}<a class="page_curr">{$pageItem.page}</a>{else /}<a href="{$mobileBase}{$pageItem.url|htmlentities}">{$pageItem.page}</a>{/if}{/volist}
+        {notempty name="pagination.next_url"}<a class="page_next" href="{$mobileBase}{$pagination.next_url|htmlentities}">下一页</a><a class="page_last" href="{$mobileBase}{$pagination.last_url|htmlentities}">末页</a>{/notempty}
+    </div>
+</div>
+{/if}

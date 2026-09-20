@@ -1,0 +1,6 @@
+{volist name="content.blocks" id="block"}
+<section class="cms-page-block cms-page-block-{$block.type|htmlentities}" data-block-key="{$block.key|htmlentities}">
+{notempty name="block.title"}<h2>{$block.title|htmlentities}</h2>{/notempty}{notempty name="block.subtitle"}<p class="cms-page-block-subtitle">{$block.subtitle|htmlentities}</p>{/notempty}
+{if $block.type=='contact_info'}<div class="cms-contact-card">{volist name="block.extra.items" id="item"}<p><b>{$item.label|htmlentities}：</b>{$item.value|htmlentities}</p>{/volist}</div>{elseif $block.type=='timeline' /}<ul class="cms-timeline">{volist name="block.extra.items" id="item"}<li><strong>{$item.year|default=$item.title|htmlentities}</strong><p>{$item.text|default=''|htmlentities}</p></li>{/volist}</ul>{else /}{notempty name="block.image"}<p><img src="{$block.image|htmlentities}" alt="{$block.title|htmlentities}"></p>{/notempty}{$block.content_html}{notempty name="block.link_url"}<p><a href="{$block.link_url|htmlentities}">{$block.link_text|htmlentities}</a></p>{/notempty}{/if}
+</section>
+{/volist}

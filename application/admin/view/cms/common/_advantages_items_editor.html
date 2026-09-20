@@ -1,0 +1,67 @@
+<div class="form-group cms-advantages-items-field">
+    <label class="control-label col-xs-12 col-sm-2">企业优势:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-advantages-items-editor" data-advantages-items-editor data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-advantages-items-list" data-advantages-items-list>
+                {foreach name="[items]" item="advantageItem" key="advantageIndex"}
+                <div class="panel panel-default cms-advantage-item" data-advantage-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-advantage-item-label>企业优势</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业优势操作">
+                            <button type="button" class="btn btn-default" data-advantage-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-advantage-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-advantage-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" data-advantage-field="url" name="[inputPrefix][{$advantageIndex}][url]" value="{$advantageItem.url|default=''|htmlentities}">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="title" name="[inputPrefix][{$advantageIndex}][title]" value="{$advantageItem.title|default=''|htmlentities}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">说明:</label>
+                            <div class="col-xs-12 col-sm-10"><textarea class="form-control" rows="3" data-advantage-field="text" name="[inputPrefix][{$advantageIndex}][text]">{$advantageItem.text|default=''|htmlentities}</textarea></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">PC 副标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="subtitle" name="[inputPrefix][{$advantageIndex}][subtitle]" value="{$advantageItem.subtitle|default=''|htmlentities}" placeholder="仅 PC 首页使用"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">移动端图片:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="image" data-media-preview="image" data-media-upload="true" name="[inputPrefix][{$advantageIndex}][image]" value="{$advantageItem.image|default=''|htmlentities}" placeholder="仅移动首页卡片使用"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图标:</label>
+                            <div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-advantage-field="icon" name="[inputPrefix][{$advantageIndex}][icon]" value="{$advantageItem.icon|default=''|htmlentities}" placeholder="优先从图标库选择；PC / 移动端共用"></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            <script type="text/template" data-advantage-item-template>
+                <div class="panel panel-default cms-advantage-item" data-advantage-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-advantage-item-label>企业优势</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="企业优势操作">
+                            <button type="button" class="btn btn-default" data-advantage-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-advantage-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-advantage-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" data-advantage-field="url" value="">
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="title" value=""></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">说明:</label><div class="col-xs-12 col-sm-10"><textarea class="form-control" rows="3" data-advantage-field="text"></textarea></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 副标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="subtitle" value="" placeholder="仅 PC 首页使用"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">移动端图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-advantage-field="image" data-media-preview="image" data-media-upload="true" value="" placeholder="仅移动首页卡片使用"></div></div>
+                        <div class="form-group"><label class="control-label col-xs-12 col-sm-2">图标:</label><div class="col-xs-12 col-sm-10"><input data-cms-icon-picker="true" class="form-control" data-advantage-field="icon" value="" placeholder="优先从图标库选择；PC / 移动端共用"></div></div>
+                    </div>
+                </div>
+            </script>
+            <button type="button" class="btn btn-success" data-advantage-item-add><i class="fa fa-plus"></i> 添加企业优势</button>
+            <p class="help-block">标题、说明和图标两端共用；PC 副标题仅 PC 使用，移动端图片仅移动首页使用。历史跳转 URL 不再展示，但会随原卡片继续保留。</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<form id="page-block-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="" data-schema-fields="{$schemaFieldsJson|htmlentities}" data-visibility-fields="pc_visible,mobile_visible">
+    {:token()}
+    <input type="hidden" name="row[version]" value="{$row.version|htmlentities}">
+
+    <div class="alert alert-warning">
+        <i class="fa fa-warning"></i>
+        保存后立即生效。功能块字段由页面模板固定，未出现的字段不支持配置。
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">功能块:</label>
+        <div class="col-xs-12 col-sm-8">
+            <p class="form-control-static"><strong>{$row.block_name|htmlentities}</strong>（{$row.page_key|htmlentities}.{$row.block_key|htmlentities}）</p>
+            <p class="help-block">类型：{$schema.type|htmlentities}；数据来源：{$schema.source_type|htmlentities}；{if condition="$schema.core"}核心功能块不能停用。{else /}可选功能块无有效内容时按规则隐藏。{/if}</p>
+        </div>
+    </div>
+
+    {foreach name="formFields" item="field"}
+    {if condition="$field.type eq 'device_image'"}
+    <div class="device-image-fields" data-field="{$field.name|htmlentities}">
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <input id="{$field.input_id|htmlentities}" class="form-control" name="row[config][{$field.name|htmlentities}]" type="text" value="{$field.value|htmlentities}" data-media-preview="image" data-media-upload="true">
+                    <div class="input-group-addon no-border no-padding">
+                        <button type="button" class="btn btn-danger faupload" data-input-id="{$field.input_id|htmlentities}" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                        <button type="button" class="btn btn-primary fachoose" data-input-id="{$field.input_id|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                    </div>
+                </div>
+                <p class="help-block">公共图片，PC 和移动端专属图片为空时自动继承。</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">PC 专属{$field.title|htmlentities}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <input id="c-config-pc-{$field.name|htmlentities}" class="form-control" name="row[config][pc_{$field.name|htmlentities}]" type="text" value="{$field.pc_value|htmlentities}" data-media-preview="image" data-media-upload="true">
+                    <div class="input-group-addon no-border no-padding">
+                        <button type="button" class="btn btn-danger faupload" data-input-id="c-config-pc-{$field.name|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                        <button type="button" class="btn btn-primary fachoose" data-input-id="c-config-pc-{$field.name|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">移动端专属{$field.title|htmlentities}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <input id="c-config-mobile-{$field.name|htmlentities}" class="form-control" name="row[config][mobile_{$field.name|htmlentities}]" type="text" value="{$field.mobile_value|htmlentities}" data-media-preview="image" data-media-upload="true">
+                    <div class="input-group-addon no-border no-padding">
+                        <button type="button" class="btn btn-danger faupload" data-input-id="c-config-mobile-{$field.name|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                        <button type="button" class="btn btn-primary fachoose" data-input-id="c-config-mobile-{$field.name|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {elseif condition="$field.type eq 'image'" /}
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="{$field.input_id|htmlentities}" class="form-control" name="row[config][{$field.name|htmlentities}]" type="text" value="{$field.value|htmlentities}" data-media-preview="image" data-media-upload="true">
+                <div class="input-group-addon no-border no-padding">
+                    <button type="button" class="btn btn-danger faupload" data-input-id="{$field.input_id|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-upload"></i> 上传</button>
+                    <button type="button" class="btn btn-primary fachoose" data-input-id="{$field.input_id|htmlentities}" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> 选择</button>
+                </div>
+            </div>
+            <p class="help-block">该字段只维护一张公共图片，不提供终端专属配置。</p>
+        </div>
+    </div>
+    {elseif condition="$field.type eq 'boolean'" /}
+    <div class="form-group field-{$field.name|htmlentities}">
+        <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <label class="radio-inline"><input type="radio" name="row[config][{$field.name|htmlentities}]" value="1" {if condition="$field.value"}checked{/if}> 是</label>
+            <label class="radio-inline"><input type="radio" name="row[config][{$field.name|htmlentities}]" value="0" {if condition="!$field.value"}checked{/if}> 否</label>
+        </div>
+    </div>
+    {elseif condition="$field.type eq 'enum'" /}
+    <div class="form-group {if condition="$field.name eq 'source_mode'"}source-mode-group{/if} field-{$field.name|htmlentities}">
+        <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select id="{$field.input_id|htmlentities}" class="form-control selectpicker" name="row[config][{$field.name|htmlentities}]" {if condition="$field.name eq 'source_mode'"}data-role="source-mode"{/if}>
+                {foreach name="field.option_list" item="optionTitle" key="option"}
+                <option value="{$option|htmlentities}" {if condition="$field.value eq $option"}selected{/if}>{$optionTitle|htmlentities}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    {elseif condition="$field.type eq 'textarea'" /}
+    <div class="form-group field-{$field.name|htmlentities}">
+        <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="{$field.input_id|htmlentities}" class="form-control" rows="6" name="row[config][{$field.name|htmlentities}]" {if condition="$field.required"}data-rule="required"{/if}>{$field.value|htmlentities}</textarea>
+        </div>
+    </div>
+    {else /}
+    <div class="form-group {if condition="$field.name eq 'category_id'"}source-auto-group{/if} field-{$field.name|htmlentities}">
+        <label class="control-label col-xs-12 col-sm-2">{$field.title|htmlentities}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="{$field.input_id|htmlentities}" class="form-control" name="row[config][{$field.name|htmlentities}]" type="{if condition="$field.type eq 'integer'"}number{else /}text{/if}" value="{$field.value|htmlentities}" {if condition="$field.required"}data-rule="required{if condition="$field.type eq 'integer'"};integer{/if}"{/if} {if condition="isset($field.min)"}min="{$field.min|htmlentities}"{/if} {if condition="isset($field.max)"}max="{$field.max|htmlentities}"{/if}>
+        </div>
+    </div>
+    {/if}
+    {/foreach}
+
+    {if condition="$supportsSourceMode"}
+    <div class="form-group source-manual-group">
+        <label class="control-label col-xs-12 col-sm-2">手动选择内容:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-reference_ids" class="form-control selectpage" name="row[reference_ids]" type="text"
+                   value="{$referenceIds|htmlentities}" data-source="{$referenceSource|htmlentities}"
+                   data-field="title" data-primary-key="id" data-multiple="true" data-order-by="weigh desc,id desc">
+            <p class="help-block">仅引用业务内容，不复制标题、正文或图片。内容下架后前台停止显示，重新发布后自动恢复原位置。</p>
+            <input type="hidden" name="row[reference_content_type]" value="{$referenceContentType|htmlentities}">
+        </div>
+    </div>
+    {/if}
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">保存</button>
+            <button type="reset" class="btn btn-default btn-embossed">重置</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,16 @@
+{include file="cms/common/strict_header" /}
+{include file="cms/common/strict_channel_header" /}
+<div class="blk-main"></div>
+<div class="blk-md"><div class="p12-sitemap-1 blk blk"><div class="blk-main">
+<div class="p12-sitemap-1-xml"><a href="/sitemap" title="HTML地图">HTML地图</a></div>
+<div class="p12-sitemap-1-tit"><h3><a href="/" title="{$cmsSite.name|default='金亚包装'|htmlentities}网站首页">{$cmsSite.name|default='金亚包装'|htmlentities}网站首页</a></h3></div>
+<ul>{volist name="cmsNavigationTree" id="nav"}<li><h4><a href="{$nav.url|default='/'|htmlentities}" title="{$nav.title|htmlentities}">{$nav.title|htmlentities}</a></h4></li>{/volist}</ul>
+<div class="p12-sitemap-1-tit"><h3><a href="/products" title="产品中心">产品中心</a></h3></div>
+<ul>{volist name="content.groups.product_categories" id="item"}<li><h4><a href="/products?category={$item.slug|urlencode}" title="{$item.name|htmlentities}">{$item.name|htmlentities}</a></h4></li>{/volist}</ul>
+<div class="p12-sitemap-1-tit"><h3><a href="/news" title="新闻动态">新闻动态</a></h3></div>
+<ul>{volist name="content.groups.article_categories" id="item"}<li><h4><a href="/news-list/{$item.slug|htmlentities}" title="{$item.name|htmlentities}">{$item.name|htmlentities}</a></h4></li>{/volist}</ul>
+<div class="p12-sitemap-1-tit"><h3><a href="/page/about" title="企业页面">企业页面</a></h3></div>
+<ul>{volist name="content.groups.pages" id="item"}<li><h4><a href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4></li>{/volist}</ul>
+<div class="clear"></div>
+</div></div></div>
+{include file="cms/common/strict_footer" /}

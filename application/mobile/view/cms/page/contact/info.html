@@ -1,0 +1,25 @@
+<section class="section" id="contact-info"><div class="container">
+<div class="contact-intro contact-intro-mobile">
+<div class="contact-avatar"><img src="{$block.image|default=''|htmlentities}" alt="{$block.title|default='金亚包装客服'|htmlentities}" loading="lazy"></div>
+<div><h3>{$block.title|default=''|htmlentities}</h3><div class="contact-copy">{$block.content_html}</div></div>
+</div>
+<div class="contact-cardgrid">
+<div class="contact-card contact-company-mobile"><div class="head">{$block.extra.company_title|default=''|htmlentities}</div><div class="body">
+{volist name="block.extra.items" id="item"}
+<div class="contact-row">
+{switch name="item.badge"}
+{case value="phone"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>{/case}
+{case value="email"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>{/case}
+{case value="map"}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{/case}
+{default /}{if condition="$item.icon_kind eq 'font'"}<i class="{$item.icon_value|htmlentities} cms-page-picked-icon" aria-hidden="true"></i>{elseif condition="$item.icon_kind eq 'image'"}<img class="cms-page-picked-icon" src="{$item.icon_value|htmlentities}" alt="" aria-hidden="true">{else /}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>{/if}
+{/switch}
+<div><div class="l">{$item.title|default=''|htmlentities}</div><div class="v">{$item.text|default=''|htmlentities|nl2br}</div></div>
+</div>
+{/volist}
+</div></div>
+<div class="contact-map" data-baidu-map data-map-provider="{$block.extra.map_provider|default='static'|htmlentities}" data-map-ak="{$block.extra.baidu_ak|default=''|htmlentities}" data-map-lng="{$block.extra.map_lng|default=''|htmlentities}" data-map-lat="{$block.extra.map_lat|default=''|htmlentities}" data-map-zoom="{$block.extra.map_zoom|default='16'|htmlentities}" data-map-title="{$block.extra.map_marker_title|default=''|htmlentities}" data-map-address="{$block.extra.map_marker_address|default=''|htmlentities}" data-map-zoom-control="{$block.extra.map_zoom_control|default='1'|htmlentities}" data-map-scroll-wheel="{$block.extra.map_scroll_wheel|default='1'|htmlentities}">
+<img class="contact-map-fallback" src="{$block.extra.map_image|default=''|htmlentities}" alt="公司地图位置" loading="lazy">
+<div class="contact-baidu-map-canvas" aria-label="百度地图公司位置"></div>
+</div>
+</div>
+</div></section>

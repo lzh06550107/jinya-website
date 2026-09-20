@@ -1,0 +1,27 @@
+<div class="page-header"><h4>标题与正文</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][title]" value="{$[rowVar].title|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">移动标题（留空继承 PC）:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_title]" value="{$[rowVar].mobile_title|default=''|htmlentities}" placeholder="留空时使用 PC 标题"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">企业介绍正文:</label><div class="col-xs-12 col-sm-10"><textarea class="form-control cms-markdown" data-markdown-upload="1" rows="8" name="[inputPrefix][content]">{$[rowVar].content|default=''|htmlentities}</textarea><p class="help-block">PC / 移动端共用，支持 Markdown。</p></div>
+</div>
+<div class="page-header"><h4>PC / 移动端配图</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">PC 背景图:</label><div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][background_image]" value="{$[rowVar].background_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-preview-fallback="/uploads/cms-clone/pc/images/abt_bg.jpg" data-media-usage="PC 首页企业介绍背景" data-media-recommended-width="1920" data-media-recommended-height="800" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536"><p class="help-block">PC 首页底部“走进科创美”区域背景；推荐 1920×800（2.4:1），JPG/WebP，建议 ≤1.5 MB。留空时使用系统默认背景。</p></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">移动端企业配图:</label><div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][mobile_background_image]" value="{$[rowVar].mobile_background_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-preview-fallback="/uploads/cms-clone/mobile/images/abt.jpg" data-media-usage="移动首页企业介绍配图" data-media-recommended-width="680" data-media-recommended-height="382" data-media-recommended-format="JPG/WebP" data-media-max-kb="800"><p class="help-block">移动首页底部企业介绍配图；推荐 680×382（约 16:9），JPG/WebP，建议 ≤800 KB。留空时使用系统默认配图。</p></div>
+</div>
+<div class="page-header"><h4>跳转设置</h4></div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">更多按钮文字:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][more_text]" value="{$[rowVar].more_text|default=''|htmlentities}"></div>
+    <label class="control-label col-xs-12 col-sm-2">更多按钮跳转 URL:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][more_url]" value="{$[rowVar].more_url|default=''|htmlentities}" placeholder="例如：/page/about"><p class="help-block">站内地址建议以 / 开头；站外地址填写完整 https://...。留空时按前台当前默认行为处理。</p></div>
+</div>
+<div class="page-header"><h4>企业数据指标</h4></div>
+<div class="cms-company-metrics-editor-section">
+{include file="cms/common/_company_metrics_editor" metrics="[rowVar].config_metrics" inputPrefix="[inputPrefix][config_metrics]" /}
+</div>
+<div class="page-header"><h4>PC 媒体内容</h4></div>
+<div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">仅 PC 首页底部企业媒体区域使用。</p></div></div>
+{include file="cms/common/_media_items_editor" mediaItems="[rowVar].config_media_items" inputPrefix="[inputPrefix][config_media_items]" /}

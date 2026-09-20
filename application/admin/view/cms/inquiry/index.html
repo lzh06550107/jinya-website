@@ -1,0 +1,17 @@
+<div class="panel panel-default panel-intro">
+    <div class="panel-heading">{:build_heading(null,false)}</div>
+    <div class="panel-body">
+        <div id="toolbar" class="toolbar">
+            <a href="javascript:;" class="btn btn-primary btn-refresh"><i class="fa fa-refresh"></i></a>
+            <a href="cms/inquiry/export" class="btn btn-success {:$auth->check('cms/inquiry/export')?'':'hide'}"><i class="fa fa-download"></i> 导出 CSV</a>
+            <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('cms/inquiry/del')?'':'hide'}"><i class="fa fa-trash"></i> 删除</a>
+        </div>
+        <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
+               data-operate-detail="{:$auth->check('cms/inquiry/detail')}"
+               data-operate-follow="{:$auth->check('cms/inquiry/follow')}"
+               data-operate-assign="{:$auth->check('cms/inquiry/assign')}"
+               data-operate-status="{:$auth->check('cms/inquiry/change_status')}"
+               data-operate-mobile="{:$auth->check('cms/inquiry/view_mobile')}"
+               width="100%"></table>
+    </div>
+</div>

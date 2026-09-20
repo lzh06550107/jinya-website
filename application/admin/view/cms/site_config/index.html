@@ -1,0 +1,294 @@
+<div class="panel panel-default panel-intro">
+    <div class="panel-heading">
+        {:build_heading(null, false)}
+    </div>
+    <div class="panel-body">
+        <form id="site-config-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="{:url('cms/site_config/edit')}">
+            {:token()}
+
+            <div class="page-header"><h4>品牌信息</h4><p class="text-muted">用于网站页头、页脚和公共页面的品牌展示。</p></div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">网站名称:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[name]" type="text" value="{$values.name|htmlentities}" data-rule="required">
+                    <p class="help-block">网站公共名称，用于页面标题等通用位置；建议填写对外使用的简称或品牌名。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">公司全称:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[cms_company]" type="text" value="{$values.cms_company|htmlentities}" data-rule="required">
+                    <p class="help-block">公司对外完整名称，页脚、联系信息等位置会使用该文本。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">网站口号:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[cms_slogan]" type="text" value="{$values.cms_slogan|htmlentities}">
+                    <p class="help-block">品牌宣传语；仅在读取该公共配置的页面显示，留空时相关位置不显示额外口号。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">网站 Logo:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_logo" class="form-control" name="row[cms_logo]" type="text" value="{$values.cms_logo|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="网站页头 Logo" data-media-recommended-width="1677" data-media-recommended-height="213" data-media-recommended-format="PNG/WebP" data-media-max-kb="300" data-media-transparent="true">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_logo" class="btn btn-danger faupload" data-input-id="c-cms_logo" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_logo" class="btn btn-primary fachoose" data-input-id="c-cms_logo" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">推荐素材尺寸 1677×213，最佳比例 559:71；推荐透明 PNG/WebP，建议 ≤300 KB。可使用其它等比例尺寸，页头与页尾都会保持原图比例，不会拉伸变形。</p>
+                </div>
+            </div>
+
+            <div class="page-header"><h4>PC 栏目横幅</h4><p class="text-muted">PC 产品、新闻、案例和企业栏目列表/详情页顶部使用。以下尺寸属于当前项目建议规格。</p></div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">PC 产品栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_pc_product_banner" class="form-control" name="row[cms_pc_product_banner]" type="text" value="{$values.cms_pc_product_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 产品栏目顶部横幅" data-media-recommended-width="1920" data-media-recommended-height="300" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_pc_product_banner" class="btn btn-danger faupload" data-input-id="c-cms_pc_product_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_pc_product_banner" class="btn btn-primary fachoose" data-input-id="c-cms_pc_product_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于产品列表和详情页顶部。当前项目建议 1920×300，JPG/WebP，建议 ≤1.5 MB；该尺寸为运营建议，不作为强制校验。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">PC 新闻栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_pc_news_banner" class="form-control" name="row[cms_pc_news_banner]" type="text" value="{$values.cms_pc_news_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 新闻栏目顶部横幅" data-media-recommended-width="1920" data-media-recommended-height="300" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_pc_news_banner" class="btn btn-danger faupload" data-input-id="c-cms_pc_news_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_pc_news_banner" class="btn btn-primary fachoose" data-input-id="c-cms_pc_news_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于新闻列表和详情页顶部。当前项目建议 1920×300，JPG/WebP，建议 ≤1.5 MB；不强制要求像素完全一致。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">PC 案例栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_pc_case_banner" class="form-control" name="row[cms_pc_case_banner]" type="text" value="{$values.cms_pc_case_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 案例栏目顶部横幅" data-media-recommended-width="1920" data-media-recommended-height="300" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_pc_case_banner" class="btn btn-danger faupload" data-input-id="c-cms_pc_case_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_pc_case_banner" class="btn btn-primary fachoose" data-input-id="c-cms_pc_case_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于工程案例列表和详情页顶部。当前项目建议 1920×300，JPG/WebP，建议 ≤1.5 MB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">PC 企业栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_pc_about_banner" class="form-control" name="row[cms_pc_about_banner]" type="text" value="{$values.cms_pc_about_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 企业栏目顶部横幅" data-media-recommended-width="1920" data-media-recommended-height="300" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_pc_about_banner" class="btn btn-danger faupload" data-input-id="c-cms_pc_about_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_pc_about_banner" class="btn btn-primary fachoose" data-input-id="c-cms_pc_about_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于关于、联系、荣誉、专利、相册、视频等企业栏目顶部。当前项目建议 1920×300，JPG/WebP，建议 ≤1.5 MB。</p>
+                </div>
+            </div>
+
+            <div class="page-header"><h4>移动端栏目横幅</h4><p class="text-muted">移动端各栏目列表/详情页顶部使用；移动端字段为空时，前台存在回退到对应 PC 横幅的兼容逻辑。</p></div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">移动端产品栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_mobile_product_banner" class="form-control" name="row[cms_mobile_product_banner]" type="text" value="{$values.cms_mobile_product_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动端产品栏目顶部横幅" data-media-recommended-width="750" data-media-recommended-height="240" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_mobile_product_banner" class="btn btn-danger faupload" data-input-id="c-cms_mobile_product_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_mobile_product_banner" class="btn btn-primary fachoose" data-input-id="c-cms_mobile_product_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于移动端产品列表和详情页顶部；建议 750×240，JPG/WebP，≤800 KB。留空时前台可回退到 PC 产品横幅。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">移动端新闻栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_mobile_news_banner" class="form-control" name="row[cms_mobile_news_banner]" type="text" value="{$values.cms_mobile_news_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动端新闻栏目顶部横幅" data-media-recommended-width="750" data-media-recommended-height="240" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_mobile_news_banner" class="btn btn-danger faupload" data-input-id="c-cms_mobile_news_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_mobile_news_banner" class="btn btn-primary fachoose" data-input-id="c-cms_mobile_news_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于移动端新闻列表和详情页顶部；建议 750×240，JPG/WebP，≤800 KB。留空时前台可回退到 PC 新闻横幅。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">移动端案例栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_mobile_case_banner" class="form-control" name="row[cms_mobile_case_banner]" type="text" value="{$values.cms_mobile_case_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动端案例栏目顶部横幅" data-media-recommended-width="750" data-media-recommended-height="240" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_mobile_case_banner" class="btn btn-danger faupload" data-input-id="c-cms_mobile_case_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_mobile_case_banner" class="btn btn-primary fachoose" data-input-id="c-cms_mobile_case_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于移动端案例列表和详情页顶部；建议 750×240，JPG/WebP，≤800 KB。留空时前台可回退到 PC 案例横幅。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">移动端企业栏目 Banner:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_mobile_about_banner" class="form-control" name="row[cms_mobile_about_banner]" type="text" value="{$values.cms_mobile_about_banner|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动端企业栏目顶部横幅" data-media-recommended-width="750" data-media-recommended-height="240" data-media-recommended-format="JPG/WebP" data-media-max-kb="800">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_mobile_about_banner" class="btn btn-danger faupload" data-input-id="c-cms_mobile_about_banner" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_mobile_about_banner" class="btn btn-primary fachoose" data-input-id="c-cms_mobile_about_banner" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">用于移动端关于、联系、荣誉、专利、相册和视频等企业栏目顶部；建议 750×240，JPG/WebP，≤800 KB。留空时前台可回退到 PC 企业横幅。</p>
+                </div>
+            </div>
+
+            <div class="page-header"><h4>社交与二维码</h4><p class="text-muted">二维码请保持正方形，不要拉伸；建议使用清晰原图，避免二次压缩影响识别。</p></div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">微信公众号二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_wechat_qr" class="form-control" name="row[cms_wechat_qr]" type="text" value="{$values.cms_wechat_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_wechat_qr" class="btn btn-danger faupload" data-input-id="c-cms_wechat_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_wechat_qr" class="btn btn-primary fachoose" data-input-id="c-cms_wechat_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">仅用于微信公众号社交关注，不再作为右侧客服二维码。推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">抖音二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_douyin_qr" class="form-control" name="row[cms_douyin_qr]" type="text" value="{$values.cms_douyin_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_douyin_qr" class="btn btn-danger faupload" data-input-id="c-cms_douyin_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_douyin_qr" class="btn btn-primary fachoose" data-input-id="c-cms_douyin_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">显示在首页及页脚。 推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">快手二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_kuaishou_qr" class="form-control" name="row[cms_kuaishou_qr]" type="text" value="{$values.cms_kuaishou_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_kuaishou_qr" class="btn btn-danger faupload" data-input-id="c-cms_kuaishou_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_kuaishou_qr" class="btn btn-primary fachoose" data-input-id="c-cms_kuaishou_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">显示在页脚。 推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">小红书二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_xiaohongshu_qr" class="form-control" name="row[cms_xiaohongshu_qr]" type="text" value="{$values.cms_xiaohongshu_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_xiaohongshu_qr" class="btn btn-danger faupload" data-input-id="c-cms_xiaohongshu_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_xiaohongshu_qr" class="btn btn-primary fachoose" data-input-id="c-cms_xiaohongshu_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">显示在页脚。 推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">视频号二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_video_qr" class="form-control" name="row[cms_video_qr]" type="text" value="{$values.cms_video_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_video_qr" class="btn btn-danger faupload" data-input-id="c-cms_video_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_video_qr" class="btn btn-primary fachoose" data-input-id="c-cms_video_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">显示在首页及页脚。 推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">B站二维码:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group">
+                        <input id="c-cms_bilibili_qr" class="form-control" name="row[cms_bilibili_qr]" type="text" value="{$values.cms_bilibili_qr|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="社交二维码" data-media-recommended-width="600" data-media-recommended-height="600" data-media-recommended-format="PNG/JPG" data-media-max-kb="500">
+                        <div class="input-group-addon no-border no-padding">
+                            <span><button type="button" id="faupload-cms_bilibili_qr" class="btn btn-danger faupload" data-input-id="c-cms_bilibili_qr" data-multiple="false"><i class="fa fa-upload"></i> 上传</button></span>
+                            <span><button type="button" id="fachoose-cms_bilibili_qr" class="btn btn-primary fachoose" data-input-id="c-cms_bilibili_qr" data-multiple="false"><i class="fa fa-list"></i> 选择</button></span>
+                        </div>
+                    </div>
+                    <p class="help-block">显示在页脚。 推荐 600×600 或更高的 1:1 清晰原图，PNG/JPG，建议 ≤500 KB。</p>
+                </div>
+            </div>
+
+            <div class="page-header"><h4>联系与备案</h4><p class="text-muted">用于页脚、联系页以及公共联系信息展示。</p></div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">服务热线:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[cms_phone]" type="text" value="{$values.cms_phone|htmlentities}">
+                    <p class="help-block">用于页脚/联系页面的服务热线文本；按希望前台直接显示的格式填写。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">联系邮箱:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[cms_email]" type="email" value="{$values.cms_email|htmlentities}" data-rule="email">
+                    <p class="help-block">企业公开联系邮箱；请填写完整邮箱地址。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">企业地址:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[cms_address]" type="text" value="{$values.cms_address|htmlentities}">
+                    <p class="help-block">企业对外联系地址，按希望前台展示的完整文本填写。</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-xs-12 col-sm-2">备案号:</label>
+                <div class="col-xs-12 col-sm-6">
+                    <input class="form-control" name="row[beian]" type="text" value="{$values.beian|htmlentities}">
+                    <p class="help-block">网站备案号文本，例如“皖ICP备XXXXXXXX号”；留空时对应位置不显示备案号。</p>
+                </div>
+            </div>
+
+            <div class="form-group layer-footer">
+                <label class="control-label col-xs-12 col-sm-2"></label>
+                <div class="col-xs-12 col-sm-6">
+                    <button type="submit" class="btn btn-primary btn-embossed disabled">保存配置</button>
+                    <button type="reset" class="btn btn-default btn-embossed">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

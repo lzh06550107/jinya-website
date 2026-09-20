@@ -1,0 +1,74 @@
+<div class="form-group cms-media-items-field">
+    <label class="control-label col-xs-12 col-sm-2">媒体项目:</label>
+    <div class="col-xs-12 col-sm-10">
+        <div class="cms-media-items-editor" data-media-items-editor data-input-prefix="[inputPrefix]">
+            <input type="hidden" name="[inputPrefix]" value="">
+            <div class="cms-media-items-list" data-media-items-list>
+                {foreach name="[mediaItems]" item="mediaItem" key="mediaIndex"}
+                <div class="panel panel-default cms-media-item" data-media-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-media-item-label>媒体项目</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="媒体项目操作">
+                            <button type="button" class="btn btn-default" data-media-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-media-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-media-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="title" name="[inputPrefix][{$mediaIndex}][title]" value="{$mediaItem.title|default=''|htmlentities}" placeholder="例如：厂房涂装工程"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图片:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="image" data-media-preview="image" data-media-upload="true" name="[inputPrefix][{$mediaIndex}][image]" value="{$mediaItem.image|default=''|htmlentities}" placeholder="上传、选择或填写图片地址"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">视频:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="video_url" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" name="[inputPrefix][{$mediaIndex}][video_url]" value="{$mediaItem.video_url|default=''|htmlentities}" placeholder="上传视频文件，或填写 MP4/WebM/Ogg / 播放器页面 URL"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">跳转链接:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="url" name="[inputPrefix][{$mediaIndex}][url]" value="{$mediaItem.url|default=''|htmlentities}" placeholder="可为空，例如：/news"></div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+
+            <script type="text/template" data-media-item-template>
+                <div class="panel panel-default cms-media-item" data-media-item>
+                    <div class="panel-heading clearfix">
+                        <strong class="pull-left" data-media-item-label>媒体项目</strong>
+                        <div class="btn-group btn-group-xs pull-right" role="group" aria-label="媒体项目操作">
+                            <button type="button" class="btn btn-default" data-media-item-up title="上移"><i class="fa fa-arrow-up"></i> 上移</button>
+                            <button type="button" class="btn btn-default" data-media-item-down title="下移"><i class="fa fa-arrow-down"></i> 下移</button>
+                            <button type="button" class="btn btn-danger" data-media-item-remove title="删除"><i class="fa fa-trash"></i> 删除</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="title" value="" placeholder="例如：厂房涂装工程"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">图片:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="image" data-media-preview="image" data-media-upload="true" value="" placeholder="上传、选择或填写图片地址"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">视频:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="video_url" data-media-preview="video" data-media-upload="true" data-media-mimetype="video/mp4,video/webm,video/ogg" value="" placeholder="上传视频文件，或填写 MP4/WebM/Ogg / 播放器页面 URL"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">跳转链接:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" type="text" data-media-field="url" value="" placeholder="可为空，例如：/news"></div>
+                        </div>
+                    </div>
+                </div>
+            </script>
+
+            <button type="button" class="btn btn-success" data-media-item-add><i class="fa fa-plus"></i> 添加媒体项目</button>
+            <p class="help-block">每个媒体项目可独立维护标题、图片、视频和跳转链接；同时配置图片和视频时优先显示视频，未配置视频时显示图片；使用上移/下移调整首页显示顺序。</p>
+        </div>
+    </div>
+</div>

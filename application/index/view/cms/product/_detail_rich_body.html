@@ -1,0 +1,102 @@
+{notempty name="content.sectionGroups.introduction"}
+<section class="jpd-section jpd-introduction" id="jpd-introduction" aria-labelledby="jpd-introduction-title">
+    <div class="jpd-section-heading"><span>PRODUCT INTRODUCTION</span><h2 id="jpd-introduction-title">产品简介</h2></div>
+    {volist name="content.sectionGroups.introduction" id="section" key="introIndex"}
+    <article class="jpd-intro-row{if condition="$introIndex%2==0"} is-reverse{/if}{if condition="empty($section.image) || (!empty($content.product.cover) && $section.image==$content.product.cover)"} is-text-only{/if}">
+        <div class="jpd-rich-text">
+            {notempty name="section.title"}<h3>{$section.title|htmlentities}</h3>{/notempty}
+            {notempty name="section.subtitle"}<p class="jpd-intro-subtitle">{$section.subtitle|htmlentities}</p>{/notempty}
+            {$section.content_html}
+        </div>
+        {if condition="!empty($section.image) && (empty($content.product.cover) || $section.image!=$content.product.cover)"}<figure><img src="{$section.image|htmlentities}" alt="{$section.title|default=$content.product.title|htmlentities}"></figure>{/if}
+    </article>
+    {/volist}
+</section>
+{elseif condition="!empty($content.product.content_html)" /}
+<section class="jpd-section jpd-introduction" id="jpd-introduction" aria-labelledby="jpd-introduction-title">
+    <div class="jpd-section-heading"><span>PRODUCT INTRODUCTION</span><h2 id="jpd-introduction-title">产品简介</h2></div>
+    <div class="jpd-rich-text jpd-rich-panel">{$content.product.content_html}</div>
+</section>
+{/notempty}
+
+{notempty name="content.featureItems"}
+<section class="jpd-section jpd-features" id="jpd-features" aria-labelledby="jpd-features-title">
+    <div class="jpd-section-heading"><span>PRODUCT FEATURES</span><h2 id="jpd-features-title">产品特点</h2><p>从材质、工艺与使用场景出发，突出该产品的核心能力。</p></div>
+    <div class="jpd-feature-grid jpd-feature-grid-count-{$content.featureItems|count}">
+        {volist name="content.featureItems" id="feature" key="featureIndex"}
+        <article class="jpd-feature-card"><em>{if condition="$featureIndex<10"}0{/if}{$featureIndex}</em><i class="fa fa-check-circle-o" aria-hidden="true"></i><p>{$feature|htmlentities}</p></article>
+        {/volist}
+    </div>
+</section>
+{/notempty}
+
+{notempty name="content.parameters"}
+<section class="jpd-section jpd-parameters" id="jpd-parameters" aria-labelledby="jpd-parameters-title">
+    <div class="jpd-section-heading"><span>SPECIFICATIONS</span><h2 id="jpd-parameters-title">规格参数</h2><p>具体尺寸、材质、数量与工艺以最终确认的订单和生产参数为准。</p></div>
+    <div class="jpd-parameter-groups">
+        {volist name="content.parameters" id="group"}
+        {notempty name="group.items"}
+        <article class="jpd-parameter-group">
+            <h3>{$group.name|htmlentities}</h3>
+            <dl>
+                {volist name="group.items" id="parameter"}
+                <div><dt>{$parameter.parameter_name|htmlentities}</dt><dd>{$parameter.parameter_value|htmlentities}{notempty name="parameter.unit"}<small>{$parameter.unit|htmlentities}</small>{/notempty}</dd></div>
+                {notempty name="parameter.paired_name"}<div><dt>{$parameter.paired_name|htmlentities}</dt><dd>{$parameter.paired_value|htmlentities}</dd></div>{/notempty}
+                {/volist}
+            </dl>
+        </article>
+        {/notempty}
+        {/volist}
+    </div>
+</section>
+{/notempty}
+
+{notempty name="content.applicationItems"}
+<section class="jpd-section jpd-applications" id="jpd-applications" aria-labelledby="jpd-applications-title">
+    <div class="jpd-section-heading"><span>APPLICATIONS</span><h2 id="jpd-applications-title">适用范围</h2><p>根据产品特性匹配不同包装、贴标及终端使用场景。</p></div>
+    <div class="jpd-application-grid jpd-application-grid-count-{$content.applicationItems|count}">
+        {volist name="content.applicationItems" id="application" key="applicationIndex"}
+        <div class="jpd-application-card"><span>{if condition="$applicationIndex<10"}0{/if}{$applicationIndex}</span><p>{$application|htmlentities}</p></div>
+        {/volist}
+    </div>
+</section>
+{/notempty}
+
+{notempty name="content.processSteps"}
+<section class="jpd-section jpd-process" id="jpd-process" aria-labelledby="jpd-process-title">
+    <div class="jpd-section-heading"><span>CUSTOM PROCESS</span><h2 id="jpd-process-title">定制流程</h2><p>从需求确认到生产交付，每一步都围绕最终使用效果展开。</p></div>
+    <ol class="jpd-process-list">
+        {volist name="content.processSteps" id="step" key="stepIndex"}
+        <li>
+            <span class="jpd-process-number">{if condition="$stepIndex<10"}0{/if}{$stepIndex}</span>
+            <div>{notempty name="step.title"}<h3>{$step.title|htmlentities}</h3>{/notempty}<p>{$step.description|htmlentities}</p></div>
+            {notempty name="step.image"}<figure><img src="{$step.image|htmlentities}" alt="{$step.title|default='定制流程'|htmlentities}"></figure>{/notempty}
+        </li>
+        {/volist}
+    </ol>
+</section>
+{/notempty}
+
+{notempty name="content.sectionGroups.precautions"}
+<section class="jpd-section jpd-precautions" aria-labelledby="jpd-precautions-title">
+    <div class="jpd-section-heading"><span>NOTES</span><h2 id="jpd-precautions-title">注意事项</h2></div>
+    <div class="jpd-note-list">
+        {volist name="content.sectionGroups.precautions" id="section"}
+        <article><i class="fa fa-info-circle" aria-hidden="true"></i><div>{notempty name="section.title"}<h3>{$section.title|htmlentities}</h3>{/notempty}{$section.content_html}</div></article>
+        {/volist}
+    </div>
+</section>
+{/notempty}
+
+{if condition="empty($content.processSteps) && !empty($content.sectionGroups.custom_text)"}
+<section class="jpd-section jpd-custom-sections">
+    {volist name="content.sectionGroups.custom_text" id="section"}
+    <article class="jpd-rich-panel">
+        {notempty name="section.title"}<h2>{$section.title|htmlentities}</h2>{/notempty}
+        {notempty name="section.subtitle"}<p class="jpd-intro-subtitle">{$section.subtitle|htmlentities}</p>{/notempty}
+        {notempty name="section.image"}<img class="jpd-custom-image" src="{$section.image|htmlentities}" alt="{$section.title|htmlentities}">{/notempty}
+        {$section.content_html}
+    </article>
+    {/volist}
+</section>
+{/if}

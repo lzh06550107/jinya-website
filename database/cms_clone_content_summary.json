@@ -1,0 +1,119 @@
+{
+  "products": 15,
+  "product_categories": 4,
+  "articles": 238,
+  "article_categories": 3,
+  "cases": 13,
+  "pages": 49,
+  "top_navigation": 8,
+  "navigation_total": 14,
+  "banners": 24,
+  "home_sections": 7,
+  "homepage_recommendations": {
+    "pc": {
+      "products": [
+        "fsq",
+        "rjq",
+        "zsq",
+        "hydp",
+        "jazdp",
+        "bxsdp",
+        "jgsgh"
+      ],
+      "cases": [
+        "hfsmkj",
+        "ahsmms",
+        "wqgcym",
+        "hfhdsy",
+        "ahkcmt4645",
+        "ahyxfz"
+      ],
+      "articles": [
+        "jcmclc",
+        "kcmfsz5731",
+        "hfcffx",
+        "wqfxxc",
+        "ahcfwq7739",
+        "kcmtlx",
+        "kcmfsq5567",
+        "ahkcmc",
+        "wsmyly",
+        "xzzsqx",
+        "wqfsqd",
+        "rhbbfs"
+      ]
+    },
+    "mobile": {
+      "products": [
+        "fsq",
+        "rjq",
+        "zsq"
+      ],
+      "cases": [
+        "hfsmkj",
+        "ahsmms",
+        "wqgcym",
+        "hfhdsy",
+        "ahkcmt4645",
+        "ahyxfz",
+        "ahkcmt8586",
+        "zlhkcx",
+        "czdthx",
+        "hfndbw"
+      ],
+      "articles": [
+        "cljcfd",
+        "hfcsgx",
+        "ahmmsm",
+        "hfwdrl"
+      ]
+    }
+  },
+  "resolved_media": 1695,
+  "missing_media": 28,
+  "warnings": [
+    "missing media: mobile/images01/20251206/1c5bf3ca1205420c9b6ae3c96c6a4c95_copy.jpeg",
+    "missing media: mobile/images01/20251206/3643604940fb4c10bae90d4aadfd22d4_copy.jpeg",
+    "missing media: mobile/images01/20251206/6c2138532b714850a0f6452d36c78e05_copy.jpeg",
+    "missing media: mobile/images01/20251206/b1bacc2322034affa2c00b592ad5649c_copy.jpeg",
+    "missing media: mobile/images01/20251206/ed6882abdb084edfb339bc6157af5343_copy.jpeg",
+    "missing media: mobile/mp/agw/article_material/open_image/get",
+    "missing media: mobile/resource/images/4c519beac0554b088a4491d5d1a4b0c9_8_copy.jpg",
+    "missing media: mobile/resource/images/97cf27de7da6407f977f50c71cde1e0b_12_copy.jpg",
+    "missing media: pc/2b8fd4c754/d/2b8fd4c7545f599960457fbd1fe2439d_1.mp4",
+    "missing media: pc/resource/images/0ee6bd66a0774f599020f8f6a532d1b8_10.jpg",
+    "missing media: pc/resource/images/0ee6bd66a0774f599020f8f6a532d1b8_12.jpg",
+    "missing media: pc/resource/images/0ee6bd66a0774f599020f8f6a532d1b8_4.jpg",
+    "missing media: pc/resource/images/0ee6bd66a0774f599020f8f6a532d1b8_6.jpg",
+    "missing media: pc/resource/images/0ee6bd66a0774f599020f8f6a532d1b8_8.jpg",
+    "missing media: pc/resource/images/20c0d8c918214384873209a52ffc262a_6.png",
+    "missing media: pc/resource/images/20c0d8c918214384873209a52ffc262a_8.png",
+    "missing media: pc/resource/images/232270a1adb64a849d077b537a06eb54_13.jpg",
+    "missing media: pc/resource/images/232270a1adb64a849d077b537a06eb54_25.jpg",
+    "missing media: pc/resource/images/2ef438c26a534659834534af8a6d20cf_2.png",
+    "missing media: pc/resource/images/3654c3c71c214255ad5cb30966463260_2.jpg",
+    "missing media: pc/resource/images/45dcec72b04f4dd8aec0f8cacf0b6124_32.jpg",
+    "missing media: pc/resource/images/4c519beac0554b088a4491d5d1a4b0c9_8.jpg",
+    "missing media: pc/resource/images/500650f6176545b0a2e2a6ebedd4cdd9_2.jpg",
+    "missing media: pc/resource/images/97cf27de7da6407f977f50c71cde1e0b_12.jpg",
+    "missing media: pc/resource/images/a4956782a7414b1290c55920378c46e4_16.jpg",
+    "missing media: pc/resource/images/b05b5354d52d4edb9e7718c97f1e71a1_2.png",
+    "missing media: pc/resource/images/b05b5354d52d4edb9e7718c97f1e71a1_4.jpg",
+    "missing media: pc/resource/images/b05b5354d52d4edb9e7718c97f1e71a1_6.jpg"
+  ],
+  "source_manifest": {
+    "generated_from": "frozen clone sources",
+    "pc": {
+      "files": 489,
+      "html_files": 344,
+      "inventory_sha256": "b1c3a352db2cb7890c77fc3b25b9bff94e2e503f3d9fdf4a36c52b4480e29d31",
+      "homepage_sha256": "3171edefe338f9d7c282e1b34ef90782e8a02f88b63d95bc1793dfc4fc656718"
+    },
+    "mobile": {
+      "files": 420,
+      "html_files": 368,
+      "inventory_sha256": "ef5cd955062652a983edadc49dd3e52402bc8e44e14a6a224a6edbb2e5a7b8fd",
+      "homepage_sha256": "e5b03affdbd85db0f739fd1e1455ab39436f0d29334b71e4cdeae61eb9d1048a"
+    }
+  }
+}
