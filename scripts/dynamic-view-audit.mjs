@@ -143,6 +143,25 @@ for (const token of ["about.config.social_url_1", "about.config.social_url_2", "
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
 
+const bannerCodec = read("application/common/service/cms/BannerHighlightCodec.php");
+for (const token of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png", "applyIconOverrides"]) {
+  expect(bannerCodec.includes(token), `Banner highlight codec missing editable icon contract ${token}`);
+}
+const bannerForm = read("application/admin/view/cms/banner/_form.html");
+for (const token of ['name="row[highlight_icon_1]"', 'name="row[highlight_icon_2]"', 'name="row[highlight_icon_3]"']) {
+  expect(bannerForm.includes(token), `Banner admin form missing editable highlight icon field ${token}`);
+}
+const bannerModel = read("application/common/model/cms/Banner.php");
+for (const token of ["highlight_icon_1", "highlight_icon_2", "highlight_icon_3"]) {
+  expect(bannerModel.includes(token), `Banner model missing admin highlight icon accessor ${token}`);
+}
+const abstractRender = read("application/common/service/cms/render/AbstractRenderService.php");
+expect(abstractRender.includes("bannerHighlights->homeHero"), "Home hero render must upgrade legacy banner highlight icons");
+for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png"]) {
+  expect(fs.existsSync(path.join(root, "html", "assets", "img", icon)), `Missing static home banner icon ${icon}`);
+  expect(fs.existsSync(path.join(root, "public", "assets", "jinya", "img", icon)), `Missing published home banner icon ${icon}`);
+}
+
 
 // HTML baseline seed is part of the runtime contract.
 {
