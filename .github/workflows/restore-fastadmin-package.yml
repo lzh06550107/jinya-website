@@ -1,0 +1,127 @@
+name: Restore FastAdmin Package
+
+on:
+  push:
+    branches:
+      - feature/dynamic-html-views-20260920
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    if: ${{ !contains(github.event.head_commit.message, 'restore(fastadmin): sync missing official package files') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Clone official FastAdmin 1.6.x
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch 1.6.x-dev https://github.com/fastadminnet/fastadmin.git /tmp/fastadmin
+
+      - name: Restore every missing tracked FastAdmin file
+        run: |
+          set -euo pipefail
+          cd /tmp/fastadmin
+          git ls-files -z > /tmp/fastadmin-files
+          cd "$GITHUB_WORKSPACE"
+          restored=0
+          while IFS= read -r -d '' path; do
+            case "$path" in
+              .gitee/*|public/admin.php)
+                continue
+                ;;
+            esac
+            if [ ! -e "$path" ]; then
+              mkdir -p "$(dirname "$path")"
+              cp -p "/tmp/fastadmin/$path" "$path"
+              echo "restored: $path"
+              restored=$((restored + 1))
+            fi
+          done < /tmp/fastadmin-files
+          echo "Restored tracked files: $restored"
+
+      - name: Setup Node.js for official frontend dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate FastAdmin public/assets/libs
+        run: |
+          set -euo pipefail
+          cd /tmp/fastadmin
+          sed -i 's#https://mirrors.tencent.com/npm/#https://registry.npmjs.org/#g' package-lock.json
+          npm ci --no-audit --no-fund
+          npx grunt deploy
+          mkdir -p "$GITHUB_WORKSPACE/public/assets/libs"
+          rsync -a public/assets/libs/ "$GITHUB_WORKSPACE/public/assets/libs/"
+
+      - name: Verify FastAdmin package completeness
+        run: |
+          set -euo pipefail
+          missing=0
+          cd /tmp/fastadmin
+          git ls-files -z > /tmp/fastadmin-files
+          cd "$GITHUB_WORKSPACE"
+          while IFS= read -r -d '' path; do
+            case "$path" in
+              .gitee/*|public/admin.php)
+                continue
+                ;;
+            esac
+            if [ ! -e "$path" ]; then
+              echo "::error::Missing FastAdmin file: $path"
+              missing=$((missing + 1))
+            fi
+          done < /tmp/fastadmin-files
+
+          required=(
+            public/assets/css/backend.css
+            public/assets/css/backend.min.css
+            public/assets/img/login-head.png
+            public/assets/img/avatar.png
+            public/assets/js/require.min.js
+            public/assets/js/require-backend.js
+            public/assets/js/require-backend.min.js
+            public/assets/fonts/glyphicons-halflings-regular.woff2
+            public/assets/libs/jquery/dist/jquery.min.js
+            public/assets/libs/bootstrap/dist/js/bootstrap.min.js
+            public/assets/libs/fastadmin-layer/dist/layer.js
+            public/assets/libs/nice-validator/dist/jquery.validator.js
+            public/assets/libs/fastadmin-selectpage/selectpage.js
+            public/assets/libs/font-awesome/css/font-awesome.min.css
+            public/assets/libs/moment/moment.js
+            public/assets/libs/require-css/css.min.js
+          )
+          for path in "${required[@]}"; do
+            if [ ! -f "$path" ]; then
+              echo "::error::Missing FastAdmin runtime asset: $path"
+              missing=$((missing + 1))
+            fi
+          done
+
+          echo "FastAdmin libs files: $(find public/assets/libs -type f | wc -l)"
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::$missing FastAdmin files are still missing"
+            exit 1
+          fi
+
+      - name: Commit restored package files
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/restore-fastadmin-package.yml
+          git add -A
+          git add -f public/assets/libs
+          if git diff --cached --quiet; then
+            echo "Nothing to restore."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "restore(fastadmin): sync missing official package files"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
