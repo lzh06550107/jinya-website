@@ -135,11 +135,13 @@ const bagsCodec = read("application/common/service/cms/BagsPageBlockConfigCodec.
 for (const token of ["bags_compare_brand", "bags_compare_footer"]) {
   expect(bagsCodec.includes(token), `Bags codec missing ${token}`);
 }
-const bagsFactory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
-expect(
-  bagsFactory.includes("$blockKey === 'bags_products'") && bagsFactory.includes("$extra['items'][0]['group'] = 'main'"),
-  "Bags product center must promote the first historical item to the main card when group=main is missing",
-);
+const productFactory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+for (const blockKey of ["bags_products", "boxes_products"]) {
+  expect(
+    productFactory.includes("'" + blockKey + "'") && productFactory.includes("$extra['items'][0]['group'] = 'main'"),
+    `${blockKey} must promote the first historical item to the main card when group=main is missing`,
+  );
+}
 const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCodec.php");
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
@@ -250,6 +252,10 @@ for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "ho
   expect(
     baselineSql.includes('"image":"/assets/jinya/img/bags-prod-1.jpg","subtitle":"","badge":"","group":"main"'),
     "HTML baseline must mark the first bags product image as the main card",
+  );
+  expect(
+    baselineSql.includes('"image":"/assets/jinya/img/boxes-prod-1.jpg","subtitle":"","badge":"","group":"main"'),
+    "HTML baseline must mark the first boxes product image as the main card",
   );
   const installer = read("application/common/service/cms/InstallerService.php");
   for (const token of [

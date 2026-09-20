@@ -110,7 +110,7 @@ class PageBlockViewModelFactory
                 array_unshift($extra['tabs_items'], $allTab);
             }
         }
-        if ($blockKey === 'bags_products' && !empty($extra['items'])) {
+        if (in_array($blockKey, ['bags_products', 'boxes_products'], true) && !empty($extra['items'])) {
             $hasMain = false;
             foreach ($extra['items'] as $productItem) {
                 if (isset($productItem['group']) && trim((string)$productItem['group']) === 'main') {
@@ -120,9 +120,9 @@ class PageBlockViewModelFactory
             }
             if (!$hasMain) {
                 // Historical HTML-baseline data stored every product image with an
-                // empty group, while the approved static layout treats the first
-                // image as the large left-hand hero card. Preserve that visual
-                // contract without requiring a database migration.
+                // empty group, while the approved static bags/boxes layouts treat
+                // the first image as the large left-hand hero card. Preserve that
+                // visual contract without requiring a database migration.
                 $extra['items'][0]['group'] = 'main';
             }
         }
