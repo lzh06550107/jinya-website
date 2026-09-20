@@ -34,10 +34,10 @@ class PageContentBlockEditorSchema
 
         // 不干胶 / 卷标（11）
         $schemas['label_hero'] = self::make('label', '不干胶/卷标', 'Banner', 'label_section',
-            ['title','content','image','mobile_image'], [],
-            ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
-            ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
+            ['title','subtitle','content','image','mobile_image'], [],
+            ['title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'], [],
+            ['title'=>'Banner 标题','subtitle'=>'标题右侧短句','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
+            ['title'=>'卖点标题','text'=>'卖点说明','badge'=>'图标类型','mobile_title'=>'移动卖点标题','mobile_text'=>'移动卖点说明','mobile_badge'=>'移动图标类型']
         );
         $schemas['label_quote'] = self::make('label', '不干胶/卷标', '为什么选择金亚', 'label_section',
             ['title'], ['label_consult_text','label_consult_url','label_phone','label_video_url'],
@@ -59,22 +59,23 @@ class PageContentBlockEditorSchema
                 'mobile_image_top'=>'移动左上图片','mobile_image_bottom'=>'移动左下图片','mobile_image'=>'移动右侧大图'
             ]
         );
-        $schemas['label_tech'] = self::make('label', '不干胶/卷标', '标签技术说明', 'label_section',
-            ['title','content','image','mobile_image'], ['label_button_text','label_button_url'], [], [],
-            ['content'=>'说明文字','image'=>'PC 背景图','mobile_image'=>'移动背景图'], [],
-            ['label_button_text'=>'咨询按钮文字','label_button_url'=>'咨询按钮链接']
+        $schemas['label_tech'] = self::make('label', '不干胶/卷标', '耐高低温视觉图', 'label_section',
+            ['title','image','mobile_image'], [], [], [],
+            ['title'=>'图片替代文字','image'=>'PC 整图','mobile_image'=>'移动整图']
         );
         $schemas['label_compare'] = self::make('label', '不干胶/卷标', '胶水材质对比', 'label_section',
-            ['title','subtitle'], [],
+            ['title','subtitle','image','mobile_image'], ['label_secondary_title'],
             ['title','text','subtitle','badge','value','group','mobile_title','mobile_text','mobile_subtitle','mobile_badge','pc_visible','mobile_visible'],
             ['compare'=>'胶水对比行','parameter'=>'产品参数行'],
-            [], ['title'=>'项目/产品名称','text'=>'第二列','subtitle'=>'第三列','badge'=>'第四列','value'=>'第五列/服务咨询','group'=>'表格分组','mobile_title'=>'移动名称','mobile_text'=>'移动第二列','mobile_subtitle'=>'移动第三列','mobile_badge'=>'移动第四列']
+            ['image'=>'PC 胶水结构对比图','mobile_image'=>'移动胶水结构对比图'], ['title'=>'项目/产品名称','text'=>'第二列','subtitle'=>'第三列','badge'=>'第四列','value'=>'第五列/服务咨询','group'=>'表格分组','mobile_title'=>'移动名称','mobile_text'=>'移动第二列','mobile_subtitle'=>'移动第三列','mobile_badge'=>'移动第四列'],
+            ['label_secondary_title'=>'参数说明标题']
         );
-        $schemas['label_materials'] = self::make('label', '不干胶/卷标', '常用工艺', 'label_section',
-            ['title'], [],
+        $schemas['label_materials'] = self::make('label', '不干胶/卷标', '常用工艺与不干胶印刷', 'label_section',
+            ['title'], ['label_print_title','label_print_points'],
             ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
-            ['craft-image'=>'工艺图片','craft-note'=>'工艺说明'],
-            [], ['title'=>'工艺名称','text'=>'工艺说明','image'=>'工艺图片','group'=>'项目类型','mobile_title'=>'移动工艺名称','mobile_text'=>'移动说明','mobile_image'=>'移动图片']
+            ['craft-image'=>'工艺图片','craft-note'=>'工艺说明','print-image'=>'不干胶印刷轮播图'],
+            [], ['title'=>'工艺/图片名称','text'=>'工艺说明','image'=>'图片','group'=>'项目类型','mobile_title'=>'移动名称','mobile_text'=>'移动说明','mobile_image'=>'移动图片'],
+            ['label_print_title'=>'不干胶印刷标题','label_print_points'=>'不干胶印刷要点（Markdown/换行）']
         );
         $schemas['label_elements'] = self::make('label', '不干胶/卷标', '卷标三要素', 'label_section',
             ['title'], [],
@@ -113,13 +114,17 @@ class PageContentBlockEditorSchema
             ['title'=>'产品名称','image'=>'产品图片','group'=>'展示位置','mobile_title'=>'移动产品名称','mobile_image'=>'移动产品图片']
         );
         $schemas['bags_compare'] = self::make('bags', '包装袋无版印刷', '专版和无版印刷怎么选', 'bags_section',
-            ['image','mobile_image'], [], [], [],
-            ['image'=>'PC 整图','mobile_image'=>'移动整图']
+            ['title','subtitle','content','image','mobile_image'], ['bags_compare_brand','bags_compare_footer'],
+            ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
+            ['plate'=>'专版印刷','digital'=>'无版印刷'],
+            ['title'=>'主标题','subtitle'=>'副标题','content'=>'选择说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
+            ['title'=>'方案标题','text'=>'方案要点','badge'=>'图标类型','group'=>'方案类型','mobile_title'=>'移动方案标题','mobile_text'=>'移动方案要点','mobile_badge'=>'移动图标类型'],
+            ['bags_compare_brand'=>'品牌小标题','bags_compare_footer'=>'底部提示']
         );
         $schemas['bags_cases'] = self::make('bags', '包装袋无版印刷', '应用案例', 'bags_section',
-            ['title','subtitle','link'], ['bags_tabs'],
+            ['title','subtitle','image','mobile_image','link'], ['bags_tabs'],
             ['title','text','image','url','subtitle','group','mobile_title','mobile_text','mobile_image','mobile_subtitle','mobile_url','pc_visible','mobile_visible'], [],
-            ['link'=>'查看更多产品'], ['title'=>'案例标题','text'=>'案例说明','image'=>'案例图片','url'=>'MORE+ 链接','subtitle'=>'底部文字','group'=>'所属 Tabs','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动图片','mobile_subtitle'=>'移动底部文字','mobile_url'=>'移动链接'],
+            ['image'=>'PC 案例区背景图','mobile_image'=>'移动案例区背景图','link'=>'查看更多产品'], ['title'=>'案例标题','text'=>'案例说明','image'=>'案例图片','url'=>'MORE+ 链接','subtitle'=>'底部文字','group'=>'所属 Tabs','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动图片','mobile_subtitle'=>'移动底部文字','mobile_url'=>'移动链接'],
             ['bags_tabs'=>'筛选 Tabs']
         );
         $schemas['bags_cases']['dynamic_group_source'] = 'bags_tabs';
@@ -143,11 +148,14 @@ class PageContentBlockEditorSchema
         );
         $schemas['bags_process'] = self::make('bags', '包装袋无版印刷', '定制流程', 'bags_section',
             ['title'], [],
-            ['title','text','subtitle','badge','mobile_title','mobile_text','mobile_subtitle','mobile_badge','pc_visible','mobile_visible'], [],
-            [], ['title'=>'步骤标题','text'=>'步骤说明','subtitle'=>'步骤编号','badge'=>'图标类型','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_subtitle'=>'移动编号','mobile_badge'=>'移动图标类型']
+            ['title','text','subtitle','badge','image','group','mobile_title','mobile_text','mobile_subtitle','mobile_badge','mobile_image','pc_visible','mobile_visible'],
+            ['step'=>'流程步骤','photo'=>'流程场景图'],
+            [], ['title'=>'步骤/图片标题','text'=>'步骤说明','subtitle'=>'步骤编号','badge'=>'图标类型','image'=>'场景图片','group'=>'项目类型','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_subtitle'=>'移动编号','mobile_badge'=>'移动图标类型','mobile_image'=>'移动场景图片']
         );
-        $schemas['bags_cta'] = self::make('bags', '包装袋无版印刷', '底部整图', 'bags_section',
-            ['image','mobile_image'], [], [], [], ['image'=>'PC 整图','mobile_image'=>'移动整图']
+        $schemas['bags_cta'] = self::make('bags', '包装袋无版印刷', '六项服务保障', 'bags_section',
+            [], [],
+            ['title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'], [],
+            [], ['title'=>'保障标题','text'=>'英文/补充说明','badge'=>'图标类型','mobile_title'=>'移动保障标题','mobile_text'=>'移动说明','mobile_badge'=>'移动图标类型']
         );
 
         // 彩盒（11）
@@ -258,6 +266,7 @@ class PageContentBlockEditorSchema
         $schemas['label_materials']['group_item_fields'] = [
             'craft-image' => ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
             'craft-note' => ['title','text','group','mobile_title','mobile_text','pc_visible','mobile_visible'],
+            'print-image' => ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
         ];
         $schemas['label_elements']['group_item_fields'] = [
             'intro-direction' => ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
@@ -265,8 +274,12 @@ class PageContentBlockEditorSchema
             'intro-diameter' => ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
         ];
         $schemas['label_service']['group_item_fields'] = [
-            'process' => ['title','badge','group','mobile_title','mobile_badge','pc_visible','mobile_visible'],
+            'process' => ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
             'guarantee' => ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
+        ];
+        $schemas['bags_process']['group_item_fields'] = [
+            'step' => ['title','text','subtitle','badge','group','mobile_title','mobile_text','mobile_subtitle','mobile_badge','pc_visible','mobile_visible'],
+            'photo' => ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
         ];
         $schemas['label_advantages']['group_item_fields'] = [
             'photo' => ['image','group','mobile_image','pc_visible','mobile_visible'],
@@ -277,7 +290,7 @@ class PageContentBlockEditorSchema
         // badge fields are ordinary text/markers and must stay plain inputs.
         foreach ([
             'label_hero','label_service','label_advantages',
-            'bags_hero','bags_process',
+            'bags_hero','bags_compare','bags_process','bags_cta',
             'boxes_hero','boxes_services',
             'about_hero','about_culture_source',
             'contact_hero','contact_info',
@@ -325,7 +338,8 @@ class PageContentBlockEditorSchema
             'bags_cases' => ['案例','添加案例'],
             'bags_samples' => ['样品','添加样品'],
             'bags_crafts' => ['工艺','添加工艺'],
-            'bags_process' => ['流程步骤','添加流程步骤'],
+            'bags_process' => ['流程项目','添加流程项目'],
+            'bags_cta' => ['服务保障','添加服务保障'],
             'boxes_hero' => ['卖点','添加卖点'],
             'boxes_products' => ['产品','添加产品'],
             'boxes_value' => ['价值图文','添加价值图文'],
@@ -449,6 +463,10 @@ class PageContentBlockEditorSchema
             'label_button_url' => '支持站内相对地址或完整 URL。',
             'label_video_url' => '左侧展示视频；支持上传 MP4/WebM/Ogg，或填写浏览器可直接播放的视频地址。',
             'bags_tabs' => '每行一个选项，格式：显示文字|分组值。',
+            'label_print_title' => '对应 html/labels.html 的“不干胶印刷”独立区块标题。',
+            'label_print_points' => '对应“不干胶印刷”左侧要点，支持 Markdown 和换行。',
+            'bags_compare_brand' => '对应专版/无版对比区左侧 JINYA PACKAGE 小标题。',
+            'bags_compare_footer' => '对应对比区底部“按需要定制 灵活可控”等提示。',
             'contact_map_image' => '静态地图/位置示意图。未启用百度地图、AK/坐标缺失或 API 加载失败时自动显示该图片。',
             'contact_map_provider' => '选择“百度地图”后才会尝试加载 JSAPI；默认“静态图片”保持现有行为。',
             'contact_baidu_ak' => '填写百度地图开放平台申请的“浏览器端 AK”。建议在百度控制台配置 Referer 白名单。',
