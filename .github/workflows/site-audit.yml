@@ -27,6 +27,9 @@ jobs:
       - name: Run dynamic view contract audit
         run: node scripts/dynamic-view-audit.mjs
 
+      - name: Install PHP dependencies for template compilation
+        run: composer install --no-interaction --prefer-dist --no-progress
+
       - name: Compile html-baseline ThinkPHP views
         run: php tests/cms_html_baseline_template_compile_test.php
 
