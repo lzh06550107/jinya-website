@@ -16,6 +16,10 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-metric-field="title" name="[inputPrefix][{$metricIndex}][title]" value="{$metric.title|default=''|htmlentities}" placeholder="例如：个性化定制"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-xs-12 col-sm-2">前缀:</label>
                             <div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="prefix" name="[inputPrefix][{$metricIndex}][prefix]" value="{$metric.prefix|default=''|htmlentities}" placeholder="例如：超"></div>
                             <label class="control-label col-xs-12 col-sm-2">数值:</label>
@@ -47,6 +51,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label>
+                            <div class="col-xs-12 col-sm-10"><input class="form-control" data-metric-field="title" name="[inputPrefix][{$metricIndex}][title]" value="{$metric.title|default=''|htmlentities}" placeholder="例如：个性化定制"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-metric-field="title" value="" placeholder="例如：个性化定制"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-xs-12 col-sm-2">前缀:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="prefix" value="" placeholder="例如：超"></div>
                             <label class="control-label col-xs-12 col-sm-2">数值:</label><div class="col-xs-12 col-sm-4"><input class="form-control" data-metric-field="value" value="" placeholder="例如：20"></div>
                         </div>
@@ -61,7 +72,7 @@
                 </div>
             </script>
             <button type="button" class="btn btn-success" data-metric-item-add><i class="fa fa-plus"></i> 添加服务指标</button>
-            <p class="help-block">前缀当前仅 PC 首页使用；数值、单位、说明和图标按现有前台模板输出。使用上移/下移调整显示顺序。</p>
+            <p class="help-block">新版首页“一站式服务”优先使用“标题 + 说明 + 图标”；前缀/数值/单位保留兼容旧数据。使用上移/下移调整显示顺序。</p>
         </div>
     </div>
 </div>
