@@ -453,6 +453,11 @@ input,textarea{ font:inherit; }
   background:var(--blue); border-color:var(--blue); color:#fff;
 }
 
+.gallery-tabs button[aria-disabled="true"],
+.app-tabs button[aria-disabled="true"]{
+  cursor:default;
+}
+
 
 /* Homepage production workshop — reference layout: clean 3×2 grid with
    centered titles and descriptive copy beneath each production image. */

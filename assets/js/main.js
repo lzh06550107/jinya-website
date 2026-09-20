@@ -235,22 +235,6 @@
     restart();
   });
 
-  // Generic tabs: any [data-tabs] wrapper with [data-tab] buttons controlling [data-panel] targets
-  document.querySelectorAll("[data-tabs]").forEach(function(group){
-    var buttons = group.querySelectorAll("[data-tab]");
-    var scope = group.closest("[data-tab-scope]") || document;
-    buttons.forEach(function(btn){
-      btn.addEventListener("click", function(){
-        var target = btn.getAttribute("data-tab");
-        buttons.forEach(function(b){ b.classList.remove("active"); });
-        btn.classList.add("active");
-        scope.querySelectorAll("[data-panel]").forEach(function(p){
-          p.classList.toggle("active", p.getAttribute("data-panel") === target);
-        });
-      });
-    });
-  });
-
   // Back to top
   var topBtn = document.querySelector(".to-top");
   if(topBtn){

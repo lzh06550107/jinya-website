@@ -168,6 +168,22 @@ for (const page of allPages) {
     fail(page, "当前站点没有留言表单，页面不得显示“在线留言”入口");
   }
 
+
+  if (html.includes("data-tabs") || html.includes("data-tab=") || html.includes("data-panel")) {
+    fail(page, "当前静态站点不得保留无内容面板的 Tab 交互钩子");
+  }
+
+  if (baseName === "bags.html") {
+    const staticTabCount = (html.match(/aria-disabled="true"/g) || []).length;
+    if (staticTabCount < 8) {
+      fail(page, `包装袋页静态分类标签数量异常: ${staticTabCount}`);
+    }
+  }
+
+  if (baseName === "news.html" && !html.includes('aria-disabled="true"')) {
+    fail(page, "新闻分类标签应为静态不可交互状态");
+  }
+
   if (baseName === "news-detail.html") {
     if (!html.includes("assets/js/news-detail.js?v=1")) {
       fail(page, "新闻详情页必须使用共享 news-detail.js");
@@ -306,6 +322,10 @@ if (js.includes("releaseVersion") || js.includes("pageLinkPattern")) {
 }
 if (!js.includes("function syncNavState()")) {
   fail("assets/js/main.js", "缺少导航 aria/open 状态同步");
+}
+
+if (js.includes('[data-tabs]') || js.includes('[data-panel]')) {
+  fail("assets/js/main.js", "已移除的通用 Tab 假交互逻辑重新出现");
 }
 
 
