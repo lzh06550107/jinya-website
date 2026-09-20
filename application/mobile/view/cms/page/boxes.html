@@ -1,7 +1,8 @@
-{include file="cms/common/strict_header" /}
+{include file="cms/layout/header" /}
 <link rel="stylesheet" href="__CDN__/assets/css/cms-boxes-page.css?v={$cmsSite.version|default='1.0'}&source=20260816-boxes">
 <link rel="stylesheet" href="__CDN__/assets/css/cms-structured-mobile-hero.css?v={$cmsSite.version|default='1.0'}&source=20260817-mobile-hero">
-<div class="cms-boxes-page" data-page="boxes"><main>
+<main>
+<div class="cms-boxes-page" data-page="boxes">
 {volist name="content.blocks" id="block"}
 {switch name="block.key"}
 {case value="boxes_hero"}{include file="cms/page/boxes/hero" /}{/case}
@@ -17,6 +18,6 @@
 {case value="boxes_services"}{include file="cms/page/boxes/services" /}{/case}
 {/switch}
 {/volist}
-</main></div>
+</div>
 <script src="__CDN__/assets/js/cms-boxes-page.js?v={$cmsSite.version|default='1.0'}&source=20260816-boxes"></script>
-{include file="cms/common/strict_footer" /}
+{include file="cms/layout/footer" /}

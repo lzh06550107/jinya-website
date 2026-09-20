@@ -1,7 +1,8 @@
-{include file="cms/common/strict_header" /}
+{include file="cms/layout/header" /}
 <link rel="stylesheet" href="__CDN__/assets/css/cms-about-page.css?v={$cmsSite.version|default='1.0'}&source=20260816-about">
 <link rel="stylesheet" href="__CDN__/assets/css/cms-pc-inner-banner.css?v={$cmsSite.version|default='1.0'}&layout=background-copy-optional-r1">
-<div class="cms-about-page" data-page="about" data-page-title="{$content.page.title|default=''|htmlentities}"><main>
+<main>
+<div class="cms-about-page" data-page="about" data-page-title="{$content.page.title|default=''|htmlentities}">
 {volist name="content.blocks" id="block"}
 {switch name="block.key"}
 {case value="about_hero"}{include file="cms/page/about/hero" /}{/case}
@@ -10,6 +11,6 @@
 {case value="about_culture_source"}{include file="cms/page/about/culture" /}{/case}
 {/switch}
 {/volist}
-</main></div>
+</div>
 <script src="__CDN__/assets/js/cms-about-page.js?v={$cmsSite.version|default='1.0'}&source=20260816-about"></script>
-{include file="cms/common/strict_footer" /}
+{include file="cms/layout/footer" /}
