@@ -453,8 +453,6 @@ input,textarea{ font:inherit; }
   background:var(--blue); border-color:var(--blue); color:#fff;
 }
 
-.gallery-panel.active{ display:block; }
-
 
 /* Homepage production workshop — reference layout: clean 3×2 grid with
    centered titles and descriptive copy beneath each production image. */
@@ -610,7 +608,6 @@ input,textarea{ font:inherit; }
 .pm-04 .photos img{ width:100%; height:100%; object-fit:cover; }
 .product-section{ background:#fff; }
 .product-center-block{ overflow:hidden; border-radius:0; }
-.product-center-block .source-strip{ margin-top:0; border-radius:0; }
 
 .service-cta{
   position:relative; z-index:1; min-height:265px; margin-top:0; overflow:hidden;
@@ -655,18 +652,6 @@ input,textarea{ font:inherit; }
   .service-cta-copy h3{ font-size:21px; }
   .service-cta-features{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px 10px; }
 }
-
-/* icon feature cards */
-
-
-
-.icon-card .ic{
-  width:56px; height:56px; margin:0 auto 16px; border-radius:50%;
-  background:var(--bg-alt); display:flex; align-items:center; justify-content:center;
-}
-.icon-card .ic svg{ width:28px; height:28px; color:var(--red); }
-
-
 
 /* 彩盒页：效果图专属细节、工艺/材质卡片与底部优势区 */
 .boxes-detail-grid{
@@ -741,13 +726,6 @@ input,textarea{ font:inherit; }
   .boxes-card-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
   
 }
-
-/* step cards (定制流程/服务流程) */
-
-.step-card .num{ font-size:13px; color:var(--blue); font-weight:700; font-family:Georgia,serif; }
-.step-card .ic{ width:44px; height:44px; margin:10px auto 12px; color:var(--ink); }
-.step-card .ic svg{ width:100%; height:100%; }
-
 
 .bags-process-flow{
   display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px;
@@ -948,11 +926,7 @@ input,textarea{ font:inherit; }
 
 
 
-.cta-designer-text p.small{ color:#9a7332; font-weight:500; margin-top:2px; }
-@media (max-width:700px){
-  
-  .cta-designer-text p.small{ display:none; }
-}
+
 
 
 /* ==========================================================================
@@ -1238,14 +1212,6 @@ input,textarea{ font:inherit; }
   .tech-copy h2{ font-size:26px; }
 }
 
-/* craft process rows (labels page) */
-
-
-
-
-.craft-row .ph{ border-radius:var(--radius); overflow:hidden; aspect-ratio:16/10; }
-.craft-row .ph img{ width:100%; height:100%; object-fit:cover; }
-.craft-row.rev .ph{ order:-1; }
 .material-media{
   display:grid; grid-template-columns:1fr 1.45fr; grid-template-rows:1fr 1fr;
   gap:10px; min-height:330px;
@@ -1257,21 +1223,8 @@ input,textarea{ font:inherit; }
 
 
 @media (max-width:760px){
-  .craft-row,.craft-row.rev{ grid-template-columns:1fr; }
-  .craft-row .ph,.material-media,.material-media--stack-right{ order:-1; min-height:260px; }
+  .material-media{ order:-1; min-height:260px; }
 }
-
-/* dark showcase banner: text list left, 3 photos right (不干胶印刷) */
-
-
-
-
-
-
-.print-showcase-photos .ph{ aspect-ratio:4/3; overflow:hidden; }
-
-
-
 
 /* full-width craft description rows from the reference artwork */
 .craft-desc{ position:relative; border:1px solid #d7dbe2; border-radius:12px; padding:25px 32px 18px; margin:0 0 32px; text-align:center; background:#fff; }
@@ -1283,15 +1236,6 @@ input,textarea{ font:inherit; }
 
 
 
-/* small labelled icon grid (crafts/materials) */
-
-
-
-.chip .ic{ width:40px; height:40px; margin:0 auto 10px; color:var(--blue); }
-.chip .ic svg{ width:100%; height:100%; }
-
-
-
 /* three-element diagram (卷标三要素) */
 .label-elements{ background:#dcecff; }
 .label-elements .section-head{ margin-bottom:28px; }
@@ -1300,10 +1244,6 @@ input,textarea{ font:inherit; }
 .diagram-image{ display:block; width:min(100%,680px); height:auto; margin-top:16px; border-radius:18px; }
 
 
-.dir-tile .box{
-  width:64px; height:44px; border:2px solid var(--blue); border-radius:4px; position:relative;
-  display:flex; align-items:center; justify-content:center; margin:0 auto 8px; background:#fff; font-size:11px; color:var(--blue);
-}
 
 .service-flow{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:52px; max-width:980px; margin:0 auto; }
 .flow-node{
@@ -1380,11 +1320,7 @@ input,textarea{ font:inherit; }
 
 
 
-.thanks-banner .eb{ font-size:12px; letter-spacing:.3em; opacity:.75; }
 
-
-.thanks-banner .phone{ display:inline-flex; align-items:center; gap:8px; margin-top:26px; font-size:16px; font-weight:700; }
-.thanks-banner .phone svg{ width:18px; height:18px; }
 
 /* about page value blocks */
 .value-block{ display:grid; grid-template-columns:1fr 1fr; gap:0; align-items:stretch; padding:0; border:1px solid var(--line); border-bottom:0; }
@@ -2565,7 +2501,6 @@ input,textarea{ font:inherit; }
 @media (max-width:640px){
   
 
-  .labels-print-head p,
   .labels-print-copy p{
     font-size:13px;
     line-height:1.75;
@@ -2608,13 +2543,11 @@ input,textarea{ font:inherit; }
   z-index:1;
 }
 
-.labels-print-section .labels-print-head h2,
 .labels-print-section .labels-print-copy h3{
   color:#fff;
   text-shadow:0 2px 8px rgba(0,0,0,.32);
 }
 
-.labels-print-section .labels-print-head p,
 .labels-print-section .labels-print-copy p{
   color:rgba(255,255,255,.9);
   text-shadow:0 1px 5px rgba(0,0,0,.28);

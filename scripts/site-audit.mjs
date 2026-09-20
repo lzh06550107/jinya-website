@@ -342,7 +342,19 @@ const deadCssTokens = [
   ".print-showcase",
   ".print-showcase-text",
   ".source-banner",
-  ".team-benefit-icon"
+  ".team-benefit-icon",
+  ".gallery-panel",
+  ".source-strip",
+  ".icon-card",
+  ".step-card",
+  ".cta-designer-text",
+  ".craft-row",
+  ".material-media--stack-right",
+  ".print-showcase-photos",
+  ".chip",
+  ".dir-tile",
+  ".thanks-banner",
+  ".labels-print-head"
 ];
 for (const token of deadCssTokens) {
   let found;
