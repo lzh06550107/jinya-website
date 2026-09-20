@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v=4.7.0">
 <script src="__CDN__/assets/jinya/js/device-router.js?v=1"></script>
 </head>
-<body class="mobile-site mobile-{$mobileThemeCss|default='home'|htmlentities}">
+<body class="mobile-site {$mobileBodyClass|default='mobile-home'|htmlentities}">
 {if !empty($isPreview)}<div style="position:fixed;left:0;right:0;top:0;z-index:99999;background:#fff3cd;color:#856404;text-align:center;padding:8px;">移动端预览模式</div>{/if}
 <header class="site-header{if !empty($mobileStrictHome)} site-header--home{/if}">
   <div class="container">

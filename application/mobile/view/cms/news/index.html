@@ -1,19 +1,23 @@
-{include file="cms/common/strict_header" /}
-{include file="cms/common/strict_channel_nav" /}
-<div class="p101-info-4-3-list">
-{notempty name="content.articles.items"}
-{volist name="content.articles.items" id="item"}
-<a href="{$mobileBase}{$item.url|htmlentities}" title="{$item.title|htmlentities}">
-    <dl>
-        <dt>{notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}">{/notempty}</dt>
-        <dd>
-            <h4>{$item.title|htmlentities}</h4>
-            {notempty name="item.summary"}<div class="p101-info-1-desc">{$item.summary|htmlentities}</div>{/notempty}
-        </dd>
-    </dl>
-</a>
-{/volist}
-{else /}<div class="cms-empty">{$content.articles.empty_message|htmlentities}</div>{/notempty}
-</div>
-{include file="cms/common/dynamic_pagination" /}
-{include file="cms/common/strict_footer" /}
+{include file="cms/layout/header" /}
+<main>
+<section class="hero hero--inner hero--blue news-generated-hero">
+  {notempty name="banner.0.image"}<div class="inner-hero-bg news-generated-hero-bg" style="background-image:url('{$banner.0.image|htmlentities}');"></div>{else /}<div class="inner-hero-bg news-generated-hero-bg"></div>{/notempty}
+  <div class="container"><div class="hero-text"><h1>{$banner.0.title|default='每一次匠心坚守，诉说金亚初心'|htmlentities}</h1><p class="lede">{$banner.0.subtitle|default='深耕包装印刷，探索工艺新可能'|htmlentities}</p><a href="{$mobileBase|htmlentities}/page/contact" class="hero-cta">更多咨询</a></div></div>
+</section>
+<section class="section"><div class="container">
+  <div class="gallery-tabs">
+    <button class="{if empty($content.currentCategory)}active{/if}" type="button" onclick="window.location.href='{$mobileBase|htmlentities}/news'">全部资讯</button>
+    {volist name="content.categories" id="category"}<button class="{if !empty($content.currentCategory) && $content.currentCategory.id==$category.id}active{/if}" type="button" onclick="window.location.href='{$mobileBase|htmlentities}/news-list/{$category.slug|htmlentities}'">{$category.name|htmlentities}</button>{/volist}
+  </div>
+  {notempty name="content.articles.items"}
+  {volist name="content.articles.items" id="item"}
+  <a class="news-item news-item-link" href="{$mobileBase|htmlentities}{$item.url|htmlentities}" aria-label="查看新闻详情：{$item.title|htmlentities}">
+    <div class="ph">{notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy">{/notempty}</div>
+    <div><h4>{$item.title|htmlentities}</h4>{notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}</div>
+    <div class="news-date">{notempty name="item.publish_date"}<div class="y">{$item.publish_date|substr=0,4|htmlentities}</div><div class="d">{$item.publish_date|substr=5,5|htmlentities}</div>{/notempty}</div>
+  </a>
+  {/volist}
+  {else /}<div class="cms-empty"><h3>{$content.articles.empty_message|default='暂无新闻'|htmlentities}</h3></div>{/notempty}
+  {include file="cms/common/dynamic_pagination" /}
+</div></section>
+{include file="cms/layout/footer" /}
