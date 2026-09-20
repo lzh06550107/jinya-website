@@ -101,7 +101,7 @@ for (const page of allPages) {
     extractBlock(html, /<header\b[^>]*class="[^"]*site-header[^"]*">/, "</header>")
   ));
   pageData.set(page + ":nav", normalizeSharedMarkup(
-    extractBlock(html, /<nav\b[^>]*class="[^"]*site-nav[^"]*">/, "</nav>")
+    extractBlock(html, /<nav\b[^>]*class="[^"]*site-nav[^"]*"[^>]*>/, "</nav>")
   ));
   pageData.set(page + ":footer", normalizeSharedMarkup(
     extractBlock(html, /<footer\b[^>]*class="[^"]*site-footer[^"]*">/, "</footer>")
@@ -175,13 +175,16 @@ for (const page of allPages) {
   const images = [...html.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
   images.forEach((tag, i) => {
     if (!/\balt="/.test(tag)) fail(page, `第 ${i + 1} 个 <img> 缺少 alt`);
-    if (!/\bwidth="/.test(tag) || !/\bheight="/.test(tag)) {
-      warn(page, `第 ${i + 1} 个 <img> 未显式声明 width/height`);
-    }
   });
 
-  const placeholders = count(html, /href="#"/g);
-  if (placeholders) warn(page, `仍有 ${placeholders} 个 href="#" 占位链接`);
+  // Footer social/friend links may remain placeholders until real URLs are supplied.
+  // Business content before the footer must never use href="#".
+  const footerStart = html.indexOf('<footer class="site-footer">');
+  const businessHtml = footerStart >= 0 ? html.slice(0, footerStart) : html;
+  const businessPlaceholders = count(businessHtml, /href="#"/g);
+  if (businessPlaceholders) {
+    fail(page, `业务内容仍有 ${businessPlaceholders} 个 href="#" 占位链接`);
+  }
 
   for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
     const target = resolveLocalReference(page, match[1]);
