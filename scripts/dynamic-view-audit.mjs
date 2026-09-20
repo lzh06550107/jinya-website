@@ -123,4 +123,24 @@ for (const [file, tokens] of Object.entries(representativeViews)) {
   for (const token of tokens) expect(body.includes(token), `${file} missing ${token}`);
 }
 
+
+const homeSchema = read("application/common/service/cms/HomeSectionEditorSchema.php");
+for (const token of ["config_social_url_1", "config_social_url_2", "'subtitle', 'mobile_subtitle'"]) {
+  expect(homeSchema.includes(token), `Home section schema missing html-baseline field ${token}`);
+}
+const structuredCodec = read("application/common/service/cms/StructuredConfigCodec.php");
+for (const token of ["config_social_url_1", "config_social_url_2", "['title', 'value', 'unit', 'text', 'icon', 'prefix']"]) {
+  expect(structuredCodec.includes(token), `Structured home codec missing ${token}`);
+}
+const homeAboutForm = read("application/admin/view/cms/common/_home_about_fields.html");
+for (const token of ['name="[inputPrefix][subtitle]"', 'name="[inputPrefix][config_social_url_1]"', 'name="[inputPrefix][config_social_url_2]"']) {
+  expect(homeAboutForm.includes(token), `Home about admin form missing ${token}`);
+}
+const homeMetricsForm = read("application/admin/view/cms/common/_metrics_editor.html");
+expect(homeMetricsForm.includes('data-metric-field="title"'), "Home service metric editor must expose a title field");
+const homeView = read("application/index/view/cms/index/index.html");
+for (const token of ["about.config.social_url_1", "about.config.social_url_2", "metric.title", "company.subtitle"]) {
+  expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
+}
+
 if (!process.exitCode) console.log("Dynamic view contract audit: OK");
