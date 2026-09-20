@@ -7,6 +7,7 @@ class BoxesPageBlockConfigCodec
         'boxes_secondary_title' => 'secondary_title',
         'boxes_secondary_text' => 'secondary_text',
         'boxes_phone' => 'phone',
+        'boxes_badge_text' => 'badge_text',
     ];
     private $itemFields = [
         'title','text','image','url','value','subtitle','badge','group',

@@ -104,7 +104,7 @@ class PageContentBlockEditorSchema
         $schemas['bags_hero'] = self::make('bags', '包装袋无版印刷', 'Banner', 'bags_section',
             ['title','content','image','mobile_image'], [],
             ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
+            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图','link'=>'CTA 按钮'],
             ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
         );
         $schemas['bags_products'] = self::make('bags', '包装袋无版印刷', '产品中心', 'bags_section',
@@ -160,10 +160,8 @@ class PageContentBlockEditorSchema
 
         // 彩盒（11）
         $schemas['boxes_hero'] = self::make('boxes', '彩盒', 'Banner', 'boxes_section',
-            ['title','content','image','mobile_image'], [],
-            ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
-            ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
+            ['title','subtitle','content','image','mobile_image','link'], [], [], [],
+            ['title'=>'Banner 标题','subtitle'=>'行业标签','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图','link'=>'CTA 按钮'], []
         );
         $schemas['boxes_products'] = self::make('boxes', '彩盒', '产品展示', 'boxes_section',
             ['title','subtitle'], [],
@@ -178,13 +176,15 @@ class PageContentBlockEditorSchema
             ['title'=>'标题','text'=>'说明','image'=>'图片','group'=>'版式方向','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动图片']
         );
         $schemas['boxes_promise'] = self::make('boxes', '彩盒', '品质承诺', 'boxes_section',
-            ['title','subtitle','content'], ['boxes_secondary_title','boxes_secondary_text'], [], [],
-            ['content'=>'主说明'], [], ['boxes_secondary_title'=>'横幅标题','boxes_secondary_text'=>'横幅说明']
+            ['title','subtitle','content'], ['boxes_secondary_title','boxes_secondary_text','boxes_badge_text'], [], [],
+            ['subtitle'=>'主承诺文案','content'=>'副承诺文案'], [], ['boxes_secondary_title'=>'面板标题','boxes_secondary_text'=>'面板说明（支持换行）','boxes_badge_text'=>'面板徽标文字']
         );
         $schemas['boxes_details'] = self::make('boxes', '彩盒', '细节展示', 'boxes_section',
-            ['title','subtitle'], [],
-            ['title','text','image','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'], [],
-            [], ['title'=>'细节标题','text'=>'补充说明','image'=>'细节图片','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动图片']
+            ['title','subtitle'], ['boxes_secondary_title','boxes_secondary_text','boxes_badge_text'],
+            ['title','text','subtitle','image','group','mobile_title','mobile_text','mobile_subtitle','mobile_image','pc_visible','mobile_visible'],
+            ['normal'=>'图左文右','reverse'=>'图右文左'],
+            [], ['title'=>'细节主标题','text'=>'底部说明','subtitle'=>'编号/标签','image'=>'细节图片','group'=>'版式方向','mobile_title'=>'移动主标题','mobile_text'=>'移动说明','mobile_subtitle'=>'移动编号/标签','mobile_image'=>'移动图片'],
+            ['boxes_secondary_title'=>'底部采购 CTA 标题','boxes_secondary_text'=>'底部采购 CTA 说明（支持换行）','boxes_badge_text'=>'CTA 徽标文字']
         );
         $schemas['boxes_purchase'] = self::make('boxes', '彩盒', '采购说明', 'boxes_section',
             ['title','content'], [], [], [], ['content'=>'说明文字']
@@ -196,9 +196,9 @@ class PageContentBlockEditorSchema
         );
         $schemas['boxes_craft_material'] = self::make('boxes', '彩盒', '工艺与材质', 'boxes_section',
             ['title'], ['boxes_secondary_title'],
-            ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
+            ['title','subtitle','image','group','mobile_title','mobile_subtitle','mobile_image','pc_visible','mobile_visible'],
             ['craft'=>'印刷工艺','material'=>'产品材质'], [],
-            ['title'=>'名称','image'=>'图片','group'=>'项目类型','mobile_title'=>'移动名称','mobile_image'=>'移动图片'],
+            ['title'=>'名称','subtitle'=>'英文副标题','image'=>'图片','group'=>'项目类型','mobile_title'=>'移动名称','mobile_subtitle'=>'移动英文副标题','mobile_image'=>'移动图片'],
             ['boxes_secondary_title'=>'材质区标题']
         );
         $schemas['boxes_team'] = self::make('boxes', '彩盒', '专业团队', 'boxes_section',
@@ -211,8 +211,8 @@ class PageContentBlockEditorSchema
             ['image'=>'PC 盒型整图','mobile_image'=>'移动盒型整图']
         );
         $schemas['boxes_services'] = self::make('boxes', '彩盒', '服务保障', 'boxes_section',
-            [], [], ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            [], ['title'=>'服务文字','badge'=>'图标类型','mobile_title'=>'移动服务文字','mobile_badge'=>'移动图标类型']
+            [], [], ['title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'], [],
+            [], ['title'=>'服务标题','text'=>'英文/补充说明','badge'=>'图标类型','mobile_title'=>'移动服务标题','mobile_text'=>'移动说明','mobile_badge'=>'移动图标类型']
         );
 
         // 走进金亚（4）
@@ -242,7 +242,7 @@ class PageContentBlockEditorSchema
 
         // 联系我们（3）
         $schemas['contact_hero'] = self::make('contact', '联系我们', 'Banner', 'contact_section',
-            ['title','content','image','mobile_image'], [],
+            ['title','content','image','mobile_image','link'], [],
             ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
             ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
             ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
