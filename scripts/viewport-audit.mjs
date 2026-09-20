@@ -206,6 +206,9 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     const logoRect = visible(logo) ? rectInfo(logo) : null;
     const phoneRect = visible(phone) ? rectInfo(phone) : null;
     const navRect = visible(mainNav) ? rectInfo(mainNav) : null;
+    const navLinkRects = mainNav
+      ? Array.from(mainNav.querySelectorAll("a")).filter(visible).map(rectInfo)
+      : [];
     const toggleRect = visible(toggle) ? rectInfo(toggle) : null;
     const floatRect = visible(floatSide) ? rectInfo(floatSide) : null;
 
@@ -246,11 +249,12 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
       logoRect,
       phoneRect,
       navRect,
+      navLinkRects,
       toggleRect,
       floatRect,
       headerOverlap: {
-        logoNav: overlap(logoRect, navRect),
-        navPhone: overlap(navRect, phoneRect),
+        logoNav: Math.max(0, ...navLinkRects.map((rect) => overlap(logoRect, rect))),
+        navPhone: Math.max(0, ...navLinkRects.map((rect) => overlap(rect, phoneRect))),
         logoPhone: overlap(logoRect, phoneRect),
         logoToggle: overlap(logoRect, toggleRect),
         phoneToggle: overlap(phoneRect, toggleRect)
@@ -277,12 +281,20 @@ async function auditPage(browserContext, pageName, viewport, mobile) {
     return rect.left < -2 || rect.right > viewport.width + 2 || rect.top < -2;
   }
 
-  [state.logoRect, state.phoneRect, state.navRect, state.toggleRect].forEach((rect, idx) => {
+  [state.logoRect, state.phoneRect, state.toggleRect].forEach((rect, idx) => {
     if (rectOutsideViewport(rect)) {
-      const names = ["Logo", "电话区", "主导航", "菜单按钮"];
+      const names = ["Logo", "电话区", "菜单按钮"];
       addFailure(pageName, viewport, `${names[idx]} 超出可视区域`);
     }
   });
+
+  if (!mobile || state.navAriaHidden !== "true") {
+    state.navLinkRects.forEach((rect, idx) => {
+      if (rectOutsideViewport(rect)) {
+        addFailure(pageName, viewport, `第 ${idx + 1} 个导航链接超出可视区域`);
+      }
+    });
+  }
 
   if (state.floatRect && state.floatRect.right > viewport.width + 2) {
     addFailure(pageName, viewport, "右侧浮动工具栏超出视口");
