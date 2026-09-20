@@ -1,1 +1,9 @@
-<section class="section section--alt"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div><div class="grid grid-6">{volist name="block.extra.items" id="item"}<div class="step-card"><span class="num">{$item.subtitle|htmlentities}</span><div class="ic">{include file="cms/page/bags/icon" /}</div><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities}</p></div>{/volist}</div></div></section>
+<section class="section section--alt"><div class="container">
+  <div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div>
+  <div class="bags-process-flow">
+    {volist name="block.extra.items" id="item" key="processIndex"}{if condition="$item.group neq 'photo'"}<div class="bags-process-step"><div class="top"><span class="num">{notempty name="item.subtitle"}{$item.subtitle|htmlentities}{else /}0{$processIndex}{/notempty}</span><div class="ic">{include file="cms/page/bags/icon" /}</div><h4>{$item.title|htmlentities}</h4></div>{notempty name="item.text"}<p>{$item.text|htmlentities|nl2br}</p>{/notempty}</div>{/if}{/volist}
+  </div>
+  <div class="grid grid-4 mt-lg">
+    {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'photo'"}<div class="photo-card"><div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|default='定制流程'|htmlentities}" loading="lazy"></div></div>{/if}{/volist}
+  </div>
+</div></section>

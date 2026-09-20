@@ -1,8 +1,5 @@
 {include file="cms/layout/header" /}
-<link rel="stylesheet" href="__CDN__/assets/css/cms-bags-page.css?v={$cmsSite.version|default='1.0'}&source=20260819-bags-cases-carousel-r1">
-<link rel="stylesheet" href="__CDN__/assets/css/cms-structured-mobile-hero.css?v={$cmsSite.version|default='1.0'}&source=20260817-mobile-hero">
 <main>
-<div class="cms-bags-page" data-page="bags">
 {volist name="content.blocks" id="block"}
 {switch name="block.key"}
 {case value="bags_hero"}{include file="cms/page/bags/hero" /}{/case}
@@ -15,6 +12,4 @@
 {case value="bags_cta"}{include file="cms/page/bags/cta" /}{/case}
 {/switch}
 {/volist}
-</div>
-<script src="__CDN__/assets/js/cms-bags-page.js?v={$cmsSite.version|default='1.0'}&source=20260819-bags-cases-carousel-r1"></script>
 {include file="cms/layout/footer" /}
