@@ -198,6 +198,17 @@ const homeView = read("application/index/view/cms/index/index.html");
 for (const token of ["about.config.social_url_1", "about.config.social_url_2", "metric.title", "company.subtitle"]) {
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
+for (const token of ["hero-title-primary", "hero-title-secondary", "hero-badges"]) {
+  expect(homeView.includes(token), `Homepage hero missing screenshot-matched structure ${token}`);
+}
+const pcStyle = read("public/assets/jinya/css/style.css");
+for (const token of ["R48: screenshot-matched PC homepage hero copy.", ".hero-title-primary", ".hero-title-secondary", "flex-direction:column"]) {
+  expect(pcStyle.includes(token), `PC homepage hero stylesheet missing ${token}`);
+}
+const staticHome = read("html/index.html");
+for (const token of ["高质量无版印刷", "不干胶·包装袋 一站式按需定制", "品质为先&nbsp;省心高效&nbsp;合作共赢"]) {
+  expect(staticHome.includes(token), `Static homepage hero missing approved screenshot copy ${token}`);
+}
 
 const bannerCodec = read("application/common/service/cms/BannerHighlightCodec.php");
 for (const token of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png", "applyIconOverrides"]) {
@@ -239,7 +250,10 @@ for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "ho
     "/assets/jinya/img/boxes-banner-clean-v87.webp",
     "/assets/jinya/img/about-banner-upload-20260919.jpg",
     "/assets/jinya/img/contact-banner-clean-v78.jpg",
-    "html-baseline:news:"
+    "html-baseline:news:",
+    "高质量无版印刷",
+    "不干胶·包装袋 一站式按需定制",
+    "品质为先 省心高效 合作共赢"
   ]) {
     expect(baselineSql.includes(token), `HTML baseline SQL missing ${token}`);
   }
