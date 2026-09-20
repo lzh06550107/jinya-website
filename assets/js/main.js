@@ -1,18 +1,6 @@
 (function(){
   "use strict";
 
-  // Keep every internal page on the same published HTML/CSS release. This
-  // avoids a cached older page being mixed with the latest banner styles.
-  const releaseVersion = '40';
-  var pageLinkPattern = /^(?:index|labels|bags|boxes|about|news|contact)\.html(?:[?#].*)?$/;
-  document.querySelectorAll('a[href]').forEach(function(link){
-    var rawHref = link.getAttribute('href');
-    if(!rawHref || !pageLinkPattern.test(rawHref)) return;
-    var target = new URL(rawHref, window.location.href);
-    target.searchParams.set('v', releaseVersion);
-    link.setAttribute('href', target.pathname.split('/').pop() + target.search + target.hash);
-  });
-
   // Global header scroll motion.
   // During the first 120px of scrolling, enlarge the logo and emergency
   // hotline progressively without changing header layout dimensions.
