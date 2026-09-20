@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Audit FastAdmin package
+        run: node scripts/fastadmin-package-audit.mjs
+
       - name: Run static site audit
         run: node scripts/site-audit.mjs
 
