@@ -38,6 +38,8 @@ class LayoutRenderService
             'cms_email' => isset($site['cms_email']) ? $site['cms_email'] : '',
             'address' => isset($site['cms_address']) ? $site['cms_address'] : '',
             'cms_address' => isset($site['cms_address']) ? $site['cms_address'] : '',
+            'factory_address' => isset($site['cms_factory_address']) ? $site['cms_factory_address'] : '',
+            'cms_factory_address' => isset($site['cms_factory_address']) ? $site['cms_factory_address'] : '',
             'wechat_qr' => isset($site['cms_wechat_qr']) ? $site['cms_wechat_qr'] : '',
             'cms_service_wecom_url' => $this->externalServiceUrl(isset($site['cms_service_wecom_url']) ? $site['cms_service_wecom_url'] : ''),
             'cms_service_wechat_qr' => isset($site['cms_service_wechat_qr']) ? $site['cms_service_wechat_qr'] : '',
