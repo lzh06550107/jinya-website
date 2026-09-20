@@ -103,7 +103,8 @@ for (const token of [
 }
 
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
-expect(factory.includes("print_points_html"), "PageBlockViewModelFactory must expose rendered print_points_html");
+expect(factory.includes("['print_points']"), "PageBlockViewModelFactory must register print_points for scalar markdown rendering");
+expect(factory.includes("$scalarMarkdownKey . '_html'"), "PageBlockViewModelFactory must expose scalar markdown HTML keys");
 
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
