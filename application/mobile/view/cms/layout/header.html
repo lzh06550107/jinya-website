@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>{$title|default=$cmsSite.name|htmlentities}</title>
+<meta name="keywords" content="{$keywords|default=''|htmlentities}">
+<meta name="description" content="{$description|default=''|htmlentities}">
+<meta name="robots" content="{$robots|default='index,follow'|htmlentities}">
+{if !empty($canonical)}<link rel="canonical" href="{$canonical|htmlentities}">{/if}
+<link rel="stylesheet" href="__CDN__/assets/jinya/css/style.css?v={$cmsSite.version|default='1.0'|htmlentities}">
+<link rel="stylesheet" href="__CDN__/assets/jinya/css/mobile.css?v={$cmsSite.version|default='1.0'|htmlentities}">
+<link rel="stylesheet" href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css?v=4.7.0">
+<script src="__CDN__/assets/jinya/js/device-router.js?v=1"></script>
+</head>
+<body class="mobile-site mobile-{$mobileThemeCss|default='home'|htmlentities}">
+{if !empty($isPreview)}<div style="position:fixed;left:0;right:0;top:0;z-index:99999;background:#fff3cd;color:#856404;text-align:center;padding:8px;">移动端预览模式</div>{/if}
+<header class="site-header{if !empty($mobileStrictHome)} site-header--home{/if}">
+  <div class="container">
+    <a href="{$mobileHomeUrl|default='/mobile'|htmlentities}" class="logo" aria-label="{$cmsSite.name|default='金亚包装'|htmlentities}">
+      {if !empty($cmsSite.logo)}<img src="{$cmsSite.logo|htmlentities}" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">{else /}<img src="__CDN__/assets/jinya/img/site-logo.png" alt="金亚包装" class="site-logo-img">{/if}
+    </a>
+    <a href="tel:{$cmsSite.hotline|default=''|htmlentities}" class="header-phone">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+      <span class="label">{$cmsSite.hotline|default='18903716652'|htmlentities}</span>
+      <span class="tag">{$layout.header.config.hotline_badge_text|default='急单专线'|htmlentities}</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>
+  </div>
+</header>
+{include file="cms/layout/nav" /}
