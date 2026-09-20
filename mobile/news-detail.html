@@ -111,34 +111,7 @@
   </div>
 </section>
 
-<script>
-(function(){
-  var params=new URLSearchParams(window.location.search);
-  var article=params.get('article') || '1';
-  var date=document.getElementById('article-date');
-  var cover=document.getElementById('article-cover');
-  var prev=document.getElementById('article-prev');
-  var next=document.getElementById('article-next');
-
-  if(article==='2'){
-    date.textContent='2026-06-29';
-    date.setAttribute('datetime','2026-06-29');
-    cover.src='../assets/img/news-2.jpg';
-    prev.href='news-detail.html?article=1';
-    prev.querySelector('strong').textContent='为什么大家都青睐合成标签？';
-    next.href='news.html';
-    next.querySelector('strong').textContent='返回查看更多新闻';
-  }else{
-    date.textContent='2026-07-24';
-    date.setAttribute('datetime','2026-07-24');
-    cover.src='../assets/img/news-1.jpg';
-    prev.href='news.html';
-    prev.querySelector('strong').textContent='返回查看更多新闻';
-    next.href='news-detail.html?article=2';
-    next.querySelector('strong').textContent='为什么大家都青睐合成标签？';
-  }
-})();
-</script>
+<script src="../assets/js/news-detail.js?v=1"></script>
 
 </main>
 

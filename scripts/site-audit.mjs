@@ -62,6 +62,28 @@ function resolveLocalReference(page, raw) {
   return path.normalize(path.join(path.dirname(page), clean));
 }
 
+
+function extractBlock(html, startRegex, endTag) {
+  const match = html.match(startRegex);
+  if (!match) return null;
+  const start = match.index;
+  const end = html.indexOf(endTag, start);
+  if (end < 0) return null;
+  return html.slice(start, end + endTag.length);
+}
+
+function normalizeSharedMarkup(markup) {
+  if (!markup) return null;
+  return markup
+    .replace(/\.\.\//g, "")
+    .replace(/\?v=\d+/g, "")
+    .replace(/\s+site-header--home/g, "")
+    .replace(/\s+active\b/g, "")
+    .replace(/\s+aria-current="page"/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 const pageData = new Map();
 
 for (const page of allPages) {
@@ -73,6 +95,17 @@ for (const page of allPages) {
 
   const html = read(page);
   pageData.set(page, html);
+
+
+  pageData.set(page + ":header", normalizeSharedMarkup(
+    extractBlock(html, /<header\b[^>]*class="[^"]*site-header[^"]*">/, "</header>")
+  ));
+  pageData.set(page + ":nav", normalizeSharedMarkup(
+    extractBlock(html, /<nav\b[^>]*class="[^"]*site-nav[^"]*">/, "</nav>")
+  ));
+  pageData.set(page + ":footer", normalizeSharedMarkup(
+    extractBlock(html, /<footer\b[^>]*class="[^"]*site-footer[^"]*">/, "</footer>")
+  ));
 
   if (count(html, /<main\b/g) !== 1) fail(page, "必须且只能有一个 <main>");
   if (count(html, /<header\b[^>]*class="[^"]*site-header/g) !== 1) fail(page, "必须且只能有一个 site-header");
@@ -125,6 +158,20 @@ for (const page of allPages) {
     fail(page, "新闻数据不足时不得显示无功能分页");
   }
 
+
+  if (/href="#"[^>]*>MORE\+<\/a>/.test(html)) {
+    fail(page, "业务区块 MORE+ 不得使用 href=\"#\" 占位");
+  }
+
+  if (baseName === "news-detail.html") {
+    if (!html.includes("assets/js/news-detail.js?v=1")) {
+      fail(page, "新闻详情页必须使用共享 news-detail.js");
+    }
+    if (/new URLSearchParams/.test(html)) {
+      fail(page, "新闻详情页不得重复内联文章切换脚本");
+    }
+  }
+
   const images = [...html.matchAll(/<img\b[^>]*>/g)].map((m) => m[0]);
   images.forEach((tag, i) => {
     if (!/\balt="/.test(tag)) fail(page, `第 ${i + 1} 个 <img> 缺少 alt`);
@@ -144,6 +191,25 @@ for (const page of allPages) {
     if (!fs.existsSync(absolute)) {
       fail(page, `本地引用不存在: ${match[1]}`);
     }
+  }
+}
+
+const shellKinds = ["header", "nav", "footer"];
+for (const kind of shellKinds) {
+  const variants = new Map();
+  for (const page of allPages) {
+    const normalized = pageData.get(page + ":" + kind);
+    if (!normalized) {
+      fail(page, `无法解析公共 ${kind}`);
+      continue;
+    }
+    if (!variants.has(normalized)) variants.set(normalized, []);
+    variants.get(normalized).push(page);
+  }
+
+  if (variants.size !== 1) {
+    const groups = [...variants.values()].map((group) => group.join(", ")).join(" | ");
+    fail(`shared-${kind}`, `公共结构发生漂移，共 ${variants.size} 个版本: ${groups}`);
   }
 }
 
