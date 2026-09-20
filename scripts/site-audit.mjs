@@ -40,9 +40,12 @@ for (const rel of pages) {
 
 const footerSocialIcons = [
   "social-wechat.png",
-  "social-douyin.png",
   "social-xiaohongshu.png",
   "social-channels.png",
+];
+
+const footerSocialVectorIcons = [
+  "social-douyin.svg",
 ];
 
 const validPng = (buffer) => {
@@ -65,6 +68,27 @@ const validPng = (buffer) => {
   }
   return hasIend ? { width, height } : null;
 };
+
+for (const name of footerSocialVectorIcons) {
+  const source = path.join(root, "assets", "img", name);
+  const published = path.join(process.cwd(), "public", "assets", "jinya", "img", name);
+  if (!fs.existsSync(source)) {
+    fail(`Missing footer social vector icon: html/assets/img/${name}`);
+    continue;
+  }
+  if (!fs.existsSync(published)) {
+    fail(`Missing published footer social vector icon: public/assets/jinya/img/${name}`);
+    continue;
+  }
+  const sourceText = fs.readFileSync(source, "utf8");
+  const publishedText = fs.readFileSync(published, "utf8");
+  if (!sourceText.includes("<svg") || !sourceText.includes("<path")) {
+    fail(`Footer social vector icon is invalid: html/assets/img/${name}`);
+  }
+  if (sourceText !== publishedText) {
+    fail(`Footer social vector icon differs between html/assets and public/assets: ${name}`);
+  }
+}
 
 for (const name of footerSocialIcons) {
   const source = path.join(root, "assets", "img", name);
