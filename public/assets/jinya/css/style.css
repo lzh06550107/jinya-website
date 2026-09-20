@@ -6249,7 +6249,7 @@ input,textarea{ font:inherit; }
   body.pc-contact{
     --page-body-width:calc(100vw - 32px);
     --page-content-width:min(1200px,calc(100vw - 80px));
-    --header-bar-height:var(--header-bar-height);
+    --header-bar-height:68px;
     --header-logo-slot:clamp(210px,16vw,300px);
     --header-phone-slot:clamp(210px,16vw,300px);
 
