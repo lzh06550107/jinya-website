@@ -163,6 +163,11 @@ for (const page of allPages) {
     fail(page, "业务区块 MORE+ 不得使用 href=\"#\" 占位");
   }
 
+
+  if (html.includes("在线留言")) {
+    fail(page, "当前站点没有留言表单，页面不得显示“在线留言”入口");
+  }
+
   if (baseName === "news-detail.html") {
     if (!html.includes("assets/js/news-detail.js?v=1")) {
       fail(page, "新闻详情页必须使用共享 news-detail.js");
