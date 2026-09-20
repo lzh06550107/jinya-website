@@ -161,6 +161,16 @@ for (const token of ["about.config.social_url_1", "about.config.social_url_2", "
   }
   expect(installer.includes("renderHtmlBaselineSql($prefix)"), "Installer must execute the HTML baseline seed");
   expect(installer.includes("cms_html_baseline.sql"), "Installer must load database/cms_html_baseline.sql");
+
+  const baselineAssetUrls = [...new Set(
+    [...baselineSql.matchAll(/\/assets\/jinya\/[A-Za-z0-9._?=&/%+-]+/g)].map((match) => match[0].split("?")[0])
+  )];
+  expect(baselineAssetUrls.length > 0, "HTML baseline SQL must reference published /assets/jinya resources");
+  for (const assetUrl of baselineAssetUrls) {
+    const publicPath = path.join(root, "public", assetUrl.replace(/^\//, "").replace(/^assets[\\/]/, "assets/"));
+    expect(fs.existsSync(publicPath), `HTML baseline SQL references missing asset ${assetUrl}`);
+  }
+  expect(!baselineSql.includes("/uploads/cms-jinya/"), "HTML baseline SQL must not fall back to legacy /uploads/cms-jinya assets");
 }
 
 if (!process.exitCode) console.log("Dynamic view contract audit: OK");
