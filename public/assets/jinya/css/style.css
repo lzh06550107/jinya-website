@@ -332,16 +332,20 @@ input,textarea{ font:inherit; }
 .hero--home .container{ width:100%; }
 .hero--home .hero-swiper{ position:absolute; inset:0; z-index:0; }
 .hero--home .swiper-viewport,.hero--home .swiper-track,.hero--home .swiper-slide{ height:100%; }
-.hero--home .swiper-slide img,.hero--home .swiper-slide video{
+.hero--home .swiper-slide{ position:relative; overflow:hidden; }
+.hero--home .swiper-slide > img,.hero--home .swiper-slide > video{
   width:100%; height:100%; object-fit:cover; object-position:center;
 }
+.hero--home .swiper-slide > .scrim{ z-index:1; }
+.hero--home .swiper-slide > .container{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  display:flex;
+  align-items:center;
+}
+.hero--home .hero-text{ position:relative; z-index:1; }
 .hero--home .swiper-arrow{ z-index:4; }
-.hero--home .container{ position:relative; z-index:3; }
-.hero--home .hero-text{ transition:opacity .35s ease, transform .35s ease; }
-.hero--home .scrim,.hero--home .hero-text{ opacity:0; }
-.hero--home[data-active-index="0"] .scrim,.hero--home[data-active-index="0"] .hero-text{ opacity:1; }
-.hero--home:not([data-active-index="0"]) .hero-text{ pointer-events:none; transform:translateY(10px); }
-.hero--home[data-active-index="0"] .hero-text{ transform:translateY(0); }
 .hero--home .swiper-dots{ z-index:4; bottom:18px; }
 
 @media (max-width:900px){
@@ -6642,7 +6646,7 @@ input,textarea{ font:inherit; }
     object-fit:cover;
   }
 
-  body.pc-home .hero--home > .container,
+  body.pc-home .hero--home .swiper-slide > .container,
   body.pc-labels .hero--inner > .container,
   body.pc-bags .hero--inner > .container,
   body.pc-boxes .hero--inner > .container,
@@ -7844,7 +7848,7 @@ input,textarea{ font:inherit; }
 /* R48: screenshot-matched PC homepage hero copy.
    Two white title lines + three vertical white selling-point pills. */
 @media (min-width:901px){
-  body.pc-home .hero--home > .container{
+  body.pc-home .hero--home .swiper-slide > .container{
     width:100%;
     max-width:none;
     margin:0;

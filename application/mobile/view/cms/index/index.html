@@ -12,20 +12,14 @@
         {else /}
         <img src="{$banner.image|htmlentities}" alt="{$banner.title|default='金亚包装'|htmlentities}"{if $bannerIndex==1} loading="eager" fetchpriority="high"{else /} loading="lazy" fetchpriority="low"{/if} decoding="async">
         {/if}
+        <div class="scrim"></div>
+        {notempty name="banner.title"}<div class="container hero-slide-copy"><div class="hero-text hero-text--slide-1">{notempty name="banner.subtitle"}<p class="hero-eyebrow">{$banner.subtitle|htmlentities}</p>{/notempty}<h1>{$banner.title|htmlentities}</h1>{notempty name="banner.highlights"}<div class="hero-badges">{volist name="banner.highlights" id="highlight"}<div class="hero-badge">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span>{$highlight.text|htmlentities}</span></div>{/volist}</div>{/notempty}</div></div>{/notempty}
       </div>
       {/if}
       {/volist}
     </div></div>
     <div class="swiper-dots" aria-label="轮播分页"></div>
   </div>
-  <div class="scrim"></div>
-  {notempty name="hero.items.0.title"}
-  <div class="container"><div class="hero-text hero-text--slide-1">
-    {notempty name="hero.items.0.subtitle"}<p class="hero-eyebrow">{$hero.items.0.subtitle|htmlentities}</p>{/notempty}
-    <h1>{$hero.items.0.title|htmlentities}</h1>
-    {notempty name="hero.items.0.highlights"}<div class="hero-badges">{volist name="hero.items.0.highlights" id="highlight"}<div class="hero-badge">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span>{$highlight.text|htmlentities}</span></div>{/volist}</div>{/notempty}
-  </div></div>
-  {/notempty}
 </section>
 {/notempty}
 
