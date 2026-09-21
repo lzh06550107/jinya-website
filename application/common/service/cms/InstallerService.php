@@ -92,6 +92,7 @@ class InstallerService
         $this->ensureHomeReferenceDisplayImageColumns($connection, $prefix);
         $this->retireBannerPosterColumns($connection, $prefix);
         $this->ensureBannerHighlightsColumn($connection, $prefix);
+        $this->migrateLegacyHomeHeroBannerDefaults($connection, $prefix);
         $pdo->exec($this->renderCloneSql($prefix));
         $pdo->exec($this->renderJinyaProductCatalogSql($prefix));
         $this->retireRemovedCmsRuntimeArtifacts($connection, $prefix);
@@ -776,6 +777,92 @@ class InstallerService
         $this->getPdo($connection)->exec(
             "ALTER TABLE `{$table}` ADD COLUMN `highlights_json` TEXT COMMENT 'Banner 卖点标签 JSON' AFTER `button_text`"
         );
+    }
+
+    /**
+     * 将未被后台编辑的历史首页首屏 Banner 默认值升级为当前视觉基线。
+     *
+     * 这里做持久化迁移，而不是在渲染阶段临时替换，确保后台回显、
+     * API/Repository 数据和前台最终展示始终使用同一份数据库真值。
+     *
+     * @param mixed  $connection
+     * @param string $prefix
+     * @return void
+     */
+    protected function migrateLegacyHomeHeroBannerDefaults($connection, $prefix)
+    {
+        $table = $prefix . 'cms_banner';
+        if (!$this->tableExists($connection, $table)
+            || !$this->columnExists($connection, $table, 'highlights_json')
+            || !$this->columnExists($connection, $table, 'edited_by_admin')) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare(
+            "SELECT `id`,`title`,`subtitle`,`highlights_json` FROM `{$table}` " .
+            "WHERE `page_key`=? AND `position`=? AND `edited_by_admin`=0 ORDER BY `weigh` DESC,`id` ASC"
+        );
+        $select->execute(['home', 'hero']);
+        $rows = $select->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$rows) {
+            return;
+        }
+
+        $iconMap = [
+            0 => ['fa fa-users', '/assets/jinya/img/home-highlight-team.png'],
+            1 => ['fa fa-shield', '/assets/jinya/img/home-highlight-quality.png'],
+            2 => ['fa fa-truck', '/assets/jinya/img/home-highlight-delivery.png'],
+        ];
+        $update = $pdo->prepare(
+            "UPDATE `{$table}` SET `title`=?,`subtitle`=?,`highlights_json`=?,`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE `id`=? AND `edited_by_admin`=0"
+        );
+
+        foreach ($rows as $row) {
+            $title = isset($row['title']) ? (string)$row['title'] : '';
+            $subtitle = isset($row['subtitle']) ? (string)$row['subtitle'] : '';
+            $json = isset($row['highlights_json']) ? (string)$row['highlights_json'] : '';
+            $changed = false;
+
+            if (trim($title) === '高品质包装印刷 一站式按需定制') {
+                $title = '高质量无版印刷';
+                $changed = true;
+            }
+            if (trim($subtitle) === 'JINYA PACKAGE · 一站式按需定制') {
+                $subtitle = '不干胶·包装袋 一站式按需定制';
+                $changed = true;
+            }
+
+            $items = json_decode($json, true);
+            if (is_array($items)) {
+                foreach ($iconMap as $index => $mapping) {
+                    if (!isset($items[$index]) || !is_array($items[$index])) {
+                        continue;
+                    }
+                    $icon = isset($items[$index]['icon']) ? trim((string)$items[$index]['icon']) : '';
+                    if ($icon === $mapping[0]) {
+                        $items[$index]['icon'] = $mapping[1];
+                        $changed = true;
+                    }
+                }
+                if (isset($items[1]['text'])
+                    && trim((string)$items[1]['text']) === '品质为先 省心高效') {
+                    $items[1]['text'] = '品质为先 省心高效 合作共赢';
+                    $changed = true;
+                }
+                if ($changed) {
+                    $encoded = json_encode($items, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                    if ($encoded !== false) {
+                        $json = $encoded;
+                    }
+                }
+            }
+
+            if ($changed) {
+                $update->execute([$title, $subtitle, $json, (int)$row['id']]);
+            }
+        }
     }
 
     /**

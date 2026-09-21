@@ -58,10 +58,6 @@ class BannerHighlightCodec
                 $items[$index]['icon'] = $mapping['to'];
             }
         }
-        if (isset($items[1]['text'])
-            && trim((string)$items[1]['text']) === '品质为先 省心高效') {
-            $items[1]['text'] = '品质为先 省心高效 合作共赢';
-        }
         return $items;
     }
 

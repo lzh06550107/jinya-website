@@ -240,6 +240,23 @@ for (const invalidMethod of ["getHighlightIcon1Attr", "getHighlightIcon2Attr", "
 }
 const abstractRender = read("application/common/service/cms/render/AbstractRenderService.php");
 expect(abstractRender.includes("bannerHighlights->homeHero"), "Home hero render must upgrade legacy banner highlight icons");
+expect(
+  !abstractRender.includes("trim((string)$title) === '高品质包装印刷 一站式按需定制'"),
+  "Homepage render must not silently rewrite persisted Banner title/subtitle",
+);
+expect(
+  !bannerCodec.includes("$items[1]['text'] = '品质为先 省心高效 合作共赢'"),
+  "Banner highlight render must not silently rewrite persisted selling-point text",
+);
+const installerService = read("application/common/service/cms/InstallerService.php");
+for (const token of [
+  "migrateLegacyHomeHeroBannerDefaults",
+  "高质量无版印刷",
+  "不干胶·包装袋 一站式按需定制",
+  "品质为先 省心高效 合作共赢"
+]) {
+  expect(installerService.includes(token), `Installer missing persisted home hero migration token ${token}`);
+}
 for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png"]) {
   expect(fs.existsSync(path.join(root, "html", "assets", "img", icon)), `Missing static home banner icon ${icon}`);
   expect(fs.existsSync(path.join(root, "public", "assets", "jinya", "img", icon)), `Missing published home banner icon ${icon}`);
