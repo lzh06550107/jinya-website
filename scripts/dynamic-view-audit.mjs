@@ -356,9 +356,7 @@ const legacySiteBannerKeys = [
   "cms_mobile_case_banner",
   "cms_mobile_about_banner",
 ];
-const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDefinitionRegistry.php");
 const checkedInSiteConfig = read("application/extra/site.php");
-const pcCmsBase = read("application/index/controller/CmsBase.php");
 const mobileCmsBase = read("application/mobile/controller/CmsBase.php");
 for (const key of legacySiteBannerKeys) {
   expect(!siteConfigDefinitions.includes(key), `Site config registry must retire duplicate Banner field ${key}`);
