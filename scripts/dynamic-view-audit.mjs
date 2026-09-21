@@ -96,8 +96,6 @@ for (const token of ["Header/footer backend configuration bridge v110", "--cms-n
 expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .label"), "Hotline label size must not switch discretely on is-scrolled");
 expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .cms-hotline-icon"), "Hotline icon size must not switch discretely on is-scrolled");
 expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .tag"), "Hotline badge size must not switch discretely on is-scrolled");
-}
-
 
 for (const file of [
   "public/assets/jinya/css/style.css",
