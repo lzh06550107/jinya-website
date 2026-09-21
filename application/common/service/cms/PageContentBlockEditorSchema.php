@@ -217,10 +217,8 @@ class PageContentBlockEditorSchema
 
         // 走进金亚（4）
         $schemas['about_hero'] = self::make('about', '走进金亚', 'Banner', 'about_section',
-            ['title','content','image','mobile_image'], [],
-            ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
-            ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
+            ['image','mobile_image'], [], [], [],
+            ['image'=>'PC 背景图','mobile_image'=>'移动背景图'], []
         );
         $schemas['about_values'] = self::make('about', '走进金亚', '品质理念', 'about_section',
             ['title'], [],
@@ -242,10 +240,8 @@ class PageContentBlockEditorSchema
 
         // 联系我们（3）
         $schemas['contact_hero'] = self::make('contact', '联系我们', 'Banner', 'contact_section',
-            ['title','content','image','mobile_image','link'], [],
-            ['title','badge','mobile_title','mobile_badge','pc_visible','mobile_visible'], [],
-            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图','link'=>'CTA 按钮'],
-            ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
+            ['title','content','image','mobile_image','link'], [], [], [],
+            ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图','link'=>'CTA 按钮'], []
         );
         $schemas['contact_info'] = self::make('contact', '联系我们', '联系信息', 'contact_section',
             ['title','content','image','mobile_image'], ['contact_company_title','contact_map_image','contact_map_provider','contact_baidu_ak','contact_map_lng','contact_map_lat','contact_map_zoom','contact_map_marker_title','contact_map_marker_address','contact_map_zoom_control','contact_map_scroll_wheel'],

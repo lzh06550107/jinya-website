@@ -2,7 +2,7 @@
 <main>
 <section class="hero hero--inner hero--blue news-generated-hero">
   {notempty name="banner.0.image"}<div class="inner-hero-bg news-generated-hero-bg" style="background-image:url('{$banner.0.image|htmlentities}');"></div>{else /}<div class="inner-hero-bg news-generated-hero-bg"></div>{/notempty}
-  <div class="container"><div class="hero-text"><h1>新闻动态</h1><p class="lede">关注金亚包装，了解包装印刷新动态</p></div></div>
+  <div class="container"><div class="hero-text"><h1>{$banner.0.title|default='新闻动态'|htmlentities}</h1><p class="lede">{$banner.0.subtitle|default='关注金亚包装，了解包装印刷新动态'|htmlentities}</p></div></div>
 </section>
 <section class="news-detail-section"><div class="container">
   <nav class="news-detail-breadcrumb" aria-label="当前位置"><a href="/">首页</a><span>/</span><a href="/news">新闻动态</a><span>/</span><span>新闻详情</span></nav>
