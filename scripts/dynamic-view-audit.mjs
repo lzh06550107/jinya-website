@@ -357,10 +357,12 @@ const legacySiteBannerKeys = [
   "cms_mobile_about_banner",
 ];
 const checkedInSiteConfig = read("application/extra/site.php");
+const cmsSchemaSql = read("database/cms.sql");
 const mobileCmsBase = read("application/mobile/controller/CmsBase.php");
 for (const key of legacySiteBannerKeys) {
   expect(!siteConfigDefinitions.includes(key), `Site config registry must retire duplicate Banner field ${key}`);
   expect(!checkedInSiteConfig.includes(key), `Checked-in site config must not retain duplicate Banner field ${key}`);
+  expect(!cmsSchemaSql.includes(key), `CMS schema seed must not recreate duplicate Banner field ${key}`);
   expect(!pcCmsBase.includes(key), `PC runtime must not read legacy Banner field ${key}`);
   expect(!mobileCmsBase.includes(key), `Mobile runtime must not read legacy Banner field ${key}`);
   expect(installerPageBlocks.includes(key), `Installer must physically clean legacy Banner field ${key}`);
