@@ -228,7 +228,7 @@ for (const token of ["config_social_url_1", "config_social_qr_1", "config_social
   expect(homeSchema.includes(token), `Home section schema missing html-baseline field ${token}`);
 }
 const structuredCodec = read("application/common/service/cms/StructuredConfigCodec.php");
-for (const token of ["config_social_url_1", "config_social_qr_1", "config_social_url_2", "config_social_qr_2", "['title', 'value', 'unit', 'text', 'icon', 'prefix']"]) {
+for (const token of ["config_social_url_1", "config_social_qr_1", "config_social_url_2", "config_social_qr_2", "['title', 'text', 'icon']"]) {
   expect(structuredCodec.includes(token), `Structured home codec missing ${token}`);
 }
 const homeAboutForm = read("application/admin/view/cms/common/_home_about_fields.html");
