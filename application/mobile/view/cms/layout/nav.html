@@ -1,4 +1,4 @@
-<nav class="site-nav" aria-label="主导航">
+<nav class="site-nav" aria-label="主导航" style="--cms-nav-active-bg:{$layout.header.config.nav_active_background_color|default='#f48101'|htmlentities};">
   <div class="container"><div class="main-nav" id="main-navigation">
     {notempty name="cmsNavigation"}
     {volist name="cmsNavigation" id="nav"}<a href="{$nav.url|default='#'|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" class="nav-link{if !empty($nav.url) && $cmsCurrentPath==$nav.url} active{/if}"{if !empty($nav.url) && $cmsCurrentPath==$nav.url} aria-current="page"{/if}>{$nav.title|htmlentities}</a>{/volist}

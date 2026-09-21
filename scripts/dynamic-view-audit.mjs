@@ -58,6 +58,10 @@ const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDef
 expect(siteConfigDefinitions.includes("'cms_factory_address'"), "Factory address must be a registered site field");
 const pcHeader = read("application/index/view/cms/layout/header.html");
 const mobileHeader = read("application/mobile/view/cms/layout/header.html");
+const pcNav = read("application/index/view/cms/layout/nav.html");
+const mobileNav = read("application/mobile/view/cms/layout/nav.html");
+expect(pcNav.includes("--cms-nav-active-bg:{$cmsPcNavActiveBackgroundColor"), "PC navigation must receive configured active background color on the nav subtree");
+expect(mobileNav.includes("--cms-nav-active-bg:{$layout.header.config.nav_active_background_color"), "Mobile navigation must receive configured active background color on the nav subtree");
 expect(pcHeader.includes("site-header--layout-"), "PC header must consume backend layout_mode");
 for (const [file, body] of [["PC header", pcHeader], ["mobile header", mobileHeader]]) {
   for (const token of ["show_logo", "show_navigation", "show_phone", "hotline_icon_view"]) {
