@@ -52,6 +52,7 @@ const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDef
 expect(siteConfigDefinitions.includes("'cms_factory_address'"), "Factory address must be a registered site field");
 const pcHeader = read("application/index/view/cms/layout/header.html");
 const mobileHeader = read("application/mobile/view/cms/layout/header.html");
+expect(pcHeader.includes("site-header--layout-"), "PC header must consume backend layout_mode");
 for (const [file, body] of [["PC header", pcHeader], ["mobile header", mobileHeader]]) {
   for (const token of ["show_logo", "show_navigation", "show_phone", "hotline_icon_view"]) {
     expect(body.includes(token), `${file} must consume backend header config ${token}`);
@@ -70,7 +71,7 @@ for (const [file, body] of [["PC footer", pcFooter], ["mobile footer", mobileFoo
 }
 expect(mobileFooter.includes("layout.navigation.footer"), "Mobile footer must consume footer navigation instead of header navigation");
 const runtimeStyle = read("public/assets/jinya/css/style.css");
-for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width"]) {
+for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
   expect(runtimeStyle.includes(token), `Runtime stylesheet missing layout config bridge ${token}`);
 }
 
