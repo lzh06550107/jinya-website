@@ -45,6 +45,13 @@ for (const file of [
   expect(fs.existsSync(path.join(root, file)), `${file} must exist`);
 }
 
+const layoutUnifiedEditor = read("application/common/service/cms/layout_editor/LayoutUnifiedEditorService.php");
+for (const token of ["defaultSocialQrKey", "'微信' => 'wechat_qr'", "'抖音' => 'douyin_qr'", "'小红书' => 'xiaohongshu_qr'", "'微信视频号' => 'video_qr'"]) {
+  expect(layoutUnifiedEditor.includes(token), `Social QR editor binding missing ${token}`);
+}
+const layoutEditorView = read("application/admin/view/cms/layout_component/edit.html");
+expect(layoutEditorView.includes('name="row[social_items][{$socialIndex}][qr_value]"'), "Social editor must expose QR upload value");
+expect(layoutEditorView.includes("PC 前台鼠标悬停对应图标时"), "Social editor must explain hover QR behavior");
 const layoutEditorRegistry = read("application/common/service/cms/layout_editor/LayoutEditorRegistry.php");
 expect(layoutEditorRegistry.includes("cms_factory_address"), "Footer editor must expose factory address");
 expect(layoutEditorRegistry.includes("cms_service_wechat_qr"), "Footer/floating editor must expose the QR actually rendered by the footer");
@@ -74,6 +81,9 @@ expect(mobileHeader.includes("/assets/jinya/css/mobile.css"), "mobile header mus
 const pcFooter = read("application/index/view/cms/layout/footer.html");
 const mobileFooter = read("application/mobile/view/cms/layout/footer.html");
 for (const [file, body] of [["PC footer", pcFooter], ["mobile footer", mobileFooter]]) {
+  for (const token of ["footer-social-item", "footer-social-qr-popover", "item.qr_image"]) {
+    expect(body.includes(token), `${file} must render hover social QR markup ${token}`);
+  }
   for (const token of ["show_company", "show_contact", "show_navigation", "show_qrcode", "show_beian", "show_online_consult", "show_online_message", "show_wechat_consult", "show_back_top"]) {
     expect(body.includes(token), `${file} must consume backend footer/floating config ${token}`);
   }
@@ -89,7 +99,14 @@ for (const token of ["mixHeaderValue", "Smoothstep", "--cms-hotline-current-widt
   expect(headerMotionJs.includes(token), `Header scroll motion missing smooth hotline interpolation token ${token}`);
 }
 expect(!headerMotionJs.includes("var phoneScale = 1 + progress * 0.08"), "Hotline must not combine scroll interpolation with a second scale animation");
+const footerRenderService = read("application/common/service/cms/render/LayoutRenderService.php");
+for (const token of ["defaultFooterSocialQrKey", "qr_image", "'微信视频号' => 'video_qr'"]) {
+  expect(footerRenderService.includes(token), `Footer QR render missing ${token}`);
+}
 const runtimeStyle = read("public/assets/jinya/css/style.css");
+for (const token of [".footer-social-qr-popover", ".footer-social-item:hover .footer-social-qr-popover", "bottom:calc(100% + 12px)"]) {
+  expect(runtimeStyle.includes(token), `Footer social QR CSS missing ${token}`);
+}
 for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", "--cms-hotline-current-width", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
   expect(runtimeStyle.includes(token), `Runtime stylesheet missing layout config bridge ${token}`);
 }
