@@ -23,6 +23,7 @@ const entryViews = [
   "application/mobile/view/cms/news/index.html",
   "application/index/view/cms/news/detail.html",
   "application/mobile/view/cms/news/detail.html",
+  "application/index/view/cms/product/detail.html",
 ];
 
 for (const file of entryViews) {
@@ -168,6 +169,30 @@ for (const token of [
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
 expect(factory.includes("['print_points']"), "PageBlockViewModelFactory must register print_points for scalar markdown rendering");
 expect(factory.includes("$scalarMarkdownKey . '_html'"), "PageBlockViewModelFactory must expose scalar markdown HTML keys");
+
+const productDetailView = read("application/index/view/cms/product/detail.html");
+for (const token of [
+  'cms/layout/header',
+  'cms/layout/footer',
+  'data-product-detail',
+  'jpd-product-hero',
+  'jpd-summary-card',
+  'jpd-detail-nav',
+  'jpd-related'
+]) {
+  expect(productDetailView.includes(token), `Product detail view missing modern layout token ${token}`);
+}
+expect(!productDetailView.includes("cms/common/strict_header"), "Product detail must not use legacy strict_header");
+expect(!productDetailView.includes("cms/common/strict_footer"), "Product detail must not use legacy strict_footer");
+
+const productDetailCss = read("public/assets/jinya/css/style.css");
+for (const token of ["Product detail v40", ".jpd-product-hero", ".jpd-detail-nav", ".jpd-media-preview", ".jpd-related-grid"]) {
+  expect(productDetailCss.includes(token), `Product detail stylesheet missing ${token}`);
+}
+const productDetailJs = read("public/assets/jinya/js/main.js");
+for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", "openProductPreview", "showDetailMedia"]) {
+  expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
+}
 
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
