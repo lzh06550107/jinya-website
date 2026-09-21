@@ -8657,8 +8657,9 @@ input,textarea{ font:inherit; }
   body:not(.mobile-site) .site-header.is-scrolled .site-logo-img{
     width:var(--cms-logo-scrolled-width,var(--cms-logo-top-width,190px))!important;
   }
-  body:not(.mobile-site) .site-header .header-phone{
-    min-width:var(--cms-hotline-top-width,202px)!important;
+  body:not(.mobile-site) .site-header:not(.is-scrolled) .header-phone{
+    min-width:min(var(--cms-hotline-top-width,300px),300px)!important;
+    width:min(var(--cms-hotline-top-width,300px),300px)!important;
     transform:translateY(var(--cms-hotline-top-offset,0)) scale(var(--phone-scroll-scale,1));
   }
   body:not(.mobile-site) .site-header.is-scrolled .header-phone{

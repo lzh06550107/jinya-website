@@ -80,8 +80,12 @@ for (const [file, body] of [["PC footer", pcFooter], ["mobile footer", mobileFoo
   expect(body.includes("factory_address"), `${file} must render configurable factory address`);
 }
 expect(mobileFooter.includes("layout.navigation.footer"), "Mobile footer must consume footer navigation instead of header navigation");
+const headerSchema = read("application/common/service/cms/LayoutSchemaRegistry.php");
+expect(headerSchema.includes("'hotline_top_width' => ['title' => '电话区顶部状态宽度', 'type' => 'number', 'default' => 300, 'min' => 240, 'max' => 300]"), "PC top hotline width must be constrained to 240-300px");
+const pcCmsBase = read("application/index/controller/CmsBase.php");
+expect(pcCmsBase.includes("min(300, (int)LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width'"), "Existing oversized hotline width values must be capped at 300px");
 const runtimeStyle = read("public/assets/jinya/css/style.css");
-for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
+for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", "min(var(--cms-hotline-top-width,300px),300px)", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
   expect(runtimeStyle.includes(token), `Runtime stylesheet missing layout config bridge ${token}`);
 }
 

@@ -52,7 +52,7 @@ abstract class CmsBase extends Frontend
             LayoutSchemaRegistry::sanitizeField('header', 'nav_active_background_color', isset($headerConfig['nav_active_background_color']) ? $headerConfig['nav_active_background_color'] : '#f48101'),
             '#f48101'
         );
-        $hotlineTopWidth = LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width', isset($headerConfig['hotline_top_width']) ? $headerConfig['hotline_top_width'] : 400);
+        $hotlineTopWidth = min(300, (int)LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width', isset($headerConfig['hotline_top_width']) ? $headerConfig['hotline_top_width'] : 300));
         $hotlineScrolledWidth = LayoutSchemaRegistry::sanitizeField('header', 'hotline_scrolled_width', isset($headerConfig['hotline_scrolled_width']) ? $headerConfig['hotline_scrolled_width'] : 320);
         $hotlineTopOffsetY = LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_offset_y', isset($headerConfig['hotline_top_offset_y']) ? $headerConfig['hotline_top_offset_y'] : 0);
         $hotlineScrolledOffsetY = LayoutSchemaRegistry::sanitizeField('header', 'hotline_scrolled_offset_y', isset($headerConfig['hotline_scrolled_offset_y']) ? $headerConfig['hotline_scrolled_offset_y'] : 0);

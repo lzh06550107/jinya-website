@@ -110,7 +110,7 @@ class LayoutSchemaRegistry
                 'hotline_number_color' => ['title' => '电话号码颜色', 'type' => 'text', 'default' => '#ffd65a', 'max_length' => 20],
                 'hotline_badge_background_color' => ['title' => '急单专线背景色', 'type' => 'text', 'default' => '#ffb918', 'max_length' => 20],
                 'hotline_badge_text_color' => ['title' => '急单专线文字颜色', 'type' => 'text', 'default' => '#333333', 'max_length' => 20],
-                'hotline_top_width' => ['title' => '电话区顶部状态宽度', 'type' => 'number', 'default' => 400, 'min' => 240, 'max' => 520],
+                'hotline_top_width' => ['title' => '电话区顶部状态宽度', 'type' => 'number', 'default' => 300, 'min' => 240, 'max' => 300],
                 'hotline_scrolled_width' => ['title' => '电话区滚动状态宽度', 'type' => 'number', 'default' => 320, 'min' => 220, 'max' => 460],
                 'hotline_top_offset_y' => ['title' => '电话区顶部状态整体上下偏移', 'type' => 'number', 'default' => 0, 'min' => -40, 'max' => 80],
                 'hotline_scrolled_offset_y' => ['title' => '电话区滚动状态整体上下偏移', 'type' => 'number', 'default' => 0, 'min' => -40, 'max' => 80],

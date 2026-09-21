@@ -355,10 +355,10 @@
                             {if condition="$layoutField.type eq 'number'"}
                             <input class="form-control" style="max-width:160px;" name="row[config][{$layoutName|htmlentities}]" type="number" {if condition="isset($layoutField.min)"}min="{$layoutField.min|htmlentities}"{/if} {if condition="isset($layoutField.max)"}max="{$layoutField.max|htmlentities}"{/if} value="{$editor.layout_config[$layoutName]|htmlentities}">
                             {if condition="$layoutName eq 'hotline_top_width'"}
-                            <p class="help-block">全站 PC 顶部导航栏电话区宽度。组件固定宽高比 5.5:1，只允许调整宽度，高度自动计算，避免热线区域被拉伸变形。</p>
+                            <p class="help-block">全站 PC 顶部导航栏电话区宽度。为避免与中间导航重叠，当前限制为 240–300 px；建议使用 280–300 px。组件按固定宽高比显示。</p>
                             <div class="form-inline cms-hotline-auto-height-row" style="margin-top:8px;">
                                 <label class="text-muted" style="font-weight:normal;margin-right:6px;">自动高度</label>
-                                <input class="form-control input-sm" style="width:110px;" type="text" value="72.7 px" readonly data-hotline-auto-height="top">
+                                <input class="form-control input-sm" style="width:110px;" type="text" value="54.5 px" readonly data-hotline-auto-height="top">
                                 <span class="text-muted" style="margin-left:8px;">固定宽高比 5.5:1</span>
                             </div>
                             {/if}
