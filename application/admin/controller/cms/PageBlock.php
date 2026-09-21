@@ -233,11 +233,16 @@ class PageBlock extends Backend
         if (!$rows) {
             $rows = [$this->emptyBannerRow()];
         }
+        $profile = $this->bannerEditorProfile($realSource['page_key'], $realSource['position']);
+        if (empty($profile['allow_multiple'])) {
+            $rows = array_slice($rows, 0, 1);
+        }
         $this->view->assign('row', $row);
         $this->view->assign('schema', $schema);
         $this->view->assign('bannerRows', $rows);
         $this->view->assign('bannerPageKey', $realSource['page_key']);
         $this->view->assign('bannerPosition', $realSource['position']);
+        $this->view->assign('bannerProfile', $profile);
     }
 
     protected function assignHomeSectionEditData($row, array $schema, array $realSource)
@@ -255,6 +260,49 @@ class PageBlock extends Backend
         $this->view->assign('homePcReferenceIds', implode(',', isset($home['pc_reference_ids']) ? $home['pc_reference_ids'] : []));
         $this->view->assign('homeMobileReferenceIds', implode(',', isset($home['mobile_reference_ids']) ? $home['mobile_reference_ids'] : []));
         $this->view->assign('homeReferenceSource', $this->referenceSource($contentType));
+    }
+
+    protected function bannerEditorProfile($pageKey, $position)
+    {
+        $pageKey = trim((string)$pageKey);
+        if ($pageKey === 'home' && $position === 'hero') {
+            return [
+                'name' => 'home_full',
+                'label' => '首页轮播',
+                'allow_multiple' => 1,
+                'show_copy' => 1,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        if (in_array($pageKey, ['news.index', 'news.category', 'news.detail'], true)) {
+            return [
+                'name' => 'news_channel',
+                'label' => '新闻栏目 Banner',
+                'allow_multiple' => 0,
+                'show_copy' => 1,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        if (in_array($pageKey, ['product.index', 'product.category'], true)) {
+            return [
+                'name' => 'image_channel',
+                'label' => '产品栏目 Banner',
+                'allow_multiple' => 0,
+                'show_copy' => 0,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        return [
+            'name' => 'pc_image',
+            'label' => 'PC 栏目 Banner',
+            'allow_multiple' => 0,
+            'show_copy' => 0,
+            'show_mobile' => 0,
+            'show_mobile_visibility' => 0,
+        ];
     }
 
     protected function emptyBannerRow()

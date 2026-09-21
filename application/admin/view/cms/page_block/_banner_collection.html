@@ -10,6 +10,7 @@
             <p class="form-control-static"><strong>{$row.block_name|htmlentities}</strong>（{$row.page_key|htmlentities}.{$row.block_key|htmlentities}）</p>
         </div>
     </div>
+    {if condition="$bannerProfile.name eq 'home_full'"}
     <div id="real-banner-list">
         {foreach name="bannerRows" item="banner" key="bannerIndex"}
         <div class="panel panel-default banner-row" data-banner-row data-banner-index="{$bannerIndex|htmlentities}">
@@ -62,5 +63,51 @@
         {/foreach}
     </div>
     <div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="button" id="btn-add-real-banner" class="btn btn-success"><i class="fa fa-plus"></i> 新增 Banner</button></div></div>
+    {else /}
+    <div class="alert alert-warning">
+        当前页面只使用 <strong>{$bannerProfile.label|htmlentities}</strong> 的实际展示字段。视频、卖点、叠加图、按钮等首页轮播专用配置已隐藏，避免出现“后台可填但前台不生效”。
+    </div>
+    <div id="real-banner-list">
+        {foreach name="bannerRows" item="banner" key="bannerIndex"}
+        <div class="panel panel-default banner-row" data-banner-row data-banner-index="{$bannerIndex|htmlentities}">
+            <div class="panel-heading"><strong>{$bannerProfile.label|htmlentities}</strong></div>
+            <div class="panel-body">
+                <input type="hidden" name="real[banners][{$bannerIndex}][id]" value="{$banner.id|default='0'|htmlentities}">
+                <input type="hidden" name="real[banners][{$bannerIndex}][media_type]" value="image">
+                {if condition="$bannerProfile.show_mobile"}<input type="hidden" name="real[banners][{$bannerIndex}][mobile_media_type]" value="image">{/if}
+                {if condition="$bannerProfile.show_copy"}
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2">PC 标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][title]" value="{$banner.title|default=''|htmlentities}"></div>
+                    <label class="control-label col-xs-12 col-sm-2">移动标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_title]" value="{$banner.mobile_title|default=''|htmlentities}" placeholder="留空时继承 PC 标题"></div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2">PC 副标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][subtitle]" value="{$banner.subtitle|default=''|htmlentities}"></div>
+                    <label class="control-label col-xs-12 col-sm-2">移动副标题:</label><div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_subtitle]" value="{$banner.mobile_subtitle|default=''|htmlentities}" placeholder="留空时继承 PC 副标题"></div>
+                </div>
+                {/if}
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2">PC Banner 图片:</label>
+                    <div class="col-xs-12 {if condition='$bannerProfile.show_mobile'}col-sm-4{else /}col-sm-8{/if}">
+                        <input class="form-control" name="real[banners][{$bannerIndex}][image]" value="{$banner.image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 栏目 Banner 图片" data-media-recommended-width="1920" data-media-recommended-height="800" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
+                    </div>
+                    {if condition="$bannerProfile.show_mobile"}
+                    <label class="control-label col-xs-12 col-sm-2">移动 Banner 图片:</label>
+                    <div class="col-xs-12 col-sm-4"><input class="form-control" name="real[banners][{$bannerIndex}][mobile_image]" value="{$banner.mobile_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="移动栏目 Banner 图片" data-media-recommended-width="750" data-media-recommended-height="422" data-media-recommended-format="JPG/WebP" data-media-max-kb="800"><p class="help-block">留空时继承 PC 图片。</p></div>
+                    {/if}
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-2">显示:</label>
+                    <div class="col-xs-12 col-sm-4">
+                        <input type="hidden" name="real[banners][{$bannerIndex}][pc_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" name="real[banners][{$bannerIndex}][pc_visible]" value="1" {if condition="!isset($banner.pc_visible) || $banner.pc_visible"}checked{/if}> PC</label>
+                        {if condition="$bannerProfile.show_mobile_visibility"}<input type="hidden" name="real[banners][{$bannerIndex}][mobile_visible]" value="0"><label class="checkbox-inline"><input type="checkbox" name="real[banners][{$bannerIndex}][mobile_visible]" value="1" {if condition="!isset($banner.mobile_visible) || $banner.mobile_visible"}checked{/if}> 移动端</label>{/if}
+                    </div>
+                    <label class="control-label col-xs-12 col-sm-2">状态:</label>
+                    <div class="col-xs-12 col-sm-4"><select class="form-control" name="real[banners][{$bannerIndex}][status]"><option value="normal" {if condition="!isset($banner.status) || $banner.status eq 'normal'"}selected{/if}>正常</option><option value="hidden" {if condition="isset($banner.status) && $banner.status eq 'hidden'"}selected{/if}>隐藏</option></select></div>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    {/if}
     <div class="form-group layer-footer"><div class="col-xs-12 col-sm-offset-2 col-sm-8"><button type="submit" class="btn btn-primary btn-embossed disabled">保存并立即生效</button><button type="reset" class="btn btn-default btn-embossed">重置</button></div></div>
 </form>
