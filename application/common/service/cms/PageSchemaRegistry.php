@@ -38,13 +38,25 @@ class PageSchemaRegistry
     }
 
     /**
-     * 已从当前首页信息架构退役的旧功能块标识。
+     * 已退出当前前台信息架构的旧功能块。
      *
-     * 保留集中清单仅用于兼容升级数据库和过滤旧记录，不能重新注册为首页功能块。
+     * 这些键只用于兼容升级数据库和即时过滤旧记录，不能重新注册到页面 Schema。
      */
+    public static function retiredBlockKeys($pageKey)
+    {
+        $map = [
+            'home' => ['cases', 'advantages', 'news'],
+            'product.detail' => ['banner'],
+            'page.about' => ['banner'],
+            'page.contact' => ['banner'],
+        ];
+        $pageKey = trim((string)$pageKey);
+        return isset($map[$pageKey]) ? $map[$pageKey] : [];
+    }
+
     public static function retiredHomeBlockKeys()
     {
-        return ['cases', 'advantages', 'news'];
+        return self::retiredBlockKeys('home');
     }
 
     /**
@@ -238,7 +250,6 @@ class PageSchemaRegistry
                 'pagination' => self::blockDefinition('产品分页', 'pagination', true, self::paginationFields(), 'query'),
             ]),
             'product.detail' => self::pageDefinition('产品详情', 'dynamic_detail', '/product/{slug}', [
-                'banner' => self::blockDefinition('产品详情 Banner', 'banner', false, self::bannerFields(), 'page'),
                 'gallery' => self::blockDefinition('产品相册', 'gallery', true, self::visibilityFields(true), 'product'),
                 'summary' => self::blockDefinition('产品基础信息', 'detail', true, self::visibilityFields(true), 'product'),
                 'parameters' => self::blockDefinition('技术参数', 'parameters', false, self::visibilityFields(false), 'product'),
@@ -547,7 +558,6 @@ class PageSchemaRegistry
     protected static function aboutPage()
     {
         return self::pageDefinition('走进金亚', 'fixed_page', '/page/about', [
-            'banner' => self::blockDefinition('企业栏目 Banner', 'banner', false, self::bannerFields(), 'page'),
             'content' => self::blockDefinition('关于我们正文', 'rich_text', true, self::pageContentFields(true), 'page:about'),
         ]);
     }
@@ -555,7 +565,6 @@ class PageSchemaRegistry
     protected static function contactPage()
     {
         return self::pageDefinition('联系我们', 'fixed_page', '/page/contact', [
-            'banner' => self::blockDefinition('企业栏目 Banner', 'banner', false, self::bannerFields(), 'page'),
             'content' => self::blockDefinition('联系我们正文', 'rich_text', true, self::pageContentFields(false), 'page:contact'),
             'contact_info' => self::blockDefinition('联系方式', 'contact_info', false, self::contactInfoFields(), 'global'),
             'inquiry' => self::blockDefinition('在线咨询', 'inquiry', false, self::inquiryFields(), 'global'),

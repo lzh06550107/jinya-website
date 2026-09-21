@@ -136,14 +136,10 @@ class ProductDetailRenderService extends AbstractRenderService
                 'related' => isset($common['page_config']['blocks']['related']),
             ],
         ];
-        $banner = $this->banners('product.detail.' . $slug, 'channel', $context);
-        if (empty($banner)) {
-            $banner = $this->banners('product.detail', 'channel', $context);
-        }
         return new ProductDetailViewModel(
             $common['seo'],
             $common['layout'],
-            $banner,
+            [],
             $this->detailBreadcrumb($displayCategory, $row),
             $common['page_config'],
             $content

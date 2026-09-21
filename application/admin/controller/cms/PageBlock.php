@@ -58,8 +58,9 @@ class PageBlock extends Backend
         $query = $this->model
             ->where('page_key', $pageKey)
             ->where($where);
-        if ($pageKey === 'home') {
-            $query->where('block_key', 'not in', PageSchemaRegistry::retiredHomeBlockKeys());
+        $retiredBlockKeys = PageSchemaRegistry::retiredBlockKeys($pageKey);
+        if ($retiredBlockKeys) {
+            $query->where('block_key', 'not in', $retiredBlockKeys);
         }
         if ($pageKey === 'home' && $sort === 'weigh') {
             $query->order('weigh ' . ($order === 'asc' ? 'asc' : 'desc') . ',id asc');
@@ -138,9 +139,8 @@ class PageBlock extends Backend
         if (!$row) {
             $this->error('固定功能块不存在');
         }
-        if ((string)$row['page_key'] === 'home'
-            && in_array((string)$row['block_key'], PageSchemaRegistry::retiredHomeBlockKeys(), true)) {
-            $this->error('该首页功能块已退役');
+        if (in_array((string)$row['block_key'], PageSchemaRegistry::retiredBlockKeys((string)$row['page_key']), true)) {
+            $this->error('该页面功能块已退役');
         }
         $schema = PageSchemaRegistry::block($row['page_key'], $row['block_key']);
         $realSource = (new PageBlockRealSourceEditorRegistry())->resolve($row['page_key'], $row['block_key'], $row['block_type']);
