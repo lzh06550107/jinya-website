@@ -122,6 +122,7 @@ class InstallerService
         // Apply the current html/ + html/mobile/ content baseline last so a fresh
         // CMS install renders the same copy and media as the approved static pages.
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        $this->ensureHomeAboutSocialIconDefaults($connection, $prefix);
 
         $missing = $this->missingTables($connection, $prefix);
         if ($missing) {
@@ -901,6 +902,51 @@ class InstallerService
      * @param string $prefix
      * @return void
      */
+    /**
+     * 为历史首页“关于金亚”配置补齐社交入口默认图标。
+     *
+     * 只在 JSON key 不存在时补值；管理员主动保存为空字符串后不会再次补回。
+     */
+    protected function ensureHomeAboutSocialIconDefaults($connection, $prefix)
+    {
+        $table = $prefix . 'cms_home_section';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare("SELECT `id`,`config_json` FROM `{$table}` WHERE `section_key`=? LIMIT 1");
+        $select->execute(['about']);
+        $row = $select->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $config = json_decode(isset($row['config_json']) ? (string)$row['config_json'] : '', true);
+        $config = is_array($config) ? $config : [];
+        $defaults = [
+            'social_icon_1' => '/assets/jinya/img/social-wechat.png',
+            'social_icon_2' => '/assets/jinya/img/home-video-channels.png',
+        ];
+        $changed = false;
+        foreach ($defaults as $key => $value) {
+            if (!array_key_exists($key, $config)) {
+                $config[$key] = $value;
+                $changed = true;
+            }
+        }
+        if (!$changed) {
+            return;
+        }
+
+        $encoded = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$table}` SET `config_json`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?");
+        $update->execute([$encoded, (int)$row['id']]);
+    }
+
     /**
      * 将历史科创美 Footer 导航一次性迁移为当前金亚页脚导航。
      *

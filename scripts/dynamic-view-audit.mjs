@@ -196,13 +196,23 @@ for (const token of ["config_social_url_1", "config_social_url_2", "['title', 'v
   expect(structuredCodec.includes(token), `Structured home codec missing ${token}`);
 }
 const homeAboutForm = read("application/admin/view/cms/common/_home_about_fields.html");
-for (const token of ['name="[inputPrefix][subtitle]"', 'name="[inputPrefix][config_social_url_1]"', 'name="[inputPrefix][config_social_url_2]"']) {
+for (const token of [
+  'name="[inputPrefix][subtitle]"',
+  'name="[inputPrefix][config_social_icon_1]"',
+  'name="[inputPrefix][config_social_url_1]"',
+  'name="[inputPrefix][config_social_icon_2]"',
+  'name="[inputPrefix][config_social_url_2]"'
+]) {
   expect(homeAboutForm.includes(token), `Home about admin form missing ${token}`);
+}
+const homeSectionModel = read("application/common/model/cms/HomeSection.php");
+for (const method of ["getConfigSocialIcon_1Attr", "getConfigSocialUrl_1Attr", "getConfigSocialIcon_2Attr", "getConfigSocialUrl_2Attr"]) {
+  expect(homeSectionModel.includes("function " + method + "("), `HomeSection model missing social accessor ${method}`);
 }
 const homeMetricsForm = read("application/admin/view/cms/common/_metrics_editor.html");
 expect(homeMetricsForm.includes('data-metric-field="title"'), "Home service metric editor must expose a title field");
 const homeView = read("application/index/view/cms/index/index.html");
-for (const token of ["about.config.social_url_1", "about.config.social_url_2", "metric.title", "company.subtitle"]) {
+for (const token of ["about.config.social_url_1", "about.config.social_url_2", "about.config.social_icon_1_view", "about.config.social_icon_2_view", "metric.title", "company.subtitle"]) {
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
 for (const token of ["hero-title-primary", "hero-title-secondary", "hero-badges"]) {
@@ -257,6 +267,9 @@ for (const token of [
 ]) {
   expect(installerService.includes(token), `Installer missing persisted home hero migration token ${token}`);
 }
+for (const token of ["ensureHomeAboutSocialIconDefaults", "social-wechat.png", "home-video-channels.png"]) {
+  expect(installerService.includes(token), `Installer missing home-about social icon migration token ${token}`);
+}
 for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png"]) {
   expect(fs.existsSync(path.join(root, "html", "assets", "img", icon)), `Missing static home banner icon ${icon}`);
   expect(fs.existsSync(path.join(root, "public", "assets", "jinya", "img", icon)), `Missing published home banner icon ${icon}`);
@@ -274,6 +287,9 @@ for (const icon of ["home-highlight-team.png", "home-highlight-quality.png", "ho
     baselineSql.includes('"image":"/assets/jinya/img/boxes-prod-1.jpg","subtitle":"","badge":"","group":"main"'),
     "HTML baseline must mark the first boxes product image as the main card",
   );
+  for (const icon of ["/assets/jinya/img/social-wechat.png", "/assets/jinya/img/home-video-channels.png"]) {
+    expect(baselineSql.includes(icon), `HTML baseline must persist home-about social icon ${icon}`);
+  }
   const installer = read("application/common/service/cms/InstallerService.php");
   for (const token of [
     "/assets/jinya/img/home-banner-01.png",

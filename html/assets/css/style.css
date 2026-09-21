@@ -413,6 +413,7 @@ input,textarea{ font:inherit; }
 .social-cta{ min-width:160px; padding:12px 22px; }
 .social-cta--channels{ min-width:238px; }
 .social-cta .brand-icon{ width:28px; height:28px; flex:0 0 28px; }
+.social-cta i.brand-icon{ font-size:26px; line-height:28px; text-align:center; }
 .social-cta .brand-icon--wechat{ color:#07c160; fill:currentColor; }
 .social-cta .brand-icon--channels{ color:#ff8a00; fill:currentColor; }
 @media (max-width:560px){
