@@ -322,6 +322,78 @@ for (const token of ["bannerProfile.name", "后台可填但前台不生效", "PC
   expect(bannerCollectionView.includes(token), `Banner collection editor missing profile token ${token}`);
 }
 
+// Banner configuration must have one runtime source of truth.
+const mobileLabelHeroView = read("application/mobile/view/cms/page/label/hero.html");
+for (const [file, body] of [
+  ["PC labels hero", labelHeroView],
+  ["mobile labels hero", mobileLabelHeroView],
+]) {
+  expect(!body.includes("labels-banner-clean-v83"), `${file} must not inject a hardcoded fallback image`);
+}
+
+const pageBlockRepository = read("application/common/repository/cms/ThinkPageContentBlockRepository.php");
+expect(
+  pageBlockRepository.includes("$terminal==='mobile'&&!empty($r['mobile_image'])?$r['mobile_image']:$r['image']"),
+  "Structured page repository must resolve mobile_image before exposing block.image",
+);
+
+const runtimeBannerCss = read("public/assets/jinya/css/style.css");
+for (const token of [
+  "about-banner-upload-20260919.jpg",
+  "news-banner-generated-clean-v77.jpg",
+  "contact-banner-clean-v78.jpg",
+]) {
+  expect(!runtimeBannerCss.includes(token), `Dynamic runtime CSS must not provide Banner fallback asset ${token}`);
+}
+
+const legacySiteBannerKeys = [
+  "cms_pc_product_banner",
+  "cms_pc_news_banner",
+  "cms_pc_case_banner",
+  "cms_pc_about_banner",
+  "cms_mobile_product_banner",
+  "cms_mobile_news_banner",
+  "cms_mobile_case_banner",
+  "cms_mobile_about_banner",
+];
+const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDefinitionRegistry.php");
+const checkedInSiteConfig = read("application/extra/site.php");
+const pcCmsBase = read("application/index/controller/CmsBase.php");
+const mobileCmsBase = read("application/mobile/controller/CmsBase.php");
+for (const key of legacySiteBannerKeys) {
+  expect(!siteConfigDefinitions.includes(key), `Site config registry must retire duplicate Banner field ${key}`);
+  expect(!checkedInSiteConfig.includes(key), `Checked-in site config must not retain duplicate Banner field ${key}`);
+  expect(!pcCmsBase.includes(key), `PC runtime must not read legacy Banner field ${key}`);
+  expect(!mobileCmsBase.includes(key), `Mobile runtime must not read legacy Banner field ${key}`);
+  expect(installerPageBlocks.includes(key), `Installer must physically clean legacy Banner field ${key}`);
+}
+expect(installerPageBlocks.includes("retireLegacySiteBannerConfig"), "Installer must retire legacy site Banner configuration");
+expect(pcCmsBase.includes("channelBannerVisible', $channelBanner !== ''"), "PC channel Banner visibility must follow the resolved ViewModel image");
+expect(mobileCmsBase.includes("channelBannerVisible', $mobileChannelBanner !== ''"), "Mobile channel Banner visibility must follow the resolved ViewModel image");
+
+const strictChannelHeader = read("application/index/view/cms/common/strict_channel_header.html");
+expect(!strictChannelHeader.includes("abt_bg.jpg"), "Dynamic strict channel header must not inject a static fallback Banner");
+
+for (const file of [
+  "application/index/view/cms/news/index.html",
+  "application/index/view/cms/news/detail.html",
+  "application/mobile/view/cms/news/index.html",
+  "application/mobile/view/cms/news/detail.html",
+]) {
+  const body = read(file);
+  expect(body.includes('{notempty name="banner.0"}'), `${file} must hide the hero when no active Banner exists`);
+  expect(body.includes("banner.0.title"), `${file} must consume configured Banner title`);
+  expect(body.includes("banner.0.subtitle"), `${file} must consume configured Banner subtitle`);
+  expect(!body.includes("default='每一次匠心坚守"), `${file} must not inject default list Banner copy`);
+  expect(!body.includes("default='新闻动态'"), `${file} must not inject default detail Banner copy`);
+}
+for (const file of [
+  "application/index/view/cms/news/index.html",
+  "application/mobile/view/cms/news/index.html",
+]) {
+  expect(!read(file).includes('class="hero-cta"'), `${file} must not render a hardcoded Banner CTA outside backend configuration`);
+}
+
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
   "application/index/view/cms/page/bags/compare.html": ["block.extra.compare_brand", "block.extra.compare_footer", "tech-compare"],
