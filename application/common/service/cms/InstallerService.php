@@ -111,6 +111,7 @@ class InstallerService
         $this->ensureContactPageDefaults($connection, $prefix);
         $this->normalizeLegacyHomeSectionWeights($connection, $prefix);
         $this->retireCmsMobileConfig($connection, $prefix);
+        $this->retireLegacySiteBannerConfig($connection, $prefix);
         // Normalize legacy HTML links before HTML is migrated to Markdown.
         $this->normalizeCmsUrls($connection, $prefix);
         // Historical strict clone fragments contained page layout HTML/CSS in data.
@@ -1813,6 +1814,42 @@ class InstallerService
         $this->getPdo($connection)->exec(
             "DELETE FROM `{$table}` WHERE `name` = 'cms_mobile'"
         );
+    }
+
+    /**
+     * 退役旧版 fa_config 栏目 Banner。
+     *
+     * 产品/新闻频道已经统一读取 cms_banner；结构化单页统一读取 *_hero 内容块。
+     * 这些历史站点级字段继续存在会形成第二数据源，因此升级时按精确键物理清理。
+     *
+     * @param mixed  $connection
+     * @param string $prefix
+     * @return void
+     */
+    protected function retireLegacySiteBannerConfig($connection, $prefix)
+    {
+        $table = $prefix . 'config';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+
+        $keys = [
+            'cms_pc_product_banner',
+            'cms_pc_news_banner',
+            'cms_pc_case_banner',
+            'cms_pc_about_banner',
+            'cms_mobile_product_banner',
+            'cms_mobile_news_banner',
+            'cms_mobile_case_banner',
+            'cms_mobile_about_banner',
+        ];
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $statement = $this->getPdo($connection)->prepare(
+            "DELETE FROM `{$table}` WHERE `name` IN ({$placeholders})"
+        );
+        if ($statement) {
+            $statement->execute($keys);
+        }
     }
 
     /**
