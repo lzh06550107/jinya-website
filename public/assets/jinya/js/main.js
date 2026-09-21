@@ -423,4 +423,110 @@
       revealObs.observe(el);
     });
   }
+
+  // Product detail gallery, media preview and anchored section navigation.
+  var productDetail = document.querySelector("[data-product-detail]");
+  if(productDetail){
+    var detailMain = productDetail.querySelector("[data-jpd-main]");
+    var detailThumbs = Array.prototype.slice.call(productDetail.querySelectorAll("[data-jpd-thumb]"));
+    var preview = productDetail.querySelector("[data-jpd-preview]");
+    var previewContent = productDetail.querySelector("[data-jpd-preview-content]");
+    var previewOpen = productDetail.querySelector("[data-jpd-open-preview]");
+    var previewClose = productDetail.querySelector("[data-jpd-preview-close]");
+    var activeMedia = { type:"", src:"", alt:"" };
+
+    function syncActiveFromStage(){
+      if(!detailMain) return;
+      var image = detailMain.querySelector("img");
+      var video = detailMain.querySelector("video");
+      if(video){
+        activeMedia = {type:"video",src:video.getAttribute("src") || "",alt:""};
+      }else if(image){
+        activeMedia = {type:"image",src:image.getAttribute("src") || "",alt:image.getAttribute("alt") || ""};
+      }
+    }
+
+    function showDetailMedia(type, src, alt){
+      if(!detailMain || !src) return;
+      detailMain.innerHTML = "";
+      var media;
+      if(type === "video"){
+        media = document.createElement("video");
+        media.controls = true;
+        media.preload = "metadata";
+        media.src = src;
+      }else{
+        media = document.createElement("img");
+        media.src = src;
+        media.alt = alt || "";
+        media.decoding = "async";
+      }
+      detailMain.appendChild(media);
+      activeMedia = {type:type,src:src,alt:alt || ""};
+    }
+
+    detailThumbs.forEach(function(thumb){
+      thumb.addEventListener("click", function(){
+        detailThumbs.forEach(function(item){ item.classList.remove("is-active"); });
+        thumb.classList.add("is-active");
+        showDetailMedia(
+          thumb.getAttribute("data-type") || "image",
+          thumb.getAttribute("data-src") || "",
+          thumb.getAttribute("data-alt") || ""
+        );
+      });
+    });
+
+    function openProductPreview(){
+      if(!preview || !previewContent || !activeMedia.src) return;
+      previewContent.innerHTML = "";
+      var media;
+      if(activeMedia.type === "video"){
+        media = document.createElement("video");
+        media.controls = true;
+        media.autoplay = true;
+        media.src = activeMedia.src;
+      }else{
+        media = document.createElement("img");
+        media.src = activeMedia.src;
+        media.alt = activeMedia.alt || "";
+      }
+      previewContent.appendChild(media);
+      preview.hidden = false;
+      preview.setAttribute("aria-hidden","false");
+      document.documentElement.style.overflow = "hidden";
+      if(previewClose) previewClose.focus();
+    }
+
+    function closeProductPreview(){
+      if(!preview) return;
+      preview.hidden = true;
+      preview.setAttribute("aria-hidden","true");
+      if(previewContent) previewContent.innerHTML = "";
+      document.documentElement.style.overflow = "";
+      if(previewOpen) previewOpen.focus();
+    }
+
+    syncActiveFromStage();
+    if(previewOpen) previewOpen.addEventListener("click", openProductPreview);
+    if(previewClose) previewClose.addEventListener("click", closeProductPreview);
+    if(preview){
+      preview.addEventListener("click", function(event){
+        if(event.target === preview) closeProductPreview();
+      });
+    }
+    document.addEventListener("keydown", function(event){
+      if(event.key === "Escape" && preview && !preview.hidden) closeProductPreview();
+    });
+
+    productDetail.querySelectorAll('.jpd-detail-nav a[href^="#"]').forEach(function(link){
+      link.addEventListener("click", function(event){
+        var target = document.querySelector(link.getAttribute("href"));
+        if(!target) return;
+        event.preventDefault();
+        target.scrollIntoView({behavior:"smooth",block:"start"});
+      });
+    });
+  }
+
 })();
