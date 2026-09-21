@@ -188,11 +188,11 @@ for (const [file, tokens] of Object.entries(representativeViews)) {
 
 
 const homeSchema = read("application/common/service/cms/HomeSectionEditorSchema.php");
-for (const token of ["config_social_url_1", "config_social_url_2", "'subtitle', 'mobile_subtitle'"]) {
+for (const token of ["config_social_url_1", "config_social_qr_1", "config_social_url_2", "config_social_qr_2", "'subtitle', 'mobile_subtitle'"]) {
   expect(homeSchema.includes(token), `Home section schema missing html-baseline field ${token}`);
 }
 const structuredCodec = read("application/common/service/cms/StructuredConfigCodec.php");
-for (const token of ["config_social_url_1", "config_social_url_2", "['title', 'value', 'unit', 'text', 'icon', 'prefix']"]) {
+for (const token of ["config_social_url_1", "config_social_qr_1", "config_social_url_2", "config_social_qr_2", "['title', 'value', 'unit', 'text', 'icon', 'prefix']"]) {
   expect(structuredCodec.includes(token), `Structured home codec missing ${token}`);
 }
 const homeAboutForm = read("application/admin/view/cms/common/_home_about_fields.html");
@@ -200,26 +200,36 @@ for (const token of [
   'name="[inputPrefix][subtitle]"',
   'name="[inputPrefix][config_social_icon_1]"',
   'name="[inputPrefix][config_social_url_1]"',
+  'name="[inputPrefix][config_social_qr_1]"',
   'name="[inputPrefix][config_social_icon_2]"',
-  'name="[inputPrefix][config_social_url_2]"'
+  'name="[inputPrefix][config_social_url_2]"',
+  'name="[inputPrefix][config_social_qr_2]"'
 ]) {
   expect(homeAboutForm.includes(token), `Home about admin form missing ${token}`);
 }
+const homeSectionSave = read("application/common/service/cms/HomeSectionConfigService.php");
+for (const token of ["config_social_url_1", "config_social_qr_1", "config_social_url_2", "config_social_qr_2"]) {
+  expect(homeSectionSave.includes(token), `Home section save service missing ${token}`);
+}
 const homeSectionModel = read("application/common/model/cms/HomeSection.php");
-for (const method of ["getConfigSocialIcon_1Attr", "getConfigSocialUrl_1Attr", "getConfigSocialIcon_2Attr", "getConfigSocialUrl_2Attr"]) {
+for (const method of ["getConfigSocialIcon_1Attr", "getConfigSocialUrl_1Attr", "getConfigSocialQr_1Attr", "getConfigSocialIcon_2Attr", "getConfigSocialUrl_2Attr", "getConfigSocialQr_2Attr"]) {
   expect(homeSectionModel.includes("function " + method + "("), `HomeSection model missing social accessor ${method}`);
+}
+const homeRenderService = read("application/common/service/cms/render/HomeRenderService.php");
+for (const token of ["social_qr_1_url", "social_qr_2_url"]) {
+  expect(homeRenderService.includes(token), `Home render service missing QR URL ${token}`);
 }
 const homeMetricsForm = read("application/admin/view/cms/common/_metrics_editor.html");
 expect(homeMetricsForm.includes('data-metric-field="title"'), "Home service metric editor must expose a title field");
 const homeView = read("application/index/view/cms/index/index.html");
-for (const token of ["about.config.social_url_1", "about.config.social_url_2", "about.config.social_icon_1_view", "about.config.social_icon_2_view", "metric.title", "company.subtitle"]) {
+for (const token of ["about.config.social_url_1", "about.config.social_qr_1_url", "about.config.social_url_2", "about.config.social_qr_2_url", "about.config.social_icon_1_view", "about.config.social_icon_2_view", "social-qr-popover", "metric.title", "company.subtitle"]) {
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
 for (const token of ["hero-title-primary", "hero-title-secondary", "hero-badges"]) {
   expect(homeView.includes(token), `Homepage hero missing screenshot-matched structure ${token}`);
 }
 const pcStyle = read("public/assets/jinya/css/style.css");
-for (const token of ["R48: screenshot-matched PC homepage hero copy.", ".hero-title-primary", ".hero-title-secondary", "flex-direction:column"]) {
+for (const token of ["R48: screenshot-matched PC homepage hero copy.", ".hero-title-primary", ".hero-title-secondary", "flex-direction:column", ".social-qr-popover", "bottom:calc(100% + 12px)"]) {
   expect(pcStyle.includes(token), `PC homepage hero stylesheet missing ${token}`);
 }
 const staticHome = read("html/index.html");
