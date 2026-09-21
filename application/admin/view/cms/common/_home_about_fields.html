@@ -43,6 +43,13 @@
     <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][config_social_url_1]" value="{$[rowVar].config_social_url_1|default=''|htmlentities}" placeholder="例如：/page/contact 或外部链接"></div>
 </div>
 <div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">入口 1 二维码:</label>
+    <div class="col-xs-12 col-sm-10">
+        <input class="form-control" name="[inputPrefix][config_social_qr_1]" value="{$[rowVar].config_social_qr_1|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页关于金亚：微信加好友二维码" data-media-recommended-format="PNG/JPG/WebP" data-media-max-kb="500" placeholder="上传二维码后，PC 端鼠标移入按钮时显示">
+        <p class="help-block">建议正方形二维码，600×600px 左右；PNG/JPG/WebP，尽量 ≤500 KB。留空则不显示悬浮二维码。</p>
+    </div>
+</div>
+<div class="form-group">
     <label class="control-label col-xs-12 col-sm-2">社交入口 2 图标:</label>
     <div class="col-xs-12 col-sm-4"><input data-cms-icon-picker="true" class="form-control" name="[inputPrefix][config_social_icon_2]" value="{$[rowVar].config_social_icon_2|default=''|htmlentities}" placeholder="优先从图标库选择；没有合适图标时再上传" data-media-usage="PC 首页社交入口图标" data-media-recommended-format="PNG/WebP" data-media-max-kb="300" data-media-transparent="true"></div>
     <label class="control-label col-xs-12 col-sm-2">显示文字:</label>
@@ -51,6 +58,13 @@
 <div class="form-group">
     <label class="control-label col-xs-12 col-sm-2">入口 2 URL:</label>
     <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][config_social_url_2]" value="{$[rowVar].config_social_url_2|default=''|htmlentities}" placeholder="例如：/page/contact 或视频号链接"></div>
+</div>
+<div class="form-group">
+    <label class="control-label col-xs-12 col-sm-2">入口 2 二维码:</label>
+    <div class="col-xs-12 col-sm-10">
+        <input class="form-control" name="[inputPrefix][config_social_qr_2]" value="{$[rowVar].config_social_qr_2|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="首页关于金亚：视频号二维码" data-media-recommended-format="PNG/JPG/WebP" data-media-max-kb="500" placeholder="上传二维码后，PC 端鼠标移入按钮时显示">
+        <p class="help-block">建议正方形二维码，600×600px 左右；PNG/JPG/WebP，尽量 ≤500 KB。留空则不显示悬浮二维码。</p>
+    </div>
 </div>
 <div class="form-group"><div class="col-xs-12 col-sm-offset-2 col-sm-10"><p class="help-block">仅 PC 首页显示；建议使用透明 PNG/WebP，小图标尽量 ≤300 KB。图标为空时沿用克隆站默认图标。</p></div></div>
 <div class="page-header"><h4>PC 媒体内容</h4></div>

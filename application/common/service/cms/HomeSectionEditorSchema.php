@@ -14,14 +14,14 @@ class HomeSectionEditorSchema
         'about' => [
             'fields' => [
                 'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'content', 'mobile_background_image', 'more_url',
-                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1',
-                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2',
+                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1', 'config_social_qr_1',
+                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2', 'config_social_qr_2',
                 'config_media_items',
                 'pc_visible', 'mobile_visible', 'weigh', 'status',
             ],
             'config_fields' => [
-                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1',
-                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2',
+                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1', 'config_social_qr_1',
+                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2', 'config_social_qr_2',
                 'config_media_items',
             ],
             'reference_type' => '',

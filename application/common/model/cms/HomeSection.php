@@ -11,8 +11,8 @@ class HomeSection extends BaseModel
 
     protected $append = [
         'status_text', 'config_array',
-        'config_social_icon_1', 'config_social_text_1', 'config_social_url_1',
-        'config_social_icon_2', 'config_social_text_2', 'config_social_url_2',
+        'config_social_icon_1', 'config_social_text_1', 'config_social_url_1', 'config_social_qr_1',
+        'config_social_icon_2', 'config_social_text_2', 'config_social_url_2', 'config_social_qr_2',
         'config_left_title', 'config_right_title',
         'config_left_url', 'config_right_url',
         'config_other_title', 'config_other_summary', 'config_other_url',
@@ -41,9 +41,11 @@ class HomeSection extends BaseModel
     public function getConfigSocialIcon_1Attr($value, $data) { return $this->configScalar($data, 'social_icon_1'); }
     public function getConfigSocialText_1Attr($value, $data) { return $this->configScalar($data, 'social_text_1'); }
     public function getConfigSocialUrl_1Attr($value, $data) { return $this->configScalar($data, 'social_url_1'); }
+    public function getConfigSocialQr_1Attr($value, $data) { return $this->configScalar($data, 'social_qr_1'); }
     public function getConfigSocialIcon_2Attr($value, $data) { return $this->configScalar($data, 'social_icon_2'); }
     public function getConfigSocialText_2Attr($value, $data) { return $this->configScalar($data, 'social_text_2'); }
     public function getConfigSocialUrl_2Attr($value, $data) { return $this->configScalar($data, 'social_url_2'); }
+    public function getConfigSocialQr_2Attr($value, $data) { return $this->configScalar($data, 'social_qr_2'); }
     public function getConfigLeftTitleAttr($value, $data) { return $this->configScalar($data, 'left_title'); }
     public function getConfigRightTitleAttr($value, $data) { return $this->configScalar($data, 'right_title'); }
     public function getConfigLeftUrlAttr($value, $data) { return $this->configScalar($data, 'left_url'); }
