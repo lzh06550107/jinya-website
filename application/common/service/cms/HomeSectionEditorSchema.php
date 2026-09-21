@@ -90,8 +90,7 @@ class HomeSectionEditorSchema
         ],
         'culture' => [
             'fields' => [
-                'title', 'mobile_title', 'subtitle', 'mobile_subtitle',
-                'background_image', 'mobile_background_image', 'config_items',
+                'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'config_items',
                 'pc_visible', 'mobile_visible', 'weigh', 'status',
             ],
             'config_fields' => ['config_items'],

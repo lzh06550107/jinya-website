@@ -98,7 +98,7 @@
 
 {notempty name="culture"}
 <section class="section"><div class="container">
-  <div class="culture-banner culture-banner--light reveal"{notempty name="culture.background"} style="background-image:url('{$culture.background|htmlentities}');"{/notempty}>
+  <div class="culture-banner culture-banner--light reveal">
     <p class="eb">{$culture.subtitle|default='CORPORATE CULTURE'|htmlentities}</p><h2>{$culture.title|default='企业文化'|htmlentities}</h2>
     {notempty name="culture.items"}<div class="culture-grid">{volist name="culture.items" id="item"}<div class="glass-card"><div class="ic">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img src="{$item.icon_view.url|htmlentities}" alt="" aria-hidden="true">{/if}</div><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities|nl2br}</p></div>{/volist}</div>{/notempty}
   </div>

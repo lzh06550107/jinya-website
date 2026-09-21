@@ -11,14 +11,5 @@
     <label class="control-label col-xs-12 col-sm-2">移动副标题（留空继承 PC）:</label>
     <div class="col-xs-12 col-sm-4"><input class="form-control" name="[inputPrefix][mobile_subtitle]" value="{$[rowVar].mobile_subtitle|default=''|htmlentities}" placeholder="留空时使用 PC 副标题"></div>
 </div>
-<div class="page-header"><h4>背景图片</h4></div>
-<div class="form-group">
-    <label class="control-label col-xs-12 col-sm-2">PC 背景图:</label>
-    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][background_image]" value="{$[rowVar].background_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-preview-fallback="/uploads/cms-home/culture/culture-background.jpg" data-media-usage="PC 首页企业文化背景" data-media-recommended-format="JPG/WebP" data-media-max-kb="1200" placeholder="留空可使用默认原站背景"><p class="help-block">原站首页企业文化使用背景图 + 半透明深色遮罩。默认素材来自上传网站首页；可在这里替换。</p></div>
-</div>
-<div class="form-group">
-    <label class="control-label col-xs-12 col-sm-2">移动背景图:</label>
-    <div class="col-xs-12 col-sm-10"><input class="form-control" name="[inputPrefix][mobile_background_image]" value="{$[rowVar].mobile_background_image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-preview-fallback="/uploads/cms-home/culture/culture-background.jpg" data-media-usage="移动首页企业文化背景" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" placeholder="留空时前台继承 PC 背景"><p class="help-block">移动端独立字段；留空时按现有 HomeSection 终端解析规则继承 PC 背景。</p></div>
-</div>
 <div class="page-header"><h4>企业文化卡片</h4></div>
 {include file="cms/common/_culture_items_editor" items="[rowVar].config_items" inputPrefix="[inputPrefix][config_items]" /}

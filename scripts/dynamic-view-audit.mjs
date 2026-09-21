@@ -262,6 +262,13 @@ for (const field of ["title", "text", "icon"]) {
 for (const legacyField of ["prefix", "value", "unit"]) {
   expect(!homeMetricsForm.includes('data-metric-field="' + legacyField + '"'), `Home service editor must not expose legacy field ${legacyField}`);
 }
+const homeCultureForm = read("application/admin/view/cms/common/_home_culture_fields.html");
+expect(!homeCultureForm.includes('name="[inputPrefix][background_image]"'), "Home culture editor must not expose obsolete PC background image");
+expect(!homeCultureForm.includes('name="[inputPrefix][mobile_background_image]"'), "Home culture editor must not expose obsolete mobile background image");
+const cultureSchemaPos = homeSchema.indexOf("'culture' => [");
+const cultureSchemaWindow = homeSchema.slice(cultureSchemaPos, cultureSchemaPos + 520);
+expect(!cultureSchemaWindow.includes("'background_image'"), "Home culture schema must not allow obsolete background_image");
+expect(!cultureSchemaWindow.includes("'mobile_background_image'"), "Home culture schema must not allow obsolete mobile_background_image");
 const workshopItemsEditor = read("application/admin/view/cms/common/_workshop_items_editor.html");
 expect(workshopItemsEditor.includes("详情说明:"), "Workshop editor must expose a detail description field");
 expect(workshopItemsEditor.includes('textarea class="form-control" rows="3" data-workshop-field="text"'), "Workshop detail description must be an editable textarea");
@@ -271,6 +278,13 @@ expect(homeServiceForm.includes("按钮跳转 URL"), "Home service form must lab
 expect(!homeServiceForm.includes("备用跳转 URL"), "Home service form must not expose obsolete fallback URL wording");
 expect(!homeServiceForm.includes("优先复用全局微信客服配置"), "Home service form must not describe nonexistent global-wechat fallback behavior");
 const homeView = read("application/index/view/cms/index/index.html");
+const cultureMarkupStart = homeView.indexOf('{notempty name="culture"}');
+const cultureMarkupWindow = homeView.slice(cultureMarkupStart, cultureMarkupStart + 1800);
+expect(!cultureMarkupWindow.includes("culture.background"), "Homepage culture light layout must not consume a background image");
+const mobileCultureMarkupStart = mobileHomeView.indexOf('{notempty name="culture"}');
+const mobileCultureMarkupWindow = mobileHomeView.slice(mobileCultureMarkupStart, mobileCultureMarkupStart + 1800);
+expect(!mobileCultureMarkupWindow.includes("culture.background"), "Mobile homepage culture light layout must not consume a background image");
+
 const serviceMarkupStart = homeView.indexOf('{notempty name="service"}');
 const serviceMarkupEnd = homeView.indexOf('{/notempty}', serviceMarkupStart);
 const serviceMarkupWindow = homeView.slice(serviceMarkupStart, serviceMarkupStart + 3200);
