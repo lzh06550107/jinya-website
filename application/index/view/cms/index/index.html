@@ -38,8 +38,14 @@
       <h2 style="font-size:26px;font-weight:800;color:var(--ink);margin:6px 0 18px;">{$about.title|default='关于金亚'|htmlentities}</h2>
       <div class="cms-dynamic-richtext">{$about.content_html}</div>
       <div class="social-cta-list">
-        <a href="{$about.config.social_url_1|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta">{if condition="$about.config.social_icon_1_view.type eq 'font'"}<i class="brand-icon brand-icon--wechat {$about.config.social_icon_1_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_1_view.type eq 'image'" /}<img class="brand-icon brand-icon--wechat" src="{$about.config.social_icon_1_view.url|htmlentities}" alt="">{/if}<span>{$about.config.social_text_1|default='微信加好友'|htmlentities}</span></a>
-        <a href="{$about.config.social_url_2|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta social-cta--channels">{if condition="$about.config.social_icon_2_view.type eq 'font'"}<i class="brand-icon brand-icon--channels {$about.config.social_icon_2_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_2_view.type eq 'image'" /}<img class="brand-icon brand-icon--channels" src="{$about.config.social_icon_2_view.url|htmlentities}" alt="">{/if}<span>{$about.config.social_text_2|default='关注金亚包装视频号'|htmlentities}</span></a>
+        <div class="social-cta-item">
+          {notempty name="about.config.social_qr_1_url"}<div class="social-qr-popover" aria-hidden="true"><img src="{$about.config.social_qr_1_url|htmlentities}" alt="微信加好友二维码" loading="lazy"><span>微信扫码添加好友</span></div>{/notempty}
+          <a href="{$about.config.social_url_1|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta">{if condition="$about.config.social_icon_1_view.type eq 'font'"}<i class="brand-icon brand-icon--wechat {$about.config.social_icon_1_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_1_view.type eq 'image'" /}<img class="brand-icon brand-icon--wechat" src="{$about.config.social_icon_1_view.url|htmlentities}" alt="">{/if}<span>{$about.config.social_text_1|default='微信加好友'|htmlentities}</span></a>
+        </div>
+        <div class="social-cta-item">
+          {notempty name="about.config.social_qr_2_url"}<div class="social-qr-popover" aria-hidden="true"><img src="{$about.config.social_qr_2_url|htmlentities}" alt="金亚包装视频号二维码" loading="lazy"><span>微信扫码关注视频号</span></div>{/notempty}
+          <a href="{$about.config.social_url_2|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta social-cta--channels">{if condition="$about.config.social_icon_2_view.type eq 'font'"}<i class="brand-icon brand-icon--channels {$about.config.social_icon_2_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$about.config.social_icon_2_view.type eq 'image'" /}<img class="brand-icon brand-icon--channels" src="{$about.config.social_icon_2_view.url|htmlentities}" alt="">{/if}<span>{$about.config.social_text_2|default='关注金亚包装视频号'|htmlentities}</span></a>
+        </div>
       </div>
     </div>
     <div class="grid grid-2 reveal">
