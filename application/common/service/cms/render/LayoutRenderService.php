@@ -104,7 +104,11 @@ class LayoutRenderService
 
     private function floatingServiceComponent(array $components, $terminal)
     {
-        $component = $this->component($components, 'layout.floating_service.' . $terminal);
+        $key = 'layout.floating_service.' . $terminal;
+        if ($terminal === 'mobile' && empty($components[$key]) && !empty($components['layout.floating_service.pc'])) {
+            $key = 'layout.floating_service.pc';
+        }
+        $component = $this->component($components, $key);
         $config = $component['config'];
         foreach (LayoutSchemaRegistry::fields('floating_service') as $name => $definition) {
             if (!array_key_exists($name, $config)) {

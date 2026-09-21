@@ -39,6 +39,7 @@ class SiteConfigDefinitionRegistry
             'cms_phone' => ['title' => '服务热线', 'type' => 'string', 'default' => '400-006-8683', 'rule' => ''],
             'cms_email' => ['title' => '联系邮箱', 'type' => 'string', 'default' => '', 'rule' => 'email'],
             'cms_address' => ['title' => '企业地址', 'type' => 'string', 'default' => '请填写企业地址', 'rule' => ''],
+            'cms_factory_address' => ['title' => '工厂地址', 'type' => 'string', 'default' => '', 'rule' => ''],
             'beian' => ['title' => '备案号', 'type' => 'string', 'default' => '', 'rule' => ''],
             'cms_copyright_year' => ['title' => '版权年份', 'type' => 'string', 'default' => date('Y'), 'rule' => ''],
             'cms_tech_support' => ['title' => '技术支持', 'type' => 'string', 'default' => '', 'rule' => ''],
