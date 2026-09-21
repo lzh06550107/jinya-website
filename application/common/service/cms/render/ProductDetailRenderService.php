@@ -42,12 +42,13 @@ class ProductDetailRenderService extends AbstractRenderService
 
         $common = $this->common('product.detail', $context, $row, $row['title'], '/product/' . rawurlencode($slug));
         $category = $this->findCategory($this->categories->publishedTree(), (int)$row['category_id']);
+        $displayCategory = $this->publicCategory($category);
         $product = $this->cards->product($row, $context);
         $product = array_merge($product, [
             'product_code' => isset($row['product_code']) ? $row['product_code'] : '',
             'tags' => isset($row['tags']) ? $row['tags'] : '',
             'content_html' => MarkdownRenderer::render(isset($row['content']) ? $row['content'] : ''),
-            'category' => $category,
+            'category' => $displayCategory,
             'views' => (int)(isset($row['views']) ? $row['views'] : 0),
         ]);
 
@@ -143,11 +144,7 @@ class ProductDetailRenderService extends AbstractRenderService
             $common['seo'],
             $common['layout'],
             $banner,
-            [
-                ['title' => '产品中心', 'url' => '/products'],
-                ['title' => isset($category['name']) ? $category['name'] : '', 'url' => isset($category['slug']) ? '/products?category=' . rawurlencode($category['slug']) : ''],
-                ['title' => $row['title'], 'url' => ''],
-            ],
+            $this->detailBreadcrumb($displayCategory, $row),
             $common['page_config'],
             $content
         );
@@ -261,6 +258,40 @@ class ProductDetailRenderService extends AbstractRenderService
         }
         unset($group);
         return $groups;
+    }
+
+    /**
+     * 首页静态基线导入使用 html-home-display 作为内部归档分类。
+     * 它只用于后台组织首页产品，不属于公开的信息架构。
+     */
+    private function publicCategory(array $category)
+    {
+        $slug = isset($category['slug']) ? trim((string)$category['slug']) : '';
+        $name = isset($category['name']) ? trim((string)$category['name']) : '';
+        if ($slug === 'html-home-display' || $name === 'HTML 首页展示') {
+            return [];
+        }
+        return $category;
+    }
+
+    private function detailBreadcrumb(array $category, array $row)
+    {
+        $items = [
+            ['title' => '产品中心', 'url' => '/products'],
+        ];
+        if (!empty($category['name'])) {
+            $items[] = [
+                'title' => $category['name'],
+                'url' => !empty($category['slug'])
+                    ? '/products?category=' . rawurlencode($category['slug'])
+                    : '',
+            ];
+        }
+        $items[] = [
+            'title' => isset($row['title']) ? $row['title'] : '',
+            'url' => '',
+        ];
+        return $items;
     }
 
     private function findCategory(array $tree, $id)

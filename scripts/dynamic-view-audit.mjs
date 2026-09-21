@@ -192,6 +192,9 @@ const productDetailRender = read("application/common/service/cms/render/ProductD
 expect(!productDetailRender.includes("previousNext("), "Product detail render service must be independent from sequential product navigation");
 expect(!productDetailRender.includes("'previous' =>"), "Product detail ViewModel must not expose previous product data");
 expect(!productDetailRender.includes("'next' =>"), "Product detail ViewModel must not expose next product data");
+for (const token of ["publicCategory", "detailBreadcrumb", "html-home-display", "HTML 首页展示"]) {
+  expect(productDetailRender.includes(token), `Product detail render missing internal-category filter token ${token}`);
+}
 
 const productDetailCss = read("public/assets/jinya/css/style.css");
 for (const token of ["Product detail v40", ".jpd-product-hero", ".jpd-detail-nav", ".jpd-media-preview", ".jpd-related-grid"]) {
