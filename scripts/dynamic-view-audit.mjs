@@ -410,6 +410,9 @@ for (const legacyToken of ["metric.prefix", "metric.value", "metric.unit"]) {
   expect(!serviceMarkupWindow.includes(legacyToken), `Homepage service markup must not consume legacy metric field ${legacyToken}`);
 }
 
+expect(!homeView.includes("hero.items.0.title"), "Homepage hero copy must not be pinned to the first Banner row");
+expect(homeView.includes('notempty name="banner.title"'), "Homepage each slide must own its configured title");
+expect(homeView.includes('name="banner.highlights"'), "Homepage each slide must own its configured selling points");
 const homeHeroEnd = homeView.indexOf("</section>", homeView.indexOf("hero-swiper"));
 const homeHeroMarkup = homeView.slice(homeView.indexOf("hero-swiper"), homeHeroEnd);
 expect(!homeHeroMarkup.includes("swiper-prev"), "Homepage hero must not render a previous arrow");
@@ -431,6 +434,9 @@ for (const token of ["R48: screenshot-matched PC homepage hero copy.", ".hero-ti
   expect(pcStyle.includes(token), `PC homepage hero stylesheet missing ${token}`);
 }
 const staticHome = read("html/index.html");
+expect(staticHome.includes("hero-slide-copy"), "Static homepage copy must live inside its Banner slide");
+const firstStaticSlide = staticHome.slice(staticHome.indexOf('home-banner-01.png'), staticHome.indexOf('home-banner-02.png'));
+expect(firstStaticSlide.includes("高质量无版印刷"), "Static first Banner slide must carry its own copy");
 const staticHeroEnd = staticHome.indexOf("</section>", staticHome.indexOf("hero-swiper"));
 const staticHeroMarkup = staticHome.slice(staticHome.indexOf("hero-swiper"), staticHeroEnd);
 expect(!staticHeroMarkup.includes("swiper-prev"), "Static homepage hero must not render a previous arrow");
@@ -443,6 +449,11 @@ const bannerCodec = read("application/common/service/cms/BannerHighlightCodec.ph
 for (const token of ["home-highlight-team.png", "home-highlight-quality.png", "home-highlight-delivery.png", "applyIconOverrides"]) {
   expect(bannerCodec.includes(token), `Banner highlight codec missing editable icon contract ${token}`);
 }
+const bannerCollectionEditor = read("application/admin/view/cms/page_block/_banner_collection.html");
+for (const unused of ["overlay_image", "button_text", "mobile_link_url"]) {
+  expect(!bannerCollectionEditor.includes('name="real[banners][{$bannerIndex}][' + unused + ']"'), `PageBlock Banner editor must not expose unused homepage field ${unused}`);
+}
+expect(!bannerCollectionEditor.includes('name="real[banners][{$bannerIndex}][link_url]"'), "PageBlock Banner editor must not expose unused homepage link");
 const bannerForm = read("application/admin/view/cms/banner/_form.html");
 for (const token of ['name="row[highlight_icon_1]"', 'name="row[highlight_icon_2]"', 'name="row[highlight_icon_3]"']) {
   expect(bannerForm.includes(token), `Banner admin form missing editable highlight icon field ${token}`);
