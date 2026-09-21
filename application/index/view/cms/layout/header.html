@@ -18,21 +18,21 @@
 </head>
 <body class="{$pcBodyClass|default='pc-home'|htmlentities}">
 {if !empty($isPreview)}<div style="position:fixed;left:0;right:0;top:0;z-index:99999;background:#fff3cd;color:#856404;text-align:center;padding:8px;">预览模式：此内容尚未正式发布。</div>{/if}
-<header class="site-header{if !empty($pcStrictHome)} site-header--home{/if}">
+<header class="site-header{if !empty($pcStrictHome)} site-header--home{/if}" style="--cms-nav-active-bg:{$cmsPcNavActiveBackgroundColor|default='#f48101'|htmlentities};--cms-hotline-bg:{$cmsPcHotlineBackgroundColor|default='#ef202d'|htmlentities};--cms-hotline-number-color:{$cmsPcHotlineNumberColor|default='#ffd65a'|htmlentities};--cms-hotline-badge-bg:{$cmsPcHotlineBadgeBackgroundColor|default='#ffb918'|htmlentities};--cms-hotline-badge-color:{$cmsPcHotlineBadgeTextColor|default='#333333'|htmlentities};--cms-logo-top-width:{$cmsPcLogoTopWidthRem|default='10.6'|htmlentities}rem;--cms-logo-scrolled-width:{$cmsPcLogoScrolledWidthRem|default='9'|htmlentities}rem;--cms-hotline-top-width:{$cmsPcHotlineTopWidthRem|default='20'|htmlentities}rem;--cms-hotline-scrolled-width:{$cmsPcHotlineScrolledWidthRem|default='16'|htmlentities}rem;--cms-hotline-top-offset:{$cmsPcHotlineTopOffsetYRem|default='0'|htmlentities}rem;--cms-hotline-scrolled-offset:{$cmsPcHotlineScrolledOffsetYRem|default='0'|htmlentities}rem;--cms-hotline-badge-top-size:{$cmsPcHotlineBadgeTopFontSizeRem|default='.8'|htmlentities}rem;--cms-hotline-badge-scrolled-size:{$cmsPcHotlineBadgeScrolledFontSizeRem|default='.65'|htmlentities}rem;--cms-hotline-icon-top-size:{$cmsPcHotlineIconTopSizeRem|default='2.45'|htmlentities}rem;--cms-hotline-icon-scrolled-size:{$cmsPcHotlineIconScrolledSizeRem|default='1.95'|htmlentities}rem;--cms-hotline-number-top-size:{$cmsPcHotlineNumberTopFontSizeRem|default='1.7'|htmlentities}rem;--cms-hotline-number-scrolled-size:{$cmsPcHotlineNumberScrolledFontSizeRem|default='1.3'|htmlentities}rem;--cms-hotline-number-weight:{$cmsPcHotlineNumberFontWeight|default='700'|htmlentities};">
   <div class="container">
+    {if condition="!isset($layout.header.config.show_logo) || !empty($layout.header.config.show_logo)"}
     <a href="/" class="logo" aria-label="{$cmsSite.name|default='金亚包装'|htmlentities}">
-      {if !empty($cmsSite.logo)}
-      <img src="{$cmsSite.logo|htmlentities}" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">
-      {else /}
-      <img src="__CDN__/assets/jinya/img/site-logo.png" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">
-      {/if}
+      {if !empty($cmsSite.logo)}<img src="{$cmsSite.logo|htmlentities}" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">{else /}<img src="__CDN__/assets/jinya/img/site-logo.png" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">{/if}
     </a>
+    {/if}
+    {if condition="!isset($layout.header.config.show_phone) || !empty($layout.header.config.show_phone)"}
     <a href="tel:{$cmsSite.hotline|default=''|htmlentities}" class="header-phone">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
+      {if condition="$layout.header.config.hotline_icon_view.type eq 'image'"}<img class="cms-hotline-icon" src="{$layout.header.config.hotline_icon_view.url|htmlentities}" alt="">{elseif condition="$layout.header.config.hotline_icon_view.type eq 'font'" /}<i class="cms-hotline-icon {$layout.header.config.hotline_icon_view.class|htmlentities}" aria-hidden="true"></i>{else /}<svg class="cms-hotline-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>{/if}
       <span class="label">{$cmsSite.hotline|default='18903716652'|htmlentities}</span>
       <span class="tag">{$layout.header.config.hotline_badge_text|default='急单专线'|htmlentities}</span>
     </a>
-    <button class="nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>
+    {/if}
+    {if condition="!isset($layout.header.config.show_navigation) || !empty($layout.header.config.show_navigation)"}<button class="nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span><span></span></button>{/if}
   </div>
 </header>
-{include file="cms/layout/nav" /}
+{if condition="!isset($layout.header.config.show_navigation) || !empty($layout.header.config.show_navigation)"}{include file="cms/layout/nav" /}{/if}

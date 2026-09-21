@@ -45,13 +45,35 @@ for (const file of [
   expect(fs.existsSync(path.join(root, file)), `${file} must exist`);
 }
 
+const layoutEditorRegistry = read("application/common/service/cms/layout_editor/LayoutEditorRegistry.php");
+expect(layoutEditorRegistry.includes("cms_factory_address"), "Footer editor must expose factory address");
+expect(!layoutEditorRegistry.includes("'show_search', 'show_online_service'"), "Header editor must not expose switches without rendered DOM");
+const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDefinitionRegistry.php");
+expect(siteConfigDefinitions.includes("'cms_factory_address'"), "Factory address must be a registered site field");
 const pcHeader = read("application/index/view/cms/layout/header.html");
 const mobileHeader = read("application/mobile/view/cms/layout/header.html");
 for (const [file, body] of [["PC header", pcHeader], ["mobile header", mobileHeader]]) {
+  for (const token of ["show_logo", "show_navigation", "show_phone", "hotline_icon_view"]) {
+    expect(body.includes(token), `${file} must consume backend header config ${token}`);
+  }
   expect(body.includes("/assets/jinya/css/style.css"), `${file} must load html/assets-derived style.css`);
   expect(body.includes("/assets/jinya/js/device-router.js"), `${file} must load html/assets-derived device-router.js`);
 }
 expect(mobileHeader.includes("/assets/jinya/css/mobile.css"), "mobile header must load mobile.css");
+const pcFooter = read("application/index/view/cms/layout/footer.html");
+const mobileFooter = read("application/mobile/view/cms/layout/footer.html");
+for (const [file, body] of [["PC footer", pcFooter], ["mobile footer", mobileFooter]]) {
+  for (const token of ["show_company", "show_contact", "show_navigation", "show_qrcode", "show_beian", "show_online_consult", "show_online_message", "show_wechat_consult", "show_back_top"]) {
+    expect(body.includes(token), `${file} must consume backend footer/floating config ${token}`);
+  }
+  expect(body.includes("factory_address"), `${file} must render configurable factory address`);
+}
+expect(mobileFooter.includes("layout.navigation.footer"), "Mobile footer must consume footer navigation instead of header navigation");
+const runtimeStyle = read("public/assets/jinya/css/style.css");
+for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width"]) {
+  expect(runtimeStyle.includes(token), `Runtime stylesheet missing layout config bridge ${token}`);
+}
+
 
 for (const file of [
   "public/assets/jinya/css/style.css",

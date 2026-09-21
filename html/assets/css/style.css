@@ -8616,3 +8616,79 @@ input,textarea{ font:inherit; }
   .jpd-media-preview-close{right:14px;top:14px;}
 }
 
+/* Header/footer backend configuration bridge v110 */
+.main-nav a:hover,
+.main-nav a.active{
+  background:var(--cms-nav-active-bg,var(--blue));
+  color:#fff;
+}
+.header-phone{
+  background:var(--cms-hotline-bg,#ef202d);
+}
+.header-phone .label,
+.header-phone .cms-hotline-icon{
+  color:var(--cms-hotline-number-color,#ffd65a);
+}
+.header-phone .tag{
+  background:var(--cms-hotline-badge-bg,#ffb918);
+  color:var(--cms-hotline-badge-color,#333);
+}
+.header-phone img.cms-hotline-icon{
+  display:block;
+  object-fit:contain;
+}
+.header-phone i.cms-hotline-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+.float-side i{
+  display:block;
+  font-size:20px;
+  line-height:1;
+}
+@media (min-width:769px){
+  body:not(.mobile-site) .site-header .site-logo-img{
+    width:var(--cms-logo-top-width,190px)!important;
+    height:auto;
+    max-height:58px;
+  }
+  body:not(.mobile-site) .site-header.is-scrolled .site-logo-img{
+    width:var(--cms-logo-scrolled-width,var(--cms-logo-top-width,190px))!important;
+  }
+  body:not(.mobile-site) .site-header .header-phone{
+    min-width:var(--cms-hotline-top-width,202px)!important;
+    transform:translateY(var(--cms-hotline-top-offset,0)) scale(var(--phone-scroll-scale,1));
+  }
+  body:not(.mobile-site) .site-header.is-scrolled .header-phone{
+    min-width:var(--cms-hotline-scrolled-width,var(--cms-hotline-top-width,202px))!important;
+    transform:translateY(var(--cms-hotline-scrolled-offset,0)) scale(var(--phone-scroll-scale,1));
+  }
+  body:not(.mobile-site) .site-header .header-phone .label{
+    font-size:var(--cms-hotline-number-top-size,22px)!important;
+    font-weight:var(--cms-hotline-number-weight,700);
+  }
+  body:not(.mobile-site) .site-header.is-scrolled .header-phone .label{
+    font-size:var(--cms-hotline-number-scrolled-size,var(--cms-hotline-number-top-size,22px))!important;
+  }
+  body:not(.mobile-site) .site-header .header-phone .cms-hotline-icon{
+    width:var(--cms-hotline-icon-top-size,23px)!important;
+    height:var(--cms-hotline-icon-top-size,23px)!important;
+    flex-basis:var(--cms-hotline-icon-top-size,23px)!important;
+    font-size:var(--cms-hotline-icon-top-size,23px)!important;
+  }
+  body:not(.mobile-site) .site-header.is-scrolled .header-phone .cms-hotline-icon{
+    width:var(--cms-hotline-icon-scrolled-size,var(--cms-hotline-icon-top-size,23px))!important;
+    height:var(--cms-hotline-icon-scrolled-size,var(--cms-hotline-icon-top-size,23px))!important;
+    flex-basis:var(--cms-hotline-icon-scrolled-size,var(--cms-hotline-icon-top-size,23px))!important;
+    font-size:var(--cms-hotline-icon-scrolled-size,var(--cms-hotline-icon-top-size,23px))!important;
+  }
+  body:not(.mobile-site) .site-header .header-phone .tag{
+    font-size:var(--cms-hotline-badge-top-size,10px)!important;
+  }
+  body:not(.mobile-site) .site-header.is-scrolled .header-phone .tag{
+    font-size:var(--cms-hotline-badge-scrolled-size,var(--cms-hotline-badge-top-size,10px))!important;
+  }
+}
+
