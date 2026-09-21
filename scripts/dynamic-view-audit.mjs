@@ -256,8 +256,24 @@ for (const token of ["social_qr_1_url", "social_qr_2_url"]) {
   expect(homeRenderService.includes(token), `Home render service missing QR URL ${token}`);
 }
 const homeMetricsForm = read("application/admin/view/cms/common/_metrics_editor.html");
-expect(homeMetricsForm.includes('data-metric-field="title"'), "Home service metric editor must expose a title field");
+for (const field of ["title", "text", "icon"]) {
+  expect(homeMetricsForm.includes('data-metric-field="' + field + '"'), `Home service editor must expose ${field}`);
+}
+for (const legacyField of ["prefix", "value", "unit"]) {
+  expect(!homeMetricsForm.includes('data-metric-field="' + legacyField + '"'), `Home service editor must not expose legacy field ${legacyField}`);
+}
+const homeServiceForm = read("application/admin/view/cms/common/_home_service_fields.html");
+expect(homeServiceForm.includes("按钮跳转 URL"), "Home service form must label the real button URL");
+expect(!homeServiceForm.includes("备用跳转 URL"), "Home service form must not expose obsolete fallback URL wording");
+expect(!homeServiceForm.includes("优先复用全局微信客服配置"), "Home service form must not describe nonexistent global-wechat fallback behavior");
 const homeView = read("application/index/view/cms/index/index.html");
+const serviceMarkupStart = homeView.indexOf('{notempty name="service"}');
+const serviceMarkupEnd = homeView.indexOf('{/notempty}', serviceMarkupStart);
+const serviceMarkupWindow = homeView.slice(serviceMarkupStart, serviceMarkupStart + 3200);
+for (const legacyToken of ["metric.prefix", "metric.value", "metric.unit"]) {
+  expect(!serviceMarkupWindow.includes(legacyToken), `Homepage service markup must not consume legacy metric field ${legacyToken}`);
+}
+
 const homeHeroEnd = homeView.indexOf("</section>", homeView.indexOf("hero-swiper"));
 const homeHeroMarkup = homeView.slice(homeView.indexOf("hero-swiper"), homeHeroEnd);
 expect(!homeHeroMarkup.includes("swiper-prev"), "Homepage hero must not render a previous arrow");
