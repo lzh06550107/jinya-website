@@ -84,9 +84,18 @@ const headerSchema = read("application/common/service/cms/LayoutSchemaRegistry.p
 expect(headerSchema.includes("'hotline_top_width' => ['title' => '电话区顶部状态宽度', 'type' => 'number', 'default' => 300, 'min' => 240, 'max' => 300]"), "PC top hotline width must be constrained to 240-300px");
 const pcCmsBase = read("application/index/controller/CmsBase.php");
 expect(pcCmsBase.includes("min(300, (int)LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width'"), "Existing oversized hotline width values must be capped at 300px");
+const headerMotionJs = read("public/assets/jinya/js/main.js");
+for (const token of ["mixHeaderValue", "Smoothstep", "--cms-hotline-current-width", "--cms-hotline-current-number-size", "--cms-hotline-current-icon-size", "--cms-hotline-current-badge-size", 'setProperty("--phone-scroll-scale", "1")']) {
+  expect(headerMotionJs.includes(token), `Header scroll motion missing smooth hotline interpolation token ${token}`);
+}
+expect(!headerMotionJs.includes("var phoneScale = 1 + progress * 0.08"), "Hotline must not combine scroll interpolation with a second scale animation");
 const runtimeStyle = read("public/assets/jinya/css/style.css");
-for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", "min(var(--cms-hotline-top-width,300px),300px)", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
+for (const token of ["Header/footer backend configuration bridge v110", "--cms-nav-active-bg", "--cms-logo-top-width", "--cms-hotline-top-width", "--cms-hotline-current-width", ".site-header--layout-balanced", ".site-header--layout-compact"]) {
   expect(runtimeStyle.includes(token), `Runtime stylesheet missing layout config bridge ${token}`);
+}
+expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .label"), "Hotline label size must not switch discretely on is-scrolled");
+expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .cms-hotline-icon"), "Hotline icon size must not switch discretely on is-scrolled");
+expect(!runtimeStyle.includes(".site-header.is-scrolled .header-phone .tag"), "Hotline badge size must not switch discretely on is-scrolled");
 }
 
 

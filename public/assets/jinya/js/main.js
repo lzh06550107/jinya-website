@@ -2,23 +2,51 @@
   "use strict";
 
   // Global header scroll motion.
-  // During the first 120px of scrolling, enlarge the logo and emergency
-  // hotline progressively without changing header layout dimensions.
+  // Header background still switches as soon as the page leaves scrollTop=0,
+  // but hotline geometry is interpolated continuously through the first 120px
+  // so width/font/icon changes never jump between two discrete CSS states.
   var siteHeader = document.querySelector(".site-header");
   if(siteHeader){
     var headerMotionTicking = false;
     var headerMotionRange = 120;
 
+    function headerVarNumber(name, fallback){
+      var raw = window.getComputedStyle(siteHeader).getPropertyValue(name);
+      var value = parseFloat(raw);
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    function mixHeaderValue(from, to, progress){
+      return from + (to - from) * progress;
+    }
+
     function syncHeaderScrollMotion(){
       var y = Math.max(0, window.scrollY || window.pageYOffset || 0);
-      var progress = Math.min(1, y / headerMotionRange);
+      var rawProgress = Math.min(1, y / headerMotionRange);
+      // Smoothstep eases both ends while remaining tied directly to scroll.
+      var progress = rawProgress * rawProgress * (3 - 2 * rawProgress);
       var logoScale = 1 + progress * 0.10;
-      var phoneScale = 1 + progress * 0.08;
+
+      var phoneTopWidth = headerVarNumber("--cms-hotline-top-width", 15);
+      var phoneScrolledWidth = headerVarNumber("--cms-hotline-scrolled-width", phoneTopWidth);
+      var phoneTopOffset = headerVarNumber("--cms-hotline-top-offset", 0);
+      var phoneScrolledOffset = headerVarNumber("--cms-hotline-scrolled-offset", phoneTopOffset);
+      var badgeTopSize = headerVarNumber("--cms-hotline-badge-top-size", 0.8);
+      var badgeScrolledSize = headerVarNumber("--cms-hotline-badge-scrolled-size", badgeTopSize);
+      var iconTopSize = headerVarNumber("--cms-hotline-icon-top-size", 2.45);
+      var iconScrolledSize = headerVarNumber("--cms-hotline-icon-scrolled-size", iconTopSize);
+      var numberTopSize = headerVarNumber("--cms-hotline-number-top-size", 1.7);
+      var numberScrolledSize = headerVarNumber("--cms-hotline-number-scrolled-size", numberTopSize);
 
       siteHeader.style.setProperty("--logo-scroll-scale", logoScale.toFixed(4));
-      siteHeader.style.setProperty("--phone-scroll-scale", phoneScale.toFixed(4));
+      siteHeader.style.setProperty("--phone-scroll-scale", "1");
+      siteHeader.style.setProperty("--cms-hotline-current-width", mixHeaderValue(phoneTopWidth, phoneScrolledWidth, progress).toFixed(4) + "rem");
+      siteHeader.style.setProperty("--cms-hotline-current-offset", mixHeaderValue(phoneTopOffset, phoneScrolledOffset, progress).toFixed(4) + "rem");
+      siteHeader.style.setProperty("--cms-hotline-current-badge-size", mixHeaderValue(badgeTopSize, badgeScrolledSize, progress).toFixed(4) + "rem");
+      siteHeader.style.setProperty("--cms-hotline-current-icon-size", mixHeaderValue(iconTopSize, iconScrolledSize, progress).toFixed(4) + "rem");
+      siteHeader.style.setProperty("--cms-hotline-current-number-size", mixHeaderValue(numberTopSize, numberScrolledSize, progress).toFixed(4) + "rem");
       siteHeader.classList.toggle("is-scrolled", y > 0);
-      siteHeader.classList.toggle("has-scroll-scale", progress > 0);
+      siteHeader.classList.toggle("has-scroll-scale", rawProgress > 0);
 
       headerMotionTicking = false;
     }
