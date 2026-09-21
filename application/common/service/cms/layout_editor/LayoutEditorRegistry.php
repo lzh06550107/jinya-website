@@ -38,13 +38,12 @@ class LayoutEditorRegistry
     {
         $footerSiteFields = [
             'cms_logo', 'cms_company', 'cms_phone', 'cms_email', 'cms_address', 'cms_factory_address', 'beian',
-            'cms_copyright_year', 'cms_tech_support',
+            'cms_copyright_year', 'cms_tech_support', 'cms_service_wechat_qr',
             'cms_wechat_qr', 'cms_douyin_qr', 'cms_kuaishou_qr', 'cms_xiaohongshu_qr', 'cms_video_qr', 'cms_bilibili_qr',
         ];
         $footerRelated = ['layout.footer.company', 'layout.footer.contact', 'layout.footer.qrcode', 'layout.friend_links'];
         $floatingServiceSiteFields = [
-            'cms_service_wecom_url', 'cms_service_wechat_qr', 'cms_service_wechat_name',
-            'cms_service_wechat_tip', 'cms_service_hours',
+            'cms_service_wecom_url', 'cms_service_wechat_qr',
         ];
         $floatingServiceLayoutFields = [
             'show_online_consult', 'show_online_message', 'show_wechat_consult', 'show_back_top',
@@ -146,7 +145,7 @@ class LayoutEditorRegistry
             'layout.footer.qrcode' => [
                 'key' => 'layout.footer.qrcode',
                 'tabs' => ['content', 'list', 'display', 'impact'],
-                'site_fields' => ['cms_wechat_qr', 'cms_douyin_qr', 'cms_kuaishou_qr', 'cms_xiaohongshu_qr', 'cms_video_qr', 'cms_bilibili_qr'],
+                'site_fields' => ['cms_service_wechat_qr', 'cms_wechat_qr', 'cms_douyin_qr', 'cms_kuaishou_qr', 'cms_xiaohongshu_qr', 'cms_video_qr', 'cms_bilibili_qr'],
                 'component_fields' => ['title'],
                 'layout_fields' => ['enabled'],
                 'navigation_position' => null,

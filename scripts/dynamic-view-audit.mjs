@@ -47,6 +47,12 @@ for (const file of [
 
 const layoutEditorRegistry = read("application/common/service/cms/layout_editor/LayoutEditorRegistry.php");
 expect(layoutEditorRegistry.includes("cms_factory_address"), "Footer editor must expose factory address");
+expect(layoutEditorRegistry.includes("cms_service_wechat_qr"), "Footer/floating editor must expose the QR actually rendered by the footer");
+for (const unusedField of ["cms_service_wechat_name", "cms_service_wechat_tip", "cms_service_hours"]) {
+  const floatingStart = layoutEditorRegistry.indexOf("$floatingServiceSiteFields");
+  const floatingEnd = layoutEditorRegistry.indexOf("];", floatingStart);
+  expect(!layoutEditorRegistry.slice(floatingStart, floatingEnd).includes(unusedField), `Floating-service editor must not expose unused field ${unusedField}`);
+}
 expect(!layoutEditorRegistry.includes("'show_search', 'show_online_service'"), "Header editor must not expose switches without rendered DOM");
 const siteConfigDefinitions = read("application/common/service/cms/SiteConfigDefinitionRegistry.php");
 expect(siteConfigDefinitions.includes("'cms_factory_address'"), "Factory address must be a registered site field");
