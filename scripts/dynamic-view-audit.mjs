@@ -258,6 +258,16 @@ for (const token of ["social_qr_1_url", "social_qr_2_url"]) {
 const homeMetricsForm = read("application/admin/view/cms/common/_metrics_editor.html");
 expect(homeMetricsForm.includes('data-metric-field="title"'), "Home service metric editor must expose a title field");
 const homeView = read("application/index/view/cms/index/index.html");
+const homeHeroEnd = homeView.indexOf("</section>", homeView.indexOf("hero-swiper"));
+const homeHeroMarkup = homeView.slice(homeView.indexOf("hero-swiper"), homeHeroEnd);
+expect(!homeHeroMarkup.includes("swiper-prev"), "Homepage hero must not render a previous arrow");
+expect(!homeHeroMarkup.includes("swiper-next"), "Homepage hero must not render a next arrow");
+expect(homeHeroMarkup.includes("swiper-dots"), "Homepage hero must keep pagination dots");
+const mobileHomeView = read("application/mobile/view/cms/index/index.html");
+const mobileHeroEnd = mobileHomeView.indexOf("</section>", mobileHomeView.indexOf("hero-swiper"));
+const mobileHeroMarkup = mobileHomeView.slice(mobileHomeView.indexOf("hero-swiper"), mobileHeroEnd);
+expect(!mobileHeroMarkup.includes("swiper-prev"), "Mobile homepage hero must not render a previous arrow");
+expect(!mobileHeroMarkup.includes("swiper-next"), "Mobile homepage hero must not render a next arrow");
 for (const token of ["about.config.social_url_1", "about.config.social_qr_1_url", "about.config.social_url_2", "about.config.social_qr_2_url", "about.config.social_icon_1_view", "about.config.social_icon_2_view", "social-qr-popover", "metric.title", "company.subtitle"]) {
   expect(homeView.includes(token), `Homepage view missing dynamic html-baseline field ${token}`);
 }
@@ -269,6 +279,10 @@ for (const token of ["R48: screenshot-matched PC homepage hero copy.", ".hero-ti
   expect(pcStyle.includes(token), `PC homepage hero stylesheet missing ${token}`);
 }
 const staticHome = read("html/index.html");
+const staticHeroEnd = staticHome.indexOf("</section>", staticHome.indexOf("hero-swiper"));
+const staticHeroMarkup = staticHome.slice(staticHome.indexOf("hero-swiper"), staticHeroEnd);
+expect(!staticHeroMarkup.includes("swiper-prev"), "Static homepage hero must not render a previous arrow");
+expect(!staticHeroMarkup.includes("swiper-next"), "Static homepage hero must not render a next arrow");
 for (const token of ["高质量无版印刷", "不干胶·包装袋 一站式按需定制", "品质为先&nbsp;省心高效&nbsp;合作共赢"]) {
   expect(staticHome.includes(token), `Static homepage hero missing approved screenshot copy ${token}`);
 }
