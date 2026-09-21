@@ -416,8 +416,68 @@ input,textarea{ font:inherit; }
 .social-cta i.brand-icon{ font-size:26px; line-height:28px; text-align:center; }
 .social-cta .brand-icon--wechat{ color:#07c160; fill:currentColor; }
 .social-cta .brand-icon--channels{ color:#ff8a00; fill:currentColor; }
+.social-cta-item{
+  position:relative;
+  display:inline-flex;
+}
+.social-qr-popover{
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 12px);
+  z-index:30;
+  width:176px;
+  padding:10px 10px 8px;
+  border:1px solid rgba(15,23,42,.10);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 12px 32px rgba(15,23,42,.16);
+  opacity:0;
+  visibility:hidden;
+  transform:translate(-50%,8px);
+  transition:opacity .18s var(--ease),transform .18s var(--ease),visibility .18s;
+  pointer-events:none;
+}
+.social-qr-popover::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:100%;
+  width:12px;
+  height:12px;
+  background:#fff;
+  border-right:1px solid rgba(15,23,42,.10);
+  border-bottom:1px solid rgba(15,23,42,.10);
+  transform:translate(-50%,-6px) rotate(45deg);
+}
+.social-qr-popover img{
+  display:block;
+  width:156px;
+  height:156px;
+  object-fit:contain;
+  background:#fff;
+  border-radius:6px;
+}
+.social-qr-popover span{
+  display:block;
+  margin-top:7px;
+  color:#475569;
+  font-size:12px;
+  line-height:1.4;
+  text-align:center;
+  white-space:nowrap;
+}
+@media (hover:hover) and (pointer:fine){
+  .social-cta-item:hover .social-qr-popover,
+  .social-cta-item:focus-within .social-qr-popover{
+    opacity:1;
+    visibility:visible;
+    transform:translate(-50%,0);
+  }
+}
+
 @media (max-width:560px){
   .social-cta-list{ align-items:stretch; }
+  .social-cta-item{ width:100%; }
   .social-cta{ min-width:0; width:100%; }
 }
 
