@@ -188,12 +188,15 @@ for (const retiredKey of ["cases", "advantages", "news"]) {
   expect(pageSchemaRegistry.includes("'" + retiredKey + "'"), `Retired home block list must contain ${retiredKey}`);
 }
 const pageBlockController = read("application/admin/controller/cms/PageBlock.php");
-expect(pageBlockController.includes("PageSchemaRegistry::retiredHomeBlockKeys()"), "Home PageBlock admin list must filter retired block identifiers");
+expect(pageBlockController.includes("PageSchemaRegistry::retiredBlockKeys("), "PageBlock admin list must filter retired identifiers for every page");
 const homeOrderService = read("application/common/service/cms/HomePageBlockOrderService.php");
 expect(homeOrderService.includes("PageSchemaRegistry::retiredHomeBlockKeys()"), "Home block ordering must ignore retired identifiers");
 const installerPageBlocks = read("application/common/service/cms/InstallerService.php");
-for (const token of ["retireRemovedHomePageBlocks", "cms_page_block_reference", "PageSchemaRegistry::retiredHomeBlockKeys()"]) {
-  expect(installerPageBlocks.includes(token), `Installer missing retired home PageBlock cleanup token ${token}`);
+for (const token of ["retireRemovedPageBlocks", "retireUnusedBannerRows", "cms_page_block_reference", "product.detail.%"]) {
+  expect(installerPageBlocks.includes(token), `Installer missing retired Banner/PageBlock cleanup token ${token}`);
+}
+for (const pageKey of ["product.detail", "page.label", "page.bags", "page.boxes", "page.about", "page.contact"]) {
+  expect(pageSchemaRegistry.includes("'" + pageKey + "' => ['banner']"), `${pageKey} must retire its legacy generic banner block`);
 }
 
 const route = read("application/route.php");
@@ -226,6 +229,22 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+const labelHeroSchemaPos = schema.indexOf("$schemas['label_hero']");
+const labelHeroSchemaWindow = schema.slice(labelHeroSchemaPos, labelHeroSchemaPos + 900);
+for (const token of ["'title','subtitle','content','image','mobile_image'", "'title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'"]) {
+  expect(labelHeroSchemaWindow.includes(token), `label_hero backend contract missing ${token}`);
+}
+const labelHeroView = read("application/index/view/cms/page/label/hero.html");
+for (const token of ["block.title", "block.subtitle", "block.content_inline_html", "block.image", "block.extra.items"]) {
+  expect(labelHeroView.includes(token), `label hero template missing backend field consumer ${token}`);
+}
+const aboutHeroSchemaPos = schema.indexOf("$schemas['about_hero']");
+const aboutHeroSchemaWindow = schema.slice(aboutHeroSchemaPos, aboutHeroSchemaPos + 500);
+expect(aboutHeroSchemaWindow.includes("['image','mobile_image']"), "about_hero must expose only images rendered by the current design");
+expect(!aboutHeroSchemaWindow.includes("'content'"), "about_hero must not expose unused copy");
+const contactHeroSchemaPos = schema.indexOf("$schemas['contact_hero']");
+const contactHeroSchemaWindow = schema.slice(contactHeroSchemaPos, contactHeroSchemaPos + 700);
+expect(contactHeroSchemaWindow.includes("['title','content','image','mobile_image','link'], [], [], []"), "contact_hero must not expose unused selling-point items");
 for (const token of [
   "label_print_title", "label_print_points", "print-image",
   "bags_compare_brand", "bags_compare_footer", "'photo'=>'流程场景图'",
@@ -268,6 +287,7 @@ expect(!productDetailView.includes("上一产品"), "Product detail must not ren
 expect(!productDetailView.includes("下一产品"), "Product detail must not render next-product copy");
 const productDetailRender = read("application/common/service/cms/render/ProductDetailRenderService.php");
 expect(!productDetailRender.includes("previousNext("), "Product detail render service must be independent from sequential product navigation");
+expect(!productDetailRender.includes("$this->banners('product.detail"), "Product detail render must not query an unused Banner");
 expect(!productDetailRender.includes("'previous' =>"), "Product detail ViewModel must not expose previous product data");
 expect(!productDetailRender.includes("'next' =>"), "Product detail ViewModel must not expose next product data");
 for (const token of ["publicCategory", "detailBreadcrumb", "html-home-display", "HTML 首页展示"]) {
@@ -281,6 +301,25 @@ for (const token of ["Product detail v40", ".jpd-product-hero", ".jpd-detail-nav
 const productDetailJs = read("public/assets/jinya/js/main.js");
 for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", "openProductPreview", "showDetailMedia"]) {
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
+}
+
+const pcNewsDetailView = read("application/index/view/cms/news/detail.html");
+const mobileNewsDetailView = read("application/mobile/view/cms/news/detail.html");
+for (const [file, body] of [["PC news detail", pcNewsDetailView], ["mobile news detail", mobileNewsDetailView]]) {
+  expect(body.includes("banner.0.title"), `${file} must consume configured Banner title`);
+  expect(body.includes("banner.0.subtitle"), `${file} must consume configured Banner subtitle`);
+}
+const singlePageRender = read("application/common/service/cms/render/SinglePageRenderService.php");
+expect(!singlePageRender.includes("$this->banners($key, 'channel'"), "Structured single pages must use *_hero blocks instead of duplicate cms_banner data");
+const realBannerService = read("application/common/service/cms/PageBlockRealSourceService.php");
+expect(realBannerService.includes("normalizeBanner(array $row, array $existing = [])"), "Banner save must preserve fields hidden by page-specific editor profiles");
+const bannerEditorController = read("application/admin/controller/cms/PageBlock.php");
+for (const token of ["bannerEditorProfile", "news_channel", "image_channel", "pc_image", "allow_multiple"]) {
+  expect(bannerEditorController.includes(token), `Banner editor profile missing ${token}`);
+}
+const bannerCollectionView = read("application/admin/view/cms/page_block/_banner_collection.html");
+for (const token of ["bannerProfile.name", "后台可填但前台不生效", "PC Banner 图片", "移动 Banner 图片"]) {
+  expect(bannerCollectionView.includes(token), `Banner collection editor missing profile token ${token}`);
 }
 
 const representativeViews = {
