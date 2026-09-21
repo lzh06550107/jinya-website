@@ -1,9 +1,11 @@
 {include file="cms/layout/header" /}
 <main>
+{notempty name="banner.0"}
 <section class="hero hero--inner hero--blue news-generated-hero">
   {notempty name="banner.0.image"}<div class="inner-hero-bg news-generated-hero-bg" style="background-image:url('{$banner.0.image|htmlentities}');"></div>{else /}<div class="inner-hero-bg news-generated-hero-bg"></div>{/notempty}
-  <div class="container"><div class="hero-text"><h1>{$banner.0.title|default='每一次匠心坚守，诉说金亚初心'|htmlentities}</h1><p class="lede">{$banner.0.subtitle|default='深耕包装印刷，探索工艺新可能'|htmlentities}</p><a href="/page/contact" class="hero-cta">更多咨询</a></div></div>
+  <div class="container"><div class="hero-text">{notempty name="banner.0.title"}<h1>{$banner.0.title|htmlentities}</h1>{/notempty}{notempty name="banner.0.subtitle"}<p class="lede">{$banner.0.subtitle|htmlentities}</p>{/notempty}</div></div>
 </section>
+{/notempty}
 <section class="section"><div class="container">
   <div class="gallery-tabs">
     {volist name="content.categories" id="category" key="categoryIndex"}<button class="{if (!empty($content.currentCategory) && $content.currentCategory.id==$category.id) || (empty($content.currentCategory) && $categoryIndex==1)}active{/if}" type="button" onclick="window.location.href='/news-list/{$category.slug|htmlentities}'">{$category.name|htmlentities}</button>{/volist}

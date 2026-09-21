@@ -146,12 +146,6 @@ abstract class CmsBase extends Frontend
             : $bundleMap['about'];
         $this->pcStrictHome = $this->pcThemeCss === 'index';
 
-        $bannerKey = $this->channelBannerConfigKey();
-        $channelBanner = (string)config('site.' . $bannerKey, '');
-        if (!$this->channelBannerAssetExists($channelBanner)) {
-            $channelBanner = '';
-        }
-
         $this->view->assign('pcThemeCss', $this->pcThemeCss);
         $this->view->assign('pcSection', $this->pcSection);
         $this->view->assign('pcBodyClass', $this->pcBodyClass);
@@ -159,7 +153,6 @@ abstract class CmsBase extends Frontend
         $this->view->assign('pcStrictHome', $this->pcStrictHome);
         $navigationPath = new PcNavigationPathService();
         $this->view->assign('cmsCurrentPath', $navigationPath->resolve($this->requestPath(), $this->pcSection));
-        $this->view->assign('channelBanner', $channelBanner);
     }
 
     protected function assignChannel($title, $breadcrumb = '')
@@ -335,32 +328,17 @@ abstract class CmsBase extends Frontend
         $breadcrumb = !empty($data['breadcrumb']) ? $data['breadcrumb'] : [];
         $current = $breadcrumb ? end($breadcrumb) : [];
         $channelBanner = isset($banner['image']) ? (string)$banner['image'] : '';
-        if ($channelBanner === '') {
-            $bannerKey = $this->channelBannerConfigKey();
-            $channelBanner = (string)config('site.' . $bannerKey, '');
-        }
         if (!$this->channelBannerAssetExists($channelBanner)) {
             $channelBanner = '';
         }
         $this->view->assign('channelBanner', $channelBanner);
         $this->view->assign('channelBannerTitle', isset($banner['title']) ? trim((string)$banner['title']) : '');
         $this->view->assign('channelBannerSubtitle', isset($banner['subtitle']) ? trim((string)$banner['subtitle']) : '');
-        $this->view->assign('channelBannerVisible', $channelBanner !== '' || $this->pcSection !== '');
+        $this->view->assign('channelBannerVisible', $channelBanner !== '');
         $this->view->assign('channelTitle', isset($current['title']) && $current['title'] !== '' ? $current['title'] : (string)$fallbackTitle);
         $this->view->assign('channelUrl', (string)$fallbackUrl);
         $this->view->assign('breadcrumbCurrent', isset($current['title']) ? $current['title'] : (string)$fallbackTitle);
         return $data;
-    }
-
-    protected function channelBannerConfigKey()
-    {
-        if ($this->pcSection === 'products') {
-            return 'cms_pc_product_banner';
-        }
-        if ($this->pcSection === 'news') {
-            return 'cms_pc_news_banner';
-        }
-        return 'cms_pc_about_banner';
     }
 
     protected function channelBannerAssetExists($url)

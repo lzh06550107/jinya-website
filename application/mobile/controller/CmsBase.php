@@ -159,25 +159,7 @@ abstract class CmsBase extends Frontend
     }
     protected function setMobileSection($section)
     {
-        $section = (string)$section;
-        $site = (array)config('site');
-        $bannerMap = [
-            'products' => ['cms_mobile_product_banner', 'cms_pc_product_banner'],
-            'news' => ['cms_mobile_news_banner', 'cms_pc_news_banner'],
-            'page' => ['cms_mobile_about_banner', 'cms_pc_about_banner'],
-            'contact' => ['cms_mobile_about_banner', 'cms_pc_about_banner'],
-        ];
-        $banner = '';
-        if (isset($bannerMap[$section])) {
-            foreach ($bannerMap[$section] as $key) {
-                if (!empty($site[$key])) {
-                    $banner = $site[$key];
-                    break;
-                }
-            }
-        }
-        $this->view->assign('mobileSection', $section);
-        $this->view->assign('mobileChannelBanner', $banner);
+        $this->view->assign('mobileSection', (string)$section);
     }
 
     protected function toMobileUrl($url)
@@ -272,9 +254,10 @@ abstract class CmsBase extends Frontend
         $banner = !empty($data['banner'][0]) ? $data['banner'][0] : [];
         $breadcrumb = !empty($data['breadcrumb']) ? $data['breadcrumb'] : [];
         $current = $breadcrumb ? end($breadcrumb) : [];
+        $mobileChannelBanner = isset($banner['image']) ? trim((string)$banner['image']) : '';
         $this->view->assign('mobileSection', (string)$section);
-        $this->view->assign('mobileChannelBanner', isset($banner['image']) ? $banner['image'] : '');
-        $this->view->assign('channelBannerVisible', !empty($banner));
+        $this->view->assign('mobileChannelBanner', $mobileChannelBanner);
+        $this->view->assign('channelBannerVisible', $mobileChannelBanner !== '');
         $this->view->assign('channelTitle', isset($current['title']) ? $current['title'] : '');
         return $data;
     }
