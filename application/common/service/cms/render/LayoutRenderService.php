@@ -144,9 +144,13 @@ class LayoutRenderService
             if (isset($item['status']) && $item['status'] === 'hidden') {
                 continue;
             }
-            $qrKey = isset($item['qr_key']) ? trim((string)$item['qr_key']) : '';
-            $item['qr_image'] = $qrKey !== '' && isset($siteView[$qrKey]) ? (string)$siteView[$qrKey] : '';
             $title = isset($item['title']) ? trim((string)$item['title']) : '';
+            $qrKey = isset($item['qr_key']) ? trim((string)$item['qr_key']) : '';
+            if ($qrKey === '') {
+                $qrKey = $this->defaultFooterSocialQrKey($title);
+            }
+            $item['qr_key'] = $qrKey;
+            $item['qr_image'] = $qrKey !== '' && isset($siteView[$qrKey]) ? (string)$siteView[$qrKey] : '';
             $footerSocialIcon = $this->footerSocialIcon($title);
             if ($footerSocialIcon !== '') {
                 // Footer social icons are fixed site assets. Override legacy/broken
@@ -158,6 +162,19 @@ class LayoutRenderService
         }
         $component['config']['items'] = $this->decorateIconItems($visibleItems);
         return $component;
+    }
+
+    private function defaultFooterSocialQrKey($title)
+    {
+        $map = [
+            '微信' => 'wechat_qr',
+            '抖音' => 'douyin_qr',
+            '小红书' => 'xiaohongshu_qr',
+            '微信视频号' => 'video_qr',
+            '视频号' => 'video_qr',
+        ];
+        $title = trim((string)$title);
+        return isset($map[$title]) ? $map[$title] : '';
     }
 
     private function footerSocialIcon($title)
