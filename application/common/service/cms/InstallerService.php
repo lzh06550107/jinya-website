@@ -2212,6 +2212,52 @@ class InstallerService
 
         $this->normalizeWorkshopPageBlockIds($connection, $prefix);
         $this->normalizeCulturePageBlockId($connection, $prefix);
+        $this->retireRemovedHomePageBlocks($connection, $prefix);
+    }
+
+    /**
+     * 物理清理已退出首页信息架构的旧 PageBlock 元数据。
+     *
+     * 这里只删除 cms_page_block 及其旧通用引用；cms_home_section 历史内容继续保留，
+     * 避免清理后台标识时误删运营资料。
+     */
+    protected function retireRemovedHomePageBlocks($connection, $prefix)
+    {
+        $blockTable = $prefix . 'cms_page_block';
+        if (!$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $keys = PageSchemaRegistry::retiredHomeBlockKeys();
+        if (!$keys) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $select = $pdo->prepare(
+            "SELECT `id` FROM `{$blockTable}` WHERE `page_key`='home' AND `block_key` IN ({$placeholders})"
+        );
+        $select->execute($keys);
+        $ids = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+        if (!$ids) {
+            return;
+        }
+
+        $referenceTable = $prefix . 'cms_page_block_reference';
+        if ($this->tableExists($connection, $referenceTable)) {
+            $idPlaceholders = implode(',', array_fill(0, count($ids), '?'));
+            $deleteReferences = $pdo->prepare(
+                "DELETE FROM `{$referenceTable}` WHERE `page_block_id` IN ({$idPlaceholders})"
+            );
+            $deleteReferences->execute($ids);
+        }
+
+        $idPlaceholders = implode(',', array_fill(0, count($ids), '?'));
+        $deleteBlocks = $pdo->prepare(
+            "DELETE FROM `{$blockTable}` WHERE `id` IN ({$idPlaceholders})"
+        );
+        $deleteBlocks->execute($ids);
     }
 
     /**

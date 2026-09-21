@@ -118,6 +118,23 @@ const iconPickerJs = read("public/assets/js/backend/cms/icon_picker.js");
 expect(iconPickerJs.includes("input.parent('.input-group')"), "CMS icon picker must reuse an existing Bootstrap input-group");
 expect(iconPickerJs.includes("cms-icon-picker.css' + version"), "CMS icon picker stylesheet URL must be cache-busted with the site version");
 
+const pageSchemaRegistry = read("application/common/service/cms/PageSchemaRegistry.php");
+const homePageSchemaStart = pageSchemaRegistry.indexOf("'home' => self::pageDefinition");
+const homePageSchemaEnd = pageSchemaRegistry.indexOf("'product.index' =>", homePageSchemaStart);
+const homePageSchemaWindow = pageSchemaRegistry.slice(homePageSchemaStart, homePageSchemaEnd);
+for (const retiredKey of ["cases", "advantages", "news"]) {
+  expect(!homePageSchemaWindow.includes("'" + retiredKey + "' => self::blockDefinition"), `Home PageSchema must not register retired block ${retiredKey}`);
+  expect(pageSchemaRegistry.includes("'" + retiredKey + "'"), `Retired home block list must contain ${retiredKey}`);
+}
+const pageBlockController = read("application/admin/controller/cms/PageBlock.php");
+expect(pageBlockController.includes("PageSchemaRegistry::retiredHomeBlockKeys()"), "Home PageBlock admin list must filter retired block identifiers");
+const homeOrderService = read("application/common/service/cms/HomePageBlockOrderService.php");
+expect(homeOrderService.includes("PageSchemaRegistry::retiredHomeBlockKeys()"), "Home block ordering must ignore retired identifiers");
+const installerPageBlocks = read("application/common/service/cms/InstallerService.php");
+for (const token of ["retireRemovedHomePageBlocks", "cms_page_block_reference", "PageSchemaRegistry::retiredHomeBlockKeys()"]) {
+  expect(installerPageBlocks.includes(token), `Installer missing retired home PageBlock cleanup token ${token}`);
+}
+
 const route = read("application/route.php");
 expect(route.includes("'product/:slug' => 'index/product/detail'"), "Generic product detail route /product/:slug must remain available site-wide");
 for (const token of [

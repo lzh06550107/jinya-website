@@ -38,6 +38,16 @@ class PageSchemaRegistry
     }
 
     /**
+     * 已从当前首页信息架构退役的旧功能块标识。
+     *
+     * 保留集中清单仅用于兼容升级数据库和过滤旧记录，不能重新注册为首页功能块。
+     */
+    public static function retiredHomeBlockKeys()
+    {
+        return ['cases', 'advantages', 'news'];
+    }
+
+    /**
      * 固定页面级字段只允许结构化 SEO 配置。
      */
     public static function sanitizePageConfig($pageKey, array $input)
@@ -212,9 +222,6 @@ class PageSchemaRegistry
                 'products' => self::blockDefinition('推荐产品', 'business_list', true, self::homeListFields('product', 7, 3), 'product'),
                 'service' => self::blockDefinition('一体化服务', 'items', true, self::serviceFields(), 'page'),
                 'workshop' => self::blockDefinition('生产车间', 'items', true, self::workshopFields(), 'page'),
-                'cases' => self::blockDefinition('工程案例', 'business_list', true, self::homeListFields('case', 6, 10), 'case'),
-                'advantages' => self::blockDefinition('企业优势', 'items', true, self::advantageFields(), 'page'),
-                'news' => self::blockDefinition('新闻动态', 'business_list', true, self::homeListFields('article', 12, 4), 'article'),
                 'company' => self::blockDefinition('底部企业介绍', 'content', true, self::contentFields(), 'page'),
                 'culture' => self::blockDefinition('企业文化', 'items', true, self::workshopFields(), 'page'),
             ]),
