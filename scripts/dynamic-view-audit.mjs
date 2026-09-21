@@ -298,8 +298,9 @@ const homeView = read("application/index/view/cms/index/index.html");
 const cultureMarkupStart = homeView.indexOf('{notempty name="culture"}');
 const cultureMarkupWindow = homeView.slice(cultureMarkupStart, cultureMarkupStart + 1800);
 expect(!cultureMarkupWindow.includes("culture.background"), "Homepage culture light layout must not consume a background image");
-const mobileCultureMarkupStart = mobileHomeView.indexOf('{notempty name="culture"}');
-const mobileCultureMarkupWindow = mobileHomeView.slice(mobileCultureMarkupStart, mobileCultureMarkupStart + 1800);
+const mobileCultureView = read("application/mobile/view/cms/index/index.html");
+const mobileCultureMarkupStart = mobileCultureView.indexOf('{notempty name="culture"}');
+const mobileCultureMarkupWindow = mobileCultureView.slice(mobileCultureMarkupStart, mobileCultureMarkupStart + 1800);
 expect(!mobileCultureMarkupWindow.includes("culture.background"), "Mobile homepage culture light layout must not consume a background image");
 
 const serviceMarkupStart = homeView.indexOf('{notempty name="service"}');
