@@ -162,20 +162,6 @@
     </section>
     {/notempty}
 
-    {if !empty($content.previous) || !empty($content.next)}
-    <nav class="jpd-product-nav" aria-label="产品翻页">
-      <div class="jpd-product-nav-item">
-        <span>上一产品</span>
-        {notempty name="content.previous"}<a href="{$content.previous.url|htmlentities}">{$content.previous.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
-      </div>
-      <a class="jpd-product-nav-back" href="/products"><i class="fa fa-th-large" aria-hidden="true"></i> 返回产品中心</a>
-      <div class="jpd-product-nav-item jpd-product-nav-next">
-        <span>下一产品</span>
-        {notempty name="content.next"}<a href="{$content.next.url|htmlentities}">{$content.next.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
-      </div>
-    </nav>
-    {/if}
-
     <div class="jpd-media-preview" data-jpd-preview hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="产品媒体预览">
       <button type="button" class="jpd-media-preview-close" data-jpd-preview-close aria-label="关闭预览"><i class="fa fa-times" aria-hidden="true"></i></button>
       <div class="jpd-media-preview-content" data-jpd-preview-content></div>

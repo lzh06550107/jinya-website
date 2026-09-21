@@ -106,7 +106,6 @@ class ProductDetailRenderService extends AbstractRenderService
             $applicationItems = $this->parseListItems(isset($row['applications']) ? $row['applications'] : '');
         }
         $processSteps = $this->processSteps($sectionGroups, isset($row['construction']) ? $row['construction'] : '');
-        $nav = $this->products->previousNext($row['id'], $row['publish_time']);
         $relatedIds = $this->referenceIds($common['page_config'], 'related', 'product');
         $relatedRows = $relatedIds
             ? $this->products->publishedByIds($relatedIds)
@@ -125,8 +124,6 @@ class ProductDetailRenderService extends AbstractRenderService
             'applicationItems' => $applicationItems,
             'processSteps' => $processSteps,
             'relatedProducts' => $related,
-            'previous' => $nav['previous'] ? $this->cards->product($nav['previous'], $context) : [],
-            'next' => $nav['next'] ? $this->cards->product($nav['next'], $context) : [],
             'contact' => $this->configBlock($common['page_config'], 'contact', [
                 'button_text' => '在线咨询',
                 'link_url' => 'http://wpa.qq.com/msgrd?v=3&uin=&site=qq&menu=yes',

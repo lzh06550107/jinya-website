@@ -119,6 +119,7 @@ expect(iconPickerJs.includes("input.parent('.input-group')"), "CMS icon picker m
 expect(iconPickerJs.includes("cms-icon-picker.css' + version"), "CMS icon picker stylesheet URL must be cache-busted with the site version");
 
 const route = read("application/route.php");
+expect(route.includes("'product/:slug' => 'index/product/detail'"), "Generic product detail route /product/:slug must remain available site-wide");
 for (const token of [
   "'index.html$'", "'labels.html$'", "'bags.html$'", "'boxes.html$'",
   "'about.html$'", "'contact.html$'", "'news.html$'",
@@ -184,6 +185,13 @@ for (const token of [
 }
 expect(!productDetailView.includes("cms/common/strict_header"), "Product detail must not use legacy strict_header");
 expect(!productDetailView.includes("cms/common/strict_footer"), "Product detail must not use legacy strict_footer");
+expect(!productDetailView.includes("jpd-product-nav"), "Product detail must not render previous/next product navigation");
+expect(!productDetailView.includes("上一产品"), "Product detail must not render previous-product copy");
+expect(!productDetailView.includes("下一产品"), "Product detail must not render next-product copy");
+const productDetailRender = read("application/common/service/cms/render/ProductDetailRenderService.php");
+expect(!productDetailRender.includes("previousNext("), "Product detail render service must be independent from sequential product navigation");
+expect(!productDetailRender.includes("'previous' =>"), "Product detail ViewModel must not expose previous product data");
+expect(!productDetailRender.includes("'next' =>"), "Product detail ViewModel must not expose next product data");
 
 const productDetailCss = read("public/assets/jinya/css/style.css");
 for (const token of ["Product detail v40", ".jpd-product-hero", ".jpd-detail-nav", ".jpd-media-preview", ".jpd-related-grid"]) {
