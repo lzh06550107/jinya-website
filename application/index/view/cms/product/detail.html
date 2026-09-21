@@ -1,146 +1,184 @@
-{include file="cms/common/strict_header" /}
-{assign name="hideChannelSearch" value="1" /}
-{include file="cms/common/strict_channel_header" /}
-<main class="jpd-page jpd-page-v31">
+{include file="cms/layout/header" /}
+<main class="product-detail-page" data-product-detail>
+  <div class="jpd-page jpd-page-v40">
+    <nav class="jpd-breadcrumb" aria-label="面包屑导航">
+      <a href="/">首页</a>
+      {notempty name="breadcrumb"}
+      {volist name="breadcrumb" id="crumb"}
+        <span aria-hidden="true">/</span>
+        {notempty name="crumb.url"}<a href="{$crumb.url|htmlentities}">{$crumb.title|htmlentities}</a>{else /}<strong>{$crumb.title|htmlentities}</strong>{/notempty}
+      {/volist}
+      {/notempty}
+    </nav>
+
     <section class="jpd-product-hero" aria-labelledby="jpd-product-title">
-        <div class="jpd-gallery">
-            <div class="jpd-gallery-stage">
-            <div class="jpd-gallery-main" data-jpd-main>
-                {notempty name="content.gallery"}
-                    {volist name="content.gallery" id="item" key="galleryIndex"}
-                        {if condition="$galleryIndex==1"}
-                            {if condition="$item.type=='video'"}
-                            <video controls preload="metadata" src="{$item.video_url|htmlentities}"></video>
-                            {else /}
-                            <img src="{$item.image|htmlentities}" alt="{$item.alt|default=$content.product.title|htmlentities}" title="{$item.title|default=$content.product.title|htmlentities}">
-                            {/if}
-                        {/if}
-                    {/volist}
-                {elseif condition="!empty($content.product.cover)" /}
-                    <img src="{$content.product.cover|htmlentities}" alt="{$content.product.title|htmlentities}" title="{$content.product.title|htmlentities}">
-                {else /}
-                    <div class="jpd-gallery-placeholder"><i class="fa fa-picture-o" aria-hidden="true"></i><span>暂无产品图片</span></div>
-                {/notempty}
-            </div>
-            {if condition="!empty($content.gallery) || !empty($content.product.cover)"}
-            <button type="button" class="jpd-gallery-zoom" data-jpd-open-preview aria-label="查看产品大图"><i class="fa fa-search-plus" aria-hidden="true"></i><span>查看大图</span></button>
-            {/if}
-            </div>
+      <div class="jpd-gallery">
+        <div class="jpd-gallery-stage">
+          <div class="jpd-gallery-main" data-jpd-main>
             {notempty name="content.gallery"}
-            <div class="jpd-gallery-thumbs" aria-label="产品相册">
-                {volist name="content.gallery" id="item" key="galleryIndex"}
-                {if condition="$item.type=='video'"}
-                <button type="button" class="jpd-gallery-thumb{if condition="$galleryIndex==1"} is-active{/if}" data-jpd-thumb data-type="video" data-src="{$item.video_url|htmlentities}" data-alt="{$item.alt|default=$content.product.title|htmlentities}" aria-label="查看{$content.product.title|htmlentities}第{$galleryIndex}个媒体">
-                    <span class="jpd-video-thumb"><i class="fa fa-play-circle" aria-hidden="true"></i></span>
-                </button>
-                {else /}
-                <button type="button" class="jpd-gallery-thumb{if condition="$galleryIndex==1"} is-active{/if}" data-jpd-thumb data-type="image" data-src="{$item.image|htmlentities}" data-alt="{$item.alt|default=$content.product.title|htmlentities}" aria-label="查看{$content.product.title|htmlentities}第{$galleryIndex}个媒体">
-                    <img src="{$item.image|htmlentities}" alt="">
-                </button>
+              {volist name="content.gallery" id="item" key="galleryIndex"}
+                {if condition="$galleryIndex==1"}
+                  {if condition="$item.type=='video'"}
+                  <video controls preload="metadata" src="{$item.video_url|htmlentities}"></video>
+                  {else /}
+                  <img src="{$item.image|htmlentities}" alt="{$item.alt|default=$content.product.title|htmlentities}" title="{$item.title|default=$content.product.title|htmlentities}" loading="eager" fetchpriority="high">
+                  {/if}
                 {/if}
-                {/volist}
-            </div>
+              {/volist}
+            {elseif condition="!empty($content.product.cover)" /}
+              <img src="{$content.product.cover|htmlentities}" alt="{$content.product.title|htmlentities}" title="{$content.product.title|htmlentities}" loading="eager" fetchpriority="high">
+            {else /}
+              <div class="jpd-gallery-placeholder"><i class="fa fa-picture-o" aria-hidden="true"></i><span>暂无产品图片</span></div>
             {/notempty}
+          </div>
+          {if condition="!empty($content.gallery) || !empty($content.product.cover)"}
+          <button type="button" class="jpd-gallery-zoom" data-jpd-open-preview aria-label="查看产品大图">
+            <i class="fa fa-search-plus" aria-hidden="true"></i><span>查看大图</span>
+          </button>
+          {/if}
         </div>
 
-        <article class="jpd-product-info">
-            {if !empty($content.product.category.name)}<div class="jpd-product-category">{$content.product.category.name|htmlentities}</div>{/if}
-            <h1 id="jpd-product-title">{$content.product.title|htmlentities}</h1>
-            {notempty name="content.product.subtitle"}<p class="jpd-product-subtitle">{$content.product.subtitle|htmlentities}</p>{/notempty}
-            {notempty name="content.product.summary"}<p class="jpd-product-summary">{$content.product.summary|htmlentities}</p>{/notempty}
+        {notempty name="content.gallery"}
+        <div class="jpd-gallery-thumbs" aria-label="产品相册">
+          {volist name="content.gallery" id="item" key="galleryIndex"}
+          {if condition="$item.type=='video'"}
+          <button type="button" class="jpd-gallery-thumb{if condition="$galleryIndex==1"} is-active{/if}" data-jpd-thumb data-type="video" data-src="{$item.video_url|htmlentities}" data-alt="{$item.alt|default=$content.product.title|htmlentities}" aria-label="查看第{$galleryIndex}个产品媒体">
+            <span class="jpd-video-thumb"><i class="fa fa-play-circle" aria-hidden="true"></i></span>
+          </button>
+          {else /}
+          <button type="button" class="jpd-gallery-thumb{if condition="$galleryIndex==1"} is-active{/if}" data-jpd-thumb data-type="image" data-src="{$item.image|htmlentities}" data-alt="{$item.alt|default=$content.product.title|htmlentities}" aria-label="查看第{$galleryIndex}张产品图片">
+            <img src="{$item.image|htmlentities}" alt="" loading="lazy">
+          </button>
+          {/if}
+          {/volist}
+        </div>
+        {/notempty}
+      </div>
 
-            <div class="jpd-product-meta">
-                {notempty name="content.product.product_code"}<span><b>产品编号</b>{$content.product.product_code|htmlentities}</span>{/notempty}
-                {notempty name="content.product.tags"}<span><b>产品标签</b>{$content.product.tags|htmlentities}</span>{/notempty}
+      <article class="jpd-product-info">
+        <div class="jpd-product-kicker">
+          {if !empty($content.product.category.name)}<span>{$content.product.category.name|htmlentities}</span>{/if}
+          <em>JINYA PACKAGING</em>
+        </div>
+        <h1 id="jpd-product-title">{$content.product.title|htmlentities}</h1>
+        {notempty name="content.product.subtitle"}<p class="jpd-product-subtitle">{$content.product.subtitle|htmlentities}</p>{/notempty}
+        {notempty name="content.product.summary"}<p class="jpd-product-summary">{$content.product.summary|htmlentities}</p>{/notempty}
+
+        {if !empty($content.product.product_code) || !empty($content.product.tags)}
+        <div class="jpd-product-meta">
+          {notempty name="content.product.product_code"}<span><b>产品编号</b>{$content.product.product_code|htmlentities}</span>{/notempty}
+          {notempty name="content.product.tags"}<span><b>产品标签</b>{$content.product.tags|htmlentities}</span>{/notempty}
+        </div>
+        {/if}
+
+        {notempty name="content.summaryParameters"}
+        <div class="jpd-summary-card">
+          <div class="jpd-summary-card-title"><span>QUICK SPECS</span><strong>核心参数</strong></div>
+          <dl class="jpd-summary-parameters">
+            {volist name="content.summaryParameters" id="parameter"}
+            <div class="jpd-summary-parameter">
+              <dt>{$parameter.parameter_name|htmlentities}</dt>
+              <dd>{$parameter.parameter_value|htmlentities}{notempty name="parameter.unit"}<small>{$parameter.unit|htmlentities}</small>{/notempty}</dd>
             </div>
+            {/volist}
+          </dl>
+        </div>
+        {/notempty}
 
-            {notempty name="content.summaryParameters"}
-            <dl class="jpd-summary-parameters">
-                {volist name="content.summaryParameters" id="parameter"}
-                <div class="jpd-summary-parameter">
-                    <dt>{$parameter.parameter_name|htmlentities}</dt>
-                    <dd>{$parameter.parameter_value|htmlentities}{notempty name="parameter.unit"}<small>{$parameter.unit|htmlentities}</small>{/notempty}</dd>
-                </div>
-                {/volist}
-            </dl>
-            {/notempty}
+        <div class="jpd-service-points" aria-label="定制服务说明">
+          <span><i class="fa fa-check-circle" aria-hidden="true"></i> 按需定制</span>
+          <span><i class="fa fa-check-circle" aria-hidden="true"></i> 工艺匹配</span>
+          <span><i class="fa fa-check-circle" aria-hidden="true"></i> 方案确认</span>
+        </div>
 
-            <div class="jpd-product-actions">
-                {notempty name="content.contact"}<a class="jpd-btn jpd-btn-primary" href="{$content.contact.link_url|default='/page/contact'|htmlentities}" target="_blank" rel="noopener"><i class="fa fa-comments-o" aria-hidden="true"></i>{$content.contact.button_text|default='立即咨询'|htmlentities}</a>{/notempty}
-                <a class="jpd-btn jpd-btn-secondary" href="/page/contact"><i class="fa fa-file-text-o" aria-hidden="true"></i>获取报价</a>
-            </div>
-            <p class="jpd-action-note"><i class="fa fa-shield" aria-hidden="true"></i> 支持按需定制，具体规格与工艺以最终确认方案为准</p>
-        </article>
+        <div class="jpd-product-actions">
+          {notempty name="content.contact"}
+          <a class="jpd-btn jpd-btn-primary" href="{$content.contact.link_url|default='/page/contact'|htmlentities}">
+            <i class="fa fa-comments-o" aria-hidden="true"></i>{$content.contact.button_text|default='立即咨询'|htmlentities}
+          </a>
+          {else /}
+          <a class="jpd-btn jpd-btn-primary" href="/page/contact"><i class="fa fa-comments-o" aria-hidden="true"></i>立即咨询</a>
+          {/notempty}
+          {if !empty($layout.site.hotline)}
+          <a class="jpd-btn jpd-btn-secondary" href="tel:{$layout.site.hotline|htmlentities}"><i class="fa fa-phone" aria-hidden="true"></i>电话咨询</a>
+          {else /}
+          <a class="jpd-btn jpd-btn-secondary" href="/page/contact"><i class="fa fa-file-text-o" aria-hidden="true"></i>获取报价</a>
+          {/if}
+        </div>
+        <p class="jpd-action-note"><i class="fa fa-shield" aria-hidden="true"></i> 支持按需定制，具体规格与工艺以最终确认方案为准</p>
+      </article>
     </section>
 
+    {if condition="!empty($content.sectionGroups.introduction) || !empty($content.product.content_html) || !empty($content.featureItems) || !empty($content.parameters) || !empty($content.applicationItems) || !empty($content.processSteps) || !empty($content.relatedProducts)"}
     <nav class="jpd-detail-nav" aria-label="产品详情导航">
-        <div class="jpd-detail-nav-inner">
-            {if condition="!empty($content.sectionGroups.introduction) || !empty($content.product.content_html)"}<a href="#jpd-introduction">产品介绍</a>{/if}
-            {notempty name="content.featureItems"}<a href="#jpd-features">产品特点</a>{/notempty}
-            {notempty name="content.parameters"}<a href="#jpd-parameters">规格参数</a>{/notempty}
-            {notempty name="content.applicationItems"}<a href="#jpd-applications">适用范围</a>{/notempty}
-            {notempty name="content.processSteps"}<a href="#jpd-process">定制流程</a>{/notempty}
-            {notempty name="content.relatedProducts"}<a href="#jpd-related">推荐产品</a>{/notempty}
-        </div>
+      <div class="jpd-detail-nav-inner">
+        {if condition="!empty($content.sectionGroups.introduction) || !empty($content.product.content_html)"}<a href="#jpd-introduction">产品介绍</a>{/if}
+        {notempty name="content.featureItems"}<a href="#jpd-features">产品特点</a>{/notempty}
+        {notempty name="content.parameters"}<a href="#jpd-parameters">规格参数</a>{/notempty}
+        {notempty name="content.applicationItems"}<a href="#jpd-applications">适用范围</a>{/notempty}
+        {notempty name="content.processSteps"}<a href="#jpd-process">定制流程</a>{/notempty}
+        {notempty name="content.relatedProducts"}<a href="#jpd-related">推荐产品</a>{/notempty}
+      </div>
     </nav>
+    {/if}
 
     {include file="cms/product/_detail_rich_body" /}
 
     <section class="jpd-cta jpd-section">
-        <div>
-            <span>PACKAGING CUSTOMIZATION</span>
-            <h2>需要定制这款产品？</h2>
-            <p>告诉我们用途、尺寸、数量和工艺需求，我们将根据实际生产条件为您确认方案与报价。</p>
-            {if !empty($layout.site.hotline) || !empty($layout.site.telephone)}
-            <div class="jpd-cta-hotline"><i class="fa fa-phone" aria-hidden="true"></i><span>服务热线</span><strong>{$layout.site.hotline|default=$layout.site.telephone|htmlentities}</strong></div>
-            {/if}
-        </div>
-        <div class="jpd-cta-actions">
-            {notempty name="content.contact"}<a class="jpd-btn jpd-btn-light" href="{$content.contact.link_url|default='/page/contact'|htmlentities}" target="_blank" rel="noopener">在线咨询</a>{/notempty}
-            <a class="jpd-btn jpd-btn-outline-light" href="/page/contact">联系我们</a>
-        </div>
+      <div class="jpd-cta-copy">
+        <span>PACKAGING CUSTOMIZATION</span>
+        <h2>需要定制这款产品？</h2>
+        <p>告诉我们用途、尺寸、数量和工艺需求，我们将根据实际生产条件为您确认方案与报价。</p>
+        {if !empty($layout.site.hotline) || !empty($layout.site.telephone)}
+        <div class="jpd-cta-hotline"><i class="fa fa-phone" aria-hidden="true"></i><span>服务热线</span><strong>{$layout.site.hotline|default=$layout.site.telephone|htmlentities}</strong></div>
+        {/if}
+      </div>
+      <div class="jpd-cta-actions">
+        <a class="jpd-btn jpd-btn-light" href="/page/contact">在线咨询</a>
+        {if !empty($layout.site.hotline)}<a class="jpd-btn jpd-btn-outline-light" href="tel:{$layout.site.hotline|htmlentities}">电话咨询</a>{else /}<a class="jpd-btn jpd-btn-outline-light" href="/page/contact">联系我们</a>{/if}
+      </div>
     </section>
 
     {notempty name="content.relatedProducts"}
     <section class="jpd-section jpd-related" id="jpd-related" aria-labelledby="jpd-related-title">
-        <div class="jpd-section-heading jpd-section-heading-row">
-            <div><span>RELATED PRODUCTS</span><h2 id="jpd-related-title">推荐产品</h2></div>
-            <a href="/products" class="jpd-more-link">查看更多产品 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-        </div>
-        <div class="jpd-related-grid">
-            {volist name="content.relatedProducts" id="item"}
-            <article class="jpd-related-card">
-                <a class="jpd-related-image" href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">
-                    {notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}">{else /}<span class="jpd-related-placeholder"><i class="fa fa-picture-o" aria-hidden="true"></i></span>{/notempty}
-                </a>
-                <div class="jpd-related-body">
-                    <h3><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h3>
-                    {notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}
-                    <a class="jpd-related-link" href="{$item.url|htmlentities}">查看详情 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                </div>
-            </article>
-            {/volist}
-        </div>
+      <div class="jpd-section-heading jpd-section-heading-row">
+        <div><span>RELATED PRODUCTS</span><h2 id="jpd-related-title">推荐产品</h2></div>
+        <a href="/products" class="jpd-more-link">查看更多产品 <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+      </div>
+      <div class="jpd-related-grid">
+        {volist name="content.relatedProducts" id="item"}
+        <article class="jpd-related-card">
+          <a class="jpd-related-image" href="{$item.url|htmlentities}" title="{$item.title|htmlentities}">
+            {notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy">{else /}<span class="jpd-related-placeholder"><i class="fa fa-picture-o" aria-hidden="true"></i></span>{/notempty}
+          </a>
+          <div class="jpd-related-body">
+            <h3><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h3>
+            {notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}
+            <a class="jpd-related-link" href="{$item.url|htmlentities}">查看详情 <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+        {/volist}
+      </div>
     </section>
     {/notempty}
 
     {if !empty($content.previous) || !empty($content.next)}
     <nav class="jpd-product-nav" aria-label="产品翻页">
-        <div class="jpd-product-nav-item">
-            <span>上一产品</span>
-            {notempty name="content.previous"}<a href="{$content.previous.url|htmlentities}">{$content.previous.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
-        </div>
-        <a class="jpd-product-nav-back" href="/products"><i class="fa fa-th-large" aria-hidden="true"></i> 返回产品中心</a>
-        <div class="jpd-product-nav-item jpd-product-nav-next">
-            <span>下一产品</span>
-            {notempty name="content.next"}<a href="{$content.next.url|htmlentities}">{$content.next.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
-        </div>
+      <div class="jpd-product-nav-item">
+        <span>上一产品</span>
+        {notempty name="content.previous"}<a href="{$content.previous.url|htmlentities}">{$content.previous.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
+      </div>
+      <a class="jpd-product-nav-back" href="/products"><i class="fa fa-th-large" aria-hidden="true"></i> 返回产品中心</a>
+      <div class="jpd-product-nav-item jpd-product-nav-next">
+        <span>下一产品</span>
+        {notempty name="content.next"}<a href="{$content.next.url|htmlentities}">{$content.next.title|htmlentities}</a>{else /}<em>没有了</em>{/notempty}
+      </div>
     </nav>
     {/if}
 
     <div class="jpd-media-preview" data-jpd-preview hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="产品媒体预览">
-        <button type="button" class="jpd-media-preview-close" data-jpd-preview-close aria-label="关闭预览"><i class="fa fa-times" aria-hidden="true"></i></button>
-        <div class="jpd-media-preview-content" data-jpd-preview-content></div>
+      <button type="button" class="jpd-media-preview-close" data-jpd-preview-close aria-label="关闭预览"><i class="fa fa-times" aria-hidden="true"></i></button>
+      <div class="jpd-media-preview-content" data-jpd-preview-content></div>
     </div>
-</main>
-{include file="cms/common/strict_footer" /}
+  </div>
+{include file="cms/layout/footer" /}
