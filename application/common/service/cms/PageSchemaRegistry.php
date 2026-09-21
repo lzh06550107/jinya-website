@@ -47,6 +47,9 @@ class PageSchemaRegistry
         $map = [
             'home' => ['cases', 'advantages', 'news'],
             'product.detail' => ['banner'],
+            'page.label' => ['banner'],
+            'page.bags' => ['banner'],
+            'page.boxes' => ['banner'],
             'page.about' => ['banner'],
             'page.contact' => ['banner'],
         ];

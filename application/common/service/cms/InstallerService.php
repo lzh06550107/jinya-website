@@ -2213,6 +2213,7 @@ class InstallerService
         $this->normalizeWorkshopPageBlockIds($connection, $prefix);
         $this->normalizeCulturePageBlockId($connection, $prefix);
         $this->retireRemovedPageBlocks($connection, $prefix);
+        $this->retireUnusedBannerRows($connection, $prefix);
     }
 
     /**
@@ -2259,6 +2260,26 @@ class InstallerService
             );
             $deleteBlocks->execute($ids);
         }
+    }
+
+    /**
+     * 结构化单页和新版产品详情不再读取 cms_banner。
+     * 升级时仅退役已经没有前台消费者的旧 Banner 行，素材文件本身不删除。
+     */
+    protected function retireUnusedBannerRows($connection, $prefix)
+    {
+        $table = $prefix . 'cms_banner';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+        $pdo = $this->getPdo($connection);
+        $keys = ['page.label', 'page.bags', 'page.boxes', 'page.about', 'page.contact', 'product.detail'];
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $statement = $pdo->prepare(
+            "UPDATE `{$table}` SET `status`='hidden',`deletetime`=COALESCE(`deletetime`,UNIX_TIMESTAMP()),`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE (`page_key` IN ({$placeholders}) OR `page_key` LIKE 'product.detail.%') AND `deletetime` IS NULL"
+        );
+        $statement->execute($keys);
     }
 
     /**

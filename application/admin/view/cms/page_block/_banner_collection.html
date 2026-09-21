@@ -87,7 +87,7 @@
                 {/if}
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-2">PC Banner 图片:</label>
-                    <div class="col-xs-12 {if condition='$bannerProfile.show_mobile'}col-sm-4{else /}col-sm-8{/if}">
+                    <div class="col-xs-12 col-sm-4">
                         <input class="form-control" name="real[banners][{$bannerIndex}][image]" value="{$banner.image|default=''|htmlentities}" data-media-preview="image" data-media-upload="true" data-media-usage="PC 栏目 Banner 图片" data-media-recommended-width="1920" data-media-recommended-height="800" data-media-recommended-format="JPG/WebP" data-media-max-kb="1536">
                     </div>
                     {if condition="$bannerProfile.show_mobile"}
