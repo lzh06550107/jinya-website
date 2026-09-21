@@ -15,15 +15,13 @@
     </nav>
     <div class="footer-grid">
       {if condition="(!isset($layout.footer.config.show_company) || !empty($layout.footer.config.show_company)) && !empty($layout.footer_company)"}
-            {/if}
-      {if condition="(!isset($layout.footer.config.show_contact) || !empty($layout.footer.config.show_contact)) && !empty($layout.footer_contact)"}
-      {/if}
-      {if condition="(!isset($layout.footer.config.show_qrcode) || !empty($layout.footer.config.show_qrcode)) && !empty($layout.footer_qrcode)"}
-<div class="footer-col">
+      <div class="footer-col">
         <h5>{$layout.footer_company.title|default='关于金亚包装'|htmlentities}</h5>
         <p>{$layout.footer_company.content|default=$cmsSite.slogan|default=''|htmlentities}</p>
         <p style="margin-top:14px;">版权所有 &copy; {$cmsSite.cms_copyright_year|default='2026'|htmlentities} {$cmsSite.name|default='郑州金亚包装有限公司'|htmlentities}。未经许可，不得转载。{if condition="(!isset($layout.footer.config.show_beian) || !empty($layout.footer.config.show_beian)) && !empty($cmsSite.beian)"}<br>备案号：{$cmsSite.beian|htmlentities}{/if}{if !empty($cmsSite.cms_tech_support)}<br>技术支持：{$cmsSite.cms_tech_support|htmlentities}{/if}</p>
       </div>
+      {/if}
+      {if condition="(!isset($layout.footer.config.show_contact) || !empty($layout.footer.config.show_contact)) && !empty($layout.footer_contact)"}
       <div class="footer-col">
         <h5>{$layout.footer_contact.title|default='联系金亚包装'|htmlentities}</h5>
         <div class="footer-contact-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>{$cmsSite.hotline|default='18903716652'|htmlentities}</div>
@@ -31,18 +29,14 @@
         {if !empty($cmsSite.address)}<div class="footer-contact-sub">公司地址：{$cmsSite.address|htmlentities}</div>{/if}
         {if !empty($cmsSite.factory_address)}<div class="footer-contact-sub">厂&nbsp;&nbsp;&nbsp;址：{$cmsSite.factory_address|htmlentities}</div>{/if}
       </div>
+      {/if}
+      {if condition="(!isset($layout.footer.config.show_qrcode) || !empty($layout.footer.config.show_qrcode)) && !empty($layout.footer_qrcode)"}
       <div class="footer-col">
         <h5>{$layout.footer_qrcode.title|default='关注金亚包装'|htmlentities}</h5>
-        <div class="footer-qr" id="footer-qr">
-          {if !empty($cmsSite.cms_service_wechat_qr)}<img src="{$cmsSite.cms_service_wechat_qr|htmlentities}" alt="金亚包装微信二维码" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/qr-code-full.png" alt="金亚包装微信二维码" loading="lazy">{/if}
-        </div>
+        <div class="footer-qr" id="footer-qr">{if !empty($cmsSite.cms_service_wechat_qr)}<img src="{$cmsSite.cms_service_wechat_qr|htmlentities}" alt="金亚包装微信二维码" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/qr-code-full.png" alt="金亚包装微信二维码" loading="lazy">{/if}</div>
         <div class="social-row">
           {notempty name="layout.footer_qrcode.config.items"}
-          {volist name="layout.footer_qrcode.config.items" id="item"}
-          <a href="{$item.url|default='#'|htmlentities}" class="social-link" aria-label="{$item.title|default=''|htmlentities}" title="{$item.title|default=''|htmlentities}"{if !empty($item.target)} target="{$item.target|htmlentities}"{/if}>
-            {if condition="$item.icon_view.type eq 'image'"}<img src="{$item.icon_view.url|htmlentities}" alt="{$item.title|default=''|htmlentities}">{elseif condition="$item.icon_view.type eq 'font'" /}<i class="{$item.icon_view.class|htmlentities}" aria-hidden="true"></i>{/if}
-          </a>
-          {/volist}
+          {volist name="layout.footer_qrcode.config.items" id="item"}<a href="{$item.url|default='#'|htmlentities}" class="social-link" aria-label="{$item.title|default=''|htmlentities}" title="{$item.title|default=''|htmlentities}"{if !empty($item.target)} target="{$item.target|htmlentities}"{/if}>{if condition="$item.icon_view.type eq 'image'"}<img src="{$item.icon_view.url|htmlentities}" alt="{$item.title|default=''|htmlentities}">{elseif condition="$item.icon_view.type eq 'font'" /}<i class="{$item.icon_view.class|htmlentities}" aria-hidden="true"></i>{/if}</a>{/volist}
           {else /}
           <a href="#" class="social-link" aria-label="微信" title="微信"><img src="__CDN__/assets/jinya/img/social-wechat.png?v=20260920-r3" alt="微信"></a>
           <a href="#" class="social-link" aria-label="抖音" title="抖音"><img src="__CDN__/assets/jinya/img/social-douyin.svg?v=20260920-r5" alt="抖音"></a>
@@ -50,7 +44,8 @@
           <a href="#" class="social-link" aria-label="微信视频号" title="微信视频号"><img src="__CDN__/assets/jinya/img/social-channels.png?v=20260920-r3" alt="微信视频号"></a>
           {/notempty}
         </div>
-      </div>      {/if}
+      </div>
+      {/if}
     </div>
   </div>
   {if condition="!empty($layout.friend_links.config.items)"}
