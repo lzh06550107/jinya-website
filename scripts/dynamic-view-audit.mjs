@@ -262,6 +262,10 @@ for (const field of ["title", "text", "icon"]) {
 for (const legacyField of ["prefix", "value", "unit"]) {
   expect(!homeMetricsForm.includes('data-metric-field="' + legacyField + '"'), `Home service editor must not expose legacy field ${legacyField}`);
 }
+const workshopItemsEditor = read("application/admin/view/cms/common/_workshop_items_editor.html");
+expect(workshopItemsEditor.includes("详情说明:"), "Workshop editor must expose a detail description field");
+expect(workshopItemsEditor.includes('textarea class="form-control" rows="3" data-workshop-field="text"'), "Workshop detail description must be an editable textarea");
+expect(!workshopItemsEditor.includes('type="hidden" data-workshop-field="text"'), "Workshop detail description must not remain hidden");
 const homeServiceForm = read("application/admin/view/cms/common/_home_service_fields.html");
 expect(homeServiceForm.includes("按钮跳转 URL"), "Home service form must label the real button URL");
 expect(!homeServiceForm.includes("备用跳转 URL"), "Home service form must not expose obsolete fallback URL wording");
