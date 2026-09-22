@@ -778,11 +778,21 @@ expect(
   "PC floating sidebar must keep Chinese action labels on one line",
 );
 
+const inquiryDetailView = read("application/admin/view/cms/inquiry/detail.html");
+expect(
+  !inquiryDetailView.includes("跟进时间线") &&
+  !inquiryDetailView.includes("row.followups") &&
+  inquiryDetailView.includes("客户资料"),
+  "inquiry detail must show customer data only, without follow-up timeline",
+);
+
 const inquiryAdminController = read("application/admin/controller/cms/Inquiry.php");
 expect(
   inquiryAdminController.includes("InquiryModel::where('inquiry.id', (int)$id)") &&
-  !inquiryAdminController.includes("InquiryModel::where('id', (int)$id)"),
-  "relation-loaded inquiry detail queries must qualify the main-table id",
+  !inquiryAdminController.includes("InquiryModel::where('id', (int)$id)") &&
+  inquiryAdminController.includes("$this->findAccessible($ids, ['assignedAdmin'])") &&
+  !inquiryAdminController.includes("$this->findAccessible($ids, ['followups.admin', 'assignedAdmin'])"),
+  "inquiry detail must qualify the main-table id and avoid loading hidden followups",
 );
 
 const inquiryAdminIndex = read("application/admin/view/cms/inquiry/index.html");
