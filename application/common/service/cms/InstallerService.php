@@ -127,6 +127,10 @@ class InstallerService
         // Apply the current html/ + html/mobile/ content baseline last so a fresh
         // CMS install renders the same copy and media as the approved static pages.
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        // Keep the boxes page CMS section order identical to the approved frontend.
+        // This also retires the historical standalone boxes_purchase block, whose
+        // content now lives inside boxes_details and is not rendered as a section.
+        $this->normalizeBoxesContentBlockOrder($connection, $prefix);
         // Apply the approved labels reference accent to editable rich-text copy.
         $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
         // bags_compare is a complete-image module. Install the approved uploaded artwork
@@ -1877,6 +1881,55 @@ class InstallerService
      * 空值、上一版 CSS 背景默认值或错误的 v1 整图会迁移为用户确认的完整效果图；
      * 后台已经上传的其它自定义图片保持不变。
      */
+    /**
+     * 统一彩盒页内容区块顺序，使后台列表与前端实际 section 顺序完全一致。
+     *
+     * 前端与后台列表都按 weigh DESC 排序，因此这里只规范排序字段，不覆盖
+     * 管理员编辑过的标题、图片、文案等内容。历史 boxes_purchase 已不再由前端
+     * 独立渲染，其采购 CTA 已合并进 boxes_details，故升级时软删除该孤立区块。
+     */
+    protected function normalizeBoxesContentBlockOrder($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $order = [
+            'boxes_hero' => 1000,
+            'boxes_products' => 900,
+            'boxes_value' => 800,
+            'boxes_promise' => 700,
+            'boxes_details' => 600,
+            'boxes_applications' => 500,
+            'boxes_craft_material' => 400,
+            'boxes_team' => 300,
+            'boxes_types' => 200,
+            'boxes_services' => 100,
+        ];
+
+        $update = $pdo->prepare(
+            "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`weigh`=?,b.`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`=? AND b.`deletetime` IS NULL"
+        );
+        if ($update) {
+            foreach ($order as $blockKey => $weight) {
+                $update->execute([$weight, $blockKey]);
+            }
+        }
+
+        $retire = $pdo->prepare(
+            "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`status`='hidden',b.`deletetime`=COALESCE(b.`deletetime`,UNIX_TIMESTAMP()),b.`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`='boxes_purchase' AND b.`deletetime` IS NULL"
+        );
+        if ($retire) {
+            $retire->execute();
+        }
+    }
     protected function ensureBagsCompareFullImageDefaults($connection, $prefix)
     {
         $pageTable = $prefix . 'cms_page';
