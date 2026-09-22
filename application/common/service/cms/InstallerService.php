@@ -1460,8 +1460,9 @@ class InstallerService
         $extraJson = json_encode(isset($block['extra']) && is_array($block['extra']) ? $block['extra'] : [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($extraJson === false) throw new \RuntimeException('包装袋页面默认配置 JSON 编码失败：' . $block['block_key']);
         $select = $pdo->prepare(
-            "SELECT `id`,`edited_by_admin`,`title`,`subtitle`,`content`,`image`,`mobile_image`,`extra_json` FROM `{$table}` " .
-            "WHERE `page_id`=? AND `deletetime` IS NULL AND (`source_key`=? OR `block_key`=?) ORDER BY (`source_key`=?) DESC,`id` ASC LIMIT 1"
+            "SELECT `id`,`edited_by_admin`,`title`,`subtitle`,`content`,`image`,`mobile_image`,`extra_json`,`deletetime` FROM `{$table}` " .
+            "WHERE `page_id`=? AND (`source_key`=? OR (`deletetime` IS NULL AND `block_key`=?)) " .
+            "ORDER BY (`source_key`=?) DESC,`id` ASC LIMIT 1"
         );
         $select->execute([(int)$pageId,$sourceKey,(string)$block['block_key'],$sourceKey]);
         $row = $select->fetch(\PDO::FETCH_ASSOC);
@@ -1502,7 +1503,7 @@ class InstallerService
         $pageId = $this->ensureBoxesPageRow($pdo, $pageTable, $page);
         if (!$pageId) return;
         foreach (BoxesPageDefaults::blocks() as $block) $this->ensureBoxesPageBlockRow($pdo, $blockTable, $pageId, $block);
-        $this->purgeRetiredPageContentBlocks($pdo, $blockTable, $pageId, ['body']);
+        $this->purgeRetiredPageContentBlocks($pdo, $blockTable, $pageId, ['body','boxes_purchase']);
     }
 
     protected function ensureBoxesPageRow($pdo, $table, array $page)
@@ -1556,7 +1557,7 @@ class InstallerService
         if (empty($row['edited_by_admin']) || $this->isStructurallyEmptyBoxesBlock($row)) {
             $update = $pdo->prepare(
                 "UPDATE `{$table}` SET `block_key`=?,`block_type`='boxes_section',`title`=?,`subtitle`=?,`content`=?,`image`=?,`mobile_image`=?,`link_text`=?,`link_url`=?," .
-                "`extra_json`=?,`source_key`=?,`pc_visible`=?,`mobile_visible`=?,`weigh`=?,`status`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?"
+                "`extra_json`=?,`source_key`=?,`pc_visible`=?,`mobile_visible`=?,`weigh`=?,`status`=?,`deletetime`=NULL,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?"
             );
             $update->execute([(string)$block['block_key'],(string)$block['title'],(string)$block['subtitle'],(string)$block['content'],(string)$block['image'],(string)$block['mobile_image'],(string)$block['link_text'],(string)$block['link_url'],$extraJson,$sourceKey,(int)$block['pc_visible'],(int)$block['mobile_visible'],(int)$block['weigh'],(string)$block['status'],(int)$row['id']]);
         }
