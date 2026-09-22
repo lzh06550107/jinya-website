@@ -302,6 +302,60 @@
       return Math.max(0, visibleCards.length - perView);
     }
 
+    function resetCardHeights(){
+      visibleCards.forEach(function(card){
+        card.style.minHeight = "";
+        var body = card.querySelector(".body");
+        var title = card.querySelector("h4");
+        var text = card.querySelector(".body p");
+        var foot = card.querySelector(".foot");
+        if(body) body.style.minHeight = "";
+        if(title) title.style.minHeight = "";
+        if(text) text.style.minHeight = "";
+        if(foot) foot.style.minHeight = "";
+      });
+    }
+
+    function maxSectionHeight(selector){
+      var max = 0;
+      visibleCards.forEach(function(card){
+        var el = card.querySelector(selector);
+        if(!el) return;
+        max = Math.max(max, Math.ceil(el.getBoundingClientRect().height));
+      });
+      return max;
+    }
+
+    function equalizeCardHeights(){
+      resetCardHeights();
+      if(visibleCards.length < 2) return;
+
+      // All cards already have the same calculated width at this point.
+      // Measure natural wrapping first, then normalize every text zone to the
+      // tallest item in the active category. This keeps all horizontal
+      // boundaries aligned without relying on hard-coded pixel heights.
+      var titleHeight = maxSectionHeight("h4");
+      var textHeight = maxSectionHeight(".body p");
+      var footHeight = maxSectionHeight(".foot");
+
+      visibleCards.forEach(function(card){
+        var title = card.querySelector("h4");
+        var text = card.querySelector(".body p");
+        var foot = card.querySelector(".foot");
+        if(title && titleHeight) title.style.minHeight = titleHeight + "px";
+        if(text && textHeight) text.style.minHeight = textHeight + "px";
+        if(foot && footHeight) foot.style.minHeight = footHeight + "px";
+      });
+
+      // A final body measurement covers cards with optional/missing text and
+      // guarantees that the footer starts on the exact same horizontal line.
+      var bodyHeight = maxSectionHeight(".body");
+      visibleCards.forEach(function(card){
+        var body = card.querySelector(".body");
+        if(body && bodyHeight) body.style.minHeight = bodyHeight + "px";
+      });
+    }
+
     function render(){
       var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || "0");
       var width = perView > 0 ? (viewport.clientWidth - gap * (perView - 1)) / perView : viewport.clientWidth;
@@ -309,6 +363,8 @@
       visibleCards.forEach(function(card){
         card.style.flexBasis = Math.max(0, width) + "px";
       });
+
+      equalizeCardHeights();
 
       index = Math.max(0, Math.min(index, maxIndex()));
       track.style.transform = "translate3d(" + (-(width + gap) * index) + "px,0,0)";
@@ -390,6 +446,9 @@
     carousel.classList.add("is-ready");
     applyCategory(initialTab ? (initialTab.getAttribute("data-tab") || "") : "");
     window.addEventListener("resize", layout, { passive:true });
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(layout).catch(function(){});
+    }
   });
 
   // Back to top
