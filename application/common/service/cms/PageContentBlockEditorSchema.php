@@ -254,6 +254,8 @@ class PageContentBlockEditorSchema
             ['normal'=>'图左文右','reverse'=>'图右文左'], [],
             ['title'=>'理念标题','text'=>'理念说明','image'=>'配图','group'=>'版式方向','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动配图']
         );
+        $schemas['about_values']['strict_groups'] = true;
+        $schemas['about_values']['default_group'] = 'normal';
         $schemas['about_stats'] = self::make('about', '走进金亚', '企业指标', 'about_section',
             [], [], ['title','value','subtitle','mobile_title','mobile_subtitle','pc_visible','mobile_visible'], [],
             [], ['title'=>'指标名称','value'=>'数值','subtitle'=>'单位','mobile_title'=>'移动指标名称','mobile_subtitle'=>'移动单位']
