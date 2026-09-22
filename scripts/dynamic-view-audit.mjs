@@ -762,6 +762,62 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const pcFloatingFooter = read("application/index/view/cms/layout/footer.html");
+const mobileFloatingFooter = read("application/mobile/view/cms/layout/footer.html");
+for (const [name, source] of [["pc", pcFloatingFooter], ["mobile", mobileFloatingFooter]]) {
+  expect(
+    !source.includes("在线咨询") &&
+    !source.includes("show_online_consult"),
+    `${name} floating service must not expose retired online consult`,
+  );
+  for (const token of [
+    "js-inquiry-open",
+    "inquiry-modal-form",
+    'name="__token__"',
+    'name="name"',
+    'name="mobile"',
+    'name="company"',
+    'name="content"',
+    "float-wechat-popover",
+    "cms_service_wechat_qr",
+  ]) {
+    expect(source.includes(token), `${name} floating service missing ${token}`);
+  }
+}
+const floatingLayoutSchema = read("application/common/service/cms/LayoutSchemaRegistry.php");
+expect(
+  !floatingLayoutSchema.includes("show_online_consult") &&
+  floatingLayoutSchema.includes("show_online_message") &&
+  floatingLayoutSchema.includes("show_wechat_consult"),
+  "floating service schema must retire online consult but retain message and WeChat controls",
+);
+const floatingMainJs = read("public/assets/jinya/js/main.js");
+for (const token of [
+  "openInquiryModal",
+  "fetch(inquiryForm.action",
+  '"X-Requested-With":"XMLHttpRequest"',
+  "new FormData(inquiryForm)",
+  "payload.data.__token__",
+  "float-wechat-item",
+]) {
+  expect(floatingMainJs.includes(token), `floating inquiry behavior missing ${token}`);
+}
+const floatingCss = read("public/assets/jinya/css/style.css");
+for (const token of [
+  ".inquiry-modal",
+  ".inquiry-modal.is-open",
+  ".float-wechat-popover",
+  ".float-wechat-item:hover .float-wechat-popover",
+]) {
+  expect(floatingCss.includes(token), `floating inquiry stylesheet missing ${token}`);
+}
+const inquiryServiceSource = read("application/common/service/cms/InquiryService.php");
+expect(
+  inquiryServiceSource.includes("$data['status'] = 'new';") &&
+  inquiryServiceSource.includes("$inquiry->allowField(true)->save($data);"),
+  "floating inquiry must continue using the existing backend lead pipeline",
+);
+
 const deviceRouterSource = read("public/assets/jinya/js/device-router.js");
 expect(
   !deviceRouterSource.includes("window.location.replace") &&
