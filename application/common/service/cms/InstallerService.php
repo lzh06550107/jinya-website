@@ -127,6 +127,9 @@ class InstallerService
         // Apply the current html/ + html/mobile/ content baseline last so a fresh
         // CMS install renders the same copy and media as the approved static pages.
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        // Homepage products are referenced directly by cms_home_section_reference.
+        // Retire the historical fake product category used only to satisfy category_id.
+        $this->retireLegacyHomeProductCategory($connection, $prefix);
         // Keep the boxes page CMS section order identical to the approved frontend.
         // This also retires the historical standalone boxes_purchase block, whose
         // content now lives inside boxes_details and is not rendered as a section.
@@ -1980,6 +1983,47 @@ class InstallerService
         $update = $pdo->prepare("UPDATE `{$blockTable}` SET `extra_json`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?");
         if ($update) {
             $update->execute([$encoded, (int)$row['id']]);
+        }
+    }
+    /**
+     * 删除历史“HTML 首页展示”技术分类。
+     *
+     * 首页产品由 cms_home_section_reference 直接引用产品 ID，运行时并不依赖分类。
+     * 因此先把仍挂在该技术分类下的产品迁移为 category_id=0，再物理删除分类，
+     * 避免后台分类树出现非业务分类，同时不影响首页引用和产品记录本身。
+     */
+    protected function retireLegacyHomeProductCategory($connection, $prefix)
+    {
+        $categoryTable = $prefix . 'cms_product_category';
+        $productTable = $prefix . 'cms_product';
+        if (!$this->tableExists($connection, $categoryTable) || !$this->tableExists($connection, $productTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare("SELECT `id` FROM `{$categoryTable}` WHERE `slug`='html-home-display' LIMIT 1");
+        if (!$select) {
+            return;
+        }
+        $select->execute();
+        $categoryId = (int)$select->fetchColumn();
+        if ($categoryId <= 0) {
+            return;
+        }
+
+        $pdo->beginTransaction();
+        try {
+            $moveProducts = $pdo->prepare("UPDATE `{$productTable}` SET `category_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `category_id`=?");
+            $moveProducts->execute([$categoryId]);
+
+            $deleteCategory = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id`=? AND `slug`='html-home-display'");
+            $deleteCategory->execute([$categoryId]);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
         }
     }
     protected function ensureBagsCompareFullImageDefaults($connection, $prefix)
