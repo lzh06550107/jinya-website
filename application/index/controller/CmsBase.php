@@ -93,7 +93,10 @@ abstract class CmsBase extends Frontend
         $this->view->assign('cmsNavigation', $navigationTree);
         $this->view->assign('cmsNavigationTree', $navigationTree);
         $this->view->assign('cmsSite', $site);
-        $this->view->assign('cmsInquiryToken', $this->request->token());
+        // CSRF token is generated only while rendering a form page. Generating a
+        // new token during POST initialization would invalidate the token that the
+        // browser is currently submitting before Inquiry::submit() can verify it.
+        $this->view->assign('cmsInquiryToken', $this->request->isPost() ? '' : $this->request->token());
         foreach (['wechat', 'douyin', 'kuaishou', 'xiaohongshu', 'video', 'bilibili'] as $qrName) {
             $key = $qrName . '_qr';
             $this->view->assign('cms' . ucfirst($qrName) . 'Qr', isset($site[$key]) ? $site[$key] : '');
