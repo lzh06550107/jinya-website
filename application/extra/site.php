@@ -4,7 +4,7 @@ return array (
   'name' => '金亚包装',
   'beian' => '皖ICP备15022698号',
   'cdnurl' => '',
-  'version' => '1.0.1',
+  'version' => '1.0.2.20260922',
   'timezone' => 'Asia/Shanghai',
   'forbiddenip' => '',
   'languages' => 

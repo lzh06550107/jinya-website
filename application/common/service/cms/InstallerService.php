@@ -14,6 +14,8 @@ use app\common\service\cms\render\CmsCacheInvalidator;
  */
 class InstallerService
 {
+    const CMS_ASSET_VERSION = '1.0.2.20260922';
+
     protected static $installed = null;
 
     protected $requiredTables = [
@@ -112,6 +114,7 @@ class InstallerService
         $this->normalizeLegacyHomeSectionWeights($connection, $prefix);
         $this->retireCmsMobileConfig($connection, $prefix);
         $this->retireLegacySiteBannerConfig($connection, $prefix);
+        $this->syncAssetVersion($connection, $prefix);
         // Normalize legacy HTML links before HTML is migrated to Markdown.
         $this->normalizeCmsUrls($connection, $prefix);
         // Historical strict clone fragments contained page layout HTML/CSS in data.
@@ -1849,6 +1852,26 @@ class InstallerService
         );
         if ($statement) {
             $statement->execute($keys);
+        }
+    }
+
+    /**
+     * 更新 FastAdmin 静态资源缓存版本。
+     *
+     * RequireJS 会把 site.version 拼到后台 JS URL；CMS 后台脚本变更后如果
+     * 版本保持不变，浏览器会继续命中旧缓存，导致新编辑器代码看似“未生效”。
+     */
+    protected function syncAssetVersion($connection, $prefix)
+    {
+        $table = $prefix . 'config';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+        $statement = $this->getPdo($connection)->prepare(
+            "UPDATE `{$table}` SET `value`=? WHERE `name`='version'"
+        );
+        if ($statement) {
+            $statement->execute([self::CMS_ASSET_VERSION]);
         }
     }
 

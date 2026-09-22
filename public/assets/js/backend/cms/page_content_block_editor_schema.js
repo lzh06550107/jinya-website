@@ -29,59 +29,174 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         group.append($('<span class="input-group-btn"></span>').append(button).append(menu));
     };
 
-    var snapshotInlineColorSelection = function (textarea) {
-        textarea = $(textarea);
-        var el = textarea.get(0);
-        if (!el || typeof el.selectionStart !== 'number' || typeof el.selectionEnd !== 'number') return;
-        textarea.attr('data-inline-color-start', el.selectionStart);
-        textarea.attr('data-inline-color-end', el.selectionEnd);
+    var escapeInlineRichText = function (value) {
+        return $('<div></div>').text(String(value == null ? '' : value)).html();
     };
 
-    var applyInlineColor = function (textarea, toolbar) {
-        textarea = $(textarea);
-        toolbar = $(toolbar);
-        var el = textarea.get(0);
-        if (!el) return;
-        var value = String(textarea.val() || '');
-        var start = parseInt(textarea.attr('data-inline-color-start'), 10);
-        var end = parseInt(textarea.attr('data-inline-color-end'), 10);
-        if (isNaN(start) || isNaN(end)) {
-            start = typeof el.selectionStart === 'number' ? el.selectionStart : value.length;
-            end = typeof el.selectionEnd === 'number' ? el.selectionEnd : start;
+    var renderInlineRichSource = function (source) {
+        var html = escapeInlineRichText(source);
+        html = html.replace(/\[color=(#[0-9a-fA-F]{6})\]([\s\S]*?)\[\/color\]/g, function (_, color, body) {
+            color = color.toLowerCase();
+            return '<span data-inline-rich-color="' + color + '" style="color:' + color + ';">' + body + '</span>';
+        });
+        return html.replace(/\n/g, '<br>');
+    };
+
+    var serializeInlineRichNode = function (node) {
+        if (!node) return '';
+        if (node.nodeType === 3) return node.nodeValue || '';
+        if (node.nodeType !== 1) return '';
+        var tag = String(node.tagName || '').toLowerCase();
+        if (tag === 'br') return '\n';
+        var content = '';
+        $(node).contents().each(function () { content += serializeInlineRichNode(this); });
+        var color = String($(node).attr('data-inline-rich-color') || '').toLowerCase();
+        if (/^#[0-9a-f]{6}$/.test(color)) {
+            return '[color=' + color + ']' + content + '[/color]';
         }
-        start = Math.max(0, Math.min(start, value.length));
-        end = Math.max(start, Math.min(end, value.length));
-        if (end <= start) {
-            el.focus();
+        if (tag === 'div' || tag === 'p') {
+            return content + '\n';
+        }
+        return content;
+    };
+
+    var syncInlineRichSource = function (editor, textarea) {
+        editor = $(editor);
+        textarea = $(textarea);
+        var source = '';
+        editor.contents().each(function () { source += serializeInlineRichNode(this); });
+        source = source.replace(/\n{3,}/g, '\n\n').replace(/\n$/, '');
+        if (String(textarea.val() || '') !== source) {
+            textarea.val(source).trigger('input').trigger('change');
+        }
+    };
+
+    var saveInlineRichSelection = function (editor) {
+        editor = $(editor);
+        var el = editor.get(0);
+        if (!el || !window.getSelection) return;
+        var selection = window.getSelection();
+        if (!selection || selection.rangeCount < 1) return;
+        var range = selection.getRangeAt(0);
+        var container = range.commonAncestorContainer;
+        if (container !== el && !$.contains(el, container.nodeType === 1 ? container : container.parentNode)) return;
+        editor.data('inline-rich-range', range.cloneRange());
+    };
+
+    var restoreInlineRichSelection = function (editor) {
+        editor = $(editor);
+        var range = editor.data('inline-rich-range');
+        if (!range || !window.getSelection) return null;
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return range;
+    };
+
+    var normalizeInlineRichColorNodes = function (editor) {
+        $(editor).find('[data-inline-rich-color]').each(function () {
+            var node = $(this);
+            var color = String(node.attr('data-inline-rich-color') || '').toLowerCase();
+            if (!/^#[0-9a-f]{6}$/.test(color)) {
+                node.replaceWith(node.contents());
+                return;
+            }
+            node.attr('style', 'color:' + color + ';');
+        });
+    };
+
+    var applyInlineRichColor = function (editor, toolbar) {
+        editor = $(editor);
+        toolbar = $(toolbar);
+        var range = restoreInlineRichSelection(editor);
+        if (!range || range.collapsed) {
+            editor.focus();
             return;
         }
-        var color = String(toolbar.find('[data-inline-color-picker]').val() || '#e25042').toLowerCase();
+        var color = String(toolbar.find('[data-inline-rich-color-picker]').val() || '#e25042').toLowerCase();
         if (!/^#[0-9a-f]{6}$/.test(color)) color = '#e25042';
-        var selected = value.substring(start, end);
-        var before = '[color=' + color + ']';
-        var after = '[/color]';
-        var replacement = before + selected + after;
-        textarea.val(value.substring(0, start) + replacement + value.substring(end)).trigger('input').trigger('change');
-        var selectedStart = start + before.length;
-        var selectedEnd = selectedStart + selected.length;
-        textarea.attr('data-inline-color-start', selectedStart).attr('data-inline-color-end', selectedEnd);
-        el.focus();
-        if (typeof el.setSelectionRange === 'function') el.setSelectionRange(selectedStart, selectedEnd);
+        var span = document.createElement('span');
+        span.setAttribute('data-inline-rich-color', color);
+        span.style.color = color;
+        span.appendChild(range.extractContents());
+        range.insertNode(span);
+        range.selectNodeContents(span);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        editor.data('inline-rich-range', range.cloneRange());
+        normalizeInlineRichColorNodes(editor);
+        syncInlineRichSource(editor, editor.siblings('textarea[data-inline-rich-source]').first());
     };
 
-    var ensureInlineColorToolbar = function (textarea) {
+    var clearInlineRichColor = function (editor) {
+        editor = $(editor);
+        var range = restoreInlineRichSelection(editor);
+        if (!range || range.collapsed) {
+            editor.focus();
+            return;
+        }
+        var text = range.toString();
+        range.deleteContents();
+        var textNode = document.createTextNode(text);
+        range.insertNode(textNode);
+        range.selectNodeContents(textNode);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        editor.data('inline-rich-range', range.cloneRange());
+        syncInlineRichSource(editor, editor.siblings('textarea[data-inline-rich-source]').first());
+    };
+
+    var ensureInlineRichEditor = function (textarea) {
         textarea = $(textarea);
         if (!textarea.is('textarea')) return;
-        textarea.attr('data-inline-color-enabled', '1');
-        var toolbar = textarea.siblings('[data-inline-color-toolbar]').first();
-        if (toolbar.length) return;
-        toolbar = $('<div class="form-inline" data-inline-color-toolbar style="margin-top:6px;"></div>');
-        toolbar.append('<span class="text-muted" style="margin-right:6px;">局部文字颜色</span>');
-        toolbar.append('<input type="color" class="form-control" data-inline-color-picker value="#e25042" title="选择文字颜色" style="width:54px;height:30px;padding:2px 5px;margin-right:6px;">');
-        toolbar.append('<button type="button" class="btn btn-default btn-sm" data-inline-color-apply><i class="fa fa-paint-brush"></i> 应用到选中文字</button>');
-        toolbar.append('<span class="help-block" style="display:inline;margin-left:8px;">先在说明框中选中文字，再选择颜色并点击应用；同一段可设置多种颜色。</span>');
-        textarea.after(toolbar);
-        snapshotInlineColorSelection(textarea);
+        textarea.attr('data-inline-rich-source', '1').hide();
+
+        var wrapper = textarea.siblings('[data-inline-rich-wrapper]').first();
+        if (!wrapper.length) {
+            wrapper = $('<div class="cms-inline-rich-wrapper" data-inline-rich-wrapper></div>');
+            var toolbar = $('<div class="btn-toolbar cms-inline-rich-toolbar" role="toolbar" style="margin-bottom:6px;"></div>');
+            var colorGroup = $('<div class="btn-group btn-group-sm"></div>');
+            colorGroup.append('<span class="btn btn-default disabled" style="opacity:1;">文字颜色</span>');
+            colorGroup.append('<span class="btn btn-default" style="padding:2px 6px;"><input type="color" data-inline-rich-color-picker value="#e25042" title="选择文字颜色" style="width:34px;height:24px;padding:0;border:0;background:transparent;"></span>');
+            colorGroup.append('<button type="button" class="btn btn-default" data-inline-rich-apply><i class="fa fa-paint-brush"></i> 应用颜色</button>');
+            colorGroup.append('<button type="button" class="btn btn-default" data-inline-rich-clear><i class="fa fa-eraser"></i> 清除颜色</button>');
+            toolbar.append(colorGroup);
+
+            var editor = $('<div class="form-control cms-inline-rich-editor" data-inline-rich-editor contenteditable="true" spellcheck="false"></div>')
+                .css({height:'auto',minHeight:'84px',maxHeight:'220px',overflowY:'auto',whiteSpace:'pre-wrap',lineHeight:'1.55',background:'#fff'});
+            var help = $('<p class="help-block" style="margin:5px 0 0;">直接选中文字 → 选择颜色 → “应用颜色”；同一段文字可设置多种颜色。下方保存时仍写回原说明字段。</p>');
+            wrapper.append(toolbar).append(editor).append(help);
+            textarea.after(wrapper);
+
+            editor.on('mouseup.inlineRich keyup.inlineRich focus.inlineRich', function () {
+                saveInlineRichSelection(editor);
+            });
+            editor.on('input.inlineRich blur.inlineRich', function () {
+                normalizeInlineRichColorNodes(editor);
+                syncInlineRichSource(editor, textarea);
+            });
+            toolbar.on('mousedown.inlineRich', 'button,[data-inline-rich-color-picker]', function (event) {
+                if (!$(event.target).is('[data-inline-rich-color-picker]')) event.preventDefault();
+                saveInlineRichSelection(editor);
+            });
+            toolbar.on('change.inlineRich', '[data-inline-rich-color-picker]', function () {
+                restoreInlineRichSelection(editor);
+            });
+            toolbar.on('click.inlineRich', '[data-inline-rich-apply]', function () {
+                applyInlineRichColor(editor, toolbar);
+            });
+            toolbar.on('click.inlineRich', '[data-inline-rich-clear]', function () {
+                clearInlineRichColor(editor);
+            });
+        }
+
+        var editor = wrapper.find('[data-inline-rich-editor]').first();
+        if (!editor.is(':focus')) {
+            editor.html(renderInlineRichSource(textarea.val() || ''));
+            normalizeInlineRichColorNodes(editor);
+        }
     };
 
     var toMap = function (items) {
@@ -448,10 +563,10 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
                 ensureEditableUnitCombobox(input);
             }
             if (visible && inlineColorFields[field]) {
-                ensureInlineColorToolbar(input);
+                ensureInlineRichEditor(input);
             } else if (input.is('textarea')) {
-                input.removeAttr('data-inline-color-enabled data-inline-color-start data-inline-color-end');
-                input.siblings('[data-inline-color-toolbar]').remove();
+                input.removeAttr('data-inline-rich-source').show();
+                input.siblings('[data-inline-rich-wrapper]').remove();
             }
             var helpText = visible && schema.item_help ? (schema.item_help[field] || '') : '';
             if (visible && iconFields[field]) {
@@ -539,14 +654,6 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         form = $(form || ROOT);
         if (!form.length) return form;
         form.off('.pageContentBlockSchema');
-        form.on('select.pageContentBlockSchema keyup.pageContentBlockSchema mouseup.pageContentBlockSchema', '[data-inline-color-enabled]', function () {
-            snapshotInlineColorSelection(this);
-        });
-        form.on('click.pageContentBlockSchema', '[data-inline-color-apply]', function () {
-            var toolbar = $(this).closest('[data-inline-color-toolbar]');
-            var textarea = toolbar.siblings('textarea[data-inline-color-enabled]').first();
-            applyInlineColor(textarea, toolbar);
-        });
         form.on('click.pageContentBlockSchema', '[data-label-item-add],[data-bags-item-add],[data-boxes-item-add],[data-about-item-add],[data-contact-item-add]', function () {
             window.setTimeout(function () { apply(form); }, 0);
         });

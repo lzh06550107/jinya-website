@@ -262,9 +262,10 @@ expect(
   "label_capability must expose partial color tools for PC/mobile explanation text",
 );
 const pageContentSchemaJs = read("public/assets/js/backend/cms/page_content_block_editor_schema.js");
-for (const token of ["data-inline-color-toolbar", "data-inline-color-apply", "应用到选中文字", "[color="]) {
-  expect(pageContentSchemaJs.includes(token), `Structured editor missing partial text color UI: ${token}`);
+for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色", "[color="]) {
+  expect(pageContentSchemaJs.includes(token), `Structured editor missing WYSIWYG partial text color UI: ${token}`);
 }
+expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
 for (const token of [
@@ -370,6 +371,10 @@ const legacySiteBannerKeys = [
   "cms_mobile_about_banner",
 ];
 const checkedInSiteConfig = read("application/extra/site.php");
+expect(checkedInSiteConfig.includes("'version' => '1.0.2.20260922'"), "Checked-in site config must bust backend asset cache after editor changes");
+const installerServiceSource = read("application/common/service/cms/InstallerService.php");
+expect(installerServiceSource.includes("CMS_ASSET_VERSION = '1.0.2.20260922'"), "cms:install must synchronize the backend asset cache version");
+expect(installerServiceSource.includes("syncAssetVersion"), "cms:install must update fa_config.version before refreshing site.php");
 const cmsSchemaSql = read("database/cms.sql");
 const mobileCmsBase = read("application/mobile/controller/CmsBase.php");
 for (const key of legacySiteBannerKeys) {
