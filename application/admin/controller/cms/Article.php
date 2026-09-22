@@ -13,10 +13,7 @@ class Article extends Content
 
     protected function afterCmsInitialize()
     {
-        $categories = ArticleCategory::where('status', 'normal')
-            ->where('name', 'not in', ['常见问答', '科创美新闻', '新闻动态'])
-            ->order('weigh desc,id asc')
-            ->column('name', 'id');
+        $categories = ArticleCategory::where('status', 'normal')->order('weigh desc,id asc')->column('name', 'id');
         $this->view->assign('categoryList', $categories);
         $this->assignconfig('categoryList', $categories);
     }
