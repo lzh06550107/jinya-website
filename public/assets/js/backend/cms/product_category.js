@@ -1,4 +1,4 @@
-define(['jquery','bootstrap','backend','table','form','backend/cms/media_preview'],function($,undefined,Backend,Table,Form,MediaPreview){
+define(['jquery','bootstrap','backend','table','form'],function($,undefined,Backend,Table,Form){
     function parentFormatter(value,row){
         if(row.parent_missing){return '<span class="text-warning"><i class="fa fa-warning"></i> '+(value||'上级分类已不存在')+'</span>';}
         return value||'—';
@@ -19,8 +19,8 @@ define(['jquery','bootstrap','backend','table','form','backend/cms/media_preview
             ]]});
             Table.api.bindevent(table);
         },
-        add:function(){MediaPreview.bindForm($('form[role=form]'),Form);},
-        edit:function(){MediaPreview.bindForm($('form[role=form]'),Form);}
+        add:function(){Form.api.bindevent($('form[role=form]'));},
+        edit:function(){Form.api.bindevent($('form[role=form]'));}
     };
     return Controller;
 });
