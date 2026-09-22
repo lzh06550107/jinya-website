@@ -176,6 +176,7 @@ class PageContentBlockEditorSchema
             ['title','subtitle','content','image','mobile_image','link'], [], [], [],
             ['title'=>'Banner 标题','subtitle'=>'行业标签','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图','link'=>'CTA 按钮'], []
         );
+        $schemas['boxes_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';
         $schemas['boxes_products'] = self::make('boxes', '彩盒', '产品展示', 'boxes_section',
             ['title','subtitle'], [],
             ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
