@@ -129,8 +129,9 @@ ON DUPLICATE KEY UPDATE
 `more_url`=IF(`edited_by_admin`=0,VALUES(`more_url`),`more_url`),`config_json`=IF(`edited_by_admin`=0,VALUES(`config_json`),`config_json`),
 `weigh`=IF(`edited_by_admin`=0,VALUES(`weigh`),`weigh`),`status`=IF(`edited_by_admin`=0,'normal',`status`),`deletetime`=IF(`edited_by_admin`=0,NULL,`deletetime`),`updatetime`=@html_now;
 UPDATE `fa_cms_home_section` SET `status`='hidden',`pc_visible`=0,`mobile_visible`=0 WHERE `section_key` IN('cases','advantages','news') AND `edited_by_admin`=0;
-INSERT IGNORE INTO `fa_cms_product_category`(`parent_id`,`name`,`short_name`,`slug`,`image`,`description`,`weigh`,`status`,`createtime`,`updatetime`) VALUES(0,'HTML 首页展示','首页展示','html-home-display','/assets/jinya/img/prod-01-labels.jpg','html/index.html 首页产品展示',1,'normal',@html_now,@html_now);
-SET @home_cat := (SELECT `id` FROM `fa_cms_product_category` WHERE `slug`='html-home-display' LIMIT 1);
+-- 首页产品由 cms_home_section_reference 直接引用，不需要伪造产品分类。
+-- category_id=0 表示这些记录仅作为首页展示素材，不进入业务分类树。
+SET @home_cat := 0;
 INSERT INTO `fa_cms_product`(`category_id`,`title`,`slug`,`cover_image`,`mobile_cover_image`,`summary`,`is_recommend`,`weigh`,`status`,`publish_time`,`source_key`,`edited_by_admin`,`createtime`,`updatetime`)
 VALUES(@home_cat,'不干胶/卷标','html-home-label','/assets/jinya/img/prod-01-labels.jpg','/assets/jinya/img/prod-01-labels.jpg','专业设计师全程对接，图文版式设计灵活，印中一丝不苟，校对图文严谨。全方位打造专属个性化印刷方案，平张、卷标、可移胶、小批量500张起印，经济又省心，灵活适配，交付效率高效，次日全国发货。',1,1,'published',@html_now,'html-baseline:product:html-home-label',0,@html_now,@html_now)
 ON DUPLICATE KEY UPDATE `title`=IF(`edited_by_admin`=0,VALUES(`title`),`title`),`cover_image`=IF(`edited_by_admin`=0,VALUES(`cover_image`),`cover_image`),`mobile_cover_image`=IF(`edited_by_admin`=0,VALUES(`mobile_cover_image`),`mobile_cover_image`),`summary`=IF(`edited_by_admin`=0,VALUES(`summary`),`summary`),`status`=IF(`edited_by_admin`=0,'published',`status`),`deletetime`=IF(`edited_by_admin`=0,NULL,`deletetime`);
