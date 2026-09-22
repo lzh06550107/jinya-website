@@ -329,7 +329,13 @@ class PageBlock extends Backend
         $config['enabled'] = $row['status'] === 'normal' ? 1 : 0;
         $fields = [];
         $deviceImageFields = [];
+        $adminHiddenFields = isset($schema['admin_hidden_fields']) && is_array($schema['admin_hidden_fields'])
+            ? array_values($schema['admin_hidden_fields'])
+            : [];
         foreach ($schema['fields'] as $name => $definition) {
+            if (in_array($name, $adminHiddenFields, true)) {
+                continue;
+            }
             $field = $definition;
             $field['name'] = $name;
             $field['input_id'] = 'c-config-' . str_replace('_', '-', $name);
@@ -359,7 +365,9 @@ class PageBlock extends Backend
         $this->view->assign('row', $row);
         $this->view->assign('schema', $schema);
         $this->view->assign('formFields', $fields);
-        $this->view->assign('schemaFieldsJson', json_encode(array_keys($schema['fields']), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->view->assign('schemaFieldsJson', json_encode(array_values(array_map(function ($field) {
+            return $field['name'];
+        }, $fields)), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $this->view->assign('deviceImageFields', $deviceImageFields);
         $this->view->assign('supportsSourceMode', isset($schema['fields']['source_mode']));
         $this->view->assign('referenceIds', implode(',', array_map('intval', $references ?: [])));
