@@ -451,6 +451,124 @@
     }
   });
 
+  // Floating inquiry modal: submit directly into cms_inquiry / backend lead management.
+  var inquiryModal = document.querySelector("#inquiry-modal");
+  if(inquiryModal){
+    var inquiryForm = inquiryModal.querySelector(".inquiry-modal-form");
+    var inquiryStatus = inquiryModal.querySelector(".inquiry-form-status");
+    var inquirySubmit = inquiryModal.querySelector(".inquiry-form-submit");
+    var inquiryFirstField = inquiryModal.querySelector('input[name="name"]');
+    var inquiryLastFocus = null;
+
+    function openInquiryModal(){
+      inquiryLastFocus = document.activeElement;
+      inquiryModal.classList.add("is-open");
+      inquiryModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("inquiry-modal-open");
+      var sourceTitle = inquiryModal.querySelector('input[name="source_title"]');
+      if(sourceTitle) sourceTitle.value = document.title || "";
+      if(inquiryStatus){
+        inquiryStatus.textContent = "";
+        inquiryStatus.className = "inquiry-form-status";
+      }
+      window.setTimeout(function(){ if(inquiryFirstField) inquiryFirstField.focus(); }, 30);
+    }
+
+    function closeInquiryModal(){
+      inquiryModal.classList.remove("is-open");
+      inquiryModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("inquiry-modal-open");
+      if(inquiryLastFocus && typeof inquiryLastFocus.focus === "function") inquiryLastFocus.focus();
+    }
+
+    document.querySelectorAll(".js-inquiry-open").forEach(function(button){
+      button.addEventListener("click", openInquiryModal);
+    });
+    inquiryModal.querySelectorAll("[data-inquiry-close]").forEach(function(el){
+      el.addEventListener("click", closeInquiryModal);
+    });
+    document.addEventListener("keydown", function(event){
+      if(event.key === "Escape" && inquiryModal.classList.contains("is-open")){
+        closeInquiryModal();
+      }
+    });
+
+    if(inquiryForm){
+      inquiryForm.addEventListener("submit", function(event){
+        event.preventDefault();
+        if(!inquiryForm.checkValidity()){
+          inquiryForm.reportValidity();
+          return;
+        }
+
+        if(inquirySubmit) inquirySubmit.disabled = true;
+        if(inquiryStatus){
+          inquiryStatus.textContent = "正在提交...";
+          inquiryStatus.className = "inquiry-form-status";
+        }
+
+        fetch(inquiryForm.action, {
+          method:"POST",
+          body:new FormData(inquiryForm),
+          credentials:"same-origin",
+          headers:{
+            "X-Requested-With":"XMLHttpRequest",
+            "Accept":"application/json"
+          }
+        }).then(function(response){
+          return response.text().then(function(text){
+            var payload = null;
+            try{ payload = JSON.parse(text); }catch(e){}
+            if(!response.ok || !payload) throw new Error("提交失败，请稍后重试");
+            return payload;
+          });
+        }).then(function(payload){
+          if(payload.data && payload.data.__token__){
+            var tokenInput = inquiryForm.querySelector('input[name="__token__"]');
+            if(tokenInput) tokenInput.value = payload.data.__token__;
+          }
+          if(Number(payload.code) !== 1){
+            throw new Error(payload.msg || "提交失败，请检查填写内容");
+          }
+
+          var tokenValue = "";
+          var currentToken = inquiryForm.querySelector('input[name="__token__"]');
+          if(currentToken) tokenValue = currentToken.value;
+          inquiryForm.reset();
+          if(currentToken) currentToken.value = tokenValue;
+          var sourceTitle = inquiryForm.querySelector('input[name="source_title"]');
+          if(sourceTitle) sourceTitle.value = document.title || "";
+
+          if(inquiryStatus){
+            inquiryStatus.textContent = payload.msg || "提交成功，我们会尽快联系您";
+            inquiryStatus.className = "inquiry-form-status is-success";
+          }
+          window.setTimeout(closeInquiryModal, 1200);
+        }).catch(function(error){
+          if(inquiryStatus){
+            inquiryStatus.textContent = error && error.message ? error.message : "提交失败，请稍后重试";
+            inquiryStatus.className = "inquiry-form-status is-error";
+          }
+        }).then(function(){
+          if(inquirySubmit) inquirySubmit.disabled = false;
+        });
+      });
+    }
+  }
+
+  // Touch devices have no hover; allow tapping the WeChat button to show/hide its QR.
+  document.querySelectorAll(".float-wechat-item").forEach(function(item){
+    var trigger = item.querySelector(".float-wechat-trigger");
+    if(!trigger) return;
+    trigger.addEventListener("click", function(event){
+      event.preventDefault();
+      item.classList.toggle("is-open");
+    });
+    document.addEventListener("click", function(event){
+      if(!item.contains(event.target)) item.classList.remove("is-open");
+    });
+  });
+
   // Back to top
   var topBtn = document.querySelector(".to-top");
   if(topBtn){
