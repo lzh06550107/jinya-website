@@ -40,6 +40,26 @@ try {
         throw new \RuntimeException('normal Markdown inline rendering unexpectedly changed soft line breaks');
     }
     echo "MARKDOWN COLOR/BREAKS OK [label capability rich text]\n";
+    $bagsHeroRow = [
+        'block_key' => 'bags_hero',
+        'block_type' => 'bags_section',
+        'title' => '包装袋无版印刷',
+        'subtitle' => '',
+        'content' => "第一行说明\n第二行说明\n第三行说明",
+        'resolved_image' => '',
+        'link_text' => '',
+        'link_url' => '',
+        'extra' => [],
+    ];
+    $bagsFactory = new \app\common\service\cms\render\PageBlockViewModelFactory();
+    foreach (['pc', 'mobile'] as $terminal) {
+        $bagsMapped = $bagsFactory->map([$bagsHeroRow], $terminal);
+        if (!isset($bagsMapped['bags_hero']['content_inline_html']) ||
+            substr_count($bagsMapped['bags_hero']['content_inline_html'], '<br>') !== 2) {
+            throw new \RuntimeException('bags_hero Banner description line breaks were not preserved for ' . $terminal);
+        }
+    }
+    echo "BAGS HERO BREAKS OK [pc/mobile]\n";
 } catch (\Throwable $e) {
     fwrite(STDERR, "MARKDOWN COLOR FAIL: " . $e->getMessage() . "\n");
     exit(1);

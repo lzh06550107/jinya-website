@@ -28,13 +28,16 @@ class PageBlockViewModelFactory
                     $linkUrl = '/mobile/products?category=no-plate-packaging';
                 }
             }
+            $contentInlineHtml = $blockKey === 'bags_hero'
+                ? MarkdownRenderer::renderInlinePreserveLineBreaks($content)
+                : MarkdownRenderer::renderInline($content);
             $item = [
                 'key' => isset($row['block_key']) ? $row['block_key'] : '',
                 'type' => $type,
                 'title' => isset($row['title']) ? $row['title'] : '',
                 'subtitle' => isset($row['subtitle']) ? $row['subtitle'] : '',
                 'content_html' => MarkdownRenderer::render($content),
-                'content_inline_html' => MarkdownRenderer::renderInline($content),
+                'content_inline_html' => $contentInlineHtml,
                 'image' => isset($row['resolved_image']) ? $row['resolved_image'] : '',
                 'link_text' => $linkText,
                 'link_url' => $linkUrl,

@@ -229,6 +229,10 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+expect(
+  schema.includes("$schemas['bags_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
+  "bags_hero backend must explain that Banner description line breaks are preserved",
+);
 const labelServiceGroupFieldsPos = schema.indexOf("$schemas['label_service']['group_item_fields']");
 const labelServiceGroupFieldsWindow = schema.slice(labelServiceGroupFieldsPos, labelServiceGroupFieldsPos + 520);
 expect(
@@ -463,9 +467,20 @@ for (const token of [
   expect(adminForm.includes(token), `Admin form missing editable field ${token}`);
 }
 
+const bagsHeroPcView = read("application/index/view/cms/page/bags/hero.html");
+const bagsHeroMobileView = read("application/mobile/view/cms/page/bags/hero.html");
+for (const view of [bagsHeroPcView, bagsHeroMobileView]) {
+  expect(view.includes("block.content_inline_html"), "bags_hero PC/mobile template must render normalized Banner description HTML");
+}
 const mobileLabelCapabilityView = read("application/mobile/view/cms/page/label/capability.html");
 expect(mobileLabelCapabilityView.includes("item.text_inline_html"), "mobile label capability template must render normalized rich description HTML");
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+expect(
+  factory.includes("$blockKey === 'bags_hero'") &&
+  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($content)") &&
+  factory.includes("'content_inline_html' => $contentInlineHtml"),
+  "bags_hero Banner description must preserve every backend-authored newline on the frontend",
+);
 expect(
   factory.includes("renderExtraMarkdown($extra, $terminal, $blockKey)") &&
   factory.includes("$blockKey === 'label_capability' && $field === 'text'") &&

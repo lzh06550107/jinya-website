@@ -119,6 +119,7 @@ class PageContentBlockEditorSchema
             ['title'=>'Banner 标题','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
             ['title'=>'卖点文字','badge'=>'图标类型','mobile_title'=>'移动卖点文字','mobile_badge'=>'移动图标类型']
         );
+        $schemas['bags_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';
         $schemas['bags_products'] = self::make('bags', '包装袋无版印刷', '产品中心', 'bags_section',
             ['title','subtitle'], [],
             ['title','image','group','mobile_title','mobile_image','pc_visible','mobile_visible'],
