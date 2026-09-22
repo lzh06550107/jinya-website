@@ -78,6 +78,7 @@ class PageContentBlockEditorSchema
             ['label_print_title'=>'不干胶印刷标题','label_print_points'=>'不干胶印刷要点（Markdown/换行）']
         );
         $schemas['label_materials']['section_order'] = ['items','specific'];
+        $schemas['label_materials']['specific_section_label'] = '不干胶印刷配置';
         $schemas['label_elements'] = self::make('label', '不干胶/卷标', '卷标三要素', 'label_section',
             ['title'], [],
             ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
@@ -359,6 +360,9 @@ class PageContentBlockEditorSchema
             $schemas[$key]['item_noun'] = $presentation[0];
             $schemas[$key]['item_add_label'] = $presentation[1];
         }
+
+        $schemas['label_materials']['item_section_label'] = '常用工艺配置';
+        $schemas['label_materials']['item_add_label'] = '添加常用工艺';
 
         // label_quote is a reasons list rather than a generic item collection.
         // Keep its stored fields unchanged, but make the backend wording match

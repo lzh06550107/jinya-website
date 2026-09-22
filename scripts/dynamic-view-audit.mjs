@@ -230,8 +230,10 @@ expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
 expect(
-  schema.includes("$schemas['label_materials']['section_order'] = ['items','specific'];"),
-  "label_materials backend editor must place 功能项目 before 页面专用配置",
+  schema.includes("$schemas['label_materials']['section_order'] = ['items','specific'];") &&
+  schema.includes("$schemas['label_materials']['item_section_label'] = '常用工艺配置';") &&
+  schema.includes("$schemas['label_materials']['specific_section_label'] = '不干胶印刷配置';"),
+  "label_materials backend editor must separate 常用工艺配置 from 不干胶印刷配置",
 );
 const labelHeroSchemaPos = schema.indexOf("$schemas['label_hero']");
 const labelHeroSchemaWindow = schema.slice(labelHeroSchemaPos, labelHeroSchemaPos + 900);
@@ -303,28 +305,37 @@ expect(
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v6"),
-  "PageContentBlock must use the immutable rich-v6 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v7"),
+  "PageContentBlock must use the immutable rich-v7 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v6"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v7"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v6.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v7.js");
 expect(
-  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v4"),
-  "Rich-v6 PageContentBlock entry must require the rich-v6 schema module",
+  pageContentRichEntry.includes("backend/cms/label_page_block_editor_v2"),
+  "Rich-v7 entry must load the multi-list label editor",
 );
-const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v4.js");
+expect(
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v5"),
+  "Rich-v7 PageContentBlock entry must require the rich-v7 schema module",
+);
+const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v5.js");
+expect(
+  pageContentRichSchema.includes("schema.specific_section_label") &&
+  pageContentRichSchema.includes("specificHeading.text"),
+  "Rich-v7 schema editor must support a semantic page-specific section heading",
+);
 for (const token of ["reorderSections", "schema.section_order", "insertAfter(anchor)", "reorderSections(editor, schema)"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v6 editor missing section-order token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v7 editor missing section-order token: ${token}`);
 }
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v6 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v7 editor missing WYSIWYG token: ${token}`);
 }
 expect(
   pageContentRichSchema.includes("inlineColorFields = {}"),
-  "Rich-v6 schema must leave label_capability PC rich text to the dedicated editor",
+  "Rich-v7 schema must leave label_capability PC rich text to the dedicated editor",
 );
 const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v3.js");
 for (const token of [
@@ -350,6 +361,27 @@ for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "con
 expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
+for (const token of [
+  'data-label-items-list="main"',
+  'data-label-items-list="print"',
+  'data-label-materials-print-config',
+  'data-label-item-target="print"',
+  'data-label-item-default-group="print-image"',
+  '不干胶印刷轮播图'
+]) {
+  expect(adminForm.includes(token), `label_materials form missing print-module grouping token: ${token}`);
+}
+const labelEditorV2 = read("public/assets/js/backend/cms/label_page_block_editor_v2.js");
+for (const token of [
+  "splitMaterials",
+  "group==='print-image'",
+  "data-label-items-list",
+  "轮播图 #",
+  "data-label-item-default-group",
+  "siblings=item.parent().children(ITEM)"
+]) {
+  expect(labelEditorV2.includes(token), `label materials multi-list editor missing token: ${token}`);
+}
 const capabilityRichSourceMatches = adminForm.match(/data-label-capability-rich-source/g) || [];
 const capabilityMobileRichMatches = adminForm.match(/data-label-field="mobile_text" data-label-capability-rich-source/g) || [];
 const capabilityPcRoleMatches = adminForm.match(/data-label-capability-rich-role="pc"/g) || [];

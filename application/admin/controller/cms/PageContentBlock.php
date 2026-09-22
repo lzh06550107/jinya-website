@@ -68,7 +68,7 @@ class PageContentBlock extends StructuredChild
 
         // Use a new, immutable RequireJS entry name for the rich-text editor.
         // This avoids stale browser/CDN/RequireJS caches of page_content_block.js.
-        $this->assignconfig('jsname', 'backend/cms/page_content_block_rich_v6');
-        $this->assignconfig('cmsPageContentBlockEditorBuild', 'rich-v6');
+        $this->assignconfig('jsname', 'backend/cms/page_content_block_rich_v7');
+        $this->assignconfig('cmsPageContentBlockEditorBuild', 'rich-v7');
     }
 }

@@ -94,12 +94,21 @@ form[data-page-content-block-schema-editor] [data-schema-item-row="mobile_text"]
 <div class="col-sm-12"><div class="form-group"><label class="control-label col-sm-2">第二标题:</label><div class="col-sm-10"><input class="form-control" name="row[label_secondary_title]" value="{:isset($row['extra_array']['secondary_title'])?htmlentities($row['extra_array']['secondary_title']):''}"><p class="help-block">用于同一区块中的第二组标题，例如“介绍说明”或“五大保障”。</p></div></div></div>
 <div class="col-sm-6"><div class="form-group"><label class="control-label col-sm-4">印刷区标题:</label><div class="col-sm-8"><input class="form-control" name="row[label_print_title]" value="{:isset($row['extra_array']['print_title'])?htmlentities($row['extra_array']['print_title']):''}" placeholder="例如：不干胶印刷"></div></div></div>
 <div class="col-sm-6"><div class="form-group"><label class="control-label col-sm-4">印刷区要点:</label><div class="col-sm-8"><textarea class="form-control cms-markdown" rows="4" name="row[label_print_points]" placeholder="支持 Markdown / 换行">{:isset($row['extra_array']['print_points'])?htmlentities($row['extra_array']['print_points']):''}</textarea></div></div></div>
+{if condition="isset($row['block_key']) && $row['block_key'] eq 'label_materials'"}
+<div class="col-sm-12" data-label-materials-print-config style="margin-top:8px">
+  <hr style="margin:8px 0 14px">
+  <h4 style="margin:0 0 6px;font-weight:600">不干胶印刷轮播图</h4>
+  <p class="help-block" style="margin:0 0 12px">这里仅维护“不干胶印刷”模块的轮播图片；原工艺 #12～#15 会自动归到这里。</p>
+  <div data-label-items-list="print"></div>
+  <button type="button" class="btn btn-success" data-label-item-add data-label-item-target="print" data-label-item-default-group="print-image"><i class="fa fa-plus"></i> 添加轮播图</button>
+</div>
+{/if}
 </div>
 </div>
 <div class="page-header" data-structured-section="items"><h4>功能项目</h4></div>
 <div data-structured-section-body="items">
 <p class="help-block">支持增删、上下排序；能力展示的主图/上图/下图均为独立图片位。</p>
-<div data-label-items-list>
+<div data-label-items-list="main">
 {if condition="!empty($row['extra_array']['items'])"}
 {volist name="row.extra_array.items" id="labelItem"}
 <div class="panel panel-default" data-label-item><div class="panel-heading clearfix"><strong class="pull-left" data-label-item-label>项目 #{$i}</strong><div class="btn-group btn-group-xs pull-right" role="group"><button type="button" class="btn btn-default" data-label-item-up><i class="fa fa-arrow-up"></i> 上移</button> <button type="button" class="btn btn-default" data-label-item-down><i class="fa fa-arrow-down"></i> 下移</button> <button type="button" class="btn btn-danger" data-label-item-remove><i class="fa fa-trash"></i> 删除</button></div></div><div class="panel-body">
