@@ -190,9 +190,11 @@ class PageContentBlockEditorSchema
             ['title'=>'标题','text'=>'说明','image'=>'图片','group'=>'版式方向','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_image'=>'移动图片']
         );
         $schemas['boxes_promise'] = self::make('boxes', '彩盒', '品质承诺', 'boxes_section',
-            ['title','subtitle','content'], ['boxes_secondary_title','boxes_secondary_text','boxes_badge_text'], [], [],
-            ['subtitle'=>'主承诺文案','content'=>'副承诺文案'], [], ['boxes_secondary_title'=>'面板标题','boxes_secondary_text'=>'面板说明（支持换行）','boxes_badge_text'=>'面板徽标文字']
+            ['title','subtitle','content'], ['boxes_secondary_title','boxes_secondary_text','boxes_badge_text','boxes_badge_logo','boxes_mobile_badge_logo'], [], [],
+            ['subtitle'=>'主承诺文案','content'=>'副承诺文案'], [], ['boxes_secondary_title'=>'面板标题','boxes_secondary_text'=>'面板说明（支持换行）','boxes_badge_text'=>'面板徽标文字','boxes_badge_logo'=>'面板 Logo','boxes_mobile_badge_logo'=>'移动端 Logo']
         );
+        $schemas['boxes_promise']['scalar_help']['boxes_badge_logo'] = '上传“订过的客户都说好”面板底部 Logo；建议透明 PNG / SVG / WebP。';
+        $schemas['boxes_promise']['scalar_help']['boxes_mobile_badge_logo'] = '可选；留空时移动端沿用 PC 面板 Logo。';
         $schemas['boxes_details'] = self::make('boxes', '彩盒', '细节展示', 'boxes_section',
             ['title','subtitle'], ['boxes_secondary_title','boxes_secondary_text','boxes_badge_text'],
             ['title','text','subtitle','image','group','mobile_title','mobile_text','mobile_subtitle','mobile_image','pc_visible','mobile_visible'],
