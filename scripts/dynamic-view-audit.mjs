@@ -778,6 +778,13 @@ expect(
   "PC floating sidebar must keep Chinese action labels on one line",
 );
 
+const inquiryAdminController = read("application/admin/controller/cms/Inquiry.php");
+expect(
+  inquiryAdminController.includes("InquiryModel::where('inquiry.id', (int)$id)") &&
+  !inquiryAdminController.includes("InquiryModel::where('id', (int)$id)"),
+  "relation-loaded inquiry detail queries must qualify the main-table id",
+);
+
 const inquiryAdminIndex = read("application/admin/view/cms/inquiry/index.html");
 const inquiryAdminJs = read("public/assets/js/backend/cms/inquiry.js");
 expect(
