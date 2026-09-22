@@ -1,7 +1,7 @@
 define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
     var Controller = {
         index: function () {
-            Table.api.init({extend: {index_url: 'cms/inquiry/index'}});
+            Table.api.init({extend: {index_url: 'cms/inquiry/index', del_url: 'cms/inquiry/del'}});
             var table = $('#table');
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
@@ -18,10 +18,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     {field: 'assigned_admin.nickname', title: '负责人', operate: false, formatter: function (value) { return value || '<span class="text-muted">未分配</span>'; }},
                     {field: 'next_follow_time', title: '下次跟进', formatter: Table.api.formatter.datetime},
                     {field: 'createtime', title: '提交时间', formatter: Table.api.formatter.datetime},
-                    {field: 'operate', title: '操作', formatter: function (value, row) {
-                        return table.data('operate-detail')
-                            ? '<a href="cms/inquiry/detail?ids=' + row.id + '" class="btn btn-xs btn-info btn-dialog" title="查看详情"><i class="fa fa-eye"></i></a>'
-                            : '';
+                    {field: 'operate', title: '操作', events: Table.api.events.operate, formatter: function (value, row) {
+                        var html = '';
+                        if (table.data('operate-detail')) {
+                            html += '<a href="cms/inquiry/detail?ids=' + row.id + '" class="btn btn-xs btn-info btn-dialog" title="查看详情"><i class="fa fa-eye"></i></a> ';
+                        }
+                        if (table.data('operate-del')) {
+                            html += '<a href="javascript:;" class="btn btn-xs btn-danger btn-delone" title="删除"><i class="fa fa-trash"></i></a>';
+                        }
+                        return html;
                     }}
                 ]]
             });
