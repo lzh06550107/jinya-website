@@ -1268,7 +1268,8 @@ body.mobile-bags .app-tabs{
   margin:20px 0 24px;
 }
 
-body.mobile-bags .app-tabs button{
+body.mobile-bags .app-tabs button,
+body.mobile-bags .app-tabs > a{
   padding:9px 14px;
   font-size:12px;
 }
