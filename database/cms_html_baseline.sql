@@ -387,13 +387,15 @@ SELECT @page_id,'contact_info','contact_section','欢迎您进入金亚包装网
 企业坚守诚信、共赢、创新经营理念，为客户提供卓越的产品与服务，共邀各界新老客户咨询洽谈。','/assets/jinya/img/contact-avatar-service.png','/assets/jinya/img/contact-avatar-service.png','','','{"company_title":"郑州金亚包装有限公司","map_image":"/assets/jinya/img/contact-map.jpg","map_provider":"static","phone":"18903716652","items":[{"title":"咨询热线：","text":"18903716652\\n15824809297","image":"","subtitle":"","badge":"phone","group":"","url":"","value":"","mobile_title":"","mobile_text":"","mobile_image":"","mobile_subtitle":"","mobile_badge":"","mobile_url":"","pc_visible":1,"mobile_visible":1},{"title":"公司邮箱：","text":"973123908@qq.com","image":"","subtitle":"","badge":"email","group":"","url":"","value":"","mobile_title":"","mobile_text":"","mobile_image":"","mobile_subtitle":"","mobile_badge":"","mobile_url":"","pc_visible":1,"mobile_visible":1},{"title":"公司地址：","text":"河南省郑州市中原区电厂路70号华强广场","image":"","subtitle":"","badge":"map","group":"","url":"","value":"","mobile_title":"","mobile_text":"","mobile_image":"","mobile_subtitle":"","mobile_badge":"","mobile_url":"","pc_visible":1,"mobile_visible":1}]}','html-baseline:contact:contact_info',0,1,1,200,'normal',@html_now,@html_now
 WHERE NOT EXISTS(SELECT 1 FROM `fa_cms_page_content_block` WHERE `page_id`=@page_id AND `block_key`='contact_info');
 SET @page_id := (SELECT `id` FROM `fa_cms_page` WHERE `slug`='contact' LIMIT 1);
-UPDATE `fa_cms_page_content_block` SET `block_type`='contact_section',`title`='感恩1000+客户的支持',`subtitle`='THANKS TO',`content`='感恩一路携手相伴，并肩奋进的岁月！每一份订单，承载着您对终端客户的责任与信赖。经由您推向市场的，
-不只是包装产品，更是精工造物的初心。往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、
-伙伴，同心开拓崭新商机。',`image`='/assets/jinya/img/cta-handshake-bg.png',`mobile_image`='/assets/jinya/img/cta-handshake-bg.png',`link_text`='',`link_url`='',`extra_json`='{"phone":"18903716652","items":[]}',`pc_visible`=1,`mobile_visible`=1,`weigh`=100,`status`='normal',`deletetime`=NULL,`updatetime`=@html_now WHERE `page_id`=@page_id AND `block_key`='contact_thanks' AND `edited_by_admin`=0;
+UPDATE `fa_cms_page_content_block` SET `block_type`='contact_section',`title`='感恩1000+客户的支持',`subtitle`='THANKS TO',`content`='感恩一路携手相伴，并肩奋进的岁月！
+每一份订单，承载着您对终端客户的责任与信赖。
+经由您推向市场的，不只是包装产品，更是精工造物的初心。
+往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、伙伴，同心开拓崭新商机。',`image`='/assets/jinya/img/cta-handshake-bg.png',`mobile_image`='/assets/jinya/img/cta-handshake-bg.png',`link_text`='',`link_url`='',`extra_json`='{"phone":"18903716652","items":[]}',`pc_visible`=1,`mobile_visible`=1,`weigh`=100,`status`='normal',`deletetime`=NULL,`updatetime`=@html_now WHERE `page_id`=@page_id AND `block_key`='contact_thanks' AND `edited_by_admin`=0;
 INSERT INTO `fa_cms_page_content_block`(`page_id`,`block_key`,`block_type`,`title`,`subtitle`,`content`,`image`,`mobile_image`,`link_text`,`link_url`,`extra_json`,`source_key`,`edited_by_admin`,`pc_visible`,`mobile_visible`,`weigh`,`status`,`createtime`,`updatetime`)
-SELECT @page_id,'contact_thanks','contact_section','感恩1000+客户的支持','THANKS TO','感恩一路携手相伴，并肩奋进的岁月！每一份订单，承载着您对终端客户的责任与信赖。经由您推向市场的，
-不只是包装产品，更是精工造物的初心。往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、
-伙伴，同心开拓崭新商机。','/assets/jinya/img/cta-handshake-bg.png','/assets/jinya/img/cta-handshake-bg.png','','','{"phone":"18903716652","items":[]}','html-baseline:contact:contact_thanks',0,1,1,100,'normal',@html_now,@html_now
+SELECT @page_id,'contact_thanks','contact_section','感恩1000+客户的支持','THANKS TO','感恩一路携手相伴，并肩奋进的岁月！
+每一份订单，承载着您对终端客户的责任与信赖。
+经由您推向市场的，不只是包装产品，更是精工造物的初心。
+往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、伙伴，同心开拓崭新商机。','/assets/jinya/img/cta-handshake-bg.png','/assets/jinya/img/cta-handshake-bg.png','','','{"phone":"18903716652","items":[]}','html-baseline:contact:contact_thanks',0,1,1,100,'normal',@html_now,@html_now
 WHERE NOT EXISTS(SELECT 1 FROM `fa_cms_page_content_block` WHERE `page_id`=@page_id AND `block_key`='contact_thanks');
 
 -- HTML 基线新闻列表配置：静态页展示完整摘要，避免默认 PC 75 / Mobile 28 字截断。
