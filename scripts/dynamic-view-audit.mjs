@@ -808,6 +808,22 @@ for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", 
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
 }
 
+const articleEditorForm = read("application/admin/view/cms/article/_form.html");
+expect(
+  !articleEditorForm.includes('name="row[slug]"') &&
+  !articleEditorForm.includes("URL 标识:"),
+  "article editor must not expose editable URL slug",
+);
+const articleController = read("application/admin/controller/cms/Article.php");
+expect(
+  articleController.includes("generateArticleSlug") &&
+  articleController.includes("unset($params['slug'])") &&
+  articleController.includes("if ($action === 'add')") &&
+  articleController.includes("elseif ($action === 'edit')") &&
+  articleController.includes("$params['slug'] = (string)$row['slug'];"),
+  "article controller must generate slug on add and preserve it on edit",
+);
+
 const articleIndexView = read("application/admin/view/cms/article/index.html");
 expect(
   !articleIndexView.includes("data-operate-preview"),
