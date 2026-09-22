@@ -403,6 +403,19 @@ expect(
   pageBlockFactoryForContactBreaks.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($content)"),
   "contact_thanks must preserve every backend line break",
 );
+const contactThanksCss = read("public/assets/jinya/css/style.css");
+expect(
+  contactThanksCss.includes("width:min(100%,960px)") &&
+  contactThanksCss.includes("width:min(100%,920px)") &&
+  contactThanksCss.includes("overflow-wrap:break-word") &&
+  !contactThanksCss.includes("white-space:nowrap;\n}"),
+  "contact thanks copy must use readable width and natural wrapping",
+);
+const contactDefaults = read("application/common/service/cms/ContactPageDefaults.php");
+expect(
+  contactDefaults.includes("感恩一路携手相伴，并肩奋进的岁月！\\n每一份订单，承载着您对终端客户的责任与信赖。\\n经由您推向市场的，不只是包装产品，更是精工造物的初心。"),
+  "contact thanks defaults must use sentence-level semantic line breaks",
+);
 const pageBlockFactoryForHeroBreaks = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
 expect(
   pageBlockFactoryForHeroBreaks.includes("['label_hero', 'bags_hero', 'boxes_hero']") &&
