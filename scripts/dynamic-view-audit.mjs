@@ -253,6 +253,19 @@ for (const token of [
   expect(schema.includes(token), `Editor schema missing required html-baseline contract: ${token}`);
 }
 
+const markdownRenderer = read("application/common/service/cms/MarkdownRenderer.php");
+for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
+  expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
+}
+expect(
+  schema.includes("item_inline_color_fields") && schema.includes("['text','mobile_text']"),
+  "label_capability must expose partial color tools for PC/mobile explanation text",
+);
+const pageContentSchemaJs = read("public/assets/js/backend/cms/page_content_block_editor_schema.js");
+for (const token of ["data-inline-color-toolbar", "data-inline-color-apply", "应用到选中文字", "[color="]) {
+  expect(pageContentSchemaJs.includes(token), `Structured editor missing partial text color UI: ${token}`);
+}
+
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
 for (const token of [
   'name="row[label_print_title]"',

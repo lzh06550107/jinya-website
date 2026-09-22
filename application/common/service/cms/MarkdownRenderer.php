@@ -154,7 +154,7 @@ class MarkdownRenderer
         $flushList();
         $flushQuote();
 
-        return HtmlSanitizer::clean(implode("\n", $html));
+        return self::restoreTextColors(HtmlSanitizer::clean(implode("\n", $html)));
     }
 
     /**
@@ -167,7 +167,7 @@ class MarkdownRenderer
         if (trim($markdown) === '') {
             return '';
         }
-        return HtmlSanitizer::clean(self::inline($markdown, true));
+        return self::restoreTextColors(HtmlSanitizer::clean(self::inline($markdown, true)));
     }
 
     public static function plainText($markdown)
@@ -187,6 +187,16 @@ class MarkdownRenderer
     private static function inline($text, $preserveLineBreaks)
     {
         $text = htmlspecialchars((string)$text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        // Trusted editor syntax for partial text color. The source is escaped
+        // first, so only this validated marker can create the temporary span.
+        $text = preg_replace_callback('/\\[color=(#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?)\\]([\\s\\S]*?)\\[\\/color\\]/u', function ($m) {
+            $color = strtolower($m[1]);
+            if (strlen($color) === 4) {
+                $color = '#' . $color[1] . $color[1] . $color[2] . $color[2] . $color[3] . $color[3];
+            }
+            return '<span data-cms-text-color="' . $color . '">' . $m[2] . '</span>';
+        }, $text);
 
         // Images before links so ![...](...) is not consumed by link matching.
         $text = preg_replace_callback('/!\[([^\]]*)\]\(([^\s\)]+)(?:\s+&quot;([^&]*)&quot;)?\)/u', function ($m) {
@@ -217,6 +227,17 @@ class MarkdownRenderer
             $text = str_replace("\n", ' ', $text);
         }
         return $text;
+    }
+
+    private static function restoreTextColors($html)
+    {
+        return preg_replace_callback(
+            '/\\sdata-cms-text-color=(["\\'])(#[0-9a-f]{6})\\1/u',
+            function ($m) {
+                return ' style="color:' . $m[2] . '"';
+            },
+            (string)$html
+        );
     }
 
     private static function safeUrl($url)

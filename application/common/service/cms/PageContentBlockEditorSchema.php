@@ -383,6 +383,9 @@ class PageContentBlockEditorSchema
             ['image_top','image_bottom'],
             ['mobile_image_top','mobile_image_bottom'],
         ];
+        $schemas['label_capability']['item_inline_color_fields'] = ['text','mobile_text'];
+        $schemas['label_capability']['item_help']['text'] = '支持同一段说明中选中部分文字设置不同颜色；未着色文字继续使用页面默认颜色。';
+        $schemas['label_capability']['item_help']['mobile_text'] = '移动端独立说明；支持局部文字颜色。留空时继承 PC 说明及其中的局部颜色。';
         $schemas['label_capability']['item_help']['image_top'] = 'PC 拼图左上图片；与左下图、右侧大图共同组成三图布局。';
         $schemas['label_capability']['item_help']['image_bottom'] = 'PC 拼图左下图片；与左上图、右侧大图共同组成三图布局。';
         $schemas['label_capability']['item_help']['image'] = 'PC 拼图右侧大图，跨上下两行；历史只有这一张图时会自动按单图铺满。';

@@ -29,6 +29,61 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         group.append($('<span class="input-group-btn"></span>').append(button).append(menu));
     };
 
+    var snapshotInlineColorSelection = function (textarea) {
+        textarea = $(textarea);
+        var el = textarea.get(0);
+        if (!el || typeof el.selectionStart !== 'number' || typeof el.selectionEnd !== 'number') return;
+        textarea.attr('data-inline-color-start', el.selectionStart);
+        textarea.attr('data-inline-color-end', el.selectionEnd);
+    };
+
+    var applyInlineColor = function (textarea, toolbar) {
+        textarea = $(textarea);
+        toolbar = $(toolbar);
+        var el = textarea.get(0);
+        if (!el) return;
+        var value = String(textarea.val() || '');
+        var start = parseInt(textarea.attr('data-inline-color-start'), 10);
+        var end = parseInt(textarea.attr('data-inline-color-end'), 10);
+        if (isNaN(start) || isNaN(end)) {
+            start = typeof el.selectionStart === 'number' ? el.selectionStart : value.length;
+            end = typeof el.selectionEnd === 'number' ? el.selectionEnd : start;
+        }
+        start = Math.max(0, Math.min(start, value.length));
+        end = Math.max(start, Math.min(end, value.length));
+        if (end <= start) {
+            el.focus();
+            return;
+        }
+        var color = String(toolbar.find('[data-inline-color-picker]').val() || '#e25042').toLowerCase();
+        if (!/^#[0-9a-f]{6}$/.test(color)) color = '#e25042';
+        var selected = value.substring(start, end);
+        var before = '[color=' + color + ']';
+        var after = '[/color]';
+        var replacement = before + selected + after;
+        textarea.val(value.substring(0, start) + replacement + value.substring(end)).trigger('input').trigger('change');
+        var selectedStart = start + before.length;
+        var selectedEnd = selectedStart + selected.length;
+        textarea.attr('data-inline-color-start', selectedStart).attr('data-inline-color-end', selectedEnd);
+        el.focus();
+        if (typeof el.setSelectionRange === 'function') el.setSelectionRange(selectedStart, selectedEnd);
+    };
+
+    var ensureInlineColorToolbar = function (textarea) {
+        textarea = $(textarea);
+        if (!textarea.is('textarea')) return;
+        textarea.attr('data-inline-color-enabled', '1');
+        var toolbar = textarea.siblings('[data-inline-color-toolbar]').first();
+        if (toolbar.length) return;
+        toolbar = $('<div class="form-inline" data-inline-color-toolbar style="margin-top:6px;"></div>');
+        toolbar.append('<span class="text-muted" style="margin-right:6px;">局部文字颜色</span>');
+        toolbar.append('<input type="color" class="form-control" data-inline-color-picker value="#e25042" title="选择文字颜色" style="width:54px;height:30px;padding:2px 5px;margin-right:6px;">');
+        toolbar.append('<button type="button" class="btn btn-default btn-sm" data-inline-color-apply><i class="fa fa-paint-brush"></i> 应用到选中文字</button>');
+        toolbar.append('<span class="help-block" style="display:inline;margin-left:8px;">先在说明框中选中文字，再选择颜色并点击应用；同一段可设置多种颜色。</span>');
+        textarea.after(toolbar);
+        snapshotInlineColorSelection(textarea);
+    };
+
     var toMap = function (items) {
         var map = {};
         $.each(items || [], function (_, key) { map[String(key)] = true; });
@@ -373,6 +428,7 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         var allowed = toMap(activeItemFields(schema, item, page));
         var iconFields = toMap(schema.item_icon_fields || []);
         var editableUnitFields = toMap(schema.item_editable_unit_fields || []);
+        var inlineColorFields = toMap(schema.item_inline_color_fields || []);
         item.find('[data-' + page + '-field]').each(function () {
             var input = $(this), field = String(input.attr('data-' + page + '-field') || '');
             var col = itemColumn(input), visible = !!allowed[field];
@@ -390,6 +446,12 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
             }
             if (visible && editableUnitFields[field]) {
                 ensureEditableUnitCombobox(input);
+            }
+            if (visible && inlineColorFields[field]) {
+                ensureInlineColorToolbar(input);
+            } else if (input.is('textarea')) {
+                input.removeAttr('data-inline-color-enabled data-inline-color-start data-inline-color-end');
+                input.siblings('[data-inline-color-toolbar]').remove();
             }
             var helpText = visible && schema.item_help ? (schema.item_help[field] || '') : '';
             if (visible && iconFields[field]) {
@@ -477,6 +539,14 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         form = $(form || ROOT);
         if (!form.length) return form;
         form.off('.pageContentBlockSchema');
+        form.on('select.pageContentBlockSchema keyup.pageContentBlockSchema mouseup.pageContentBlockSchema', '[data-inline-color-enabled]', function () {
+            snapshotInlineColorSelection(this);
+        });
+        form.on('click.pageContentBlockSchema', '[data-inline-color-apply]', function () {
+            var toolbar = $(this).closest('[data-inline-color-toolbar]');
+            var textarea = toolbar.siblings('textarea[data-inline-color-enabled]').first();
+            applyInlineColor(textarea, toolbar);
+        });
         form.on('click.pageContentBlockSchema', '[data-label-item-add],[data-bags-item-add],[data-boxes-item-add],[data-about-item-add],[data-contact-item-add]', function () {
             window.setTimeout(function () { apply(form); }, 0);
         });
