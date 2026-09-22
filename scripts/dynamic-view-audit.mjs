@@ -827,6 +827,20 @@ for (const token of [
 ]) {
   expect(floatingCss.includes(token), `floating inquiry stylesheet missing ${token}`);
 }
+const pcInquiryController = read("application/index/controller/Inquiry.php");
+const mobileInquiryController = read("application/mobile/controller/Inquiry.php");
+for (const [name, source] of [["pc", pcInquiryController], ["mobile", mobileInquiryController]]) {
+  expect(
+    source.includes("return json([") &&
+    source.includes("'code' => 1") &&
+    source.includes("'id' => (int)$inquiry['id']") &&
+    source.includes("catch (\\Throwable $e)") &&
+    !source.includes("$this->success(") &&
+    !source.includes("$this->error("),
+    `${name} inquiry submit must use a stable JSON API envelope`,
+  );
+}
+
 const inquiryServiceSource = read("application/common/service/cms/InquiryService.php");
 expect(
   inquiryServiceSource.includes("$data['status'] = 'new';") &&
@@ -839,6 +853,17 @@ expect(
   !inquiryServiceSource.includes("Cache::set($rateKey, 1, 60)"),
   "inquiry duplicate protection must only block immediate duplicate submits",
 );
+for (const token of [
+  "$data['source_url'] = $this->clip",
+  "$data['source_title'] = $this->clip",
+  "$data['utm_source'] = $this->clip",
+  "$data['utm_medium'] = $this->clip",
+  "$data['utm_campaign'] = $this->clip",
+  "$data['ip'] = $this->clip",
+  "$data['user_agent'] = $this->clip",
+]) {
+  expect(inquiryServiceSource.includes(token), `inquiry metadata must be bounded before save: ${token}`);
+}
 
 const deviceRouterSource = read("public/assets/jinya/js/device-router.js");
 expect(
