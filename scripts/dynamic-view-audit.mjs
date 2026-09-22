@@ -278,6 +278,11 @@ expect(
 );
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+expect(
+  schema.includes("$schema['section_order'] = ['items','specific'];") &&
+  schema.includes("$schema['page'] === 'boxes'"),
+  "boxes admin sections must place 功能项目 before 页面专用配置",
+);
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
 const bagsCompareSchemaWindow = schema.slice(bagsCompareSchemaPos, bagsCompareSchemaPos + 700);
 expect(
