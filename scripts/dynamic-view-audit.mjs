@@ -258,34 +258,35 @@ for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
 }
 expect(
-  schema.includes("item_inline_color_fields") && schema.includes("['text','mobile_text']"),
-  "label_capability must expose partial color tools for PC/mobile explanation text",
+  schema.includes("PC 说明使用富文本颜色编辑器"),
+  "label_capability schema must describe the PC rich-text color editor",
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v2"),
-  "PageContentBlock must use the immutable rich-v2 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v3"),
+  "PageContentBlock must use the immutable rich-v3 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v2"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v3"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v2.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v3.js");
 expect(
   pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v2"),
-  "Rich-v2 PageContentBlock entry must require the rich-v2 schema module",
+  "Rich-v3 PageContentBlock entry must require the rich-v3 schema module",
 );
-const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v2.js");
+const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v3.js");
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v2 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v3 editor missing WYSIWYG token: ${token}`);
 }
 expect(
-  pageContentRichSchema.includes("page === 'label'") &&
-  pageContentRichSchema.includes("schema.label || '') === '能力图文'") &&
-  pageContentRichSchema.includes("inlineColorFields.text = true") &&
-  pageContentRichSchema.includes("inlineColorFields.mobile_text = true"),
-  "Rich-v2 editor must force capability PC/mobile descriptions into rich-text mode even with stale schema metadata",
+  pageContentRichSchema.includes("inlineColorFields = {}"),
+  "Rich-v3 schema must leave label_capability PC rich text to the dedicated editor",
 );
+const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v1.js");
+for (const token of ["data-label-capability-rich-editor", "data-label-capability-apply-color", "data-label-capability-clear-color", "[color=", "label_capability"]) {
+  expect(capabilityRichText.includes(token), `Capability PC rich-text editor missing token: ${token}`);
+}
 
 const pageContentSchemaJs = read("public/assets/js/backend/cms/page_content_block_editor_schema.js");
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色", "[color="]) {
@@ -294,7 +295,7 @@ for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "con
 expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
-expect(adminForm.includes("data-label-capability-rich-v2-marker"), "label_capability form must expose a server-rendered Rich V2 marker for runtime diagnosis");
+expect(adminForm.includes("data-label-capability-rich-v3-marker"), "label_capability form must expose a server-rendered Rich V2 marker for runtime diagnosis");
 expect(adminForm.includes("局部颜色编辑器 Rich V2 已加载"), "Rich V2 runtime marker text missing");
 for (const token of [
   'name="row[label_print_title]"',
