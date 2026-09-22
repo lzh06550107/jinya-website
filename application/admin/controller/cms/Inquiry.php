@@ -179,7 +179,10 @@ class Inquiry extends Backend
 
     protected function findAccessible($id, array $with = [])
     {
-        $query = InquiryModel::where('id', (int)$id);
+        // assignedAdmin is eager-loaded with a LEFT JOIN. Once that join exists,
+        // an unqualified "id" is ambiguous because both inquiry and admin own it.
+        // Always target the inquiry table explicitly for the requested lead.
+        $query = InquiryModel::where('inquiry.id', (int)$id);
         if ($with) {
             $query->with($with);
         }
