@@ -833,6 +833,12 @@ expect(
   inquiryServiceSource.includes("$inquiry->allowField(true)->save($data);"),
   "floating inquiry must continue using the existing backend lead pipeline",
 );
+expect(
+  inquiryServiceSource.includes("cms:inquiry:dedupe:v2:") &&
+  inquiryServiceSource.includes("Cache::set($rateKey, 1, 5)") &&
+  !inquiryServiceSource.includes("Cache::set($rateKey, 1, 60)"),
+  "inquiry duplicate protection must only block immediate duplicate submits",
+);
 
 const deviceRouterSource = read("public/assets/jinya/js/device-router.js");
 expect(
