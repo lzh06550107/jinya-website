@@ -1274,6 +1274,24 @@ body.mobile-bags .app-tabs > a{
   font-size:12px;
 }
 
+body.mobile-bags .case-carousel{
+  padding:0 36px;
+}
+
+body.mobile-bags .case-carousel-track{
+  gap:14px;
+}
+
+body.mobile-bags .case-carousel-nav{
+  width:30px;
+  height:30px;
+}
+
+body.mobile-bags .case-carousel-nav svg{
+  width:18px;
+  height:18px;
+}
+
 body.mobile-bags .case-card{
   border-radius:10px;
 }
