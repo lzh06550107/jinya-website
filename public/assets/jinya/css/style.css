@@ -1095,21 +1095,38 @@ input,textarea{ font:inherit; }
    ========================================================================== */
 .float-side{
   position:fixed; right:16px; bottom:100px; z-index:150;
-  display:flex; flex-direction:column; gap:2px;
-  border-radius:2px; overflow:visible;
+  display:flex; flex-direction:column; gap:1px;
+  width:72px;
+  border-radius:4px; overflow:visible;
+  filter:drop-shadow(0 4px 12px rgba(15,38,68,.18));
 }
 .float-side a, .float-side button{
-  width:48px; height:48px; background:var(--red); color:#fff; border:none;
+  width:72px; min-width:72px; height:60px; padding:6px 4px;
+  box-sizing:border-box;
+  background:var(--red); color:#fff; border:none;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:4px; font-size:10.5px; border-bottom:1px solid rgba(255,255,255,.18);
-  box-shadow:var(--shadow-sm);
+  gap:5px; font-size:12px; line-height:1.15; font-weight:500;
+  border-bottom:1px solid rgba(255,255,255,.22);
+  box-shadow:none;
   transition:background .2s var(--ease);
   cursor:pointer;
 }
+.float-side > :first-child,
+.float-side > :first-child > button{ border-radius:4px 4px 0 0; }
+.float-side > :last-child,
+.float-side > :last-child > button{ border-radius:0 0 4px 4px; }
 .float-side a:hover, .float-side button:hover{ background:var(--red-dark); }
-.float-side svg{ width:18px; height:18px; }
-.float-side i{ font-size:18px; line-height:1; }
+.float-side span{
+  display:block;
+  width:100%;
+  white-space:nowrap;
+  word-break:keep-all;
+  text-align:center;
+}
+.float-side svg{ width:19px; height:19px; flex:0 0 19px; }
+.float-side i{ font-size:19px; line-height:1; }
 .float-side .to-top{ background:var(--ink); }
+.float-side .to-top span{ font-size:12px; }
 .float-wechat-item{ position:relative; }
 .float-wechat-popover{
   position:absolute;
@@ -1263,9 +1280,9 @@ input,textarea{ font:inherit; }
 .inquiry-form-status.is-success{ color:#17823b; }
 body.inquiry-modal-open{ overflow:hidden; }
 @media (max-width:640px){
-  .float-side{ right:12px; bottom:90px; }
-  .float-side a,.float-side button{ width:46px; height:46px; font-size:9px; }
-  .float-side svg{ width:15px;height:15px; }
+  .float-side{ right:12px; bottom:90px; width:46px; filter:none; }
+  .float-side a,.float-side button{ width:46px; min-width:46px; height:46px; padding:4px; font-size:9px; }
+  .float-side svg{ width:15px;height:15px; flex-basis:15px; }
   .float-side i{ font-size:16px; }
   .float-wechat-popover{ width:148px; }
   .float-wechat-popover img{ width:126px; height:126px; }
