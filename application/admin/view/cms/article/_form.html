@@ -40,47 +40,34 @@
         <div class="col-xs-12 col-sm-8"><textarea id="c-content" class="form-control cms-markdown" data-markdown-upload="1" rows="16" name="row[content]">{$row.content|default=''|htmlentities}</textarea><p class="help-block">支持 Markdown；可通过编辑器上传正文图片。建议正文图片压缩后再上传，避免页面过大。</p></div>
     </div>
 
+    <div class="page-header">
+        <h4>排序与 SEO</h4>
+        <p class="text-muted">以下配置当前仍被新闻排序、相关推荐和 SEO 使用，直接显示，不再折叠隐藏。</p>
+    </div>
+
     <div class="form-group">
-        <div class="col-xs-12 col-sm-offset-2 col-sm-8">
-            <div class="panel panel-default cms-article-advanced-panel">
-                <div class="panel-heading">
-                    <h4 class="panel-title"><a role="button" data-toggle="collapse" href="#cms-article-advanced" aria-expanded="false" aria-controls="cms-article-advanced"><i class="fa fa-cog"></i> 高级设置 <span class="text-muted">（作者、置顶推荐、排序、SEO）</span> <i class="fa fa-angle-down pull-right"></i></a></h4>
-                </div>
-                <div id="cms-article-advanced" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">作者:</label>
-                            <div class="col-xs-12 col-sm-10"><input id="c-author" class="form-control" name="row[author]" type="text" value="{$row.author|default=''|htmlentities}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">置顶:</label>
-                            <div class="col-xs-12 col-sm-10">{:build_radios('row[is_top]', ['0'=>'否','1'=>'是'], isset($row['is_top'])?$row['is_top']:0)}</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">推荐:</label>
-                            <div class="col-xs-12 col-sm-10">{:build_radios('row[is_recommend]', ['0'=>'否','1'=>'是'], isset($row['is_recommend'])?$row['is_recommend']:0)}</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">排序:</label>
-                            <div class="col-xs-12 col-sm-10"><input id="c-weigh" class="form-control" name="row[weigh]" type="text" value="{$row.weigh|default=''|htmlentities}" data-rule="integer"><p class="help-block">数值越大通常越靠前；置顶、推荐与排序共同影响部分列表或推荐位置。</p></div>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">SEO 标题:</label>
-                            <div class="col-xs-12 col-sm-10"><input id="c-seo_title" class="form-control" name="row[seo_title]" type="text" value="{$row.seo_title|default=''|htmlentities}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">SEO 关键词:</label>
-                            <div class="col-xs-12 col-sm-10"><input id="c-seo_keywords" class="form-control" name="row[seo_keywords]" type="text" value="{$row.seo_keywords|default=''|htmlentities}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-xs-12 col-sm-2">SEO 描述:</label>
-                            <div class="col-xs-12 col-sm-10"><textarea id="c-seo_description" class="form-control" rows="4" name="row[seo_description]">{$row.seo_description|default=''|htmlentities}</textarea><p class="help-block">SEO 字段留空时，前台继续使用现有 SEO 回退规则。</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <label class="control-label col-xs-12 col-sm-2">置顶:</label>
+        <div class="col-xs-12 col-sm-8">{:build_radios('row[is_top]', ['0'=>'否','1'=>'是'], isset($row['is_top'])?$row['is_top']:0)}</div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">推荐:</label>
+        <div class="col-xs-12 col-sm-8">{:build_radios('row[is_recommend]', ['0'=>'否','1'=>'是'], isset($row['is_recommend'])?$row['is_recommend']:0)}</div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">排序:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-weigh" class="form-control" name="row[weigh]" type="text" value="{$row.weigh|default=''|htmlentities}" data-rule="integer"><p class="help-block">数值越大通常越靠前；置顶、推荐与排序会影响对应列表或相关推荐顺序。</p></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 标题:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-seo_title" class="form-control" name="row[seo_title]" type="text" value="{$row.seo_title|default=''|htmlentities}"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 关键词:</label>
+        <div class="col-xs-12 col-sm-8"><input id="c-seo_keywords" class="form-control" name="row[seo_keywords]" type="text" value="{$row.seo_keywords|default=''|htmlentities}"></div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">SEO 描述:</label>
+        <div class="col-xs-12 col-sm-8"><textarea id="c-seo_description" class="form-control" rows="4" name="row[seo_description]">{$row.seo_description|default=''|htmlentities}</textarea><p class="help-block">留空时前台继续使用现有 SEO 回退规则。</p></div>
     </div>
 
     <div class="form-group layer-footer">
