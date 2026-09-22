@@ -229,6 +229,26 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+const labelServiceGroupFieldsPos = schema.indexOf("$schemas['label_service']['group_item_fields']");
+const labelServiceGroupFieldsWindow = schema.slice(labelServiceGroupFieldsPos, labelServiceGroupFieldsPos + 520);
+expect(
+  labelServiceGroupFieldsWindow.includes("'process' => ['title','text','group','mobile_title','mobile_text','pc_visible','mobile_visible']"),
+  "label_service process editor must not expose unused badge/mobile_badge fields",
+);
+expect(
+  labelServiceGroupFieldsWindow.includes("'guarantee' => ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible']"),
+  "label_service guarantee editor must keep badge/mobile_badge icon fields",
+);
+const labelServicePcView = read("application/index/view/cms/page/label/service.html");
+const labelServiceMobileView = read("application/mobile/view/cms/page/label/service.html");
+for (const view of [labelServicePcView, labelServiceMobileView]) {
+  const processStart = view.indexOf("$item.group eq 'process'");
+  const guaranteeStart = view.indexOf("$item.group eq 'guarantee'");
+  const processWindow = view.slice(processStart, guaranteeStart);
+  const guaranteeWindow = view.slice(guaranteeStart);
+  expect(!processWindow.includes('cms/page/label/icon'), "label_service process frontend must not consume icons");
+  expect(guaranteeWindow.includes('cms/page/label/icon'), "label_service guarantee frontend must consume its configured icons");
+}
 for (const token of [
   "$schemas['label_service']['item_scope'] = 'form';",
   "'process' => 'content'",

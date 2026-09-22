@@ -282,7 +282,8 @@ class PageContentBlockEditorSchema
             'intro-diameter' => ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
         ];
         $schemas['label_service']['group_item_fields'] = [
-            'process' => ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
+            // 定制流程前端只消费标题/说明，不渲染 badge 图标；不要在后台暴露无效图标字段。
+            'process' => ['title','text','group','mobile_title','mobile_text','pc_visible','mobile_visible'],
             'guarantee' => ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
         ];
         $schemas['bags_process']['group_item_fields'] = [
