@@ -46,6 +46,7 @@ class PageSchemaRegistry
     {
         $map = [
             'home' => ['cases', 'advantages', 'news'],
+            'news.index' => ['category_navigation', 'pagination'],
             'product.detail' => ['banner'],
             'page.label' => ['banner'],
             'page.bags' => ['banner'],
@@ -260,7 +261,7 @@ class PageSchemaRegistry
                 'related' => self::blockDefinition('相关推荐', 'business_list', false, self::listFields('product'), 'product'),
                 'contact' => self::blockDefinition('在线咨询入口', 'contact', false, self::buttonFields(), 'global'),
             ]),
-            'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsListPageBlocks()),
+            'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsIndexPageBlocks()),
             'news.category' => self::pageDefinition('新闻分类列表', 'dynamic_list', '/news-list/{category}', self::newsListPageBlocks()),
             'news.detail' => self::pageDefinition('新闻详情', 'dynamic_detail', '/news/{slug}', self::newsDetailPageBlocks()),
             'page.label' => self::pageDefinition('不干胶/卷标', 'fixed_page', '/page/label', []),
@@ -535,6 +536,30 @@ class PageSchemaRegistry
             'pc_visible' => ['title' => 'PC 显示', 'type' => 'boolean', 'default' => 1],
             'mobile_visible' => ['title' => '移动端显示', 'type' => 'boolean', 'default' => 1],
         ];
+    }
+
+    /**
+     * 新闻总列表后台只开放真正影响 /news 前端的配置。
+     *
+     * 分类导航直接来自已发布新闻分类树，分页直接由当前页、总数和终端 page size
+     * 自动生成，因此不再把 category_navigation / pagination 暴露成“可配置”功能块。
+     */
+    protected static function newsIndexPageBlocks()
+    {
+        $blocks = self::newsListPageBlocks();
+        unset($blocks['category_navigation'], $blocks['pagination']);
+
+        // 这些字段保留在兼容 Schema 中用于读取历史 config_json，但当前 /news
+        // 前端并不消费，后台不再展示“可填但不生效”的输入项。
+        $blocks['list']['admin_hidden_fields'] = [
+            'page_size',
+            'show_date',
+            'summary_length',
+            'pc_visible',
+            'mobile_visible',
+            'enabled',
+        ];
+        return $blocks;
     }
 
     protected static function newsListPageBlocks()
