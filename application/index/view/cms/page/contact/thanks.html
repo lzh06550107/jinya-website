@@ -1,7 +1,7 @@
 <section class="contact-thanks-section"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}>
   <div class="contact-thanks-overlay"></div><div class="container contact-thanks-inner"><div class="contact-thanks-content">
     <div class="contact-thanks-heading">{notempty name="block.subtitle"}<span>{$block.subtitle|htmlentities}</span>{/notempty}<h2>{$block.title|htmlentities}</h2></div>
-    <div class="contact-thanks-copy">{$block.content_html}</div>
+    <div class="contact-thanks-copy">{$block.content_inline_html}</div>
     {notempty name="block.extra.phone"}<a class="contact-thanks-phone" href="tel:{$block.extra.phone|htmlentities}" aria-label="拨打咨询热线 {$block.extra.phone|htmlentities}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.46 15.46 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.59a1 1 0 0 1-.25 1.01l-2.2 2.19z"/></svg><span>咨询热线：{$block.extra.phone|htmlentities}</span></a>{/notempty}
   </div></div>
 </section>
