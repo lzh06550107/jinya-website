@@ -13,6 +13,28 @@ require ROOT_PATH . 'thinkphp/base.php';
 set_error_handler(static function () { return true; }, E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_WARNING);
 \think\Loader::addNamespace('app', APP_PATH);
 
+try {
+    $coloredText = \app\common\service\cms\MarkdownRenderer::renderInline(
+        '普通文字 [color=#E25042]重点文字[/color] 其它文字'
+    );
+    if (strpos($coloredText, 'style="color:#e25042"') === false) {
+        throw new \RuntimeException('partial text color style was not rendered');
+    }
+    if (strpos($coloredText, 'data-cms-text-color') !== false) {
+        throw new \RuntimeException('temporary color marker leaked into frontend HTML');
+    }
+    $invalidColor = \app\common\service\cms\MarkdownRenderer::renderInline(
+        '[color=javascript:alert(1)]危险文字[/color]'
+    );
+    if (strpos($invalidColor, 'style=') !== false) {
+        throw new \RuntimeException('invalid partial text color produced an inline style');
+    }
+    echo "MARKDOWN COLOR OK [label capability partial text]\n";
+} catch (\Throwable $e) {
+    fwrite(STDERR, "MARKDOWN COLOR FAIL: " . $e->getMessage() . "\n");
+    exit(1);
+}
+
 $cacheRoot = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'jinya-html-baseline-template-' . bin2hex(random_bytes(6));
 mkdir($cacheRoot, 0755, true);
 
