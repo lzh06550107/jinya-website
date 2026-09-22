@@ -762,6 +762,13 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const productCategoryIndex = read("application/admin/view/cms/product_category/index.html");
+expect(
+  productCategoryIndex.includes("build_toolbar('refresh,add')") &&
+  !productCategoryIndex.includes("build_toolbar('refresh,add,edit')"),
+  "product category toolbar must not expose bulk edit",
+);
+
 const productCategoryAdmin = read("application/admin/controller/cms/ProductCategory.php");
 expect(
   productCategoryAdmin.includes("where('slug', '<>', 'html-home-display')"),
