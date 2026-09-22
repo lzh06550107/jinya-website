@@ -131,6 +131,9 @@ class InstallerService
         // This also retires the historical standalone boxes_purchase block, whose
         // content now lives inside boxes_details and is not rendered as a section.
         $this->normalizeBoxesContentBlockOrder($connection, $prefix);
+        // The approved promise badge icon used to live only as inline template SVG.
+        // Backfill its asset path so the admin Logo field reflects what frontend shows.
+        $this->ensureBoxesPromiseLogoDefault($connection, $prefix);
         // Apply the approved labels reference accent to editable rich-text copy.
         $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
         // bags_compare is a complete-image module. Install the approved uploaded artwork
@@ -1928,6 +1931,54 @@ class InstallerService
         );
         if ($retire) {
             $retire->execute();
+        }
+    }
+    /**
+     * 将彩盒“品质承诺”当前前端礼盒 Logo 显式写回 CMS extra_json。
+     *
+     * 只在 badge_logo 为空时补默认资源，管理员已经上传的 Logo 永不覆盖。
+     * mobile_badge_logo 留空表示移动端继承 PC Logo。
+     */
+    protected function ensureBoxesPromiseLogoDefault($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $query = $pdo->prepare(
+            "SELECT b.`id`,b.`extra_json` FROM `{$blockTable}` b " .
+            "INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`='boxes_promise' AND b.`deletetime` IS NULL LIMIT 1"
+        );
+        if (!$query) {
+            return;
+        }
+        $query->execute();
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $extra = json_decode((string)$row['extra_json'], true);
+        $extra = is_array($extra) ? $extra : [];
+        if (isset($extra['badge_logo']) && trim((string)$extra['badge_logo']) !== '') {
+            return;
+        }
+
+        $extra['badge_logo'] = '/assets/jinya/img/boxes-promise-logo.svg';
+        if (!array_key_exists('mobile_badge_logo', $extra)) {
+            $extra['mobile_badge_logo'] = '';
+        }
+        $encoded = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$blockTable}` SET `extra_json`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?");
+        if ($update) {
+            $update->execute([$encoded, (int)$row['id']]);
         }
     }
     protected function ensureBagsCompareFullImageDefaults($connection, $prefix)
