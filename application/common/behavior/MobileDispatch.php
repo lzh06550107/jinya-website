@@ -8,6 +8,8 @@ use think\Cookie;
 class MobileDispatch
 {
     const COOKIE_NAME = 'cms_view';
+    const COOKIE_SOURCE_NAME = 'cms_view_source';
+    const COOKIE_SOURCE_EXPLICIT = 'explicit';
     const COOKIE_EXPIRE = 2592000;
 
     public function appBegin(&$dispatch)
@@ -31,11 +33,23 @@ class MobileDispatch
                 'path' => '/',
                 'httponly' => true,
             ]);
+            Cookie::set(self::COOKIE_SOURCE_NAME, self::COOKIE_SOURCE_EXPLICIT, [
+                'expire' => self::COOKIE_EXPIRE,
+                'path' => '/',
+                'httponly' => true,
+            ]);
         }
+
+        // Legacy client-side viewport routing used to write cms_view=mobile when a
+        // desktop browser window merely became narrow. Those cookies have no source
+        // marker and must no longer override the real User-Agent.
+        $cookiePreference = (string)Cookie::get(self::COOKIE_SOURCE_NAME) === self::COOKIE_SOURCE_EXPLICIT
+            ? (string)Cookie::get(self::COOKIE_NAME)
+            : '';
 
         $viewMode = $resolver->resolve(
             $forcedPreference,
-            (string)Cookie::get(self::COOKIE_NAME),
+            $cookiePreference,
             $request->isMobile()
         );
 
