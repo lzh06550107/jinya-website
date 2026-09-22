@@ -64,6 +64,7 @@ class NewsDetailRenderService extends AbstractRenderService
             'latestArticles' => $latest,
             'latestColumns' => [array_slice($latest, 0, 4), array_slice($latest, 4, 4)],
             'metadata' => [
+                'author' => $article['author'],
                 'source' => $article['source'],
                 'publish_date' => $article['publish_date'],
                 'views' => $article['views'],
