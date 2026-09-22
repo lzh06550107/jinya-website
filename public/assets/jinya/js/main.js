@@ -263,6 +263,135 @@
     restart();
   });
 
+  // Application cases: keep one category in a responsive carousel.
+  // Desktop shows three cards at once; arrows appear only when the active
+  // category has more cards than the current viewport can display.
+  document.querySelectorAll("[data-case-carousel]").forEach(function(carousel){
+    var scope = carousel.closest("[data-tab-scope]");
+    var tabs = scope ? Array.prototype.slice.call(scope.querySelectorAll("[data-tabs] button[data-tab]")) : [];
+    var viewport = carousel.querySelector(".case-carousel-viewport");
+    var track = carousel.querySelector(".case-carousel-track");
+    var cards = Array.prototype.slice.call(carousel.querySelectorAll(".case-card[data-tab-groups]"));
+    var prev = carousel.querySelector(".case-carousel-prev");
+    var next = carousel.querySelector(".case-carousel-next");
+    if(!viewport || !track || !cards.length) return;
+
+    var index = 0;
+    var perView = 3;
+    var activeKey = "";
+    var visibleCards = [];
+    var pointerStart = null;
+
+    function getPerView(){
+      var desktop = parseInt(carousel.getAttribute("data-desktop-per-view") || "3", 10);
+      var tablet = parseInt(carousel.getAttribute("data-tablet-per-view") || "2", 10);
+      var mobile = parseInt(carousel.getAttribute("data-mobile-per-view") || "1", 10);
+      if(window.innerWidth <= 640) return mobile;
+      if(window.innerWidth <= 900) return tablet;
+      return desktop;
+    }
+
+    function cardMatches(card, key){
+      if(!key || key === "all") return true;
+      var raw = card.getAttribute("data-tab-groups") || "";
+      var groups = raw.split(/[\s,;|]+/).filter(Boolean);
+      return groups.length === 0 || groups.indexOf(key) !== -1;
+    }
+
+    function maxIndex(){
+      return Math.max(0, visibleCards.length - perView);
+    }
+
+    function render(){
+      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || "0");
+      var width = perView > 0 ? (viewport.clientWidth - gap * (perView - 1)) / perView : viewport.clientWidth;
+
+      visibleCards.forEach(function(card){
+        card.style.flexBasis = Math.max(0, width) + "px";
+      });
+
+      index = Math.max(0, Math.min(index, maxIndex()));
+      track.style.transform = "translate3d(" + (-(width + gap) * index) + "px,0,0)";
+
+      var canScroll = visibleCards.length > perView;
+      if(prev){
+        prev.hidden = !canScroll;
+        prev.disabled = !canScroll || index === 0;
+      }
+      if(next){
+        next.hidden = !canScroll;
+        next.disabled = !canScroll || index === maxIndex();
+      }
+
+      carousel.classList.toggle("is-static", !canScroll);
+    }
+
+    function layout(){
+      perView = Math.max(1, Math.min(getPerView(), Math.max(1, visibleCards.length)));
+      render();
+    }
+
+    function applyCategory(key){
+      activeKey = key || "";
+      index = 0;
+      visibleCards = [];
+
+      cards.forEach(function(card){
+        var visible = cardMatches(card, activeKey);
+        card.hidden = !visible;
+        card.setAttribute("aria-hidden", visible ? "false" : "true");
+        if(visible) visibleCards.push(card);
+      });
+
+      tabs.forEach(function(tab){
+        var selected = (tab.getAttribute("data-tab") || "") === activeKey;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+      });
+
+      layout();
+    }
+
+    function go(target){
+      index = Math.max(0, Math.min(target, maxIndex()));
+      render();
+    }
+
+    tabs.forEach(function(tab){
+      tab.setAttribute("role", "tab");
+      tab.addEventListener("click", function(){
+        applyCategory(tab.getAttribute("data-tab") || "");
+      });
+    });
+
+    if(prev) prev.addEventListener("click", function(){ go(index - 1); });
+    if(next) next.addEventListener("click", function(){ go(index + 1); });
+
+    carousel.addEventListener("keydown", function(event){
+      if(event.key === "ArrowLeft"){ event.preventDefault(); go(index - 1); }
+      if(event.key === "ArrowRight"){ event.preventDefault(); go(index + 1); }
+    });
+
+    viewport.addEventListener("pointerdown", function(event){
+      pointerStart = event.clientX;
+    });
+    viewport.addEventListener("pointerup", function(event){
+      if(pointerStart === null) return;
+      var distance = event.clientX - pointerStart;
+      pointerStart = null;
+      if(Math.abs(distance) > 42) go(index + (distance < 0 ? 1 : -1));
+    });
+    viewport.addEventListener("pointercancel", function(){ pointerStart = null; });
+
+    var initialTab = tabs.filter(function(tab){ return tab.classList.contains("active"); })[0] || tabs[0];
+    carousel.setAttribute("tabindex", "0");
+    carousel.setAttribute("role", "region");
+    carousel.setAttribute("aria-label", "应用案例");
+    carousel.classList.add("is-ready");
+    applyCategory(initialTab ? (initialTab.getAttribute("data-tab") || "") : "");
+    window.addEventListener("resize", layout, { passive:true });
+  });
+
   // Back to top
   var topBtn = document.querySelector(".to-top");
   if(topBtn){
