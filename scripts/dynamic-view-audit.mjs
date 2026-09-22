@@ -386,6 +386,23 @@ expect(
   schema.includes("$schemas['boxes_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
   "boxes_hero backend must explain that Banner description line breaks are preserved",
 );
+expect(
+  schema.includes("$schemas['contact_thanks']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动端前端原样显示。';"),
+  "contact_thanks backend must explain that thanks text line breaks are preserved",
+);
+const contactThanksPcView = read("application/index/view/cms/page/contact/thanks.html");
+const contactThanksMobileView = read("application/mobile/view/cms/page/contact/thanks.html");
+expect(
+  contactThanksPcView.includes("$block.content_inline_html") &&
+  contactThanksMobileView.includes("$block.content_inline_html"),
+  "contact_thanks PC/mobile templates must render preserved inline HTML",
+);
+const pageBlockFactoryForContactBreaks = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+expect(
+  pageBlockFactoryForContactBreaks.includes("['label_hero', 'bags_hero', 'boxes_hero', 'contact_thanks']") &&
+  pageBlockFactoryForContactBreaks.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($content)"),
+  "contact_thanks must preserve every backend line break",
+);
 const pageBlockFactoryForHeroBreaks = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
 expect(
   pageBlockFactoryForHeroBreaks.includes("['label_hero', 'bags_hero', 'boxes_hero']") &&
