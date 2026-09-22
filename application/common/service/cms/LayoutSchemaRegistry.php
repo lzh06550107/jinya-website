@@ -142,7 +142,6 @@ class LayoutSchemaRegistry
                 'max_items' => ['title' => '最大显示数量', 'type' => 'number', 'default' => 8, 'min' => 1, 'max' => 50],
             ],
             'floating_service' => [
-                'show_online_consult' => ['title' => '显示在线咨询', 'type' => 'boolean', 'default' => 1],
                 'show_online_message' => ['title' => '显示在线留言', 'type' => 'boolean', 'default' => 1],
                 'show_wechat_consult' => ['title' => '显示微信咨询', 'type' => 'boolean', 'default' => 1],
                 'show_back_top' => ['title' => '显示返回顶部', 'type' => 'boolean', 'default' => 1],
