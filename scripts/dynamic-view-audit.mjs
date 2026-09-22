@@ -808,6 +808,34 @@ for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", 
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
 }
 
+const articleCategoryAdmin = read("application/admin/controller/cms/ArticleCategory.php");
+for (const name of ["常见问答", "科创美新闻", "新闻动态"]) {
+  expect(
+    articleCategoryAdmin.includes(name),
+    `article category admin must retire legacy category: ${name}`,
+  );
+}
+expect(
+  articleCategoryAdmin.includes("where('name', 'not in', ['常见问答', '科创美新闻', '新闻动态'])"),
+  "article category admin must hide retired legacy categories",
+);
+const articleCategoryRepository = read("application/common/repository/cms/ThinkArticleCategoryRepository.php");
+expect(
+  articleCategoryRepository.includes("where('name','not in',['常见问答','科创美新闻','新闻动态'])") &&
+  articleCategoryRepository.includes("in_array((string)$row['name'],['常见问答','科创美新闻','新闻动态'],true)"),
+  "frontend article category repository must exclude retired legacy categories",
+);
+const articleCategoryInstaller = read("application/common/service/cms/InstallerService.php");
+expect(
+  articleCategoryInstaller.includes("retireLegacyArticleCategories") &&
+  articleCategoryInstaller.includes("SET \`category_id\`=0") &&
+  articleCategoryInstaller.includes("SET \`parent_id\`=0") &&
+  articleCategoryInstaller.includes("常见问答") &&
+  articleCategoryInstaller.includes("科创美新闻") &&
+  articleCategoryInstaller.includes("新闻动态"),
+  "cms:install must preserve articles/children while deleting retired article categories",
+);
+
 const pcNewsDetailView = read("application/index/view/cms/news/detail.html");
 const mobileNewsDetailView = read("application/mobile/view/cms/news/detail.html");
 for (const [file, body] of [["PC news detail", pcNewsDetailView], ["mobile news detail", mobileNewsDetailView]]) {
