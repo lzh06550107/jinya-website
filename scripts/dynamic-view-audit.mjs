@@ -762,6 +762,22 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const pcCmsBaseForInquiry = read("application/index/controller/CmsBase.php");
+const mobileCmsBaseForInquiry = read("application/mobile/controller/CmsBase.php");
+for (const [name, source] of [["pc", pcCmsBaseForInquiry], ["mobile", mobileCmsBaseForInquiry]]) {
+  expect(
+    source.includes("$this->request->isPost() ? '' : $this->request->token()"),
+    `${name} CMS base must not rotate the inquiry CSRF token during POST initialization`,
+  );
+}
+const floatingLeadCss = read("public/assets/jinya/css/style.css");
+expect(
+  floatingLeadCss.includes("width:72px") &&
+  floatingLeadCss.includes("white-space:nowrap") &&
+  floatingLeadCss.includes("word-break:keep-all"),
+  "PC floating sidebar must keep Chinese action labels on one line",
+);
+
 const pcFloatingFooter = read("application/index/view/cms/layout/footer.html");
 const mobileFloatingFooter = read("application/mobile/view/cms/layout/footer.html");
 for (const [name, source] of [["pc", pcFloatingFooter], ["mobile", mobileFloatingFooter]]) {
