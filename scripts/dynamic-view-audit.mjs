@@ -313,8 +313,9 @@ const bagsCompareBaselinePos = htmlBaselineSqlForBagsCompare.indexOf("'bags_comp
 const bagsCompareBaselineWindow = htmlBaselineSqlForBagsCompare.slice(bagsCompareBaselinePos, bagsCompareBaselinePos + 650);
 expect(
   bagsCompareBaselinePos >= 0 &&
+  bagsCompareBaselineWindow.includes("/assets/jinya/img/bags-compare-full.webp") &&
   !bagsCompareBaselineWindow.includes("/assets/jinya/img/bags-tech-compare-bg-v2.jpg"),
-  "bags_compare complete-image baseline must not prefill the old CSS background as an uploaded image",
+  "bags_compare baseline must install the approved uploaded complete artwork, not the old CSS background",
 );
 const labelsHtmlBaselineSql = read("database/cms_html_baseline.sql");
 const labelsAccentMarkers = labelsHtmlBaselineSql.match(/\[color=#e25042\]/g) || [];
@@ -330,8 +331,8 @@ for (const token of [
   expect(labelsHtmlBaselineSql.includes(token), `labels html baseline missing reference text color: ${token}`);
 }
 const installerSourceForBagsCompare = read("application/common/service/cms/InstallerService.php");
-for (const token of ["retireBagsCompareBackgroundDefaults", "bags-tech-compare-bg-v2.jpg", "bags_compare"]) {
-  expect(installerSourceForBagsCompare.includes(token), `bags_compare legacy-background retirement missing: ${token}`);
+for (const token of ["ensureBagsCompareFullImageDefaults", "bags-tech-compare-bg-v2.jpg", "bags-compare-full.webp", "bags_compare"]) {
+  expect(installerSourceForBagsCompare.includes(token), `bags_compare full-image default migration missing: ${token}`);
 }
 const installerSourceForLabelColors = read("application/common/service/cms/InstallerService.php");
 for (const token of [
