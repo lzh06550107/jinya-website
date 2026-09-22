@@ -277,6 +277,35 @@ expect(
   "boxes default upsert must reuse soft-deleted source_key rows instead of violating uk_page_block_source",
 );
 
+const pageSchemaRegistry = read("application/common/service/cms/PageSchemaRegistry.php");
+expect(
+  pageSchemaRegistry.includes("'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsIndexPageBlocks())"),
+  "news.index must use its cleaned page-block schema",
+);
+const newsIndexBlocksPos = pageSchemaRegistry.indexOf("protected static function newsIndexPageBlocks()");
+const newsIndexBlocksWindow = pageSchemaRegistry.slice(newsIndexBlocksPos, newsIndexBlocksPos + 1400);
+for (const token of [
+  "unset($blocks['category_navigation'], $blocks['pagination'])",
+  "'page_size'",
+  "'show_date'",
+  "'summary_length'",
+  "'pc_visible'",
+  "'mobile_visible'",
+  "'enabled'",
+]) {
+  expect(newsIndexBlocksWindow.includes(token), `news.index cleanup contract missing: ${token}`);
+}
+expect(
+  pageSchemaRegistry.includes("'news.index' => ['category_navigation', 'pagination']"),
+  "news.index automatic category navigation/pagination blocks must be retired from admin",
+);
+const pageBlockAdminController = read("application/admin/controller/cms/PageBlock.php");
+expect(
+  pageBlockAdminController.includes("admin_hidden_fields") &&
+  pageBlockAdminController.includes("in_array($name, $adminHiddenFields, true)"),
+  "page-block admin must honor schema hidden fields",
+);
+
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
 expect(
   schema.includes("$schema['section_order'] = ['items','specific'];") &&
