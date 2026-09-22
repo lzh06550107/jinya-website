@@ -767,6 +767,18 @@ expect(
   productCategoryAdmin.includes("where('slug', '<>', 'html-home-display')"),
   "product category admin must hide the retired homepage technical category before migration",
 );
+const productCategoryForm = read("application/admin/view/cms/product_category/_form.html");
+expect(
+  !productCategoryForm.includes('name="row[image]"') &&
+  !productCategoryForm.includes("分类图片:"),
+  "product category editor must not expose unused category image",
+);
+const productCategoryJs = read("public/assets/js/backend/cms/product_category.js");
+expect(
+  !productCategoryJs.includes("backend/cms/media_preview") &&
+  productCategoryJs.includes("Form.api.bindevent"),
+  "product category editor must not load image-upload dependency after removing category image",
+);
 const productCategoryRepository = read("application/common/repository/cms/ThinkProductCategoryRepository.php");
 expect(
   productCategoryRepository.includes("where('slug','<>','html-home-display')") &&
