@@ -303,6 +303,13 @@ expect(
   richSchemaEditor.includes("if (!strict && !Object.prototype.hasOwnProperty.call(groups, current))"),
   "strict group editors must not append the fake 普通/默认 option",
 );
+const aboutValuesSchemaPos = schema.indexOf("$schemas['about_values'] = self::make");
+const aboutValuesSchemaWindow = schema.slice(aboutValuesSchemaPos, aboutValuesSchemaPos + 900);
+expect(
+  aboutValuesSchemaWindow.includes("$schemas['about_values']['strict_groups'] = true;") &&
+  aboutValuesSchemaWindow.includes("$schemas['about_values']['default_group'] = 'normal';"),
+  "about_values layout direction must not expose 普通/默认",
+);
 const boxesCraftMaterialPos = schema.indexOf("$schemas['boxes_craft_material']['item_order'] = [");
 const boxesCraftMaterialWindow = schema.slice(boxesCraftMaterialPos, boxesCraftMaterialPos + 900);
 for (const token of ["split_craft_material", "global_item_numbering", "strict_groups", "default_group"]) {
