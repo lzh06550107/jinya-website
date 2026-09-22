@@ -229,6 +229,16 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+for (const token of [
+  "$schemas['label_service']['item_scope'] = 'form';",
+  "'process' => 'content'",
+  "'guarantee' => 'specific'",
+  "$schemas['label_service']['hide_item_section'] = true;",
+  "$schemas['label_service']['process_section_label'] = '定制流程';",
+  "$schemas['label_service']['guarantee_section_label'] = '五大保障';"
+]) {
+  expect(schema.includes(token), `label_service split-section contract missing: ${token}`);
+}
 expect(
   schema.includes("$schemas['label_materials']['section_order'] = ['items','specific'];") &&
   schema.includes("$schemas['label_materials']['item_section_label'] = '常用工艺配置';") &&
@@ -305,37 +315,45 @@ expect(
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v7"),
-  "PageContentBlock must use the immutable rich-v7 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v8"),
+  "PageContentBlock must use the immutable rich-v8 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v7"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v8"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v7.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v8.js");
 expect(
-  pageContentRichEntry.includes("backend/cms/label_page_block_editor_v2"),
-  "Rich-v7 entry must load the multi-list label editor",
+  pageContentRichEntry.includes("backend/cms/label_page_block_editor_v3") &&
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v6"),
+  "Rich-v8 entry must load label split editor v3 and schema v6",
 );
 expect(
-  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v5"),
-  "Rich-v7 PageContentBlock entry must require the rich-v7 schema module",
+  pageContentRichEntry.includes("backend/cms/label_page_block_editor_v3"),
+  "Rich-v8 entry must load the multi-list label editor",
 );
-const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v5.js");
+expect(
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v6"),
+  "Rich-v8 PageContentBlock entry must require the rich-v8 schema module",
+);
+const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v6.js");
+for (const token of ["schema.item_scope === 'form'", "schema.hide_item_section", "header.hide()", "sectionBody.hide()"]) {
+  expect(pageContentRichSchema.includes(token), `Rich-v8 schema editor missing external-item section support: ${token}`);
+}
 expect(
   pageContentRichSchema.includes("schema.specific_section_label") &&
   pageContentRichSchema.includes("specificHeading.text"),
-  "Rich-v7 schema editor must support a semantic page-specific section heading",
+  "Rich-v8 schema editor must support a semantic page-specific section heading",
 );
 for (const token of ["reorderSections", "schema.section_order", "insertAfter(anchor)", "reorderSections(editor, schema)"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v7 editor missing section-order token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v8 editor missing section-order token: ${token}`);
 }
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v7 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v8 editor missing WYSIWYG token: ${token}`);
 }
 expect(
   pageContentRichSchema.includes("inlineColorFields = {}"),
-  "Rich-v7 schema must leave label_capability PC rich text to the dedicated editor",
+  "Rich-v8 schema must leave label_capability PC rich text to the dedicated editor",
 );
 const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v3.js");
 for (const token of [
@@ -371,7 +389,19 @@ for (const token of [
 ]) {
   expect(adminForm.includes(token), `label_materials form missing print-module grouping token: ${token}`);
 }
-const labelEditorV2 = read("public/assets/js/backend/cms/label_page_block_editor_v2.js");
+const labelEditorV3 = read("public/assets/js/backend/cms/label_page_block_editor_v3.js");
+for (const token of [
+  "splitService",
+  "data-label-service-section=\"process\"",
+  "data-label-service-section=\"guarantee\"",
+  "data-label-items-list=\"service-process\"",
+  "data-label-items-list=\"service-guarantee\"",
+  "data-label-item-default-group=\"process\"",
+  "data-label-item-default-group=\"guarantee\"",
+  "项目 #'+(i+6)+' · 五大保障"
+]) {
+  expect(labelEditorV3.includes(token), `label_service backend grouping missing token: ${token}`);
+}
 for (const token of [
   "splitMaterials",
   "group==='print-image'",
@@ -380,7 +410,7 @@ for (const token of [
   "data-label-item-default-group",
   "siblings=item.parent().children(ITEM)"
 ]) {
-  expect(labelEditorV2.includes(token), `label materials multi-list editor missing token: ${token}`);
+  expect(labelEditorV3.includes(token), `label materials multi-list editor missing token: ${token}`);
 }
 const capabilityRichSourceMatches = adminForm.match(/data-label-capability-rich-source/g) || [];
 const capabilityMobileRichMatches = adminForm.match(/data-label-field="mobile_text" data-label-capability-rich-source/g) || [];

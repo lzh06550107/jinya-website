@@ -92,6 +92,16 @@ class PageContentBlockEditorSchema
             [], ['title'=>'项目标题','text'=>'保障说明','badge'=>'图标类型','group'=>'项目类型','mobile_title'=>'移动标题','mobile_text'=>'移动说明','mobile_badge'=>'移动图标类型'],
             ['label_secondary_title'=>'第二组标题']
         );
+        $schemas['label_service']['item_scope'] = 'form';
+        $schemas['label_service']['split_item_sections'] = [
+            'process' => 'content',
+            'guarantee' => 'specific',
+        ];
+        $schemas['label_service']['hide_item_section'] = true;
+        $schemas['label_service']['process_section_label'] = '定制流程';
+        $schemas['label_service']['guarantee_section_label'] = '五大保障';
+        $schemas['label_service']['process_add_label'] = '添加流程项目';
+        $schemas['label_service']['guarantee_add_label'] = '添加保障项目';
         $schemas['label_advantages'] = self::make('label', '不干胶/卷标', '生产与服务优势', 'label_section',
             ['title'], [],
             ['title','text','image','badge','group','mobile_title','mobile_text','mobile_image','mobile_badge','pc_visible','mobile_visible'],
