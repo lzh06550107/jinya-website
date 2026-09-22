@@ -272,7 +272,7 @@ expect(
 );
 const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v3.js");
 expect(
-  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v2"),
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v3"),
   "Rich-v3 PageContentBlock entry must require the rich-v3 schema module",
 );
 const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v3.js");
@@ -295,8 +295,16 @@ for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "con
 expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
-expect(adminForm.includes("data-label-capability-rich-v3-marker"), "label_capability form must expose a server-rendered Rich V2 marker for runtime diagnosis");
-expect(adminForm.includes("局部颜色编辑器 Rich V2 已加载"), "Rich V2 runtime marker text missing");
+for (const token of [
+  "data-label-capability-rich-field",
+  "data-label-capability-rich-source",
+  "data-label-capability-rich-wrapper",
+  "data-label-capability-rich-editor",
+  "data-label-capability-apply-color",
+  "应用颜色",
+]) {
+  expect(adminForm.includes(token), `label_capability PC description form missing rich-text token: ${token}`);
+}
 for (const token of [
   'name="row[label_print_title]"',
   'name="row[label_print_points]"',
