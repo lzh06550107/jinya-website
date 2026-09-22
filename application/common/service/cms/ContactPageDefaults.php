@@ -39,7 +39,7 @@ class ContactPageDefaults
                 'map_zoom_control'=>'1',
                 'map_scroll_wheel'=>'1',
             ]),
-            self::block('contact_thanks', '感恩1000+客户的支持', 'THANKS TO', '感恩一路携手相伴，并肩奋进的岁月！每一份订单，承载着您对终端客户的责任与信赖。经由您推向市场的，不只是包装产品，更是精工造物的初心。往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、伙伴，同心开拓崭新商机。', '/uploads/cms-jinya/contact/workshop-1.jpg', 1020, [], [
+            self::block('contact_thanks', '感恩1000+客户的支持', 'THANKS TO', "感恩一路携手相伴，并肩奋进的岁月！\n每一份订单，承载着您对终端客户的责任与信赖。\n经由您推向市场的，不只是包装产品，更是精工造物的初心。\n往后我们持续精进印刷工艺，完善定制化配套服务，携手各位客户、伙伴，同心开拓崭新商机。", '/uploads/cms-jinya/contact/workshop-1.jpg', 1020, [], [
                 'phone'=>'18903716652',
             ]),
         ];
