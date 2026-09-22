@@ -229,6 +229,10 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+expect(
+  schema.includes("$schemas['label_materials']['section_order'] = ['items','specific'];"),
+  "label_materials backend editor must place 功能项目 before 页面专用配置",
+);
 const labelHeroSchemaPos = schema.indexOf("$schemas['label_hero']");
 const labelHeroSchemaWindow = schema.slice(labelHeroSchemaPos, labelHeroSchemaPos + 900);
 for (const token of ["'title','subtitle','content','image','mobile_image'", "'title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'"]) {
@@ -299,25 +303,28 @@ expect(
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v5"),
-  "PageContentBlock must use the immutable rich-v5 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v6"),
+  "PageContentBlock must use the immutable rich-v6 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v5"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v6"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v5.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v6.js");
 expect(
-  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v3"),
-  "Rich-v5 PageContentBlock entry must require the rich-v5 schema module",
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v4"),
+  "Rich-v6 PageContentBlock entry must require the rich-v6 schema module",
 );
-const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v3.js");
+const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v4.js");
+for (const token of ["reorderSections", "schema.section_order", "insertAfter(anchor)", "reorderSections(editor, schema)"]) {
+  expect(pageContentRichSchema.includes(token), `Rich-v6 editor missing section-order token: ${token}`);
+}
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v5 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v6 editor missing WYSIWYG token: ${token}`);
 }
 expect(
   pageContentRichSchema.includes("inlineColorFields = {}"),
-  "Rich-v5 schema must leave label_capability PC rich text to the dedicated editor",
+  "Rich-v6 schema must leave label_capability PC rich text to the dedicated editor",
 );
 const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v3.js");
 for (const token of [

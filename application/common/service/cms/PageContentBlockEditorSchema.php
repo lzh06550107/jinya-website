@@ -77,6 +77,7 @@ class PageContentBlockEditorSchema
             [], ['title'=>'工艺/图片名称','text'=>'工艺说明','image'=>'图片','group'=>'项目类型','mobile_title'=>'移动名称','mobile_text'=>'移动说明','mobile_image'=>'移动图片'],
             ['label_print_title'=>'不干胶印刷标题','label_print_points'=>'不干胶印刷要点（Markdown/换行）']
         );
+        $schemas['label_materials']['section_order'] = ['items','specific'];
         $schemas['label_elements'] = self::make('label', '不干胶/卷标', '卷标三要素', 'label_section',
             ['title'], [],
             ['title','text','image','group','mobile_title','mobile_text','mobile_image','pc_visible','mobile_visible'],
