@@ -232,9 +232,9 @@ class MarkdownRenderer
     private static function restoreTextColors($html)
     {
         return preg_replace_callback(
-            '/\\sdata-cms-text-color=(["\\'])(#[0-9a-f]{6})\\1/u',
+            '/\\sdata-cms-text-color="(#[0-9a-f]{6})"/u',
             function ($m) {
-                return ' style="color:' . $m[2] . '"';
+                return ' style="color:' . $m[1] . '"';
             },
             (string)$html
         );
