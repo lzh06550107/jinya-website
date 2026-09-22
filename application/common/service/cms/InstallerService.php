@@ -130,6 +130,9 @@ class InstallerService
         // Homepage products are referenced directly by cms_home_section_reference.
         // Retire the historical fake product category used only to satisfy category_id.
         $this->retireLegacyHomeProductCategory($connection, $prefix);
+        // Retire old clone-era article categories that are not part of the current
+        // Jinya news information architecture. Keep the articles themselves.
+        $this->retireLegacyArticleCategories($connection, $prefix);
         // Keep the boxes page CMS section order identical to the approved frontend.
         // This also retires the historical standalone boxes_purchase block, whose
         // content now lives inside boxes_details and is not rendered as a section.
@@ -2018,6 +2021,53 @@ class InstallerService
 
             $deleteCategory = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id`=? AND `slug`='html-home-display'");
             $deleteCategory->execute([$categoryId]);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 删除旧克隆站遗留的无用新闻分类，但保留新闻内容。
+     *
+     * “常见问答 / 科创美新闻 / 新闻动态”不属于当前金亚新闻分类体系。
+     * 删除前先把所属新闻迁移为 category_id=0，并把非退役子分类提升为顶级分类，
+     * 避免因为清理分类而误删文章或留下不可达的分类树。
+     */
+    protected function retireLegacyArticleCategories($connection, $prefix)
+    {
+        $categoryTable = $prefix . 'cms_article_category';
+        $articleTable = $prefix . 'cms_article';
+        if (!$this->tableExists($connection, $categoryTable) || !$this->tableExists($connection, $articleTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $names = ['常见问答', '科创美新闻', '新闻动态'];
+        $placeholders = implode(',', array_fill(0, count($names), '?'));
+        $select = $pdo->prepare("SELECT `id` FROM `{$categoryTable}` WHERE `name` IN ({$placeholders})");
+        if (!$select) {
+            return;
+        }
+        $select->execute($names);
+        $ids = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+        if (!$ids) {
+            return;
+        }
+
+        $idPlaceholders = implode(',', array_fill(0, count($ids), '?'));
+        $pdo->beginTransaction();
+        try {
+            $moveArticles = $pdo->prepare("UPDATE `{$articleTable}` SET `category_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `category_id` IN ({$idPlaceholders})");
+            $moveArticles->execute($ids);
+
+            $promoteChildren = $pdo->prepare("UPDATE `{$categoryTable}` SET `parent_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `parent_id` IN ({$idPlaceholders}) AND `id` NOT IN ({$idPlaceholders})");
+            $promoteChildren->execute(array_merge($ids, $ids));
+
+            $deleteCategories = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id` IN ({$idPlaceholders})");
+            $deleteCategories->execute($ids);
             $pdo->commit();
         } catch (\Throwable $e) {
             if ($pdo->inTransaction()) {
