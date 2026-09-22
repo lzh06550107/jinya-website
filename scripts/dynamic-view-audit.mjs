@@ -778,6 +778,28 @@ expect(
   "PC floating sidebar must keep Chinese action labels on one line",
 );
 
+const inquiryAdminIndex = read("application/admin/view/cms/inquiry/index.html");
+const inquiryAdminJs = read("public/assets/js/backend/cms/inquiry.js");
+expect(
+  inquiryAdminIndex.includes("data-operate-detail") &&
+  !inquiryAdminIndex.includes("cms/inquiry/export") &&
+  !inquiryAdminIndex.includes("btn-del") &&
+  !inquiryAdminIndex.includes("data-operate-follow") &&
+  !inquiryAdminIndex.includes("data-operate-assign") &&
+  !inquiryAdminIndex.includes("data-operate-status") &&
+  !inquiryAdminIndex.includes("data-operate-mobile"),
+  "inquiry list UI must expose only refresh and detail",
+);
+expect(
+  !inquiryAdminJs.includes("{checkbox: true}") &&
+  !inquiryAdminJs.includes("btn-inquiry-dialog") &&
+  !inquiryAdminJs.includes("data-title=\"新增跟进\"") &&
+  !inquiryAdminJs.includes("data-title=\"分配负责人\"") &&
+  !inquiryAdminJs.includes("data-title=\"修改状态\"") &&
+  inquiryAdminJs.includes('title="查看详情"'),
+  "inquiry list row operations must keep only detail",
+);
+
 const pcFloatingFooter = read("application/index/view/cms/layout/footer.html");
 const mobileFloatingFooter = read("application/mobile/view/cms/layout/footer.html");
 for (const [name, source] of [["pc", pcFloatingFooter], ["mobile", mobileFloatingFooter]]) {
