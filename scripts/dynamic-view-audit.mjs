@@ -762,6 +762,36 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const deviceRouterSource = read("public/assets/jinya/js/device-router.js");
+expect(
+  !deviceRouterSource.includes("window.location.replace") &&
+  !deviceRouterSource.includes("matchMedia") &&
+  !deviceRouterSource.includes("innerWidth") &&
+  !deviceRouterSource.includes("addEventListener(\"change\""),
+  "viewport changes must never route between PC and mobile pages",
+);
+const pcCmsHeader = read("application/index/view/cms/layout/header.html");
+const mobileCmsHeader = read("application/mobile/view/cms/layout/header.html");
+expect(
+  !pcCmsHeader.includes("device-router.js") &&
+  !mobileCmsHeader.includes("device-router.js"),
+  "frontend templates must not load client-side device routing",
+);
+const mobileDispatchSource = read("application/common/behavior/MobileDispatch.php");
+expect(
+  mobileDispatchSource.includes("COOKIE_SOURCE_NAME") &&
+  mobileDispatchSource.includes("COOKIE_SOURCE_EXPLICIT") &&
+  mobileDispatchSource.includes("$cookiePreference =") &&
+  mobileDispatchSource.includes("$request->isMobile()"),
+  "mobile dispatch must ignore legacy unmarked view cookies and fall back to real device detection",
+);
+const mobileCmsBaseSource = read("application/mobile/controller/CmsBase.php");
+expect(
+  !mobileCmsBaseSource.includes("Cookie::set('cms_view'") &&
+  !mobileCmsBaseSource.includes("use think\\Cookie;"),
+  "explicit /mobile routes must not persist a global mobile-view lock",
+);
+
 const productIndexView = read("application/admin/view/cms/product/index.html");
 expect(
   productIndexView.includes("build_toolbar('refresh,add')") &&
