@@ -258,8 +258,9 @@ for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
 }
 expect(
-  schema.includes("$schemas['label_capability']['item_help']['text'] = '';"),
-  "label_capability PC rich editor must not inject duplicate schema help copy into the toolbar area",
+  schema.includes("$schemas['label_capability']['item_help']['text'] = '';") &&
+  schema.includes("$schemas['label_capability']['item_help']['mobile_text'] = '';"),
+  "label_capability PC/mobile rich editors must not inject duplicate schema help copy into their toolbar areas",
 );
 const capabilityPairPos = schema.indexOf("$schemas['label_capability']['item_pair_rows']");
 const capabilityPairWindow = schema.slice(capabilityPairPos, capabilityPairPos + 420);
@@ -269,27 +270,27 @@ expect(
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v4"),
-  "PageContentBlock must use the immutable rich-v4 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v5"),
+  "PageContentBlock must use the immutable rich-v5 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v4"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v5"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v4.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v5.js");
 expect(
   pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v3"),
-  "Rich-v4 PageContentBlock entry must require the rich-v4 schema module",
+  "Rich-v5 PageContentBlock entry must require the rich-v5 schema module",
 );
 const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v3.js");
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v4 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v5 editor missing WYSIWYG token: ${token}`);
 }
 expect(
   pageContentRichSchema.includes("inlineColorFields = {}"),
-  "Rich-v4 schema must leave label_capability PC rich text to the dedicated editor",
+  "Rich-v5 schema must leave label_capability PC rich text to the dedicated editor",
 );
-const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v2.js");
+const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v3.js");
 for (const token of [
   "data-label-capability-rich-editor",
   "data-label-capability-command",
@@ -313,6 +314,14 @@ for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "con
 expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
+const capabilityRichSourceMatches = adminForm.match(/data-label-capability-rich-source/g) || [];
+const capabilityMobileRichMatches = adminForm.match(/data-label-field="mobile_text" data-label-capability-rich-source/g) || [];
+const capabilityPcRoleMatches = adminForm.match(/data-label-capability-rich-role="pc"/g) || [];
+const capabilityMobileRoleMatches = adminForm.match(/data-label-capability-rich-role="mobile"/g) || [];
+expect(capabilityRichSourceMatches.length >= 4, "label_capability existing/template PC+mobile descriptions must all expose rich-text sources");
+expect(capabilityMobileRichMatches.length >= 2, "label_capability existing/template mobile descriptions must both use rich-text sources");
+expect(capabilityPcRoleMatches.length >= 2 && capabilityMobileRoleMatches.length >= 2, "label_capability existing/template items must expose both PC and mobile rich editor roles");
+
 for (const token of [
   "data-label-capability-rich-field",
   "data-label-capability-rich-source",
@@ -336,7 +345,15 @@ for (const token of [
   expect(adminForm.includes(token), `Admin form missing editable field ${token}`);
 }
 
+const mobileLabelCapabilityView = read("application/mobile/view/cms/page/label/capability.html");
+expect(mobileLabelCapabilityView.includes("item.text_inline_html"), "mobile label capability template must render normalized rich description HTML");
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+expect(
+  factory.includes("foreach (['title','text','image','image_top','image_bottom','subtitle','badge','url'] as $field)") &&
+  factory.includes("$entry[$field] = $entry[$mobileField]"),
+  "mobile label capability ViewModel must substitute mobile_text before Markdown rendering",
+);
+
 expect(factory.includes("['print_points']"), "PageBlockViewModelFactory must register print_points for scalar markdown rendering");
 expect(factory.includes("$scalarMarkdownKey . '_html'"), "PageBlockViewModelFactory must expose scalar markdown HTML keys");
 

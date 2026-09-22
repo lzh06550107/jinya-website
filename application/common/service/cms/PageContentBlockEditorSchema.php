@@ -382,9 +382,9 @@ class PageContentBlockEditorSchema
             ['image_top','image_bottom'],
             ['mobile_image_top','mobile_image_bottom'],
         ];
-        // PC 说明是整行富文本编辑器，不再和移动说明左右并排，避免工具栏被压缩。
+        // PC / 移动说明都使用整行富文本编辑器；帮助文案由编辑器自身显示。
         $schemas['label_capability']['item_help']['text'] = '';
-        $schemas['label_capability']['item_help']['mobile_text'] = '移动端独立说明；留空时继承 PC 说明内容。';
+        $schemas['label_capability']['item_help']['mobile_text'] = '';
         $schemas['label_capability']['item_help']['image_top'] = 'PC 拼图左上图片；与左下图、右侧大图共同组成三图布局。';
         $schemas['label_capability']['item_help']['image_bottom'] = 'PC 拼图左下图片；与左上图、右侧大图共同组成三图布局。';
         $schemas['label_capability']['item_help']['image'] = 'PC 拼图右侧大图，跨上下两行；历史只有这一张图时会自动按单图铺满。';
