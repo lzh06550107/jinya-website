@@ -127,6 +127,10 @@ class InstallerService
         // Apply the current html/ + html/mobile/ content baseline last so a fresh
         // CMS install renders the same copy and media as the approved static pages.
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        // HTML baseline marks obsolete clone-era news as hidden. Hidden is not a
+        // valid article publishing state in the current CMS, so remove those rows
+        // and any stale article references immediately after the baseline is applied.
+        $this->deleteHiddenArticles($connection, $prefix);
         // Homepage products are referenced directly by cms_home_section_reference.
         // Retire the historical fake product category used only to satisfy category_id.
         $this->retireLegacyHomeProductCategory($connection, $prefix);
@@ -2068,6 +2072,51 @@ class InstallerService
 
             $deleteCategories = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id` IN ({$idPlaceholders})");
             $deleteCategories->execute($ids);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 物理删除所有 status=hidden 的新闻及其页面引用。
+     *
+     * hidden 不属于当前 PublishStateMachine 的合法新闻状态，只用于历史 HTML
+     * 基线淘汰旧克隆新闻。删除新闻前先清理 page_block_reference 与
+     * home_section_reference，避免保留悬空引用。
+     */
+    protected function deleteHiddenArticles($connection, $prefix)
+    {
+        $articleTable = $prefix . 'cms_article';
+        if (!$this->tableExists($connection, $articleTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $pageReferenceTable = $prefix . 'cms_page_block_reference';
+        $homeReferenceTable = $prefix . 'cms_home_section_reference';
+
+        $pdo->beginTransaction();
+        try {
+            if ($this->tableExists($connection, $pageReferenceTable)) {
+                $pdo->exec(
+                    "DELETE r FROM `{$pageReferenceTable}` r " .
+                    "INNER JOIN `{$articleTable}` a ON a.`id`=r.`content_id` " .
+                    "WHERE r.`content_type`='article' AND a.`status`='hidden'"
+                );
+            }
+
+            if ($this->tableExists($connection, $homeReferenceTable)) {
+                $pdo->exec(
+                    "DELETE r FROM `{$homeReferenceTable}` r " .
+                    "INNER JOIN `{$articleTable}` a ON a.`id`=r.`content_id` " .
+                    "WHERE r.`content_type`='article' AND a.`status`='hidden'"
+                );
+            }
+
+            $pdo->exec("DELETE FROM `{$articleTable}` WHERE `status`='hidden'");
             $pdo->commit();
         } catch (\Throwable $e) {
             if ($pdo->inTransaction()) {
