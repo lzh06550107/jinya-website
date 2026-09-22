@@ -236,6 +236,60 @@ class PageContentBlockEditorSchema
         }
         unset($schema);
 
+        // 版式方向只允许前端实际支持的两个方向。历史空值等同 normal，
+        // 编辑时自动归一为 normal，不再生成“普通/默认”伪选项。
+        foreach (['boxes_value','boxes_details'] as $key) {
+            $schemas[$key]['strict_groups'] = true;
+            $schemas[$key]['default_group'] = 'normal';
+        }
+
+        // 彩盒功能项目后台字段顺序跟随前端实际展示顺序，而不是套用全站通用顺序。
+        // 特别是 boxes_details：前端文本依次为 编号/标签 -> 主标题 -> 底部说明。
+        $schemas['boxes_products']['item_order'] = [
+            'group',
+            'title','mobile_title',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_value']['item_order'] = [
+            'group',
+            'title','mobile_title',
+            'text','mobile_text',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_details']['item_order'] = [
+            'group',
+            'subtitle','mobile_subtitle',
+            'title','mobile_title',
+            'text','mobile_text',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_applications']['item_order'] = [
+            'title','mobile_title',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_craft_material']['item_order'] = [
+            'group',
+            'title','mobile_title',
+            'subtitle','mobile_subtitle',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_team']['item_order'] = [
+            'title','mobile_title',
+            'image','mobile_image',
+            'pc_visible','mobile_visible',
+        ];
+        $schemas['boxes_services']['item_order'] = [
+            'title','mobile_title',
+            'text','mobile_text',
+            'badge','mobile_badge',
+            'pc_visible','mobile_visible',
+        ];
+
         // 走进金亚（4）
         $schemas['about_hero'] = self::make('about', '走进金亚', 'Banner', 'about_section',
             ['image','mobile_image'], [], [], [],
