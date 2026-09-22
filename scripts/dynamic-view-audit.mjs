@@ -261,6 +261,21 @@ expect(
   read("application/common/service/cms/InstallerService.php").includes("ensureBoxesPromiseLogoDefault"),
   "cms:install must backfill the current boxes promise logo without overwriting custom uploads",
 );
+const boxesDefaultsSource = read("application/common/service/cms/BoxesPageDefaults.php");
+expect(
+  !boxesDefaultsSource.includes('"block_key":"boxes_purchase"'),
+  "retired boxes_purchase must not be recreated by BoxesPageDefaults",
+);
+const installerBoxesSource = read("application/common/service/cms/InstallerService.php");
+expect(
+  installerBoxesSource.includes("['body','boxes_purchase']"),
+  "boxes installer must explicitly retire legacy boxes_purchase",
+);
+expect(
+  installerBoxesSource.includes("(`source_key`=? OR (`deletetime` IS NULL AND `block_key`=?))") &&
+  installerBoxesSource.includes("`deletetime`=NULL"),
+  "boxes default upsert must reuse soft-deleted source_key rows instead of violating uk_page_block_source",
+);
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
