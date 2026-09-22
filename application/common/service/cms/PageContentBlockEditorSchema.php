@@ -228,6 +228,14 @@ class PageContentBlockEditorSchema
             [], ['title'=>'服务标题','text'=>'英文/补充说明','badge'=>'图标类型','mobile_title'=>'移动服务标题','mobile_text'=>'移动说明','mobile_badge'=>'移动图标类型']
         );
 
+        // 彩盒页统一后台配置顺序：先维护功能项目，再维护页面专用配置。
+        foreach ($schemas as &$schema) {
+            if (isset($schema['page']) && $schema['page'] === 'boxes') {
+                $schema['section_order'] = ['items','specific'];
+            }
+        }
+        unset($schema);
+
         // 走进金亚（4）
         $schemas['about_hero'] = self::make('about', '走进金亚', 'Banner', 'about_section',
             ['image','mobile_image'], [], [], [],
