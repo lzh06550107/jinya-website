@@ -20,7 +20,7 @@
   {if condition="!empty($layout.friend_links.config.items)"}<div class="footer-bottom"><div class="container">{$layout.friend_links.title|default='友情链接：'|htmlentities}{volist name="layout.friend_links.config.items" id="item"}<a href="{$item.url|default='#'|htmlentities}" target="{$item.target|default='_blank'|htmlentities}">{$item.title|default=''|htmlentities}</a>&nbsp;&nbsp;{/volist}</div></div>{/if}
 </footer>
 <div class="float-side">
-  {if !empty($layout.floating_service.config.show_online_message)}<button type="button" class="js-inquiry-open" title="在线留言" aria-haspopup="dialog" aria-controls="inquiry-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>在线留言</span></button>{/if}
+  {if condition="!isset($layout.floating_service.config.show_online_message) || !empty($layout.floating_service.config.show_online_message)"}<button type="button" class="js-inquiry-open" title="在线留言" aria-haspopup="dialog" aria-controls="inquiry-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>在线留言</span></button>{/if}
   {if condition="!isset($layout.floating_service.config.show_wechat_consult) || !empty($layout.floating_service.config.show_wechat_consult)"}
   <div class="float-wechat-item">
     <button type="button" class="float-wechat-trigger" title="微信咨询" aria-label="微信咨询，悬停查看二维码">
