@@ -303,6 +303,30 @@ expect(
   richSchemaEditor.includes("if (!strict && !Object.prototype.hasOwnProperty.call(groups, current))"),
   "strict group editors must not append the fake 普通/默认 option",
 );
+const boxesCraftMaterialPos = schema.indexOf("$schemas['boxes_craft_material']['item_order'] = [");
+const boxesCraftMaterialWindow = schema.slice(boxesCraftMaterialPos, boxesCraftMaterialPos + 900);
+for (const token of ["split_craft_material", "global_item_numbering", "strict_groups", "default_group"]) {
+  expect(
+    boxesCraftMaterialWindow.includes(token),
+    `boxes_craft_material backend must declare split editor metadata: ${token}`,
+  );
+}
+expect(
+  richSchemaEditor.includes("arrangeBoxesCraftMaterial") &&
+  richSchemaEditor.includes('data-boxes-items-list="craft"') &&
+  richSchemaEditor.includes('data-boxes-items-list="material"') &&
+  richSchemaEditor.includes("data-boxes-material-title-row") &&
+  richSchemaEditor.includes("添加印刷工艺") &&
+  richSchemaEditor.includes("添加产品材质"),
+  "boxes craft/material editor must place material items below 材质区标题",
+);
+const boxesEditorSource = read("public/assets/js/backend/cms/boxes_page_block_editor.js");
+expect(
+  boxesEditorSource.includes("data-boxes-item-target") &&
+  boxesEditorSource.includes("data-boxes-item-default-group") &&
+  boxesEditorSource.includes("allItems"),
+  "boxes item editor must support targeted craft/material lists with continuous indexing",
+);
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
 const bagsCompareSchemaWindow = schema.slice(bagsCompareSchemaPos, bagsCompareSchemaPos + 700);
 expect(
