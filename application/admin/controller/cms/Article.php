@@ -31,6 +31,12 @@ class Article extends Content
         $action = strtolower((string)$this->request->action());
         if ($action === 'add') {
             $params['slug'] = $this->generateArticleSlug();
+        } elseif ($action === 'edit') {
+            $id = (int)$this->request->request('ids');
+            $row = $id > 0 ? ArticleModel::get($id) : null;
+            if ($row && trim((string)$row['slug']) !== '') {
+                $params['slug'] = (string)$row['slug'];
+            }
         }
 
         return $params;
