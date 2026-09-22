@@ -762,6 +762,16 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const productIndexView = read("application/admin/view/cms/product/index.html");
+expect(
+  productIndexView.includes("build_toolbar('refresh,add')") &&
+  !productIndexView.includes("build_toolbar('refresh,add,edit')") &&
+  !productIndexView.includes("btn-cms-batch") &&
+  !productIndexView.includes("btn-recyclebin") &&
+  !productIndexView.includes("data-operate-preview"),
+  "product management must remove preview, bulk edit/actions, and recycle-bin toolbar controls",
+);
+
 const productCategoryIndex = read("application/admin/view/cms/product_category/index.html");
 expect(
   productCategoryIndex.includes("build_toolbar('refresh,add')") &&
