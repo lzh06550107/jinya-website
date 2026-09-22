@@ -284,6 +284,7 @@ class PageContentBlockEditorSchema
             ['title','subtitle','content','image','mobile_image'], ['contact_phone'], [], [],
             ['content'=>'感谢文字','image'=>'PC 背景图','mobile_image'=>'移动背景图'], [], ['contact_phone'=>'咨询热线']
         );
+        $schemas['contact_thanks']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动端前端原样显示。';
 
         $schemas['label_compare']['group_item_fields'] = [
             'compare' => ['title','text','subtitle','group','mobile_title','mobile_text','mobile_subtitle','pc_visible','mobile_visible'],
