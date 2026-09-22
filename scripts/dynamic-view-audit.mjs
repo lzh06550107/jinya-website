@@ -258,33 +258,45 @@ for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
 }
 expect(
-  schema.includes("PC 说明使用富文本颜色编辑器"),
+  schema.includes("PC 说明使用富文本编辑器"),
   "label_capability schema must describe the PC rich-text color editor",
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
-  pageContentController.includes("backend/cms/page_content_block_rich_v3"),
-  "PageContentBlock must use the immutable rich-v3 RequireJS entry to bypass stale editor caches",
+  pageContentController.includes("backend/cms/page_content_block_rich_v4"),
+  "PageContentBlock must use the immutable rich-v4 RequireJS entry to bypass stale editor caches",
 );
 expect(
-  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v3"),
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v4"),
   "PageContentBlock must expose the active editor build marker",
 );
-const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v3.js");
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v4.js");
 expect(
   pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v3"),
-  "Rich-v3 PageContentBlock entry must require the rich-v3 schema module",
+  "Rich-v4 PageContentBlock entry must require the rich-v4 schema module",
 );
 const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v3.js");
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
-  expect(pageContentRichSchema.includes(token), `Rich-v3 editor missing WYSIWYG token: ${token}`);
+  expect(pageContentRichSchema.includes(token), `Rich-v4 editor missing WYSIWYG token: ${token}`);
 }
 expect(
   pageContentRichSchema.includes("inlineColorFields = {}"),
-  "Rich-v3 schema must leave label_capability PC rich text to the dedicated editor",
+  "Rich-v4 schema must leave label_capability PC rich text to the dedicated editor",
 );
-const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v1.js");
-for (const token of ["data-label-capability-rich-editor", "data-label-capability-apply-color", "data-label-capability-clear-color", "[color=", "label_capability"]) {
+const capabilityRichText = read("public/assets/js/backend/cms/label_capability_richtext_v2.js");
+for (const token of [
+  "data-label-capability-rich-editor",
+  "data-label-capability-command",
+  "bold",
+  "italic",
+  "strikeThrough",
+  "data-label-capability-rich-color",
+  "foreColor",
+  "data-label-capability-clear-format",
+  "removeFormat",
+  "[color=",
+  "label_capability"
+]) {
   expect(capabilityRichText.includes(token), `Capability PC rich-text editor missing token: ${token}`);
 }
 
@@ -299,11 +311,11 @@ for (const token of [
   "data-label-capability-rich-field",
   "data-label-capability-rich-source",
   "data-label-capability-rich-wrapper",
-  "data-label-capability-rich-editor",
-  "data-label-capability-apply-color",
-  "应用颜色",
+  "cms-label-capability-richbox",
+  "cms-label-capability-rich-toolbar",
+  "cms-label-capability-rich-editor"
 ]) {
-  expect(adminForm.includes(token), `label_capability PC description form missing rich-text token: ${token}`);
+  expect(adminForm.includes(token), `label_capability PC description form missing integrated rich-text token: ${token}`);
 }
 for (const token of [
   'name="row[label_print_title]"',
