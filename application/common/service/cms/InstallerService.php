@@ -1874,7 +1874,7 @@ class InstallerService
     /**
      * 为“专版和无版印刷怎么选”整图模块补齐默认成品图。
      *
-     * 空值或上一版 CSS 背景默认值会迁移为用户确认的完整效果图；
+     * 空值、上一版 CSS 背景默认值或错误的 v1 整图会迁移为用户确认的完整效果图；
      * 后台已经上传的其它自定义图片保持不变。
      */
     protected function ensureBagsCompareFullImageDefaults($connection, $prefix)
@@ -1885,15 +1885,19 @@ class InstallerService
             return;
         }
 
-        $legacy = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
-        $default = '/assets/jinya/img/bags-compare-full.webp';
+        $legacyBackground = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
+        $legacyBrokenFull = '/assets/jinya/img/bags-compare-full.webp';
+        $default = '/assets/jinya/img/bags-compare-full-v2.webp';
         $sql = "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
-            "SET b.`image`=CASE WHEN TRIM(COALESCE(b.`image`,''))='' OR b.`image`=? THEN ? ELSE b.`image` END, " .
-            "b.`mobile_image`=CASE WHEN TRIM(COALESCE(b.`mobile_image`,''))='' OR b.`mobile_image`=? THEN ? ELSE b.`mobile_image` END " .
+            "SET b.`image`=CASE WHEN TRIM(COALESCE(b.`image`,''))='' OR b.`image` IN (?,?) THEN ? ELSE b.`image` END, " .
+            "b.`mobile_image`=CASE WHEN TRIM(COALESCE(b.`mobile_image`,''))='' OR b.`mobile_image` IN (?,?) THEN ? ELSE b.`mobile_image` END " .
             "WHERE p.`slug`='bags' AND b.`block_key`='bags_compare'";
         $statement = $this->getPdo($connection)->prepare($sql);
         if ($statement) {
-            $statement->execute([$legacy, $default, $legacy, $default]);
+            $statement->execute([
+                $legacyBackground, $legacyBrokenFull, $default,
+                $legacyBackground, $legacyBrokenFull, $default,
+            ]);
         }
     }
 
