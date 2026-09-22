@@ -813,6 +813,13 @@ expect(
   !articleIndexView.includes("data-operate-preview"),
   "news management operations must not expose preview",
 );
+expect(
+  articleIndexView.includes("build_toolbar('refresh,add')") &&
+  !articleIndexView.includes("build_toolbar('refresh,add,edit')") &&
+  !articleIndexView.includes("btn-cms-batch") &&
+  !articleIndexView.includes("btn-recyclebin"),
+  "news management toolbar must only expose refresh and add",
+);
 
 const installerHiddenArticleCleanup = read("application/common/service/cms/InstallerService.php");
 expect(
