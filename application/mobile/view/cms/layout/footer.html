@@ -20,10 +20,42 @@
   {if condition="!empty($layout.friend_links.config.items)"}<div class="footer-bottom"><div class="container">{$layout.friend_links.title|default='友情链接：'|htmlentities}{volist name="layout.friend_links.config.items" id="item"}<a href="{$item.url|default='#'|htmlentities}" target="{$item.target|default='_blank'|htmlentities}">{$item.title|default=''|htmlentities}</a>&nbsp;&nbsp;{/volist}</div></div>{/if}
 </footer>
 <div class="float-side">
-  {if condition="!isset($layout.floating_service.config.show_online_consult) || !empty($layout.floating_service.config.show_online_consult)"}<a href="{if !empty($cmsSite.cms_service_wecom_url)}{$cmsSite.cms_service_wecom_url|htmlentities}{else /}{$mobileBase|htmlentities}/page/contact{/if}" title="在线咨询"{if !empty($cmsSite.cms_service_wecom_url)} target="_blank" rel="noopener"{/if}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>在线咨询</span></a>{/if}
-  {if !empty($layout.floating_service.config.show_online_message)}<a href="{$mobileBase|htmlentities}/page/contact" title="在线留言"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>在线留言</span></a>{/if}
-  {if condition="!isset($layout.floating_service.config.show_wechat_consult) || !empty($layout.floating_service.config.show_wechat_consult)"}<a href="#footer-qr" title="微信扫一扫"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3"/></svg><span>微信咨询</span></a>{/if}
+  {if !empty($layout.floating_service.config.show_online_message)}<button type="button" class="js-inquiry-open" title="在线留言" aria-haspopup="dialog" aria-controls="inquiry-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span>在线留言</span></button>{/if}
+  {if condition="!isset($layout.floating_service.config.show_wechat_consult) || !empty($layout.floating_service.config.show_wechat_consult)"}
+  <div class="float-wechat-item">
+    <button type="button" class="float-wechat-trigger" title="微信咨询" aria-label="微信咨询，悬停查看二维码">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3"/></svg><span>微信咨询</span>
+    </button>
+    <div class="float-wechat-popover" role="tooltip">
+      <div class="float-wechat-popover-title">微信扫码咨询</div>
+      {if !empty($cmsSite.cms_service_wechat_qr)}<img src="{$cmsSite.cms_service_wechat_qr|htmlentities}" alt="客服微信二维码" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/qr-code-full.png" alt="客服微信二维码" loading="lazy">{/if}
+    </div>
+  </div>
+  {/if}
   {if condition="!isset($layout.floating_service.config.show_back_top) || !empty($layout.floating_service.config.show_back_top)"}<button class="to-top" type="button" title="返回顶部"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg><span>TOP</span></button>{/if}
+</div>
+
+<div class="inquiry-modal" id="inquiry-modal" aria-hidden="true">
+  <div class="inquiry-modal-backdrop" data-inquiry-close></div>
+  <div class="inquiry-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="inquiry-modal-title">
+    <button type="button" class="inquiry-modal-close" data-inquiry-close aria-label="关闭留言表单">&times;</button>
+    <div class="inquiry-modal-head">
+      <h3 id="inquiry-modal-title">在线留言</h3>
+      <p>留下您的需求和联系方式，我们会尽快与您联系。</p>
+    </div>
+    <form class="inquiry-modal-form" action="{$mobileBase|htmlentities}/inquiry/submit" method="post">
+      <input type="hidden" name="__token__" value="{$cmsInquiryToken|htmlentities}">
+      <input type="hidden" name="source_title" value="">
+      <div class="inquiry-form-grid">
+        <label><span>姓名 <em>*</em></span><input type="text" name="name" maxlength="100" autocomplete="name" required placeholder="请输入姓名"></label>
+        <label><span>手机号 <em>*</em></span><input type="tel" name="mobile" maxlength="11" inputmode="numeric" autocomplete="tel" pattern="1[0-9]{10}" required placeholder="请输入11位手机号"></label>
+      </div>
+      <label><span>公司</span><input type="text" name="company" maxlength="200" autocomplete="organization" placeholder="公司名称（选填）"></label>
+      <label><span>咨询需求 <em>*</em></span><textarea name="content" maxlength="2000" rows="5" required placeholder="请描述产品、数量、尺寸、工艺或交期等需求"></textarea></label>
+      <div class="inquiry-form-status" role="status" aria-live="polite"></div>
+      <button type="submit" class="inquiry-form-submit">提交留言</button>
+    </form>
+  </div>
 </div>
 <script src="__CDN__/assets/jinya/js/main.js?v={$cmsSite.version|default='1.0'|htmlentities}"></script>
 </body>
