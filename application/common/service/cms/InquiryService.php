@@ -31,9 +31,12 @@ class InquiryService
             throw new \InvalidArgumentException('咨询需求不能超过2000个字符');
         }
         $ip = isset($data['ip']) ? $data['ip'] : '';
-        $rateKey = 'cms:inquiry:' . md5($ip . '|' . $mobile);
+        // 只拦截几秒内的完全重复提交，防止双击产生重复线索。
+        // 不再按“IP + 手机号”锁 60 秒，否则同一客户补充第二条需求、
+        // 以及后台验收连续测试都会被误判为频繁提交。
+        $rateKey = 'cms:inquiry:dedupe:v2:' . md5($ip . '|' . $mobile . '|' . $company . '|' . $content);
         if (Cache::get($rateKey)) {
-            throw new \RuntimeException('提交过于频繁，请稍后再试');
+            throw new \RuntimeException('请勿重复提交相同内容');
         }
         $inquiry = new Inquiry();
         $data['name'] = $name;
@@ -42,7 +45,7 @@ class InquiryService
         $data['content'] = $content;
         $data['status'] = 'new';
         $inquiry->allowField(true)->save($data);
-        Cache::set($rateKey, 1, 60);
+        Cache::set($rateKey, 1, 5);
         return $inquiry;
     }
 
