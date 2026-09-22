@@ -227,6 +227,25 @@ for (const blockKey of ["bags_products", "boxes_products"]) {
 }
 const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCodec.php");
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
+for (const token of ["boxes_badge_logo", "boxes_mobile_badge_logo", "'badge_logo'", "'mobile_badge_logo'"]) {
+  expect(boxesCodec.includes(token), `Boxes codec missing promise logo field: ${token}`);
+}
+const boxesPromiseSchemaPos = schema.indexOf("$schemas['boxes_promise']");
+const boxesPromiseSchemaWindow = schema.slice(boxesPromiseSchemaPos, boxesPromiseSchemaPos + 1200);
+for (const token of ["boxes_badge_logo", "boxes_mobile_badge_logo", "面板 Logo", "移动端 Logo"]) {
+  expect(boxesPromiseSchemaWindow.includes(token), `boxes_promise backend missing logo contract: ${token}`);
+}
+for (const file of [
+  "application/index/view/cms/page/boxes/promise.html",
+  "application/mobile/view/cms/page/boxes/promise.html",
+]) {
+  const promiseView = read(file);
+  expect(promiseView.includes("block.extra.badge_logo"), `${file} must consume configured promise logo`);
+}
+expect(
+  read("application/mobile/view/cms/page/boxes/promise.html").includes("block.extra.mobile_badge_logo"),
+  "mobile boxes promise must consume mobile logo override",
+);
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
