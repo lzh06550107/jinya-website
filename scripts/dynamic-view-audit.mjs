@@ -808,6 +808,12 @@ for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", 
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
 }
 
+const articleIndexView = read("application/admin/view/cms/article/index.html");
+expect(
+  !articleIndexView.includes("data-operate-preview"),
+  "news management operations must not expose preview",
+);
+
 const installerHiddenArticleCleanup = read("application/common/service/cms/InstallerService.php");
 expect(
   installerHiddenArticleCleanup.includes("deleteHiddenArticles") &&
