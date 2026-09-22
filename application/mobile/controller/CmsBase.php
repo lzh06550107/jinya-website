@@ -7,7 +7,6 @@ use app\common\service\cms\InstallerService;
 use app\common\service\cms\PageConfigService;
 use app\common\service\cms\PageSeoResolver;
 use think\Cache;
-use think\Cookie;
 use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\Response;
@@ -43,9 +42,6 @@ abstract class CmsBase extends Frontend
         $requestPath = $this->requestPath();
         $explicitMobile = (bool)preg_match('#^/mobile(?:/|$)#i', $requestPath);
         $this->mobileBase = $explicitMobile ? '/mobile' : '';
-        if ($explicitMobile) {
-            Cookie::set('cms_view', 'mobile', ['expire' => 2592000, 'path' => '/', 'httponly' => true]);
-        }
         $this->desktopPath = $explicitMobile ? $this->stripMobilePrefix($requestPath) : $requestPath;
 
         $this->renderLayout = $this->renderServices()->layout()->render($this->renderContext());
