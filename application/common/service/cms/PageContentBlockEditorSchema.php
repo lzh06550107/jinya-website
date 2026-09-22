@@ -128,17 +128,12 @@ class PageContentBlockEditorSchema
             ['title'=>'产品名称','image'=>'产品图片','group'=>'展示位置','mobile_title'=>'移动产品名称','mobile_image'=>'移动产品图片']
         );
         $schemas['bags_compare'] = self::make('bags', '包装袋无版印刷', '专版和无版印刷怎么选', 'bags_section',
-            ['title','subtitle','content','image','mobile_image'], ['bags_compare_brand','bags_compare_footer'],
-            ['title','text','badge','group','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'],
-            ['plate'=>'专版印刷','digital'=>'无版印刷'],
-            ['title'=>'主标题','subtitle'=>'副标题','content'=>'选择说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
-            ['title'=>'方案标题','text'=>'方案要点','badge'=>'图标类型','group'=>'方案类型','mobile_title'=>'移动方案标题','mobile_text'=>'移动方案要点','mobile_badge'=>'移动图标类型'],
-            ['bags_compare_brand'=>'品牌小标题','bags_compare_footer'=>'底部提示']
+            ['image','mobile_image'], [], [], [],
+            ['image'=>'PC 整图','mobile_image'=>'移动整图'], []
         );
-        $schemas['bags_compare']['base_help']['image'] = 'PC 背景图；默认回显当前参考背景，可直接上传替换。';
-        $schemas['bags_compare']['base_help']['mobile_image'] = '移动背景图；默认与 PC 背景一致，可单独上传替换。';
-        $schemas['bags_compare']['item_help']['text'] = 'PC 方案要点；支持换行，后台每次换行都会在前端原样显示。';
-        $schemas['bags_compare']['item_help']['mobile_text'] = '移动方案要点；支持换行；留空时沿用 PC 方案要点。';
+        $schemas['bags_compare']['base_help']['image'] = '上传完整效果图；前端直接原图展示，不再叠加标题、说明、方案要点或背景层。';
+        $schemas['bags_compare']['base_help']['mobile_image'] = '移动端完整效果图；可选，留空时自动沿用 PC 整图。';
+
         $schemas['bags_cases'] = self::make('bags', '包装袋无版印刷', '应用案例', 'bags_section',
             ['title','subtitle','image','mobile_image','link'], ['bags_tabs'],
             ['title','text','image','url','subtitle','group','mobile_title','mobile_text','mobile_image','mobile_subtitle','mobile_url','pc_visible','mobile_visible'], [],

@@ -129,9 +129,9 @@ class InstallerService
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
         // Apply the approved labels reference accent to editable rich-text copy.
         $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
-        // Persist the comparison reference background into empty CMS media fields
-        // so backend preview/editing and frontend rendering share one source of truth.
-        $this->ensureBagsCompareBackgroundDefaults($connection, $prefix);
+        // bags_compare is now a complete-image upload module. Remove only the exact
+        // legacy CSS-background value so the backend starts with a real empty upload slot.
+        $this->retireBagsCompareBackgroundDefaults($connection, $prefix);
         $this->ensureHomeAboutSocialIconDefaults($connection, $prefix);
 
         $missing = $this->missingTables($connection, $prefix);
@@ -1865,7 +1865,13 @@ class InstallerService
      * 将“专版和无版印刷怎么选”的 CSS 默认背景迁回 CMS 数据。
      * 仅补齐空的 image/mobile_image，不覆盖后台已有自定义图片。
      */
-    protected function ensureBagsCompareBackgroundDefaults($connection, $prefix)
+    /**
+     * 退役“专版和无版印刷怎么选”曾经写入 CMS 的 CSS 背景默认值。
+     *
+     * 整图模式下 image/mobile_image 代表完整成品图，而不是背景层。
+     * 这里只清空上一版迁移写入的精确默认路径；后台自定义上传绝不覆盖。
+     */
+    protected function retireBagsCompareBackgroundDefaults($connection, $prefix)
     {
         $pageTable = $prefix . 'cms_page';
         $blockTable = $prefix . 'cms_page_content_block';
@@ -1873,15 +1879,15 @@ class InstallerService
             return;
         }
 
-        $default = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
+        $legacy = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
         $sql = "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
-            "SET b.`image`=IF(TRIM(COALESCE(b.`image`,''))='',?,b.`image`), " .
-            "b.`mobile_image`=IF(TRIM(COALESCE(b.`mobile_image`,''))='',?,b.`mobile_image`) " .
+            "SET b.`image`=IF(b.`image`=?,'',b.`image`), " .
+            "b.`mobile_image`=IF(b.`mobile_image`=?,'',b.`mobile_image`) " .
             "WHERE p.`slug`='bags' AND b.`block_key`='bags_compare' " .
-            "AND (TRIM(COALESCE(b.`image`,''))='' OR TRIM(COALESCE(b.`mobile_image`,''))='')";
+            "AND (b.`image`=? OR b.`mobile_image`=?)";
         $statement = $this->getPdo($connection)->prepare($sql);
         if ($statement) {
-            $statement->execute([$default, $default]);
+            $statement->execute([$legacy, $legacy, $legacy, $legacy]);
         }
     }
 

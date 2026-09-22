@@ -229,11 +229,16 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
-for (const token of [
-  "$schemas['bags_compare']['base_help']['image'] = 'PC 背景图；默认回显当前参考背景，可直接上传替换。';",
-  "$schemas['bags_compare']['item_help']['text'] = 'PC 方案要点；支持换行，后台每次换行都会在前端原样显示。';"
-]) {
-  expect(schema.includes(token), `bags_compare backend contract missing: ${token}`);
+const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
+const bagsCompareSchemaWindow = schema.slice(bagsCompareSchemaPos, bagsCompareSchemaPos + 700);
+expect(
+  bagsCompareSchemaWindow.includes("['image','mobile_image'], [], [], []") &&
+  bagsCompareSchemaWindow.includes("'image'=>'PC 整图'") &&
+  bagsCompareSchemaWindow.includes("'mobile_image'=>'移动整图'"),
+  "bags_compare backend must be a complete-image-only editor",
+);
+for (const retiredToken of ["bags_compare_brand", "bags_compare_footer", "'text'=>'方案要点'", "'title'=>'主标题'"]) {
+  expect(!bagsCompareSchemaWindow.includes(retiredToken), `bags_compare image-only schema must hide legacy field: ${retiredToken}`);
 }
 expect(
   schema.includes("$schemas['bags_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
@@ -304,10 +309,12 @@ for (const token of [
 }
 
 const htmlBaselineSqlForBagsCompare = read("database/cms_html_baseline.sql");
+const bagsCompareBaselinePos = htmlBaselineSqlForBagsCompare.indexOf("'bags_compare','bags_section','专版和无版印刷怎么选'");
+const bagsCompareBaselineWindow = htmlBaselineSqlForBagsCompare.slice(bagsCompareBaselinePos, bagsCompareBaselinePos + 650);
 expect(
-  htmlBaselineSqlForBagsCompare.includes("'bags_compare','bags_section','专版和无版印刷怎么选'") &&
-  htmlBaselineSqlForBagsCompare.includes("/assets/jinya/img/bags-tech-compare-bg-v2.jpg"),
-  "bags_compare baseline must persist the reference background image for backend preview/editing",
+  bagsCompareBaselinePos >= 0 &&
+  !bagsCompareBaselineWindow.includes("/assets/jinya/img/bags-tech-compare-bg-v2.jpg"),
+  "bags_compare complete-image baseline must not prefill the old CSS background as an uploaded image",
 );
 const labelsHtmlBaselineSql = read("database/cms_html_baseline.sql");
 const labelsAccentMarkers = labelsHtmlBaselineSql.match(/\[color=#e25042\]/g) || [];
@@ -323,8 +330,8 @@ for (const token of [
   expect(labelsHtmlBaselineSql.includes(token), `labels html baseline missing reference text color: ${token}`);
 }
 const installerSourceForBagsCompare = read("application/common/service/cms/InstallerService.php");
-for (const token of ["ensureBagsCompareBackgroundDefaults", "bags-tech-compare-bg-v2.jpg", "bags_compare"]) {
-  expect(installerSourceForBagsCompare.includes(token), `bags_compare background migration missing: ${token}`);
+for (const token of ["retireBagsCompareBackgroundDefaults", "bags-tech-compare-bg-v2.jpg", "bags_compare"]) {
+  expect(installerSourceForBagsCompare.includes(token), `bags_compare legacy-background retirement missing: ${token}`);
 }
 const installerSourceForLabelColors = read("application/common/service/cms/InstallerService.php");
 for (const token of [
@@ -497,6 +504,13 @@ const labelHeroMobileLineBreakView = read("application/mobile/view/cms/page/labe
 for (const view of [labelHeroPcLineBreakView, labelHeroMobileLineBreakView]) {
   expect(view.includes("block.content_inline_html"), "label_hero PC/mobile template must render normalized Banner description HTML");
 }
+const bagsComparePcImageView = read("application/index/view/cms/page/bags/compare.html");
+const bagsCompareMobileImageView = read("application/mobile/view/cms/page/bags/compare.html");
+for (const view of [bagsComparePcImageView, bagsCompareMobileImageView]) {
+  expect(view.includes('{notempty name="block.image"}'), "bags_compare must prefer an uploaded complete image");
+  expect(view.includes('bags-compare-full-image'), "bags_compare complete-image wrapper missing");
+  expect(view.includes('data-bags-compare-legacy-fallback'), "bags_compare must preserve a no-image legacy fallback during migration");
+}
 const mobileLabelCapabilityView = read("application/mobile/view/cms/page/label/capability.html");
 expect(mobileLabelCapabilityView.includes("item.text_inline_html"), "mobile label capability template must render normalized rich description HTML");
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
@@ -653,7 +667,7 @@ for (const file of [
 
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
-  "application/index/view/cms/page/bags/compare.html": ["block.extra.compare_brand", "block.extra.compare_footer", "tech-compare", "item.text_inline_html"],
+  "application/index/view/cms/page/bags/compare.html": ["bags-compare-full-image", "block.image", "data-bags-compare-legacy-fallback"],
   "application/index/view/cms/page/bags/process.html": ["bags-process-flow", "item.group eq 'photo'"],
   "application/index/view/cms/page/bags/cta.html": ["bags-benefits-section", "block.extra.items"],
   "application/index/view/cms/page/boxes/hero.html": ["block.link_text", "hero-cta--singleline"],
