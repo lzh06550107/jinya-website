@@ -248,6 +248,16 @@ expect(
   schema.includes("$schemas['label_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
   "label_hero backend must explain that Banner description line breaks are preserved",
 );
+expect(
+  schema.includes("$schemas['boxes_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
+  "boxes_hero backend must explain that Banner description line breaks are preserved",
+);
+const pageBlockFactoryForHeroBreaks = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+expect(
+  pageBlockFactoryForHeroBreaks.includes("['label_hero', 'bags_hero', 'boxes_hero']") &&
+  pageBlockFactoryForHeroBreaks.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($content)"),
+  "label/bags/boxes Banner descriptions must preserve every backend line break",
+);
 const labelServiceGroupFieldsPos = schema.indexOf("$schemas['label_service']['group_item_fields']");
 const labelServiceGroupFieldsWindow = schema.slice(labelServiceGroupFieldsPos, labelServiceGroupFieldsPos + 520);
 expect(
