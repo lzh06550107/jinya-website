@@ -261,6 +261,32 @@ expect(
   schema.includes("item_inline_color_fields") && schema.includes("['text','mobile_text']"),
   "label_capability must expose partial color tools for PC/mobile explanation text",
 );
+const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
+expect(
+  pageContentController.includes("backend/cms/page_content_block_rich_v2"),
+  "PageContentBlock must use the immutable rich-v2 RequireJS entry to bypass stale editor caches",
+);
+expect(
+  pageContentController.includes("cmsPageContentBlockEditorBuild") && pageContentController.includes("rich-v2"),
+  "PageContentBlock must expose the active editor build marker",
+);
+const pageContentRichEntry = read("public/assets/js/backend/cms/page_content_block_rich_v2.js");
+expect(
+  pageContentRichEntry.includes("backend/cms/page_content_block_editor_schema_rich_v2"),
+  "Rich-v2 PageContentBlock entry must require the rich-v2 schema module",
+);
+const pageContentRichSchema = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v2.js");
+for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色"]) {
+  expect(pageContentRichSchema.includes(token), `Rich-v2 editor missing WYSIWYG token: ${token}`);
+}
+expect(
+  pageContentRichSchema.includes("page === 'label'") &&
+  pageContentRichSchema.includes("schema.label || '') === '能力图文'") &&
+  pageContentRichSchema.includes("inlineColorFields.text = true") &&
+  pageContentRichSchema.includes("inlineColorFields.mobile_text = true"),
+  "Rich-v2 editor must force capability PC/mobile descriptions into rich-text mode even with stale schema metadata",
+);
+
 const pageContentSchemaJs = read("public/assets/js/backend/cms/page_content_block_editor_schema.js");
 for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "contenteditable", "应用颜色", "清除颜色", "[color="]) {
   expect(pageContentSchemaJs.includes(token), `Structured editor missing WYSIWYG partial text color UI: ${token}`);
