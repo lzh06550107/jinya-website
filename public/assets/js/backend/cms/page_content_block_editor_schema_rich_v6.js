@@ -531,6 +531,12 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
 
     var updateItemHeading = function (item, schema, page, index) {
         item = $(item);
+        if (schema && schema.global_item_numbering) {
+            var editor = item.closest(PAGE_EDITORS[page] || ROOT);
+            var all = editor.find('[data-' + page + '-item]');
+            var globalIndex = all.index(item);
+            if (globalIndex >= 0) index = globalIndex;
+        }
         var label = item.find('[data-' + page + '-item-label]').first();
         if (!label.length) return;
         var segments = [(schema.item_noun || '项目') + ' #' + (index + 1)];
@@ -547,6 +553,93 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         }
         if (title) segments.push(title);
         label.text(segments.join(' · '));
+    };
+
+    var arrangeBoxesCraftMaterial = function (editor, schema) {
+        editor = $(editor);
+        if (!schema || !schema.split_craft_material) return;
+
+        var itemsBody = editor.find('[data-structured-section-body="items"]').first();
+        if (!itemsBody.length) return;
+
+        var craftList = editor.find('[data-boxes-items-list="craft"]').first();
+        if (!craftList.length) {
+            craftList = editor.find('[data-boxes-items-list]').first();
+            if (!craftList.length) return;
+            craftList.attr('data-boxes-items-list', 'craft');
+        }
+
+        var materialList = editor.find('[data-boxes-items-list="material"]').first();
+        if (!materialList.length) {
+            materialList = $('<div data-boxes-items-list="material"></div>');
+        }
+
+        var genericAdd = itemsBody.find('[data-boxes-item-add]').first();
+        if (genericAdd.length) {
+            genericAdd
+                .attr('data-boxes-item-target', 'craft')
+                .attr('data-boxes-item-default-group', 'craft')
+                .html('<i class="fa fa-plus"></i> 添加印刷工艺');
+        }
+
+        var materialTitleInput = editor.find('[name="row[boxes_secondary_title]"]').first();
+        var materialTitleContainer = materialTitleInput.length ? scalarContainer(materialTitleInput) : $();
+        var titleRow = itemsBody.find('[data-boxes-material-title-row]').first();
+        if (!titleRow.length) {
+            titleRow = $('<div class="row" data-boxes-material-title-row style="margin-top:24px"></div>');
+        }
+        if (materialTitleContainer.length) {
+            materialTitleContainer.detach().appendTo(titleRow);
+        }
+
+        var materialAdd = itemsBody.find('[data-boxes-material-add]').first();
+        if (!materialAdd.length) {
+            materialAdd = $('<button type="button" class="btn btn-success" data-boxes-item-add data-boxes-material-add></button>');
+        }
+        materialAdd
+            .attr('data-boxes-item-target', 'material')
+            .attr('data-boxes-item-default-group', 'material')
+            .html('<i class="fa fa-plus"></i> 添加产品材质');
+
+        var template = itemsBody.find('[data-boxes-item-template]').first();
+        if (genericAdd.length) {
+            titleRow.insertAfter(genericAdd);
+        } else if (template.length) {
+            titleRow.insertBefore(template);
+        } else {
+            itemsBody.append(titleRow);
+        }
+        materialList.insertAfter(titleRow);
+        materialAdd.insertAfter(materialList);
+
+        // Keep the saved items array in frontend order: craft first, material second.
+        var allItems = editor.find('[data-boxes-item]').toArray();
+        $.each(allItems, function (_, node) {
+            var item = $(node);
+            var group = String(item.find('[data-boxes-field="group"]').first().val() || '');
+            if (group === 'material') {
+                materialList.append(item);
+            } else {
+                craftList.append(item);
+            }
+        });
+
+        // Re-index across both visual lists so material items remain #7...#12
+        // and their row[boxes_items][N] names keep the original single-array contract.
+        var prefix = editor.attr('data-input-prefix') || 'row[boxes_items]';
+        var ordered = editor.find('[data-boxes-items-list]').children('[data-boxes-item]');
+        ordered.each(function (index) {
+            var item = $(this);
+            item.find('[data-boxes-field]').each(function () {
+                var input = $(this), field = input.attr('data-boxes-field');
+                if (field) input.attr('name', prefix + '[' + index + '][' + field + ']');
+            });
+            updateItemHeading(item, schema, 'boxes', index);
+            var siblings = item.parent().children('[data-boxes-item]');
+            var localIndex = siblings.index(item);
+            item.find('[data-boxes-item-up]').prop('disabled', localIndex === 0);
+            item.find('[data-boxes-item-down]').prop('disabled', localIndex === siblings.length - 1);
+        });
     };
 
     var applyOneItem = function (item, schema, page) {
@@ -597,6 +690,9 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
             var groupInput = item.find('[data-' + page + '-field="group"]').filter('input,textarea').first();
             ensureGroupSelect(groupInput, schema.groups, function () {
                 applyOneItem(item, schema, page);
+                if (schema.split_craft_material && page === 'boxes') {
+                    arrangeBoxesCraftMaterial(item.closest(PAGE_EDITORS.boxes), schema);
+                }
                 IconPicker.refresh(item.closest(ROOT));
             }, schema);
         }
@@ -703,6 +799,9 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
             if (specificHeading.length) specificHeading.text(schema.specific_section_label || '页面专用配置');
             applyScalars(editor, schema);
             applyItems(editor, schema, page);
+            if (schema.split_craft_material && page === 'boxes') {
+                arrangeBoxesCraftMaterial(editor, schema);
+            }
             reorderSections(editor, schema);
         });
         IconPicker.refresh(form);
