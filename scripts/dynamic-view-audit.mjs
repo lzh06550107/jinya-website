@@ -758,9 +758,34 @@ expect(!productDetailRender.includes("previousNext("), "Product detail render se
 expect(!productDetailRender.includes("$this->banners('product.detail"), "Product detail render must not query an unused Banner");
 expect(!productDetailRender.includes("'previous' =>"), "Product detail ViewModel must not expose previous product data");
 expect(!productDetailRender.includes("'next' =>"), "Product detail ViewModel must not expose next product data");
-for (const token of ["publicCategory", "detailBreadcrumb", "html-home-display", "HTML 首页展示"]) {
-  expect(productDetailRender.includes(token), `Product detail render missing internal-category filter token ${token}`);
-}
+expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render must keep normal category breadcrumbs");
+expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
+expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
+
+const productCategoryAdmin = read("application/admin/controller/cms/ProductCategory.php");
+expect(
+  productCategoryAdmin.includes("where('slug', '<>', 'html-home-display')"),
+  "product category admin must hide the retired homepage technical category before migration",
+);
+const productCategoryRepository = read("application/common/repository/cms/ThinkProductCategoryRepository.php");
+expect(
+  productCategoryRepository.includes("where('slug','<>','html-home-display')") &&
+  productCategoryRepository.includes("if((string)$slug==='html-home-display')return null;"),
+  "frontend product category repository must exclude retired homepage technical category",
+);
+const htmlBaselineSql = read("database/cms_html_baseline.sql");
+expect(
+  !htmlBaselineSql.includes("'HTML 首页展示','首页展示','html-home-display'") &&
+  htmlBaselineSql.includes("SET @home_cat := 0;"),
+  "HTML baseline must stop creating the fake homepage product category",
+);
+const installerProductCategoryCleanup = read("application/common/service/cms/InstallerService.php");
+expect(
+  installerProductCategoryCleanup.includes("retireLegacyHomeProductCategory") &&
+  installerProductCategoryCleanup.includes("SET \`category_id\`=0") &&
+  installerProductCategoryCleanup.includes("DELETE FROM \`{$categoryTable}\`"),
+  "cms:install must detach homepage products and delete the legacy technical category",
+);
 
 const productDetailCss = read("public/assets/jinya/css/style.css");
 for (const token of ["Product detail v40", ".jpd-product-hero", ".jpd-detail-nav", ".jpd-media-preview", ".jpd-related-grid"]) {
