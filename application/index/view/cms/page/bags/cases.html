@@ -3,14 +3,24 @@
     <div class="container" data-tab-scope>
       <div class="section-head"><h2>{$block.title|htmlentities}</h2>{notempty name="block.subtitle"}<p>{$block.subtitle|htmlentities}</p>{/notempty}</div>
       {notempty name="block.extra.tabs_items"}<div class="app-tabs" data-tabs>{volist name="block.extra.tabs_items" id="tab" key="tabIndex"}<button type="button" data-tab="{$tab.value|htmlentities}"{if condition="$tabIndex==1"} class="active"{/if}>{$tab.label|htmlentities}</button>{/volist}{notempty name="block.link_url"}<a href="{$block.link_url|htmlentities}">{$block.link_text|default='查看更多+'|htmlentities}</a>{/notempty}</div>{/notempty}
-      <div class="grid grid-3">
-        {volist name="block.extra.items" id="item"}
-        <article class="case-card" data-tab-groups="{$item.group|default=''|htmlentities}">
-          <div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>
-          <div class="body"><h4>{$item.title|htmlentities}</h4>{notempty name="item.text"}<p>{$item.text|htmlentities}</p>{/notempty}</div>
-          <div class="foot"><span>{$item.subtitle|htmlentities}</span><a href="{if !empty($item.url)}{$item.url|htmlentities}{else /}/page/contact{/if}">MORE+</a></div>
-        </article>
-        {/volist}
+      <div class="case-carousel" data-case-carousel data-desktop-per-view="3" data-tablet-per-view="2" data-mobile-per-view="1">
+        <button class="case-carousel-nav case-carousel-prev" type="button" aria-label="上一组应用案例">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="case-carousel-viewport">
+          <div class="case-carousel-track">
+            {volist name="block.extra.items" id="item"}
+            <article class="case-card" data-tab-groups="{$item.group|default=''|htmlentities}">
+              <div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>
+              <div class="body"><h4>{$item.title|htmlentities}</h4>{notempty name="item.text"}<p>{$item.text|htmlentities}</p>{/notempty}</div>
+              <div class="foot"><span>{$item.subtitle|htmlentities}</span><a href="{if !empty($item.url)}{$item.url|htmlentities}{else /}/page/contact{/if}">MORE+</a></div>
+            </article>
+            {/volist}
+          </div>
+        </div>
+        <button class="case-carousel-nav case-carousel-next" type="button" aria-label="下一组应用案例">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </div>
   </div>
