@@ -283,6 +283,26 @@ expect(
   schema.includes("$schema['page'] === 'boxes'"),
   "boxes admin sections must place 功能项目 before 页面专用配置",
 );
+expect(
+  schema.includes("$schemas[$key]['strict_groups'] = true;") &&
+  schema.includes("$schemas[$key]['default_group'] = 'normal';"),
+  "boxes_value/boxes_details layout direction must use strict real frontend groups",
+);
+const boxesDetailsOrderPos = schema.indexOf("$schemas['boxes_details']['item_order'] = [");
+const boxesDetailsOrderWindow = schema.slice(boxesDetailsOrderPos, boxesDetailsOrderPos + 420);
+expect(
+  boxesDetailsOrderWindow.indexOf("'subtitle','mobile_subtitle'") <
+    boxesDetailsOrderWindow.indexOf("'title','mobile_title'") &&
+  boxesDetailsOrderWindow.indexOf("'title','mobile_title'") <
+    boxesDetailsOrderWindow.indexOf("'text','mobile_text'"),
+  "boxes_details backend fields must follow frontend text order: tag -> title -> description",
+);
+const richSchemaEditor = read("public/assets/js/backend/cms/page_content_block_editor_schema_rich_v6.js");
+expect(
+  richSchemaEditor.includes("var strict = !!(schema && schema.strict_groups);") &&
+  richSchemaEditor.includes("if (!strict && !Object.prototype.hasOwnProperty.call(groups, current))"),
+  "strict group editors must not append the fake 普通/默认 option",
+);
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
 const bagsCompareSchemaWindow = schema.slice(bagsCompareSchemaPos, bagsCompareSchemaPos + 700);
 expect(
