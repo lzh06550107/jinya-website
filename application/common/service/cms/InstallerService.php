@@ -134,6 +134,10 @@ class InstallerService
         // Homepage products are referenced directly by cms_home_section_reference.
         // Retire the historical fake product category used only to satisfy category_id.
         $this->retireLegacyHomeProductCategory($connection, $prefix);
+        // Keep only products that the current frontend explicitly references.
+        // This removes old clone/demo products from Product Management while
+        // preserving homepage/page-block products and their detail pages.
+        $this->deleteUnusedProducts($connection, $prefix);
         // Retire old clone-era article categories that are not part of the current
         // Jinya news information architecture. Keep the articles themselves.
         $this->retireLegacyArticleCategories($connection, $prefix);
@@ -2117,6 +2121,101 @@ class InstallerService
             }
 
             $pdo->exec("DELETE FROM `{$articleTable}` WHERE `status`='hidden'");
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 物理删除当前前台未使用的产品及其附属数据。
+     *
+     * “正在使用”以当前有效的首页引用 / 页面功能块引用为准。当前正式前台
+     * 首页产品中心通过 cms_home_section_reference 引用产品；页面级手工推荐
+     * 则通过 cms_page_block_reference 引用。其它旧克隆、演示或孤立产品不会
+     * 再参与正式前台，安装时直接清除。
+     *
+     * 历史客户咨询不删除；如果它引用了被淘汰产品，只把 product_id 归零。
+     */
+    protected function deleteUnusedProducts($connection, $prefix)
+    {
+        $productTable = $prefix . 'cms_product';
+        if (!$this->tableExists($connection, $productTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $homeReferenceTable = $prefix . 'cms_home_section_reference';
+        $pageReferenceTable = $prefix . 'cms_page_block_reference';
+        $keepIds = [];
+
+        if ($this->tableExists($connection, $homeReferenceTable)) {
+            $statement = $pdo->query(
+                "SELECT DISTINCT `content_id` FROM `{$homeReferenceTable}` " .
+                "WHERE `content_type`='product' AND `status`='normal' AND `deletetime` IS NULL AND `content_id`>0"
+            );
+            if ($statement) {
+                $keepIds = array_merge($keepIds, $statement->fetchAll(\PDO::FETCH_COLUMN));
+            }
+        }
+
+        if ($this->tableExists($connection, $pageReferenceTable)) {
+            $statement = $pdo->query(
+                "SELECT DISTINCT `content_id` FROM `{$pageReferenceTable}` " .
+                "WHERE `content_type`='product' AND `status`='normal' AND `deletetime` IS NULL AND `content_id`>0"
+            );
+            if ($statement) {
+                $keepIds = array_merge($keepIds, $statement->fetchAll(\PDO::FETCH_COLUMN));
+            }
+        }
+
+        $keepIds = array_values(array_unique(array_filter(array_map('intval', $keepIds))));
+        // Fail safe: the HTML baseline always creates homepage product references.
+        // If none exist, do not risk deleting the whole product table.
+        if (!$keepIds) {
+            return;
+        }
+
+        $keepPlaceholders = implode(',', array_fill(0, count($keepIds), '?'));
+        $select = $pdo->prepare("SELECT `id` FROM `{$productTable}` WHERE `id` NOT IN ({$keepPlaceholders})");
+        $select->execute($keepIds);
+        $deleteIds = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+        if (!$deleteIds) {
+            return;
+        }
+
+        $deletePlaceholders = implode(',', array_fill(0, count($deleteIds), '?'));
+        $pdo->beginTransaction();
+        try {
+            // Preserve historical inquiries, but remove references to products being retired.
+            $inquiryTable = $prefix . 'cms_inquiry';
+            if ($this->tableExists($connection, $inquiryTable)) {
+                $statement = $pdo->prepare("UPDATE `{$inquiryTable}` SET `product_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `product_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            foreach (['cms_product_image', 'cms_product_parameter', 'cms_product_section'] as $childName) {
+                $childTable = $prefix . $childName;
+                if (!$this->tableExists($connection, $childTable)) {
+                    continue;
+                }
+                $statement = $pdo->prepare("DELETE FROM `{$childTable}` WHERE `product_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            if ($this->tableExists($connection, $pageReferenceTable)) {
+                $statement = $pdo->prepare("DELETE FROM `{$pageReferenceTable}` WHERE `content_type`='product' AND `content_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+            if ($this->tableExists($connection, $homeReferenceTable)) {
+                $statement = $pdo->prepare("DELETE FROM `{$homeReferenceTable}` WHERE `content_type`='product' AND `content_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            $statement = $pdo->prepare("DELETE FROM `{$productTable}` WHERE `id` IN ({$deletePlaceholders})");
+            $statement->execute($deleteIds);
             $pdo->commit();
         } catch (\Throwable $e) {
             if ($pdo->inTransaction()) {
