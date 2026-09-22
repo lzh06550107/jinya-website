@@ -26,15 +26,22 @@ form[data-page-content-block-schema-editor] .cms-contact-map-row--full .cms-cont
 @media (max-width:767px){form[data-page-content-block-schema-editor] .cms-contact-map-row{display:block;margin-left:-15px;margin-right:-15px}form[data-page-content-block-schema-editor] .cms-contact-map-field .form-group{display:block}form[data-page-content-block-schema-editor] .cms-contact-map-field .control-label{text-align:left}}
 @media (max-width:767px){form[data-page-content-block-schema-editor] .cms-schema-item-layout .control-label{text-align:left;}}
 
-form[data-page-content-block-schema-editor] .cms-label-capability-richbox{border:1px solid #d2d6de;border-radius:2px;background:#fff;overflow:hidden}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar{margin:0;padding:6px 8px;background:#f7f7f7;border-bottom:1px solid #d2d6de;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar .btn{min-width:32px}
+form[data-page-content-block-schema-editor] .cms-label-capability-richbox{width:100%;border:1px solid #d2d6de;border-radius:3px;background:#fff;overflow:hidden}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar{margin:0;padding:7px 10px;background:#f7f7f7;border-bottom:1px solid #d2d6de;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-height:43px}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar .btn-group{display:inline-flex;align-items:center;flex:0 0 auto}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar .btn{min-width:34px;height:30px}
 form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar .btn.active{background:#e6e6e6;box-shadow:inset 0 2px 4px rgba(0,0,0,.12)}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-color-wrap{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 8px;border:1px solid #ccc;border-radius:3px;background:#fff;font-weight:400;cursor:pointer}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-color{width:26px;height:22px;padding:0;border:0;background:transparent;cursor:pointer}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-editor{height:auto;min-height:138px;max-height:320px;overflow-y:auto;white-space:pre-wrap;line-height:1.7;background:#fff;cursor:text;border:0!important;border-radius:0!important;box-shadow:none!important;padding:10px 12px;font-size:14px}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-color-wrap{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:30px;padding:0 9px;border:1px solid #ccc;border-radius:3px;background:#fff;font-weight:400;cursor:pointer;white-space:nowrap;margin:0}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-color-wrap span{white-space:nowrap}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-color{width:28px;height:22px;padding:0;border:0;background:transparent;cursor:pointer;flex:0 0 28px}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-editor{display:block;width:100%;height:auto;min-height:168px;max-height:360px;overflow-y:auto;white-space:pre-wrap;line-height:1.8;background:#fff;cursor:text;border:0!important;border-radius:0!important;box-shadow:none!important;padding:12px 14px;font-size:14px}
 form[data-page-content-block-schema-editor] .cms-label-capability-rich-editor:focus{outline:0;background:#fff}
-form[data-page-content-block-schema-editor] .cms-label-capability-rich-footer{padding:6px 10px;background:#fafafa;border-top:1px solid #eee;color:#888;font-size:12px;line-height:1.5}
+form[data-page-content-block-schema-editor] .cms-label-capability-rich-footer{display:block;clear:both;padding:7px 12px;background:#fafafa;border-top:1px solid #eee;color:#888;font-size:12px;line-height:1.5}
+form[data-page-content-block-schema-editor] [data-schema-item-row="text"]>[class*="col-sm-"],
+form[data-page-content-block-schema-editor] [data-schema-item-row="mobile_text"]>[class*="col-sm-"]{float:left}
+@media (max-width:991px){
+  form[data-page-content-block-schema-editor] .cms-label-capability-rich-toolbar{flex-wrap:wrap}
+}
 </style>
 <form class="form-horizontal" role="form" data-toggle="validator" data-page-content-block-schema-editor method="POST" action="">
 <input type="hidden" name="row[page_id]" value="{:isset($row['page_id'])?$row['page_id']:$parentValue}">
@@ -102,18 +109,7 @@ form[data-page-content-block-schema-editor] .cms-label-capability-rich-footer{pa
   <div class="col-sm-12">
     <label>PC 说明</label>
     <textarea class="form-control" rows="3" data-label-field="text" data-label-capability-rich-source>{$labelItem.text|default=''|htmlentities}</textarea>
-    <div data-label-capability-rich-wrapper style="display:none">
-      <div class="btn-toolbar cms-label-capability-rich-toolbar" role="toolbar">
-        <div class="btn-group btn-group-sm">
-          <span class="btn btn-default disabled">文字颜色</span>
-          <span class="btn btn-default" style="padding:2px 6px"><input type="color" class="cms-label-capability-rich-color" data-label-capability-color value="#e25042" title="选择文字颜色"></span>
-          <button type="button" class="btn btn-default" data-label-capability-apply-color><i class="fa fa-paint-brush"></i> 应用颜色</button>
-          <button type="button" class="btn btn-default" data-label-capability-clear-color><i class="fa fa-eraser"></i> 清除颜色</button>
-        </div>
-      </div>
-      <div class="form-control cms-label-capability-rich-editor" contenteditable="true" spellcheck="false" data-label-capability-rich-editor></div>
-      <p class="help-block cms-label-capability-rich-help">选中 PC 说明中的任意文字，选择颜色后点击“应用颜色”；同一段文字可设置多种颜色。</p>
-    </div>
+    <div data-label-capability-rich-wrapper style="display:none"></div>
   </div>
 </div>
 {else /}
@@ -130,7 +126,7 @@ form[data-page-content-block-schema-editor] .cms-label-capability-rich-footer{pa
 {/if}
 </div>
 <script type="text/template" data-label-item-template><div class="panel panel-default" data-label-item><div class="panel-heading clearfix"><strong class="pull-left" data-label-item-label>项目</strong><div class="btn-group btn-group-xs pull-right" role="group"><button type="button" class="btn btn-default" data-label-item-up><i class="fa fa-arrow-up"></i> 上移</button> <button type="button" class="btn btn-default" data-label-item-down><i class="fa fa-arrow-down"></i> 下移</button> <button type="button" class="btn btn-danger" data-label-item-remove><i class="fa fa-trash"></i> 删除</button></div></div><div class="panel-body"><div class="row"><div class="col-sm-4"><label>标题</label><input class="form-control" data-label-field="title"></div><div class="col-sm-4"><label>副标题/第三列</label><input class="form-control" data-label-field="subtitle"></div><div class="col-sm-2"><label>分组</label><input class="form-control" data-label-field="group"></div><div class="col-sm-2"><label>标记/Icon</label><input class="form-control" data-label-field="badge"></div></div>{if condition="isset($row['block_key']) && $row['block_key'] eq 'label_capability'"}
-<div class="row" style="margin-top:10px" data-label-capability-rich-field><div class="col-sm-12"><label>PC 说明</label><textarea class="form-control" rows="3" data-label-field="text" data-label-capability-rich-source></textarea><div data-label-capability-rich-wrapper style="display:none"><div class="btn-toolbar cms-label-capability-rich-toolbar" role="toolbar"><div class="btn-group btn-group-sm"><span class="btn btn-default disabled">文字颜色</span><span class="btn btn-default" style="padding:2px 6px"><input type="color" class="cms-label-capability-rich-color" data-label-capability-color value="#e25042" title="选择文字颜色"></span><button type="button" class="btn btn-default" data-label-capability-apply-color><i class="fa fa-paint-brush"></i> 应用颜色</button><button type="button" class="btn btn-default" data-label-capability-clear-color><i class="fa fa-eraser"></i> 清除颜色</button></div></div><div class="form-control cms-label-capability-rich-editor" contenteditable="true" spellcheck="false" data-label-capability-rich-editor></div><p class="help-block cms-label-capability-rich-help">选中 PC 说明中的任意文字，选择颜色后点击“应用颜色”；同一段文字可设置多种颜色。</p></div></div></div>
+<div class="row" style="margin-top:10px" data-label-capability-rich-field><div class="col-sm-12"><label>PC 说明</label><textarea class="form-control" rows="3" data-label-field="text" data-label-capability-rich-source></textarea><div data-label-capability-rich-wrapper style="display:none"></div></div></div>
 {else /}
 <div class="row" style="margin-top:10px"><div class="col-sm-12"><label>说明</label><textarea class="form-control" rows="3" data-label-field="text"></textarea></div></div>
 {/if}<div class="row" style="margin-top:10px"><div class="col-sm-4"><label>主图</label><input class="form-control" data-label-field="image" data-media-preview="image" data-media-upload="true"></div><div class="col-sm-4"><label>辅助上图</label><input class="form-control" data-label-field="image_top" data-media-preview="image" data-media-upload="true"></div><div class="col-sm-4"><label>辅助下图</label><input class="form-control" data-label-field="image_bottom" data-media-preview="image" data-media-upload="true"></div></div><div class="row" style="margin-top:10px"><div class="col-sm-6"><label>第五列/值</label><input class="form-control" data-label-field="value" placeholder="例如参数表第五列"></div><div class="col-sm-6"><label>链接</label><input class="form-control" data-label-field="url"></div></div><div class="row" style="margin-top:10px"><div class="col-sm-6"></div><div class="col-sm-3"><input type="hidden" data-label-field="pc_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-label-field="pc_visible" value="1" checked> PC显示</label></div><div class="col-sm-3"><input type="hidden" data-label-field="mobile_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-label-field="mobile_visible" value="1" checked> 移动显示</label></div></div><div class="row" style="margin-top:10px"><div class="col-sm-4"><label>移动标题</label><input class="form-control" data-label-field="mobile_title"></div><div class="col-sm-8"><label>移动说明</label><textarea class="form-control" rows="2" data-label-field="mobile_text"></textarea></div></div><div class="row" style="margin-top:10px"><div class="col-sm-4"><label>移动主图</label><input class="form-control" data-label-field="mobile_image" data-media-preview="image" data-media-upload="true"></div><div class="col-sm-4"><label>移动辅助上图</label><input class="form-control" data-label-field="mobile_image_top" data-media-preview="image" data-media-upload="true"></div><div class="col-sm-4"><label>移动辅助下图</label><input class="form-control" data-label-field="mobile_image_bottom" data-media-preview="image" data-media-upload="true"></div></div><div class="row" style="margin-top:10px"><div class="col-sm-4"><label>移动副标题</label><input class="form-control" data-label-field="mobile_subtitle"></div><div class="col-sm-4"><label>移动标记</label><input class="form-control" data-label-field="mobile_badge"></div><div class="col-sm-4"><label>移动链接</label><input class="form-control" data-label-field="mobile_url"></div></div></div></div></script>

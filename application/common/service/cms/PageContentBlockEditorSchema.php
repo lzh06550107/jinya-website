@@ -379,11 +379,11 @@ class PageContentBlockEditorSchema
         ];
         $schemas['label_capability']['item_pair_rows'] = [
             ['title','mobile_title'],
-            ['text','mobile_text'],
             ['image_top','image_bottom'],
             ['mobile_image_top','mobile_image_bottom'],
         ];
-        $schemas['label_capability']['item_help']['text'] = 'PC 说明使用富文本编辑器；支持加粗、斜体、删除线、局部文字颜色和清除格式。';
+        // PC 说明是整行富文本编辑器，不再和移动说明左右并排，避免工具栏被压缩。
+        $schemas['label_capability']['item_help']['text'] = '';
         $schemas['label_capability']['item_help']['mobile_text'] = '移动端独立说明；留空时继承 PC 说明内容。';
         $schemas['label_capability']['item_help']['image_top'] = 'PC 拼图左上图片；与左下图、右侧大图共同组成三图布局。';
         $schemas['label_capability']['item_help']['image_bottom'] = 'PC 拼图左下图片；与左上图、右侧大图共同组成三图布局。';

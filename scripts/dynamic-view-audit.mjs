@@ -258,8 +258,14 @@ for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
 }
 expect(
-  schema.includes("PC 说明使用富文本编辑器"),
-  "label_capability schema must describe the PC rich-text color editor",
+  schema.includes("$schemas['label_capability']['item_help']['text'] = '';"),
+  "label_capability PC rich editor must not inject duplicate schema help copy into the toolbar area",
+);
+const capabilityPairPos = schema.indexOf("$schemas['label_capability']['item_pair_rows']");
+const capabilityPairWindow = schema.slice(capabilityPairPos, capabilityPairPos + 420);
+expect(
+  !capabilityPairWindow.includes("['text','mobile_text']"),
+  "label_capability PC rich editor and mobile description must render on separate full-width rows",
 );
 const pageContentController = read("application/admin/controller/cms/PageContentBlock.php");
 expect(
@@ -313,7 +319,10 @@ for (const token of [
   "data-label-capability-rich-wrapper",
   "cms-label-capability-richbox",
   "cms-label-capability-rich-toolbar",
-  "cms-label-capability-rich-editor"
+  "cms-label-capability-rich-editor",
+  "flex-wrap:nowrap",
+  "white-space:nowrap",
+  "min-height:168px"
 ]) {
   expect(adminForm.includes(token), `label_capability PC description form missing integrated rich-text token: ${token}`);
 }
