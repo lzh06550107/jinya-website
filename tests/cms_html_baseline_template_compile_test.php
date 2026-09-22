@@ -60,6 +60,25 @@ try {
         }
     }
     echo "BAGS HERO BREAKS OK [pc/mobile]\n";
+    $labelHeroRow = [
+        'block_key' => 'label_hero',
+        'block_type' => 'label_section',
+        'title' => '不干胶/卷筒标签',
+        'subtitle' => '贴合每一刻需求',
+        'content' => "第一行说明\n第二行说明\n第三行说明",
+        'resolved_image' => '',
+        'link_text' => '',
+        'link_url' => '',
+        'extra' => [],
+    ];
+    foreach (['pc', 'mobile'] as $terminal) {
+        $labelMapped = $bagsFactory->map([$labelHeroRow], $terminal);
+        if (!isset($labelMapped['label_hero']['content_inline_html']) ||
+            substr_count($labelMapped['label_hero']['content_inline_html'], '<br>') !== 2) {
+            throw new \RuntimeException('label_hero Banner description line breaks were not preserved for ' . $terminal);
+        }
+    }
+    echo "LABEL HERO BREAKS OK [pc/mobile]\n";
 } catch (\Throwable $e) {
     fwrite(STDERR, "MARKDOWN COLOR FAIL: " . $e->getMessage() . "\n");
     exit(1);

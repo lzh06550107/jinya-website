@@ -39,6 +39,7 @@ class PageContentBlockEditorSchema
             ['title'=>'Banner 标题','subtitle'=>'标题右侧短句','content'=>'Banner 说明','image'=>'PC 背景图','mobile_image'=>'移动背景图'],
             ['title'=>'卖点标题','text'=>'卖点说明','badge'=>'图标类型','mobile_title'=>'移动卖点标题','mobile_text'=>'移动卖点说明','mobile_badge'=>'移动图标类型']
         );
+        $schemas['label_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';
         $schemas['label_quote'] = self::make('label', '不干胶/卷标', '为什么选择金亚', 'label_section',
             ['title'], ['label_consult_text','label_consult_url','label_phone','label_video_url'],
             ['title','text','badge','mobile_title','mobile_text','mobile_badge','pc_visible','mobile_visible'], [],
