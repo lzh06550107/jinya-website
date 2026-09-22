@@ -253,6 +253,29 @@ for (const token of [
   expect(schema.includes(token), `Editor schema missing required html-baseline contract: ${token}`);
 }
 
+const labelsHtmlBaselineSql = read("database/cms_html_baseline.sql");
+const labelsAccentMarkers = labelsHtmlBaselineSql.match(/\[color=#e25042\]/g) || [];
+expect(labelsAccentMarkers.length >= 14, "labels html baseline must store the approved #e25042 rich-text emphasis markers");
+for (const token of [
+  "[color=#e25042]特点：表面光滑细腻",
+  "[color=#e25042]优点：性价比高",
+  "[color=#e25042]特点：自带细腻珠光柔光质感",
+  "[color=#e25042]特点：耐高温",
+  "[color=#e25042]用途：食品、农化、中药、日化等",
+  "[color=#e25042]特点：光感特性能呈现幻彩感"
+]) {
+  expect(labelsHtmlBaselineSql.includes(token), `labels html baseline missing reference text color: ${token}`);
+}
+const installerSourceForLabelColors = read("application/common/service/cms/InstallerService.php");
+for (const token of [
+  "LABEL_REFERENCE_ACCENT_COLOR = '#e25042'",
+  "applyLabelCapabilityReferenceTextColors",
+  "decorateReferenceTextColorLines",
+  "'铜版纸不干胶' => ['特点：', '优点：']",
+  "'亮银/哑银/合成银不干胶' => ['特点：', '优点：', '用途：']"
+]) {
+  expect(installerSourceForLabelColors.includes(token), `label capability color migration missing: ${token}`);
+}
 const markdownRenderer = read("application/common/service/cms/MarkdownRenderer.php");
 for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
