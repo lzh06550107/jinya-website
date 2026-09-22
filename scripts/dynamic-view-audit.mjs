@@ -277,6 +277,12 @@ for (const token of [
   expect(installerSourceForLabelColors.includes(token), `label capability color migration missing: ${token}`);
 }
 const markdownRenderer = read("application/common/service/cms/MarkdownRenderer.php");
+expect(
+  markdownRenderer.includes("renderInlinePreserveLineBreaks") &&
+  markdownRenderer.includes("$preserveEveryLineBreak") &&
+  markdownRenderer.includes("str_replace(\"\\n\", '<br>'"),
+  "Markdown renderer must expose a dedicated editor-inline mode that preserves every visual line break",
+);
 for (const token of ["[color=", "data-cms-text-color", "restoreTextColors"]) {
   expect(markdownRenderer.includes(token), `Markdown renderer missing partial text color support: ${token}`);
 }
@@ -371,6 +377,12 @@ for (const token of [
 const mobileLabelCapabilityView = read("application/mobile/view/cms/page/label/capability.html");
 expect(mobileLabelCapabilityView.includes("item.text_inline_html"), "mobile label capability template must render normalized rich description HTML");
 const factory = read("application/common/service/cms/render/PageBlockViewModelFactory.php");
+expect(
+  factory.includes("renderExtraMarkdown($extra, $terminal, $blockKey)") &&
+  factory.includes("$blockKey === 'label_capability' && $field === 'text'") &&
+  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks"),
+  "label_capability rich text must preserve editor-authored line breaks without changing other inline Markdown fields",
+);
 expect(
   factory.includes("foreach (['title','text','image','image_top','image_bottom','subtitle','badge','url'] as $field)") &&
   factory.includes("$entry[$field] = $entry[$mobileField]"),

@@ -16,7 +16,7 @@ class PageBlockViewModelFactory
             if ($type === 'label_section' || $type === 'bags_section' || $type === 'boxes_section' || $type === 'about_section' || $type === 'contact_section') {
                 $extra = $this->normalizeLabelExtra($extra, $terminal, $blockKey);
             }
-            $extra = $this->renderExtraMarkdown($extra, $terminal);
+            $extra = $this->renderExtraMarkdown($extra, $terminal, $blockKey);
             $content = isset($row['content']) ? $row['content'] : '';
             if ($terminal === 'mobile' && isset($extra['mobile_content']) && trim((string)$extra['mobile_content']) !== '') $content = $extra['mobile_content'];
             $linkText = isset($row['link_text']) ? trim((string)$row['link_text']) : '';
@@ -154,7 +154,7 @@ class PageBlockViewModelFactory
         return $extra;
     }
 
-    private function renderExtraMarkdown(array $extra, $terminal)
+    private function renderExtraMarkdown(array $extra, $terminal, $blockKey = '')
     {
         foreach (['print_points'] as $scalarMarkdownKey) {
             if (isset($extra[$scalarMarkdownKey]) && trim((string)$extra[$scalarMarkdownKey]) !== '') {
@@ -176,7 +176,9 @@ class PageBlockViewModelFactory
                 foreach (['value','text','description','content'] as $field) {
                     if (!isset($entry[$field]) || trim((string)$entry[$field]) === '') continue;
                     $entry[$field . '_html'] = MarkdownRenderer::render($entry[$field]);
-                    $entry[$field . '_inline_html'] = MarkdownRenderer::renderInline($entry[$field]);
+                    $entry[$field . '_inline_html'] = ($blockKey === 'label_capability' && $field === 'text')
+                        ? MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])
+                        : MarkdownRenderer::renderInline($entry[$field]);
                 }
                 $extra['items'][$index] = $entry;
             }

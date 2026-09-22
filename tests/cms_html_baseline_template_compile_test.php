@@ -29,7 +29,17 @@ try {
     if (strpos($invalidColor, 'style=') !== false) {
         throw new \RuntimeException('invalid partial text color produced an inline style');
     }
-    echo "MARKDOWN COLOR OK [label capability partial text]\n";
+    $richBreaks = \app\common\service\cms\MarkdownRenderer::renderInlinePreserveLineBreaks(
+        "特点：第一行\n优点：第二行\n用途：第三行"
+    );
+    if (substr_count($richBreaks, '<br>') !== 2) {
+        throw new \RuntimeException('editor line breaks were not preserved as <br>');
+    }
+    $normalInline = \app\common\service\cms\MarkdownRenderer::renderInline("第一行\n第二行");
+    if (strpos($normalInline, '<br>') !== false) {
+        throw new \RuntimeException('normal Markdown inline rendering unexpectedly changed soft line breaks');
+    }
+    echo "MARKDOWN COLOR/BREAKS OK [label capability rich text]\n";
 } catch (\Throwable $e) {
     fwrite(STDERR, "MARKDOWN COLOR FAIL: " . $e->getMessage() . "\n");
     exit(1);

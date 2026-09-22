@@ -170,6 +170,19 @@ class MarkdownRenderer
         return self::restoreTextColors(HtmlSanitizer::clean(self::inline($markdown, true)));
     }
 
+    /**
+     * Render editor-authored inline rich text while preserving every visual line break.
+     * Used by fields backed by a WYSIWYG/contenteditable editor rather than Markdown soft-wrap semantics.
+     */
+    public static function renderInlinePreserveLineBreaks($markdown)
+    {
+        $markdown = str_replace(["\r\n", "\r"], "\n", (string)$markdown);
+        if (trim($markdown) === '') {
+            return '';
+        }
+        return self::restoreTextColors(HtmlSanitizer::clean(self::inline($markdown, true, true)));
+    }
+
     public static function plainText($markdown)
     {
         $html = self::render($markdown);
@@ -184,7 +197,7 @@ class MarkdownRenderer
         return trim($text);
     }
 
-    private static function inline($text, $preserveLineBreaks)
+    private static function inline($text, $preserveLineBreaks, $preserveEveryLineBreak = false)
     {
         $text = htmlspecialchars((string)$text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
@@ -223,8 +236,12 @@ class MarkdownRenderer
         $text = preg_replace('/~~([^~\n]+)~~/u', '<s>$1</s>', $text);
 
         if ($preserveLineBreaks) {
-            $text = preg_replace('/ {2,}\n/u', '<br>', $text);
-            $text = str_replace("\n", ' ', $text);
+            if ($preserveEveryLineBreak) {
+                $text = str_replace("\n", '<br>', $text);
+            } else {
+                $text = preg_replace('/ {2,}\n/u', '<br>', $text);
+                $text = str_replace("\n", ' ', $text);
+            }
         }
         return $text;
     }
