@@ -230,8 +230,9 @@ expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge
 for (const token of ["boxes_badge_logo", "boxes_mobile_badge_logo", "'badge_logo'", "'mobile_badge_logo'"]) {
   expect(boxesCodec.includes(token), `Boxes codec missing promise logo field: ${token}`);
 }
-const boxesPromiseSchemaPos = schema.indexOf("$schemas['boxes_promise']");
-const boxesPromiseSchemaWindow = schema.slice(boxesPromiseSchemaPos, boxesPromiseSchemaPos + 1200);
+const boxesPromiseSchemaSource = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+const boxesPromiseSchemaPos = boxesPromiseSchemaSource.indexOf("$schemas['boxes_promise']");
+const boxesPromiseSchemaWindow = boxesPromiseSchemaSource.slice(boxesPromiseSchemaPos, boxesPromiseSchemaPos + 1200);
 for (const token of ["boxes_badge_logo", "boxes_mobile_badge_logo", "面板 Logo", "移动端 Logo"]) {
   expect(boxesPromiseSchemaWindow.includes(token), `boxes_promise backend missing logo contract: ${token}`);
 }
