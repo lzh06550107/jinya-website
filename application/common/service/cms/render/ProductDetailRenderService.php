@@ -42,13 +42,12 @@ class ProductDetailRenderService extends AbstractRenderService
 
         $common = $this->common('product.detail', $context, $row, $row['title'], '/product/' . rawurlencode($slug));
         $category = $this->findCategory($this->categories->publishedTree(), (int)$row['category_id']);
-        $displayCategory = $this->publicCategory($category);
         $product = $this->cards->product($row, $context);
         $product = array_merge($product, [
             'product_code' => isset($row['product_code']) ? $row['product_code'] : '',
             'tags' => isset($row['tags']) ? $row['tags'] : '',
             'content_html' => MarkdownRenderer::render(isset($row['content']) ? $row['content'] : ''),
-            'category' => $displayCategory,
+            'category' => $category,
             'views' => (int)(isset($row['views']) ? $row['views'] : 0),
         ]);
 
@@ -140,7 +139,7 @@ class ProductDetailRenderService extends AbstractRenderService
             $common['seo'],
             $common['layout'],
             [],
-            $this->detailBreadcrumb($displayCategory, $row),
+            $this->detailBreadcrumb($category, $row),
             $common['page_config'],
             $content
         );
@@ -254,20 +253,6 @@ class ProductDetailRenderService extends AbstractRenderService
         }
         unset($group);
         return $groups;
-    }
-
-    /**
-     * 首页静态基线导入使用 html-home-display 作为内部归档分类。
-     * 它只用于后台组织首页产品，不属于公开的信息架构。
-     */
-    private function publicCategory(array $category)
-    {
-        $slug = isset($category['slug']) ? trim((string)$category['slug']) : '';
-        $name = isset($category['name']) ? trim((string)$category['name']) : '';
-        if ($slug === 'html-home-display' || $name === 'HTML 首页展示') {
-            return [];
-        }
-        return $category;
     }
 
     private function detailBreadcrumb(array $category, array $row)
