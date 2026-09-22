@@ -49,7 +49,10 @@ abstract class CmsBase extends Frontend
         $this->view->assign('layout', $this->renderLayout);
         $this->view->assign('cmsNavigation', $navigation);
         $this->view->assign('cmsSite', isset($this->renderLayout['site']) ? $this->renderLayout['site'] : []);
-        $this->view->assign('cmsInquiryToken', $this->request->token());
+        // CSRF token is generated only while rendering a form page. Generating a
+        // new token during POST initialization would invalidate the token that the
+        // browser is currently submitting before Inquiry::submit() can verify it.
+        $this->view->assign('cmsInquiryToken', $this->request->isPost() ? '' : $this->request->token());
         $this->view->assign('mobileBase', $this->mobileBase);
         $this->view->assign('mobileHomeUrl', $this->mobileBase ? '/mobile' : '/');
         $this->view->assign('desktopUrl', $this->buildModeUrl($this->desktopPath, 'desktop'));
