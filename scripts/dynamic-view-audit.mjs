@@ -246,6 +246,20 @@ expect(
   read("application/mobile/view/cms/page/boxes/promise.html").includes("block.extra.mobile_badge_logo"),
   "mobile boxes promise must consume mobile logo override",
 );
+const boxesPromiseLogoPath = "public/assets/jinya/img/boxes-promise-logo.svg";
+expect(fs.existsSync(path.join(root, boxesPromiseLogoPath)), "boxes promise current frontend logo asset must exist");
+expect(
+  read("application/admin/view/cms/page_content_block/_form.html").includes("/assets/jinya/img/boxes-promise-logo.svg"),
+  "boxes_promise admin Logo field must echo the current frontend logo by default",
+);
+expect(
+  read("database/cms_html_baseline.sql").includes('\"badge_logo\":\"/assets/jinya/img/boxes-promise-logo.svg\"'),
+  "boxes_promise baseline must persist the current frontend logo path",
+);
+expect(
+  read("application/common/service/cms/InstallerService.php").includes("ensureBoxesPromiseLogoDefault"),
+  "cms:install must backfill the current boxes promise logo without overwriting custom uploads",
+);
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
 const bagsCompareSchemaPos = schema.indexOf("$schemas['bags_compare'] = self::make");
