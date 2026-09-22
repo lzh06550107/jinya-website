@@ -317,6 +317,16 @@ expect(
   !bagsCompareBaselineWindow.includes("/assets/jinya/img/bags-tech-compare-bg-v2.jpg"),
   "bags_compare baseline must install the approved uploaded complete artwork, not the old CSS background",
 );
+const bagsCompareArtworkPath = path.join(root, "public/assets/jinya/img/bags-compare-full-v2.webp");
+expect(fs.existsSync(bagsCompareArtworkPath), "bags_compare approved full artwork file must exist");
+if (fs.existsSync(bagsCompareArtworkPath)) {
+  const bagsCompareArtwork = fs.readFileSync(bagsCompareArtworkPath);
+  const isWebp =
+    bagsCompareArtwork.length >= 12 &&
+    bagsCompareArtwork.toString("ascii", 0, 4) === "RIFF" &&
+    bagsCompareArtwork.toString("ascii", 8, 12) === "WEBP";
+  expect(isWebp, "bags_compare approved full artwork must be a valid RIFF/WEBP file, not only a .webp filename");
+}
 const labelsHtmlBaselineSql = read("database/cms_html_baseline.sql");
 const labelsAccentMarkers = labelsHtmlBaselineSql.match(/\[color=#e25042\]/g) || [];
 expect(labelsAccentMarkers.length >= 14, "labels html baseline must store the approved #e25042 rich-text emphasis markers");
