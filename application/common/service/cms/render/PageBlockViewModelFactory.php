@@ -28,7 +28,7 @@ class PageBlockViewModelFactory
                     $linkUrl = '/mobile/products?category=no-plate-packaging';
                 }
             }
-            $contentInlineHtml = in_array($blockKey, ['label_hero', 'bags_hero'], true)
+            $contentInlineHtml = in_array($blockKey, ['label_hero', 'bags_hero', 'boxes_hero'], true)
                 ? MarkdownRenderer::renderInlinePreserveLineBreaks($content)
                 : MarkdownRenderer::renderInline($content);
             $item = [
