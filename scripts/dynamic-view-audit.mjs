@@ -808,6 +808,21 @@ for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", 
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
 }
 
+const installerHiddenArticleCleanup = read("application/common/service/cms/InstallerService.php");
+expect(
+  installerHiddenArticleCleanup.includes("deleteHiddenArticles") &&
+  installerHiddenArticleCleanup.includes("DELETE FROM \`{$articleTable}\` WHERE \`status\`='hidden'") &&
+  installerHiddenArticleCleanup.includes("cms_page_block_reference") &&
+  installerHiddenArticleCleanup.includes("cms_home_section_reference"),
+  "cms:install must physically delete hidden articles and stale references",
+);
+const publishStateMachine = read("application/common/service/cms/PublishStateMachine.php");
+expect(
+  !publishStateMachine.includes("const HIDDEN") &&
+  !publishStateMachine.includes("'hidden' =>"),
+  "hidden must remain outside the valid article publishing states",
+);
+
 const articleCategoryAdmin = read("application/admin/controller/cms/ArticleCategory.php");
 for (const name of ["常见问答", "科创美新闻", "新闻动态"]) {
   expect(
