@@ -43,6 +43,16 @@ class InquiryService
         $data['mobile'] = $mobile;
         $data['company'] = $company;
         $data['content'] = $content;
+        // System metadata must respect cms_inquiry column lengths as well.
+        // Otherwise a long title / Referer / UTM value can make an otherwise
+        // valid customer form fail under MySQL strict mode.
+        $data['source_url'] = $this->clip(isset($data['source_url']) ? $data['source_url'] : '', 500);
+        $data['source_title'] = $this->clip(isset($data['source_title']) ? $data['source_title'] : '', 255);
+        $data['utm_source'] = $this->clip(isset($data['utm_source']) ? $data['utm_source'] : '', 100);
+        $data['utm_medium'] = $this->clip(isset($data['utm_medium']) ? $data['utm_medium'] : '', 100);
+        $data['utm_campaign'] = $this->clip(isset($data['utm_campaign']) ? $data['utm_campaign'] : '', 100);
+        $data['ip'] = $this->clip(isset($data['ip']) ? $data['ip'] : '', 50);
+        $data['user_agent'] = $this->clip(isset($data['user_agent']) ? $data['user_agent'] : '', 500);
         $data['status'] = 'new';
         $inquiry->allowField(true)->save($data);
         Cache::set($rateKey, 1, 5);
@@ -52,6 +62,15 @@ class InquiryService
     protected function fieldLength($value)
     {
         return function_exists('mb_strlen') ? mb_strlen((string)$value, 'UTF-8') : strlen((string)$value);
+    }
+
+    protected function clip($value, $maxLength)
+    {
+        $value = trim((string)$value);
+        if (function_exists('mb_substr')) {
+            return mb_substr($value, 0, (int)$maxLength, 'UTF-8');
+        }
+        return substr($value, 0, (int)$maxLength);
     }
 
     public function assign($id, $adminId, $operatorId)
