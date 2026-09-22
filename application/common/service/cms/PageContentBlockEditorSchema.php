@@ -382,6 +382,10 @@ class PageContentBlockEditorSchema
             'image','mobile_image',
             'pc_visible','mobile_visible',
         ];
+        $schemas['boxes_craft_material']['split_craft_material'] = true;
+        $schemas['boxes_craft_material']['global_item_numbering'] = true;
+        $schemas['boxes_craft_material']['strict_groups'] = true;
+        $schemas['boxes_craft_material']['default_group'] = 'craft';
         $schemas['boxes_team']['item_order'] = [
             'title','mobile_title',
             'image','mobile_image',
