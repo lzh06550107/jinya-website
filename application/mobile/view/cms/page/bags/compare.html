@@ -12,7 +12,7 @@
       <div class="tech-option">
         <div class="ic">{include file="cms/page/bags/icon" /}</div>
         <h3>{$item.title|htmlentities}</h3>
-        {notempty name="item.text_html"}<div class="tech-option-list">{$item.text_html}</div>{/notempty}
+        {notempty name="item.text_inline_html"}<div class="tech-option-list">{$item.text_inline_html}</div>{/notempty}
       </div>
       {/volist}
     </div>

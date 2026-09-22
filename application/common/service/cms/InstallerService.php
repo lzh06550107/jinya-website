@@ -129,6 +129,9 @@ class InstallerService
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
         // Apply the approved labels reference accent to editable rich-text copy.
         $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
+        // Persist the comparison reference background into empty CMS media fields
+        // so backend preview/editing and frontend rendering share one source of truth.
+        $this->ensureBagsCompareBackgroundDefaults($connection, $prefix);
         $this->ensureHomeAboutSocialIconDefaults($connection, $prefix);
 
         $missing = $this->missingTables($connection, $prefix);
@@ -1855,6 +1858,30 @@ class InstallerService
         );
         if ($statement) {
             $statement->execute($keys);
+        }
+    }
+
+    /**
+     * 将“专版和无版印刷怎么选”的 CSS 默认背景迁回 CMS 数据。
+     * 仅补齐空的 image/mobile_image，不覆盖后台已有自定义图片。
+     */
+    protected function ensureBagsCompareBackgroundDefaults($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $default = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
+        $sql = "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`image`=IF(TRIM(COALESCE(b.`image`,''))='',?,b.`image`), " .
+            "b.`mobile_image`=IF(TRIM(COALESCE(b.`mobile_image`,''))='',?,b.`mobile_image`) " .
+            "WHERE p.`slug`='bags' AND b.`block_key`='bags_compare' " .
+            "AND (TRIM(COALESCE(b.`image`,''))='' OR TRIM(COALESCE(b.`mobile_image`,''))='')";
+        $statement = $this->getPdo($connection)->prepare($sql);
+        if ($statement) {
+            $statement->execute([$default, $default]);
         }
     }
 

@@ -229,6 +229,12 @@ const boxesCodec = read("application/common/service/cms/BoxesPageBlockConfigCode
 expect(boxesCodec.includes("boxes_badge_text"), "Boxes codec missing boxes_badge_text");
 
 const schema = read("application/common/service/cms/PageContentBlockEditorSchema.php");
+for (const token of [
+  "$schemas['bags_compare']['base_help']['image'] = 'PC 背景图；默认回显当前参考背景，可直接上传替换。';",
+  "$schemas['bags_compare']['item_help']['text'] = 'PC 方案要点；支持换行，后台每次换行都会在前端原样显示。';"
+]) {
+  expect(schema.includes(token), `bags_compare backend contract missing: ${token}`);
+}
 expect(
   schema.includes("$schemas['bags_hero']['base_help']['content'] = '支持 Markdown 和换行；后台每次换行都会在 PC/移动 Banner 前端原样显示。';"),
   "bags_hero backend must explain that Banner description line breaks are preserved",
@@ -297,6 +303,12 @@ for (const token of [
   expect(schema.includes(token), `Editor schema missing required html-baseline contract: ${token}`);
 }
 
+const htmlBaselineSqlForBagsCompare = read("database/cms_html_baseline.sql");
+expect(
+  htmlBaselineSqlForBagsCompare.includes("'bags_compare','bags_section','专版和无版印刷怎么选'") &&
+  htmlBaselineSqlForBagsCompare.includes("/assets/jinya/img/bags-tech-compare-bg-v2.jpg"),
+  "bags_compare baseline must persist the reference background image for backend preview/editing",
+);
 const labelsHtmlBaselineSql = read("database/cms_html_baseline.sql");
 const labelsAccentMarkers = labelsHtmlBaselineSql.match(/\[color=#e25042\]/g) || [];
 expect(labelsAccentMarkers.length >= 14, "labels html baseline must store the approved #e25042 rich-text emphasis markers");
@@ -309,6 +321,10 @@ for (const token of [
   "[color=#e25042]特点：光感特性能呈现幻彩感"
 ]) {
   expect(labelsHtmlBaselineSql.includes(token), `labels html baseline missing reference text color: ${token}`);
+}
+const installerSourceForBagsCompare = read("application/common/service/cms/InstallerService.php");
+for (const token of ["ensureBagsCompareBackgroundDefaults", "bags-tech-compare-bg-v2.jpg", "bags_compare"]) {
+  expect(installerSourceForBagsCompare.includes(token), `bags_compare background migration missing: ${token}`);
 }
 const installerSourceForLabelColors = read("application/common/service/cms/InstallerService.php");
 for (const token of [
@@ -491,10 +507,10 @@ expect(
   "label_hero and bags_hero Banner descriptions must preserve every backend-authored newline on the frontend",
 );
 expect(
-  factory.includes("renderExtraMarkdown($extra, $terminal, $blockKey)") &&
-  factory.includes("$blockKey === 'label_capability' && $field === 'text'") &&
-  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks"),
-  "label_capability rich text must preserve editor-authored line breaks without changing other inline Markdown fields",
+  factory.includes("in_array($blockKey, ['label_capability', 'bags_compare'], true)") &&
+  factory.includes("$preserveItemBreaks") &&
+  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])"),
+  "label_capability and bags_compare item text must preserve editor-authored line breaks",
 );
 expect(
   factory.includes("foreach (['title','text','image','image_top','image_bottom','subtitle','badge','url'] as $field)") &&
@@ -637,7 +653,7 @@ for (const file of [
 
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
-  "application/index/view/cms/page/bags/compare.html": ["block.extra.compare_brand", "block.extra.compare_footer", "tech-compare"],
+  "application/index/view/cms/page/bags/compare.html": ["block.extra.compare_brand", "block.extra.compare_footer", "tech-compare", "item.text_inline_html"],
   "application/index/view/cms/page/bags/process.html": ["bags-process-flow", "item.group eq 'photo'"],
   "application/index/view/cms/page/bags/cta.html": ["bags-benefits-section", "block.extra.items"],
   "application/index/view/cms/page/boxes/hero.html": ["block.link_text", "hero-cta--singleline"],
