@@ -179,9 +179,7 @@ class PageBlockViewModelFactory
                 foreach (['value','text','description','content'] as $field) {
                     if (!isset($entry[$field]) || trim((string)$entry[$field]) === '') continue;
                     $entry[$field . '_html'] = MarkdownRenderer::render($entry[$field]);
-                    $preserveItemBreaks = $field === 'text'
-                        && in_array($blockKey, ['label_capability', 'bags_compare'], true);
-                    $entry[$field . '_inline_html'] = $preserveItemBreaks
+                    $entry[$field . '_inline_html'] = ($blockKey === 'label_capability' && $field === 'text')
                         ? MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])
                         : MarkdownRenderer::renderInline($entry[$field]);
                 }

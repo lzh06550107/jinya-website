@@ -1,27 +1,7 @@
+{notempty name="block.image"}
 <section class="section section--tight"><div class="container">
-  {notempty name="block.image"}
   <div class="bags-compare-full-image">
     <img src="{$block.image|htmlentities}" alt="专版和无版印刷怎么选" loading="lazy" style="display:block;width:100%;height:auto;border-radius:var(--radius-lg);">
   </div>
-  {else /}
-  <div class="tech-compare tech-compare--image" data-bags-compare-legacy-fallback>
-    <div class="tech-bg" aria-hidden="true"></div>
-    <div class="tech-copy">
-      {notempty name="block.extra.compare_brand"}<p class="tech-brand">{$block.extra.compare_brand|htmlentities}</p>{/notempty}
-      <h2>{$block.title|htmlentities}</h2>
-      {notempty name="block.subtitle"}<p class="tech-sub">{$block.subtitle|htmlentities}</p>{/notempty}
-      {notempty name="block.content_inline_html"}<div class="tech-note">{$block.content_inline_html}</div>{/notempty}
-    </div>
-    <div class="tech-panel">
-      {volist name="block.extra.items" id="item"}
-      <div class="tech-option">
-        <div class="ic">{include file="cms/page/bags/icon" /}</div>
-        <h3>{$item.title|htmlentities}</h3>
-        {notempty name="item.text_inline_html"}<div class="tech-option-list">{$item.text_inline_html}</div>{/notempty}
-      </div>
-      {/volist}
-    </div>
-    {notempty name="block.extra.compare_footer"}<p class="tech-footer">{$block.extra.compare_footer|htmlentities}</p>{/notempty}
-  </div>
-  {/notempty}
 </div></section>
+{/notempty}

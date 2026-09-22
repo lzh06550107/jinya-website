@@ -79,33 +79,6 @@ try {
         }
     }
     echo "LABEL HERO BREAKS OK [pc/mobile]\n";
-    $bagsCompareRow = [
-        'block_key' => 'bags_compare',
-        'block_type' => 'bags_section',
-        'title' => '专版和无版印刷怎么选',
-        'subtitle' => '',
-        'content' => '',
-        'resolved_image' => '/assets/jinya/img/bags-tech-compare-bg-v2.jpg',
-        'link_text' => '',
-        'link_url' => '',
-        'extra' => [
-            'items' => [[
-                'title' => '专版印刷',
-                'text' => "起订量高\n价格低\n有版费\n工期长",
-                'group' => 'plate',
-                'pc_visible' => 1,
-                'mobile_visible' => 1,
-            ]],
-        ],
-    ];
-    foreach (['pc', 'mobile'] as $terminal) {
-        $compareMapped = $bagsFactory->map([$bagsCompareRow], $terminal);
-        $compareText = $compareMapped['bags_compare']['extra']['items'][0]['text_inline_html'] ?? '';
-        if (substr_count($compareText, '<br>') !== 3) {
-            throw new \RuntimeException('bags_compare plan points did not preserve line breaks for ' . $terminal);
-        }
-    }
-    echo "BAGS COMPARE BREAKS OK [pc/mobile]\n";
 } catch (\Throwable $e) {
     fwrite(STDERR, "MARKDOWN COLOR FAIL: " . $e->getMessage() . "\n");
     exit(1);

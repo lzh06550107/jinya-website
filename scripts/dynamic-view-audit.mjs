@@ -507,9 +507,18 @@ for (const view of [labelHeroPcLineBreakView, labelHeroMobileLineBreakView]) {
 const bagsComparePcImageView = read("application/index/view/cms/page/bags/compare.html");
 const bagsCompareMobileImageView = read("application/mobile/view/cms/page/bags/compare.html");
 for (const view of [bagsComparePcImageView, bagsCompareMobileImageView]) {
-  expect(view.includes('{notempty name="block.image"}'), "bags_compare must prefer an uploaded complete image");
+  expect(view.includes('{notempty name="block.image"}'), "bags_compare must render only when a complete image is configured");
   expect(view.includes('bags-compare-full-image'), "bags_compare complete-image wrapper missing");
-  expect(view.includes('data-bags-compare-legacy-fallback'), "bags_compare must preserve a no-image legacy fallback during migration");
+  for (const retiredToken of [
+    'data-bags-compare-legacy-fallback',
+    'tech-compare',
+    'block.extra.compare_brand',
+    'block.extra.compare_footer',
+    'item.text_inline_html',
+    'cms/page/bags/icon'
+  ]) {
+    expect(!view.includes(retiredToken), `bags_compare image-only template must not render legacy token: ${retiredToken}`);
+  }
 }
 const mobileLabelCapabilityView = read("application/mobile/view/cms/page/label/capability.html");
 expect(mobileLabelCapabilityView.includes("item.text_inline_html"), "mobile label capability template must render normalized rich description HTML");
@@ -521,10 +530,10 @@ expect(
   "label_hero and bags_hero Banner descriptions must preserve every backend-authored newline on the frontend",
 );
 expect(
-  factory.includes("in_array($blockKey, ['label_capability', 'bags_compare'], true)") &&
-  factory.includes("$preserveItemBreaks") &&
-  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])"),
-  "label_capability and bags_compare item text must preserve editor-authored line breaks",
+  factory.includes("$blockKey === 'label_capability' && $field === 'text'") &&
+  factory.includes("MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])") &&
+  !factory.includes("['label_capability', 'bags_compare']"),
+  "only label_capability item text should use preserved inline line breaks; bags_compare is image-only",
 );
 expect(
   factory.includes("foreach (['title','text','image','image_top','image_bottom','subtitle','badge','url'] as $field)") &&
@@ -667,7 +676,7 @@ for (const file of [
 
 const representativeViews = {
   "application/index/view/cms/page/label/materials.html": ["block.extra.print_title", "block.extra.print_points_html", "print-image"],
-  "application/index/view/cms/page/bags/compare.html": ["bags-compare-full-image", "block.image", "data-bags-compare-legacy-fallback"],
+  "application/index/view/cms/page/bags/compare.html": ["bags-compare-full-image", "block.image"],
   "application/index/view/cms/page/bags/process.html": ["bags-process-flow", "item.group eq 'photo'"],
   "application/index/view/cms/page/bags/cta.html": ["bags-benefits-section", "block.extra.items"],
   "application/index/view/cms/page/boxes/hero.html": ["block.link_text", "hero-cta--singleline"],
