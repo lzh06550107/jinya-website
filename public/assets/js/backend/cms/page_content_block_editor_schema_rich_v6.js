@@ -262,10 +262,21 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         });
     };
 
-    var ensureGroupSelect = function (input, groups, applyItem) {
+    var ensureGroupSelect = function (input, groups, applyItem, schema) {
         input = $(input);
         if (!input.length || !groups || $.isEmptyObject(groups)) return;
         var current = String(input.val() == null ? '' : input.val());
+        var strict = !!(schema && schema.strict_groups);
+        if (strict && !Object.prototype.hasOwnProperty.call(groups, current)) {
+            var fallback = String((schema && schema.default_group) || '');
+            if (!Object.prototype.hasOwnProperty.call(groups, fallback)) {
+                var keys = Object.keys(groups);
+                fallback = keys.length ? String(keys[0]) : '';
+            }
+            current = fallback;
+            input.val(current);
+        }
+
         var select = input.siblings('select[data-schema-group-select]').first();
         if (!select.length) {
             select = $('<select class="form-control" data-schema-group-select></select>');
@@ -280,7 +291,7 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
         $.each(groups, function (value, text) {
             select.append($('<option></option>').attr('value', value).text(text));
         });
-        if (!Object.prototype.hasOwnProperty.call(groups, current)) {
+        if (!strict && !Object.prototype.hasOwnProperty.call(groups, current)) {
             select.append($('<option></option>').attr('value', current).text(current || '普通/默认'));
         }
         select.val(current);
@@ -587,7 +598,7 @@ define(['jquery','backend/cms/icon_picker'], function ($, IconPicker) {
             ensureGroupSelect(groupInput, schema.groups, function () {
                 applyOneItem(item, schema, page);
                 IconPicker.refresh(item.closest(ROOT));
-            });
+            }, schema);
         }
         reflowItem(item, schema, page);
         updateItemHeading(item, schema, page, item.index());
