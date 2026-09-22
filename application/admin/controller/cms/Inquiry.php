@@ -45,7 +45,7 @@ class Inquiry extends Backend
 
     public function detail($ids = null)
     {
-        $row = $this->findAccessible($ids, ['followups.admin', 'assignedAdmin']);
+        $row = $this->findAccessible($ids, ['assignedAdmin']);
         if (!$this->auth->check('cms/inquiry/view_mobile')) {
             $row['mobile'] = $row['mobile_masked'];
         }
