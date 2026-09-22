@@ -294,6 +294,8 @@ for (const token of ["data-inline-rich-wrapper", "data-inline-rich-editor", "con
 expect(!pageContentSchemaJs.includes("data-inline-color-toolbar"), "Legacy textarea color toolbar must be retired");
 
 const adminForm = read("application/admin/view/cms/page_content_block/_form.html");
+expect(adminForm.includes("data-label-capability-rich-v2-marker"), "label_capability form must expose a server-rendered Rich V2 marker for runtime diagnosis");
+expect(adminForm.includes("局部颜色编辑器 Rich V2 已加载"), "Rich V2 runtime marker text missing");
 for (const token of [
   'name="row[label_print_title]"',
   'name="row[label_print_points]"',
