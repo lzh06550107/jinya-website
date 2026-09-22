@@ -798,6 +798,19 @@ expect(
   htmlBaselineSql.includes("SET @home_cat := 0;"),
   "HTML baseline must stop creating the fake homepage product category",
 );
+const installerUnusedProductCleanup = read("application/common/service/cms/InstallerService.php");
+expect(
+  installerUnusedProductCleanup.includes("deleteUnusedProducts") &&
+  installerUnusedProductCleanup.includes("cms_home_section_reference") &&
+  installerUnusedProductCleanup.includes("cms_page_block_reference") &&
+  installerUnusedProductCleanup.includes("cms_product_image") &&
+  installerUnusedProductCleanup.includes("cms_product_parameter") &&
+  installerUnusedProductCleanup.includes("cms_product_section") &&
+  installerUnusedProductCleanup.includes("SET \`product_id\`=0") &&
+  installerUnusedProductCleanup.includes("DELETE FROM \`{$productTable}\` WHERE \`id\` IN"),
+  "cms:install must physically remove products unused by the current frontend",
+);
+
 const installerProductCategoryCleanup = read("application/common/service/cms/InstallerService.php");
 expect(
   installerProductCategoryCleanup.includes("retireLegacyHomeProductCategory") &&
