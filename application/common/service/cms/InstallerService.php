@@ -15,6 +15,7 @@ use app\common\service\cms\render\CmsCacheInvalidator;
 class InstallerService
 {
     const CMS_ASSET_VERSION = '1.0.2.20260922';
+    const LABEL_REFERENCE_ACCENT_COLOR = '#e25042';
 
     protected static $installed = null;
 
@@ -126,6 +127,8 @@ class InstallerService
         // Apply the current html/ + html/mobile/ content baseline last so a fresh
         // CMS install renders the same copy and media as the approved static pages.
         $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        // Apply the approved labels reference accent to editable rich-text copy.
+        $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
         $this->ensureHomeAboutSocialIconDefaults($connection, $prefix);
 
         $missing = $this->missingTables($connection, $prefix);
@@ -1855,6 +1858,102 @@ class InstallerService
         }
     }
 
+    /**
+     * 按已确认的不干胶效果图，为“能力图文”富文本补齐强调色。
+     *
+     * 只处理命中的标题和行前缀；已有 [color=...] 的行保持原样，
+     * 因此重复执行 cms:install 不会叠加标签，也不会覆盖其它后台内容。
+     */
+    protected function applyLabelCapabilityReferenceTextColors($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $statement = $pdo->prepare(
+            "SELECT b.`id`,b.`extra_json` FROM `{$blockTable}` b " .
+            "INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "WHERE p.`slug`='label' AND b.`block_key`='label_capability' AND b.`deletetime` IS NULL LIMIT 1"
+        );
+        $statement->execute();
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $extra = json_decode((string)$row['extra_json'], true);
+        if (!is_array($extra) || !isset($extra['items']) || !is_array($extra['items'])) {
+            return;
+        }
+
+        $rules = [
+            '铜版纸不干胶' => ['特点：', '优点：'],
+            '珠光膜/PVC/合成纸不干胶' => ['特点：', '1、', '2、', '3、', '1.', '2.', '3.'],
+            '亮银/哑银/合成银不干胶' => ['特点：', '优点：', '用途：'],
+            '镭射不干胶' => ['特点：', '1、', '2、', '3、', '1.', '2.', '3.'],
+        ];
+
+        $changed = false;
+        foreach ($extra['items'] as &$item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $title = isset($item['title']) ? trim((string)$item['title']) : '';
+            if ($title === '' || !isset($rules[$title])) {
+                continue;
+            }
+            foreach (['text', 'mobile_text'] as $field) {
+                if (!isset($item[$field]) || trim((string)$item[$field]) === '') {
+                    continue;
+                }
+                $decorated = $this->decorateReferenceTextColorLines(
+                    (string)$item[$field],
+                    $rules[$title],
+                    self::LABEL_REFERENCE_ACCENT_COLOR
+                );
+                if ($decorated !== (string)$item[$field]) {
+                    $item[$field] = $decorated;
+                    $changed = true;
+                }
+            }
+        }
+        unset($item);
+
+        if (!$changed) {
+            return;
+        }
+
+        $encoded = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$blockTable}` SET `extra_json`=?,`updatetime`=? WHERE `id`=?");
+        $update->execute([$encoded, time(), (int)$row['id']]);
+    }
+
+    protected function decorateReferenceTextColorLines($text, array $prefixes, $color)
+    {
+        $text = str_replace(["\r\n", "\r"], "\n", (string)$text);
+        $lines = explode("\n", $text);
+        foreach ($lines as &$line) {
+            if (trim($line) === '' || strpos($line, '[color=') !== false) {
+                continue;
+            }
+            $probe = trim($line);
+            $probe = preg_replace('/^(?:\\*\\*|__)\\s*/u', '', $probe);
+            foreach ($prefixes as $prefix) {
+                if (strpos($probe, $prefix) === 0) {
+                    $line = '[color=' . $color . ']' . $line . '[/color]';
+                    break;
+                }
+            }
+        }
+        unset($line);
+        return implode("\n", $lines);
+    }
     /**
      * 更新 FastAdmin 静态资源缓存版本。
      *
