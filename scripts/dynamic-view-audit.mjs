@@ -808,6 +808,34 @@ for (const token of ["Product detail gallery, media preview", "data-jpd-thumb", 
   expect(productDetailJs.includes(token), `Product detail interaction missing ${token}`);
 }
 
+const articleEditor = read("application/admin/view/cms/article/_form.html");
+expect(
+  !articleEditor.includes('name="row[author]"') &&
+  !articleEditor.includes("cms-article-advanced") &&
+  !articleEditor.includes("panel-collapse collapse"),
+  "article editor must not keep hidden/collapsed advanced fields or unused author",
+);
+for (const token of [
+  'name="row[is_top]"',
+  'name="row[is_recommend]"',
+  'name="row[weigh]"',
+  'name="row[seo_title]"',
+  'name="row[seo_keywords]"',
+  'name="row[seo_description]"',
+]) {
+  expect(articleEditor.includes(token), `active article setting must remain directly visible: ${token}`);
+}
+const articleAdminController = read("application/admin/controller/cms/Article.php");
+expect(
+  articleAdminController.includes("->where('name', 'not in', ['常见问答', '科创美新闻', '新闻动态'])"),
+  "article category selector must exclude retired legacy categories",
+);
+const newsDetailRenderSource = read("application/common/service/cms/render/NewsDetailRenderService.php");
+expect(
+  !newsDetailRenderSource.includes("'author' => $article['author']"),
+  "news detail runtime must not expose unused author metadata",
+);
+
 const articleCategoryAdmin = read("application/admin/controller/cms/ArticleCategory.php");
 for (const name of ["常见问答", "科创美新闻", "新闻动态"]) {
   expect(
