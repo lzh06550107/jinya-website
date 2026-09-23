@@ -762,14 +762,23 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const mobileHomeBannerView = read("application/mobile/view/cms/index/index.html");
 const mobileHomeBannerCss = read("public/assets/jinya/css/mobile.css");
 expect(
-  mobileHomeBannerCss.includes("Mobile homepage banner copy legibility v112") &&
-  mobileHomeBannerCss.includes("body.mobile-home .hero--home h1{") &&
-  mobileHomeBannerCss.includes("text-shadow:") &&
-  mobileHomeBannerCss.includes("-webkit-text-stroke:.35px") &&
-  !mobileHomeBannerCss.includes("Mobile homepage banner copy legibility v112.\n * Keep the uploaded banner image untouched: improve only the text itself. */\nbody.mobile-home .hero--home .hero-text{\n  background:"),
-  "mobile homepage banner copy must stay readable without restoring a banner mask",
+  mobileHomeBannerView.includes('class="hero-title"') &&
+  mobileHomeBannerView.includes('class="hero-title-primary"') &&
+  mobileHomeBannerView.includes('class="hero-title-secondary"') &&
+  !mobileHomeBannerView.includes('class="hero-eyebrow"'),
+  "mobile homepage banner must reuse the PC title/subtitle structure",
+);
+expect(
+  mobileHomeBannerCss.includes("Mobile homepage banner copy v113") &&
+  mobileHomeBannerCss.includes("body.mobile-home .hero--home .hero-title-primary") &&
+  mobileHomeBannerCss.includes("body.mobile-home .hero--home .hero-title-secondary") &&
+  mobileHomeBannerCss.includes("background:rgba(255,255,255,.96)") &&
+  mobileHomeBannerCss.includes("border-radius:999px") &&
+  !mobileHomeBannerCss.includes("Mobile homepage banner copy legibility v112"),
+  "mobile homepage banner must scale the PC copy/pill presentation instead of using a separate text treatment",
 );
 
 const bannerStyleSource = read("public/assets/jinya/css/style.css");
