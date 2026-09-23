@@ -762,6 +762,29 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const bannerStyleSource = read("public/assets/jinya/css/style.css");
+const mobileBannerStyleSource = read("public/assets/jinya/css/mobile.css");
+expect(
+  bannerStyleSource.includes("Banner image fidelity v111") &&
+  bannerStyleSource.includes(".hero--inner::after") &&
+  bannerStyleSource.includes("content:none !important;") &&
+  bannerStyleSource.includes("opacity:1 !important;"),
+  "PC/runtime banners must render uploaded artwork without mask or dimming",
+);
+expect(
+  mobileBannerStyleSource.includes("Mobile banner image fidelity v111") &&
+  mobileBannerStyleSource.includes("body.mobile-labels .labels-hero-ref::after") &&
+  mobileBannerStyleSource.includes("content:none !important;") &&
+  mobileBannerStyleSource.includes("opacity:1 !important;"),
+  "mobile banners must render uploaded artwork without mask or dimming",
+);
+for (const file of [
+  "application/index/view/cms/index/index.html",
+  "application/mobile/view/cms/index/index.html",
+]) {
+  expect(!read(file).includes('class="scrim"'), `${file} must not render a homepage banner scrim`);
+}
+
 const mobileHeaderHotlineView = read("application/mobile/view/cms/layout/header.html");
 const mobileHeaderHotlineCss = read("public/assets/jinya/css/mobile.css");
 expect(
