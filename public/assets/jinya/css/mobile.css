@@ -50,34 +50,96 @@ body.mobile-site .site-header:not(.site-header--home) + main{
 }
 
 body.mobile-site .site-logo-img{
-  width:142px;
+  width:clamp(112px,35vw,142px);
   height:44px;
 }
 
 body.mobile-site .header-phone{
-  width:40px;
-  min-width:40px;
+  width:auto;
+  min-width:122px;
   height:38px;
-  padding:0;
+  padding:0 8px;
+  gap:4px;
   border-radius:7px;
+  flex:0 0 auto;
 }
 
-body.mobile-site .header-phone .label,
+body.mobile-site .header-phone .label{
+  display:block;
+  padding:0;
+  margin:0;
+  border-radius:0;
+  background:transparent;
+  color:#ffd83f;
+  font-size:13px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:0;
+  white-space:nowrap;
+  text-shadow:0 1px 0 rgba(120,0,0,.45);
+}
+
 body.mobile-site .header-phone .tag,
 body.mobile-site .header-phone::before{
   display:none;
 }
 
-body.mobile-site .header-phone svg{
-  width:20px;
-  height:20px;
-  flex-basis:20px;
+body.mobile-site .header-phone .cms-hotline-icon{
+  width:18px;
+  min-width:18px;
+  height:18px;
+  flex:0 0 18px;
+  font-size:18px;
+}
+
+body.mobile-site .header-phone img.cms-hotline-icon{
+  object-fit:contain;
 }
 
 body.mobile-site .nav-toggle{
   display:flex;
   width:38px;
+  min-width:38px;
   height:38px;
+  flex:0 0 38px;
+}
+
+@media (max-width:360px){
+  body.mobile-site .site-header .container{
+    padding-left:10px;
+    padding-right:8px;
+  }
+
+  body.mobile-site .site-logo-img{
+    width:108px;
+    height:40px;
+  }
+
+  body.mobile-site .header-phone{
+    min-width:112px;
+    height:36px;
+    padding:0 6px;
+    gap:3px;
+  }
+
+  body.mobile-site .header-phone .label{
+    font-size:12px;
+  }
+
+  body.mobile-site .header-phone .cms-hotline-icon{
+    width:16px;
+    min-width:16px;
+    height:16px;
+    flex-basis:16px;
+    font-size:16px;
+  }
+
+  body.mobile-site .nav-toggle{
+    width:34px;
+    min-width:34px;
+    height:36px;
+    flex-basis:34px;
+  }
 }
 
 body.mobile-site .main-nav{
