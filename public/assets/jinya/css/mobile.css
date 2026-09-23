@@ -2193,3 +2193,27 @@ body.mobile-site main .container{
 body.mobile-site main :is(img,video,iframe){
   max-width:100%;
 }
+
+/* Mobile banner image fidelity v111: never add a readability mask over uploaded banners. */
+body.mobile-site .hero--photo .scrim,
+body.mobile-site .hero--inner::after,
+body.mobile-labels .labels-hero-ref::after,
+body.mobile-bags .bags-hero-ref::after,
+body.mobile-boxes .boxes-hero-ref::after,
+body.mobile-news .news-generated-hero::after,
+body.mobile-news-detail .news-generated-hero::after,
+body.mobile-contact .contact-generated-hero::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+}
+body.mobile-site .hero--inner .inner-hero-bg,
+body.mobile-labels .labels-hero-ref .inner-hero-bg,
+body.mobile-bags .bags-hero-ref .inner-hero-bg,
+body.mobile-boxes .boxes-hero-ref .inner-hero-bg,
+body.mobile-news .news-generated-hero .news-generated-hero-bg,
+body.mobile-news-detail .news-generated-hero .news-generated-hero-bg,
+body.mobile-contact .contact-generated-hero .contact-generated-hero-bg{
+  opacity:1 !important;
+}
+
