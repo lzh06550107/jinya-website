@@ -762,6 +762,21 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const mobileHeaderHotlineView = read("application/mobile/view/cms/layout/header.html");
+const mobileHeaderHotlineCss = read("public/assets/jinya/css/mobile.css");
+expect(
+  mobileHeaderHotlineView.includes("tel:{$cmsSite.hotline|default='18903716652'|htmlentities}") &&
+  mobileHeaderHotlineView.includes("<span class=\"label\">{$cmsSite.hotline|default='18903716652'|htmlentities}</span>"),
+  "mobile header must render the complete configured hotline as a tappable number",
+);
+expect(
+  mobileHeaderHotlineCss.includes("body.mobile-site .header-phone .label{") &&
+  mobileHeaderHotlineCss.includes("display:block;") &&
+  mobileHeaderHotlineCss.includes("min-width:122px;") &&
+  !mobileHeaderHotlineCss.includes(".header-phone .label,\nbody.mobile-site .header-phone .tag"),
+  "mobile header must not collapse the hotline to an icon-only button",
+);
+
 const pcCmsBaseForInquiry = read("application/index/controller/CmsBase.php");
 const mobileCmsBaseForInquiry = read("application/mobile/controller/CmsBase.php");
 for (const [name, source] of [["pc", pcCmsBaseForInquiry], ["mobile", mobileCmsBaseForInquiry]]) {
