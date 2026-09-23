@@ -762,6 +762,16 @@ expect(productDetailRender.includes("detailBreadcrumb"), "Product detail render 
 expect(!productDetailRender.includes("publicCategory"), "Product detail must not keep retired homepage-category special handling");
 expect(!productDetailRender.includes("HTML 首页展示"), "Product detail must not know about retired technical category");
 
+const mobileHomeBannerCss = read("public/assets/jinya/css/mobile.css");
+expect(
+  mobileHomeBannerCss.includes("Mobile homepage banner copy legibility v112") &&
+  mobileHomeBannerCss.includes("body.mobile-home .hero--home h1{") &&
+  mobileHomeBannerCss.includes("text-shadow:") &&
+  mobileHomeBannerCss.includes("-webkit-text-stroke:.35px") &&
+  !mobileHomeBannerCss.includes("Mobile homepage banner copy legibility v112.\n * Keep the uploaded banner image untouched: improve only the text itself. */\nbody.mobile-home .hero--home .hero-text{\n  background:"),
+  "mobile homepage banner copy must stay readable without restoring a banner mask",
+);
+
 const bannerStyleSource = read("public/assets/jinya/css/style.css");
 const mobileBannerStyleSource = read("public/assets/jinya/css/mobile.css");
 expect(
