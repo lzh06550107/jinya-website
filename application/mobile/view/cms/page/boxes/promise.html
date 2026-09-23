@@ -1,1 +1,12 @@
-<section class="section"><div class="container center"><div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div><p class="boxes-promise-lead">{$block.subtitle|htmlentities}</p><p class="boxes-promise-sub">{$block.content_inline_html}</p><div class="cta-banner mt-lg boxes-promise-banner"><div class="cta-banner-inner center"><h3>{$block.extra.secondary_title|default=''|htmlentities}</h3><p>{$block.extra.secondary_text|default=''|htmlentities}</p></div></div></div></section>
+<section class="boxes-promise-section"><div class="container">
+  <div class="boxes-promise-head">
+    <h2>{$block.title|htmlentities}</h2>
+    {notempty name="block.subtitle"}<p class="boxes-promise-main">{$block.subtitle|htmlentities}</p>{/notempty}
+    {notempty name="block.content_inline_html"}<p class="boxes-promise-sub">{$block.content_inline_html}</p>{/notempty}
+  </div>
+  <div class="boxes-promise-panel">
+    <h3>{$block.extra.secondary_title|default=''|htmlentities}</h3>
+    {notempty name="block.extra.secondary_text"}<div class="boxes-promise-panel-copy">{$block.extra.secondary_text|htmlentities|nl2br}</div>{/notempty}
+    <div class="boxes-promise-badge" aria-hidden="true"><div class="boxes-promise-badge-icon">{notempty name="block.extra.mobile_badge_logo"}<img src="{$block.extra.mobile_badge_logo|htmlentities}" alt="" loading="lazy">{else /}{notempty name="block.extra.badge_logo"}<img src="{$block.extra.badge_logo|htmlentities}" alt="" loading="lazy">{else /}<img src="/assets/jinya/img/boxes-promise-logo.svg" alt="" loading="lazy">{/notempty}{/notempty}</div>{notempty name="block.extra.badge_text"}<span>{$block.extra.badge_text|htmlentities}</span>{/notempty}</div>
+  </div>
+</div></section>

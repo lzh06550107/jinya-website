@@ -133,6 +133,7 @@ class HomePageBlockOrderService
     {
         $rows = Db::name('cms_page_block')
             ->where('page_key', 'home')
+            ->where('block_key', 'not in', PageSchemaRegistry::retiredHomeBlockKeys())
             ->whereNull('deletetime')
             ->field('id,block_key')
             ->order('id asc')

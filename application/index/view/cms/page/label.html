@@ -1,7 +1,5 @@
-{include file="cms/common/strict_header" /}
-<link rel="stylesheet" href="__CDN__/assets/css/cms-label-page.css?v={$cmsSite.version|default='1.0'}&source=20260816-latest">
-<link rel="stylesheet" href="__CDN__/assets/css/cms-pc-inner-banner.css?v={$cmsSite.version|default='1.0'}&layout=background-copy-optional-r1">
-<div class="cms-label-page" data-page="label"><main>
+{include file="cms/layout/header" /}
+<main>
 {volist name="content.blocks" id="block"}
 {switch name="block.key"}
 {case value="label_hero"}{include file="cms/page/label/hero" /}{/case}
@@ -17,6 +15,4 @@
 {case value="label_cta"}{include file="cms/page/label/cta" /}{/case}
 {/switch}
 {/volist}
-</main></div>
-<script src="__CDN__/assets/js/cms-label-page.js?v={$cmsSite.version|default='1.0'}&source=20260816-latest"></script>
-{include file="cms/common/strict_footer" /}
+{include file="cms/layout/footer" /}

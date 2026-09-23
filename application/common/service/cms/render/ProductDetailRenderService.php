@@ -106,7 +106,6 @@ class ProductDetailRenderService extends AbstractRenderService
             $applicationItems = $this->parseListItems(isset($row['applications']) ? $row['applications'] : '');
         }
         $processSteps = $this->processSteps($sectionGroups, isset($row['construction']) ? $row['construction'] : '');
-        $nav = $this->products->previousNext($row['id'], $row['publish_time']);
         $relatedIds = $this->referenceIds($common['page_config'], 'related', 'product');
         $relatedRows = $relatedIds
             ? $this->products->publishedByIds($relatedIds)
@@ -125,8 +124,6 @@ class ProductDetailRenderService extends AbstractRenderService
             'applicationItems' => $applicationItems,
             'processSteps' => $processSteps,
             'relatedProducts' => $related,
-            'previous' => $nav['previous'] ? $this->cards->product($nav['previous'], $context) : [],
-            'next' => $nav['next'] ? $this->cards->product($nav['next'], $context) : [],
             'contact' => $this->configBlock($common['page_config'], 'contact', [
                 'button_text' => '在线咨询',
                 'link_url' => 'http://wpa.qq.com/msgrd?v=3&uin=&site=qq&menu=yes',
@@ -138,19 +135,11 @@ class ProductDetailRenderService extends AbstractRenderService
                 'related' => isset($common['page_config']['blocks']['related']),
             ],
         ];
-        $banner = $this->banners('product.detail.' . $slug, 'channel', $context);
-        if (empty($banner)) {
-            $banner = $this->banners('product.detail', 'channel', $context);
-        }
         return new ProductDetailViewModel(
             $common['seo'],
             $common['layout'],
-            $banner,
-            [
-                ['title' => '产品中心', 'url' => '/products'],
-                ['title' => isset($category['name']) ? $category['name'] : '', 'url' => isset($category['slug']) ? '/products?category=' . rawurlencode($category['slug']) : ''],
-                ['title' => $row['title'], 'url' => ''],
-            ],
+            [],
+            $this->detailBreadcrumb($category, $row),
             $common['page_config'],
             $content
         );
@@ -264,6 +253,26 @@ class ProductDetailRenderService extends AbstractRenderService
         }
         unset($group);
         return $groups;
+    }
+
+    private function detailBreadcrumb(array $category, array $row)
+    {
+        $items = [
+            ['title' => '产品中心', 'url' => '/products'],
+        ];
+        if (!empty($category['name'])) {
+            $items[] = [
+                'title' => $category['name'],
+                'url' => !empty($category['slug'])
+                    ? '/products?category=' . rawurlencode($category['slug'])
+                    : '',
+            ];
+        }
+        $items[] = [
+            'title' => isset($row['title']) ? $row['title'] : '',
+            'url' => '',
+        ];
+        return $items;
     }
 
     private function findCategory(array $tree, $id)

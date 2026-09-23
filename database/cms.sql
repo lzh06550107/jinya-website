@@ -534,10 +534,6 @@ INSERT IGNORE INTO `fa_config` (`name`,`group`,`title`,`tip`,`type`,`visible`,`v
 ('cms_company','basic','公司全称','显示在企业站页头和页脚','string','','安徽科创美涂料科技股份有限公司','','required','',''),
 ('cms_slogan','basic','网站口号','显示在首页和页脚','string','','专业涂料产品与工程解决方案','','','',''),
 ('cms_logo','basic','网站 Logo','建议上传透明背景图片','image','','','','','',''),
-('cms_pc_news_banner','basic','PC 新闻栏目 Banner','新闻列表和详情页顶部横幅','image','','','','','',''),
-('cms_pc_about_banner','basic','PC 企业栏目 Banner','当前结构化页面顶部横幅（走进金亚、联系我们等）','image','','','','','',''),
-('cms_mobile_news_banner','basic','移动端新闻栏目 Banner','移动端新闻列表和详情页顶部横幅','image','','','','','',''),
-('cms_mobile_about_banner','basic','移动端企业栏目 Banner','移动端当前结构化页面顶部横幅（走进金亚、联系我们等）','image','','','','','',''),
 ('cms_wechat_qr','basic','微信公众号二维码','PC页脚社交关注','image','','','','','',''),
 ('cms_service_wecom_url','basic','企业微信在线客服链接','右侧浮动客服：在线咨询','string','','','','','',''),
 ('cms_service_wechat_qr','basic','客服企业微信二维码','右侧浮动客服：微信咨询','image','','','','','',''),
@@ -708,10 +704,6 @@ INSERT IGNORE INTO fa_auth_rule(type,pid,name,title,icon,ismenu,createtime,updat
 
 
 -- 产品体系恢复：后台五个产品模块 + 产品列表/详情。顶部 Header 仍严格保持 7 个正式入口。
-INSERT IGNORE INTO `fa_config` (`name`,`group`,`title`,`tip`,`type`,`visible`,`value`,`content`,`rule`,`extend`,`setting`) VALUES
-('cms_pc_product_banner','basic','PC 产品栏目 Banner','产品列表和详情页顶部横幅','image','','','','','',''),
-('cms_mobile_product_banner','basic','移动端产品栏目 Banner','移动端产品列表和详情页顶部横幅','image','','','','','','');
-
 INSERT IGNORE INTO `fa_cms_page_config`
 (`page_key`,`page_name`,`page_type`,`route_pattern`,`pc_header_key`,`pc_footer_key`,`mobile_header_key`,`mobile_footer_key`,`config_json`,`version`,`status`,`createtime`,`updatetime`) VALUES
 ('product.index','产品总列表','list','/products','layout.header.pc','layout.footer.pc','layout.header.mobile','layout.footer.mobile','{}',1,'normal',UNIX_TIMESTAMP(),UNIX_TIMESTAMP()),

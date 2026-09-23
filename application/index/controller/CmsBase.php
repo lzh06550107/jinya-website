@@ -52,7 +52,7 @@ abstract class CmsBase extends Frontend
             LayoutSchemaRegistry::sanitizeField('header', 'nav_active_background_color', isset($headerConfig['nav_active_background_color']) ? $headerConfig['nav_active_background_color'] : '#f48101'),
             '#f48101'
         );
-        $hotlineTopWidth = LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width', isset($headerConfig['hotline_top_width']) ? $headerConfig['hotline_top_width'] : 400);
+        $hotlineTopWidth = min(300, (int)LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_width', isset($headerConfig['hotline_top_width']) ? $headerConfig['hotline_top_width'] : 300));
         $hotlineScrolledWidth = LayoutSchemaRegistry::sanitizeField('header', 'hotline_scrolled_width', isset($headerConfig['hotline_scrolled_width']) ? $headerConfig['hotline_scrolled_width'] : 320);
         $hotlineTopOffsetY = LayoutSchemaRegistry::sanitizeField('header', 'hotline_top_offset_y', isset($headerConfig['hotline_top_offset_y']) ? $headerConfig['hotline_top_offset_y'] : 0);
         $hotlineScrolledOffsetY = LayoutSchemaRegistry::sanitizeField('header', 'hotline_scrolled_offset_y', isset($headerConfig['hotline_scrolled_offset_y']) ? $headerConfig['hotline_scrolled_offset_y'] : 0);
@@ -93,7 +93,10 @@ abstract class CmsBase extends Frontend
         $this->view->assign('cmsNavigation', $navigationTree);
         $this->view->assign('cmsNavigationTree', $navigationTree);
         $this->view->assign('cmsSite', $site);
-        $this->view->assign('cmsInquiryToken', $this->request->token());
+        // CSRF token is generated only while rendering a form page. Generating a
+        // new token during POST initialization would invalidate the token that the
+        // browser is currently submitting before Inquiry::submit() can verify it.
+        $this->view->assign('cmsInquiryToken', $this->request->isPost() ? '' : $this->request->token());
         foreach (['wechat', 'douyin', 'kuaishou', 'xiaohongshu', 'video', 'bilibili'] as $qrName) {
             $key = $qrName . '_qr';
             $this->view->assign('cms' . ucfirst($qrName) . 'Qr', isset($site[$key]) ? $site[$key] : '');
@@ -146,12 +149,6 @@ abstract class CmsBase extends Frontend
             : $bundleMap['about'];
         $this->pcStrictHome = $this->pcThemeCss === 'index';
 
-        $bannerKey = $this->channelBannerConfigKey();
-        $channelBanner = (string)config('site.' . $bannerKey, '');
-        if (!$this->channelBannerAssetExists($channelBanner)) {
-            $channelBanner = '';
-        }
-
         $this->view->assign('pcThemeCss', $this->pcThemeCss);
         $this->view->assign('pcSection', $this->pcSection);
         $this->view->assign('pcBodyClass', $this->pcBodyClass);
@@ -159,7 +156,6 @@ abstract class CmsBase extends Frontend
         $this->view->assign('pcStrictHome', $this->pcStrictHome);
         $navigationPath = new PcNavigationPathService();
         $this->view->assign('cmsCurrentPath', $navigationPath->resolve($this->requestPath(), $this->pcSection));
-        $this->view->assign('channelBanner', $channelBanner);
     }
 
     protected function assignChannel($title, $breadcrumb = '')
@@ -335,32 +331,17 @@ abstract class CmsBase extends Frontend
         $breadcrumb = !empty($data['breadcrumb']) ? $data['breadcrumb'] : [];
         $current = $breadcrumb ? end($breadcrumb) : [];
         $channelBanner = isset($banner['image']) ? (string)$banner['image'] : '';
-        if ($channelBanner === '') {
-            $bannerKey = $this->channelBannerConfigKey();
-            $channelBanner = (string)config('site.' . $bannerKey, '');
-        }
         if (!$this->channelBannerAssetExists($channelBanner)) {
             $channelBanner = '';
         }
         $this->view->assign('channelBanner', $channelBanner);
         $this->view->assign('channelBannerTitle', isset($banner['title']) ? trim((string)$banner['title']) : '');
         $this->view->assign('channelBannerSubtitle', isset($banner['subtitle']) ? trim((string)$banner['subtitle']) : '');
-        $this->view->assign('channelBannerVisible', $channelBanner !== '' || $this->pcSection !== '');
+        $this->view->assign('channelBannerVisible', $channelBanner !== '');
         $this->view->assign('channelTitle', isset($current['title']) && $current['title'] !== '' ? $current['title'] : (string)$fallbackTitle);
         $this->view->assign('channelUrl', (string)$fallbackUrl);
         $this->view->assign('breadcrumbCurrent', isset($current['title']) ? $current['title'] : (string)$fallbackTitle);
         return $data;
-    }
-
-    protected function channelBannerConfigKey()
-    {
-        if ($this->pcSection === 'products') {
-            return 'cms_pc_product_banner';
-        }
-        if ($this->pcSection === 'news') {
-            return 'cms_pc_news_banner';
-        }
-        return 'cms_pc_about_banner';
     }
 
     protected function channelBannerAssetExists($url)

@@ -14,6 +14,9 @@ use app\common\service\cms\render\CmsCacheInvalidator;
  */
 class InstallerService
 {
+    const CMS_ASSET_VERSION = '1.0.2.20260922';
+    const LABEL_REFERENCE_ACCENT_COLOR = '#e25042';
+
     protected static $installed = null;
 
     protected $requiredTables = [
@@ -92,6 +95,7 @@ class InstallerService
         $this->ensureHomeReferenceDisplayImageColumns($connection, $prefix);
         $this->retireBannerPosterColumns($connection, $prefix);
         $this->ensureBannerHighlightsColumn($connection, $prefix);
+        $this->migrateLegacyHomeHeroBannerDefaults($connection, $prefix);
         $pdo->exec($this->renderCloneSql($prefix));
         $pdo->exec($this->renderJinyaProductCatalogSql($prefix));
         $this->retireRemovedCmsRuntimeArtifacts($connection, $prefix);
@@ -110,6 +114,8 @@ class InstallerService
         $this->ensureContactPageDefaults($connection, $prefix);
         $this->normalizeLegacyHomeSectionWeights($connection, $prefix);
         $this->retireCmsMobileConfig($connection, $prefix);
+        $this->retireLegacySiteBannerConfig($connection, $prefix);
+        $this->syncAssetVersion($connection, $prefix);
         // Normalize legacy HTML links before HTML is migrated to Markdown.
         $this->normalizeCmsUrls($connection, $prefix);
         // Historical strict clone fragments contained page layout HTML/CSS in data.
@@ -118,6 +124,36 @@ class InstallerService
         $this->retireStrictCloneBodies($connection, $prefix);
         $this->migrateMarkdownBodies($connection, $prefix);
         $this->syncPageSchema($connection, $prefix);
+        // Apply the current html/ + html/mobile/ content baseline last so a fresh
+        // CMS install renders the same copy and media as the approved static pages.
+        $pdo->exec($this->renderHtmlBaselineSql($prefix));
+        // HTML baseline marks obsolete clone-era news as hidden. Hidden is not a
+        // valid article publishing state in the current CMS, so remove those rows
+        // and any stale article references immediately after the baseline is applied.
+        $this->deleteHiddenArticles($connection, $prefix);
+        // Homepage products are referenced directly by cms_home_section_reference.
+        // Retire the historical fake product category used only to satisfy category_id.
+        $this->retireLegacyHomeProductCategory($connection, $prefix);
+        // Keep only products that the current frontend explicitly references.
+        // This removes old clone/demo products from Product Management while
+        // preserving homepage/page-block products and their detail pages.
+        $this->deleteUnusedProducts($connection, $prefix);
+        // Retire old clone-era article categories that are not part of the current
+        // Jinya news information architecture. Keep the articles themselves.
+        $this->retireLegacyArticleCategories($connection, $prefix);
+        // Keep the boxes page CMS section order identical to the approved frontend.
+        // This also retires the historical standalone boxes_purchase block, whose
+        // content now lives inside boxes_details and is not rendered as a section.
+        $this->normalizeBoxesContentBlockOrder($connection, $prefix);
+        // The approved promise badge icon used to live only as inline template SVG.
+        // Backfill its asset path so the admin Logo field reflects what frontend shows.
+        $this->ensureBoxesPromiseLogoDefault($connection, $prefix);
+        // Apply the approved labels reference accent to editable rich-text copy.
+        $this->applyLabelCapabilityReferenceTextColors($connection, $prefix);
+        // bags_compare is a complete-image module. Install the approved uploaded artwork
+        // into empty/legacy-only slots while preserving any real backend custom upload.
+        $this->ensureBagsCompareFullImageDefaults($connection, $prefix);
+        $this->ensureHomeAboutSocialIconDefaults($connection, $prefix);
 
         $missing = $this->missingTables($connection, $prefix);
         if ($missing) {
@@ -638,7 +674,9 @@ class InstallerService
             . "\n\n"
             . $this->renderCloneSql($prefix)
             . "\n\n"
-            . $this->renderJinyaProductCatalogSql($prefix);
+            . $this->renderJinyaProductCatalogSql($prefix)
+            . "\n\n"
+            . $this->renderHtmlBaselineSql($prefix);
     }
 
     /**
@@ -705,6 +743,29 @@ class InstallerService
     }
 
     /**
+     * 渲染当前 html/ 静态页面对应的 CMS 内容基线。
+     *
+     * 必须在结构升级、克隆数据、产品目录和页面 Schema 同步之后执行，
+     * 使初始化数据库最终数据以当前静态参考页面为准。
+     *
+     * @param string $prefix
+     * @return string
+     */
+    public function renderHtmlBaselineSql($prefix)
+    {
+        $prefix = $this->normalizePrefix($prefix);
+        $file = ROOT_PATH . 'database' . DS . 'cms_html_baseline.sql';
+        if (!is_file($file)) {
+            throw new \RuntimeException('找不到 HTML 基线 CMS 脚本：database/cms_html_baseline.sql');
+        }
+        $sql = file_get_contents($file);
+        if ($sql === false || trim($sql) === '') {
+            throw new \RuntimeException('HTML 基线 CMS 脚本为空：database/cms_html_baseline.sql');
+        }
+        return str_replace('fa_', $prefix, $sql);
+    }
+
+    /**
      * 退役历史 Banner 独立视频海报字段。
      * 视频封面统一复用 image/mobile_image，两个旧列存在时精确删除。
      *
@@ -751,6 +812,92 @@ class InstallerService
     }
 
     /**
+     * 将未被后台编辑的历史首页首屏 Banner 默认值升级为当前视觉基线。
+     *
+     * 这里做持久化迁移，而不是在渲染阶段临时替换，确保后台回显、
+     * API/Repository 数据和前台最终展示始终使用同一份数据库真值。
+     *
+     * @param mixed  $connection
+     * @param string $prefix
+     * @return void
+     */
+    protected function migrateLegacyHomeHeroBannerDefaults($connection, $prefix)
+    {
+        $table = $prefix . 'cms_banner';
+        if (!$this->tableExists($connection, $table)
+            || !$this->columnExists($connection, $table, 'highlights_json')
+            || !$this->columnExists($connection, $table, 'edited_by_admin')) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare(
+            "SELECT `id`,`title`,`subtitle`,`highlights_json` FROM `{$table}` " .
+            "WHERE `page_key`=? AND `position`=? AND `edited_by_admin`=0 ORDER BY `weigh` DESC,`id` ASC"
+        );
+        $select->execute(['home', 'hero']);
+        $rows = $select->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$rows) {
+            return;
+        }
+
+        $iconMap = [
+            0 => ['fa fa-users', '/assets/jinya/img/home-highlight-team.png'],
+            1 => ['fa fa-shield', '/assets/jinya/img/home-highlight-quality.png'],
+            2 => ['fa fa-truck', '/assets/jinya/img/home-highlight-delivery.png'],
+        ];
+        $update = $pdo->prepare(
+            "UPDATE `{$table}` SET `title`=?,`subtitle`=?,`highlights_json`=?,`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE `id`=? AND `edited_by_admin`=0"
+        );
+
+        foreach ($rows as $row) {
+            $title = isset($row['title']) ? (string)$row['title'] : '';
+            $subtitle = isset($row['subtitle']) ? (string)$row['subtitle'] : '';
+            $json = isset($row['highlights_json']) ? (string)$row['highlights_json'] : '';
+            $changed = false;
+
+            if (trim($title) === '高品质包装印刷 一站式按需定制') {
+                $title = '高质量无版印刷';
+                $changed = true;
+            }
+            if (trim($subtitle) === 'JINYA PACKAGE · 一站式按需定制') {
+                $subtitle = '不干胶·包装袋 一站式按需定制';
+                $changed = true;
+            }
+
+            $items = json_decode($json, true);
+            if (is_array($items)) {
+                foreach ($iconMap as $index => $mapping) {
+                    if (!isset($items[$index]) || !is_array($items[$index])) {
+                        continue;
+                    }
+                    $icon = isset($items[$index]['icon']) ? trim((string)$items[$index]['icon']) : '';
+                    if ($icon === $mapping[0]) {
+                        $items[$index]['icon'] = $mapping[1];
+                        $changed = true;
+                    }
+                }
+                if (isset($items[1]['text'])
+                    && trim((string)$items[1]['text']) === '品质为先 省心高效') {
+                    $items[1]['text'] = '品质为先 省心高效 合作共赢';
+                    $changed = true;
+                }
+                if ($changed) {
+                    $encoded = json_encode($items, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                    if ($encoded !== false) {
+                        $json = $encoded;
+                    }
+                }
+            }
+
+            if ($changed) {
+                $update->execute([$title, $subtitle, $json, (int)$row['id']]);
+            }
+        }
+    }
+
+    /**
      * 为首页内容引用补齐终端专用展示图。
      * 这些字段只改变首页推荐关系的视觉素材，不覆盖产品自身封面。
      *
@@ -786,6 +933,51 @@ class InstallerService
      * @param string $prefix
      * @return void
      */
+    /**
+     * 为历史首页“关于金亚”配置补齐社交入口默认图标。
+     *
+     * 只在 JSON key 不存在时补值；管理员主动保存为空字符串后不会再次补回。
+     */
+    protected function ensureHomeAboutSocialIconDefaults($connection, $prefix)
+    {
+        $table = $prefix . 'cms_home_section';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare("SELECT `id`,`config_json` FROM `{$table}` WHERE `section_key`=? LIMIT 1");
+        $select->execute(['about']);
+        $row = $select->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $config = json_decode(isset($row['config_json']) ? (string)$row['config_json'] : '', true);
+        $config = is_array($config) ? $config : [];
+        $defaults = [
+            'social_icon_1' => '/assets/jinya/img/social-wechat.png',
+            'social_icon_2' => '/assets/jinya/img/home-video-channels.png',
+        ];
+        $changed = false;
+        foreach ($defaults as $key => $value) {
+            if (!array_key_exists($key, $config)) {
+                $config[$key] = $value;
+                $changed = true;
+            }
+        }
+        if (!$changed) {
+            return;
+        }
+
+        $encoded = json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$table}` SET `config_json`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?");
+        $update->execute([$encoded, (int)$row['id']]);
+    }
+
     /**
      * 将历史科创美 Footer 导航一次性迁移为当前金亚页脚导航。
      *
@@ -1282,8 +1474,9 @@ class InstallerService
         $extraJson = json_encode(isset($block['extra']) && is_array($block['extra']) ? $block['extra'] : [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         if ($extraJson === false) throw new \RuntimeException('包装袋页面默认配置 JSON 编码失败：' . $block['block_key']);
         $select = $pdo->prepare(
-            "SELECT `id`,`edited_by_admin`,`title`,`subtitle`,`content`,`image`,`mobile_image`,`extra_json` FROM `{$table}` " .
-            "WHERE `page_id`=? AND `deletetime` IS NULL AND (`source_key`=? OR `block_key`=?) ORDER BY (`source_key`=?) DESC,`id` ASC LIMIT 1"
+            "SELECT `id`,`edited_by_admin`,`title`,`subtitle`,`content`,`image`,`mobile_image`,`extra_json`,`deletetime` FROM `{$table}` " .
+            "WHERE `page_id`=? AND (`source_key`=? OR (`deletetime` IS NULL AND `block_key`=?)) " .
+            "ORDER BY (`source_key`=?) DESC,`id` ASC LIMIT 1"
         );
         $select->execute([(int)$pageId,$sourceKey,(string)$block['block_key'],$sourceKey]);
         $row = $select->fetch(\PDO::FETCH_ASSOC);
@@ -1324,7 +1517,7 @@ class InstallerService
         $pageId = $this->ensureBoxesPageRow($pdo, $pageTable, $page);
         if (!$pageId) return;
         foreach (BoxesPageDefaults::blocks() as $block) $this->ensureBoxesPageBlockRow($pdo, $blockTable, $pageId, $block);
-        $this->purgeRetiredPageContentBlocks($pdo, $blockTable, $pageId, ['body']);
+        $this->purgeRetiredPageContentBlocks($pdo, $blockTable, $pageId, ['body','boxes_purchase']);
     }
 
     protected function ensureBoxesPageRow($pdo, $table, array $page)
@@ -1378,7 +1571,7 @@ class InstallerService
         if (empty($row['edited_by_admin']) || $this->isStructurallyEmptyBoxesBlock($row)) {
             $update = $pdo->prepare(
                 "UPDATE `{$table}` SET `block_key`=?,`block_type`='boxes_section',`title`=?,`subtitle`=?,`content`=?,`image`=?,`mobile_image`=?,`link_text`=?,`link_url`=?," .
-                "`extra_json`=?,`source_key`=?,`pc_visible`=?,`mobile_visible`=?,`weigh`=?,`status`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?"
+                "`extra_json`=?,`source_key`=?,`pc_visible`=?,`mobile_visible`=?,`weigh`=?,`status`=?,`deletetime`=NULL,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?"
             );
             $update->execute([(string)$block['block_key'],(string)$block['title'],(string)$block['subtitle'],(string)$block['content'],(string)$block['image'],(string)$block['mobile_image'],(string)$block['link_text'],(string)$block['link_url'],$extraJson,$sourceKey,(int)$block['pc_visible'],(int)$block['mobile_visible'],(int)$block['weigh'],(string)$block['status'],(int)$row['id']]);
         }
@@ -1652,6 +1845,523 @@ class InstallerService
         $this->getPdo($connection)->exec(
             "DELETE FROM `{$table}` WHERE `name` = 'cms_mobile'"
         );
+    }
+
+    /**
+     * 退役旧版 fa_config 栏目 Banner。
+     *
+     * 产品/新闻频道已经统一读取 cms_banner；结构化单页统一读取 *_hero 内容块。
+     * 这些历史站点级字段继续存在会形成第二数据源，因此升级时按精确键物理清理。
+     *
+     * @param mixed  $connection
+     * @param string $prefix
+     * @return void
+     */
+    protected function retireLegacySiteBannerConfig($connection, $prefix)
+    {
+        $table = $prefix . 'config';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+
+        $keys = [
+            'cms_pc_product_banner',
+            'cms_pc_news_banner',
+            'cms_pc_case_banner',
+            'cms_pc_about_banner',
+            'cms_mobile_product_banner',
+            'cms_mobile_news_banner',
+            'cms_mobile_case_banner',
+            'cms_mobile_about_banner',
+        ];
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $statement = $this->getPdo($connection)->prepare(
+            "DELETE FROM `{$table}` WHERE `name` IN ({$placeholders})"
+        );
+        if ($statement) {
+            $statement->execute($keys);
+        }
+    }
+
+    /**
+     * 将“专版和无版印刷怎么选”的 CSS 默认背景迁回 CMS 数据。
+     * 仅补齐空的 image/mobile_image，不覆盖后台已有自定义图片。
+     */
+    /**
+     * 退役“专版和无版印刷怎么选”曾经写入 CMS 的 CSS 背景默认值。
+     *
+     * 整图模式下 image/mobile_image 代表完整成品图，而不是背景层。
+     * 这里只清空上一版迁移写入的精确默认路径；后台自定义上传绝不覆盖。
+     */
+    /**
+     * 为“专版和无版印刷怎么选”整图模块补齐默认成品图。
+     *
+     * 空值、上一版 CSS 背景默认值或错误的 v1 整图会迁移为用户确认的完整效果图；
+     * 后台已经上传的其它自定义图片保持不变。
+     */
+    /**
+     * 统一彩盒页内容区块顺序，使后台列表与前端实际 section 顺序完全一致。
+     *
+     * 前端与后台列表都按 weigh DESC 排序，因此这里只规范排序字段，不覆盖
+     * 管理员编辑过的标题、图片、文案等内容。历史 boxes_purchase 已不再由前端
+     * 独立渲染，其采购 CTA 已合并进 boxes_details，故升级时软删除该孤立区块。
+     */
+    protected function normalizeBoxesContentBlockOrder($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $order = [
+            'boxes_hero' => 1000,
+            'boxes_products' => 900,
+            'boxes_value' => 800,
+            'boxes_promise' => 700,
+            'boxes_details' => 600,
+            'boxes_applications' => 500,
+            'boxes_craft_material' => 400,
+            'boxes_team' => 300,
+            'boxes_types' => 200,
+            'boxes_services' => 100,
+        ];
+
+        $update = $pdo->prepare(
+            "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`weigh`=?,b.`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`=? AND b.`deletetime` IS NULL"
+        );
+        if ($update) {
+            foreach ($order as $blockKey => $weight) {
+                $update->execute([$weight, $blockKey]);
+            }
+        }
+
+        $retire = $pdo->prepare(
+            "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`status`='hidden',b.`deletetime`=COALESCE(b.`deletetime`,UNIX_TIMESTAMP()),b.`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`='boxes_purchase' AND b.`deletetime` IS NULL"
+        );
+        if ($retire) {
+            $retire->execute();
+        }
+    }
+    /**
+     * 将彩盒“品质承诺”当前前端礼盒 Logo 显式写回 CMS extra_json。
+     *
+     * 只在 badge_logo 为空时补默认资源，管理员已经上传的 Logo 永不覆盖。
+     * mobile_badge_logo 留空表示移动端继承 PC Logo。
+     */
+    protected function ensureBoxesPromiseLogoDefault($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $query = $pdo->prepare(
+            "SELECT b.`id`,b.`extra_json` FROM `{$blockTable}` b " .
+            "INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "WHERE p.`slug`='boxes' AND b.`block_key`='boxes_promise' AND b.`deletetime` IS NULL LIMIT 1"
+        );
+        if (!$query) {
+            return;
+        }
+        $query->execute();
+        $row = $query->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $extra = json_decode((string)$row['extra_json'], true);
+        $extra = is_array($extra) ? $extra : [];
+        if (isset($extra['badge_logo']) && trim((string)$extra['badge_logo']) !== '') {
+            return;
+        }
+
+        $extra['badge_logo'] = '/assets/jinya/img/boxes-promise-logo.svg';
+        if (!array_key_exists('mobile_badge_logo', $extra)) {
+            $extra['mobile_badge_logo'] = '';
+        }
+        $encoded = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$blockTable}` SET `extra_json`=?,`updatetime`=UNIX_TIMESTAMP() WHERE `id`=?");
+        if ($update) {
+            $update->execute([$encoded, (int)$row['id']]);
+        }
+    }
+    /**
+     * 删除历史“HTML 首页展示”技术分类。
+     *
+     * 首页产品由 cms_home_section_reference 直接引用产品 ID，运行时并不依赖分类。
+     * 因此先把仍挂在该技术分类下的产品迁移为 category_id=0，再物理删除分类，
+     * 避免后台分类树出现非业务分类，同时不影响首页引用和产品记录本身。
+     */
+    protected function retireLegacyHomeProductCategory($connection, $prefix)
+    {
+        $categoryTable = $prefix . 'cms_product_category';
+        $productTable = $prefix . 'cms_product';
+        if (!$this->tableExists($connection, $categoryTable) || !$this->tableExists($connection, $productTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $select = $pdo->prepare("SELECT `id` FROM `{$categoryTable}` WHERE `slug`='html-home-display' LIMIT 1");
+        if (!$select) {
+            return;
+        }
+        $select->execute();
+        $categoryId = (int)$select->fetchColumn();
+        if ($categoryId <= 0) {
+            return;
+        }
+
+        $pdo->beginTransaction();
+        try {
+            $moveProducts = $pdo->prepare("UPDATE `{$productTable}` SET `category_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `category_id`=?");
+            $moveProducts->execute([$categoryId]);
+
+            $deleteCategory = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id`=? AND `slug`='html-home-display'");
+            $deleteCategory->execute([$categoryId]);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 删除旧克隆站遗留的无用新闻分类，但保留新闻内容。
+     *
+     * “常见问答 / 科创美新闻 / 新闻动态”不属于当前金亚新闻分类体系。
+     * 删除前先把所属新闻迁移为 category_id=0，并把非退役子分类提升为顶级分类，
+     * 避免因为清理分类而误删文章或留下不可达的分类树。
+     */
+    protected function retireLegacyArticleCategories($connection, $prefix)
+    {
+        $categoryTable = $prefix . 'cms_article_category';
+        $articleTable = $prefix . 'cms_article';
+        if (!$this->tableExists($connection, $categoryTable) || !$this->tableExists($connection, $articleTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $names = ['常见问答', '科创美新闻', '新闻动态'];
+        $placeholders = implode(',', array_fill(0, count($names), '?'));
+        $select = $pdo->prepare("SELECT `id` FROM `{$categoryTable}` WHERE `name` IN ({$placeholders})");
+        if (!$select) {
+            return;
+        }
+        $select->execute($names);
+        $ids = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+        if (!$ids) {
+            return;
+        }
+
+        $idPlaceholders = implode(',', array_fill(0, count($ids), '?'));
+        $pdo->beginTransaction();
+        try {
+            $moveArticles = $pdo->prepare("UPDATE `{$articleTable}` SET `category_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `category_id` IN ({$idPlaceholders})");
+            $moveArticles->execute($ids);
+
+            $promoteChildren = $pdo->prepare("UPDATE `{$categoryTable}` SET `parent_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `parent_id` IN ({$idPlaceholders}) AND `id` NOT IN ({$idPlaceholders})");
+            $promoteChildren->execute(array_merge($ids, $ids));
+
+            $deleteCategories = $pdo->prepare("DELETE FROM `{$categoryTable}` WHERE `id` IN ({$idPlaceholders})");
+            $deleteCategories->execute($ids);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 物理删除所有 status=hidden 的新闻及其页面引用。
+     *
+     * hidden 不属于当前 PublishStateMachine 的合法新闻状态，只用于历史 HTML
+     * 基线淘汰旧克隆新闻。删除新闻前先清理 page_block_reference 与
+     * home_section_reference，避免保留悬空引用。
+     */
+    protected function deleteHiddenArticles($connection, $prefix)
+    {
+        $articleTable = $prefix . 'cms_article';
+        if (!$this->tableExists($connection, $articleTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $pageReferenceTable = $prefix . 'cms_page_block_reference';
+        $homeReferenceTable = $prefix . 'cms_home_section_reference';
+
+        $pdo->beginTransaction();
+        try {
+            if ($this->tableExists($connection, $pageReferenceTable)) {
+                $pdo->exec(
+                    "DELETE r FROM `{$pageReferenceTable}` r " .
+                    "INNER JOIN `{$articleTable}` a ON a.`id`=r.`content_id` " .
+                    "WHERE r.`content_type`='article' AND a.`status`='hidden'"
+                );
+            }
+
+            if ($this->tableExists($connection, $homeReferenceTable)) {
+                $pdo->exec(
+                    "DELETE r FROM `{$homeReferenceTable}` r " .
+                    "INNER JOIN `{$articleTable}` a ON a.`id`=r.`content_id` " .
+                    "WHERE r.`content_type`='article' AND a.`status`='hidden'"
+                );
+            }
+
+            $pdo->exec("DELETE FROM `{$articleTable}` WHERE `status`='hidden'");
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    /**
+     * 物理删除当前前台未使用的产品及其附属数据。
+     *
+     * “正在使用”以当前有效的首页引用 / 页面功能块引用为准。当前正式前台
+     * 首页产品中心通过 cms_home_section_reference 引用产品；页面级手工推荐
+     * 则通过 cms_page_block_reference 引用。其它旧克隆、演示或孤立产品不会
+     * 再参与正式前台，安装时直接清除。
+     *
+     * 历史客户咨询不删除；如果它引用了被淘汰产品，只把 product_id 归零。
+     */
+    protected function deleteUnusedProducts($connection, $prefix)
+    {
+        $productTable = $prefix . 'cms_product';
+        if (!$this->tableExists($connection, $productTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $homeReferenceTable = $prefix . 'cms_home_section_reference';
+        $pageReferenceTable = $prefix . 'cms_page_block_reference';
+        $keepIds = [];
+
+        if ($this->tableExists($connection, $homeReferenceTable)) {
+            $statement = $pdo->query(
+                "SELECT DISTINCT `content_id` FROM `{$homeReferenceTable}` " .
+                "WHERE `content_type`='product' AND `status`='normal' AND `deletetime` IS NULL AND `content_id`>0"
+            );
+            if ($statement) {
+                $keepIds = array_merge($keepIds, $statement->fetchAll(\PDO::FETCH_COLUMN));
+            }
+        }
+
+        if ($this->tableExists($connection, $pageReferenceTable)) {
+            $statement = $pdo->query(
+                "SELECT DISTINCT `content_id` FROM `{$pageReferenceTable}` " .
+                "WHERE `content_type`='product' AND `status`='normal' AND `deletetime` IS NULL AND `content_id`>0"
+            );
+            if ($statement) {
+                $keepIds = array_merge($keepIds, $statement->fetchAll(\PDO::FETCH_COLUMN));
+            }
+        }
+
+        $keepIds = array_values(array_unique(array_filter(array_map('intval', $keepIds))));
+        // Fail safe: the HTML baseline always creates homepage product references.
+        // If none exist, do not risk deleting the whole product table.
+        if (!$keepIds) {
+            return;
+        }
+
+        $keepPlaceholders = implode(',', array_fill(0, count($keepIds), '?'));
+        $select = $pdo->prepare("SELECT `id` FROM `{$productTable}` WHERE `id` NOT IN ({$keepPlaceholders})");
+        $select->execute($keepIds);
+        $deleteIds = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+        if (!$deleteIds) {
+            return;
+        }
+
+        $deletePlaceholders = implode(',', array_fill(0, count($deleteIds), '?'));
+        $pdo->beginTransaction();
+        try {
+            // Preserve historical inquiries, but remove references to products being retired.
+            $inquiryTable = $prefix . 'cms_inquiry';
+            if ($this->tableExists($connection, $inquiryTable)) {
+                $statement = $pdo->prepare("UPDATE `{$inquiryTable}` SET `product_id`=0,`updatetime`=UNIX_TIMESTAMP() WHERE `product_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            foreach (['cms_product_image', 'cms_product_parameter', 'cms_product_section'] as $childName) {
+                $childTable = $prefix . $childName;
+                if (!$this->tableExists($connection, $childTable)) {
+                    continue;
+                }
+                $statement = $pdo->prepare("DELETE FROM `{$childTable}` WHERE `product_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            if ($this->tableExists($connection, $pageReferenceTable)) {
+                $statement = $pdo->prepare("DELETE FROM `{$pageReferenceTable}` WHERE `content_type`='product' AND `content_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+            if ($this->tableExists($connection, $homeReferenceTable)) {
+                $statement = $pdo->prepare("DELETE FROM `{$homeReferenceTable}` WHERE `content_type`='product' AND `content_id` IN ({$deletePlaceholders})");
+                $statement->execute($deleteIds);
+            }
+
+            $statement = $pdo->prepare("DELETE FROM `{$productTable}` WHERE `id` IN ({$deletePlaceholders})");
+            $statement->execute($deleteIds);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
+    }
+    protected function ensureBagsCompareFullImageDefaults($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $legacyBackground = '/assets/jinya/img/bags-tech-compare-bg-v2.jpg';
+        $legacyBrokenFull = '/assets/jinya/img/bags-compare-full.webp';
+        $default = '/assets/jinya/img/bags-compare-full-v2.webp';
+        $sql = "UPDATE `{$blockTable}` b INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "SET b.`image`=CASE WHEN TRIM(COALESCE(b.`image`,''))='' OR b.`image` IN (?,?) THEN ? ELSE b.`image` END, " .
+            "b.`mobile_image`=CASE WHEN TRIM(COALESCE(b.`mobile_image`,''))='' OR b.`mobile_image` IN (?,?) THEN ? ELSE b.`mobile_image` END " .
+            "WHERE p.`slug`='bags' AND b.`block_key`='bags_compare'";
+        $statement = $this->getPdo($connection)->prepare($sql);
+        if ($statement) {
+            $statement->execute([
+                $legacyBackground, $legacyBrokenFull, $default,
+                $legacyBackground, $legacyBrokenFull, $default,
+            ]);
+        }
+    }
+
+    /**
+     * 按已确认的不干胶效果图，为“能力图文”富文本补齐强调色。
+     *
+     * 只处理命中的标题和行前缀；已有 [color=...] 的行保持原样，
+     * 因此重复执行 cms:install 不会叠加标签，也不会覆盖其它后台内容。
+     */
+    protected function applyLabelCapabilityReferenceTextColors($connection, $prefix)
+    {
+        $pageTable = $prefix . 'cms_page';
+        $blockTable = $prefix . 'cms_page_content_block';
+        if (!$this->tableExists($connection, $pageTable) || !$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $statement = $pdo->prepare(
+            "SELECT b.`id`,b.`extra_json` FROM `{$blockTable}` b " .
+            "INNER JOIN `{$pageTable}` p ON p.`id`=b.`page_id` " .
+            "WHERE p.`slug`='label' AND b.`block_key`='label_capability' AND b.`deletetime` IS NULL LIMIT 1"
+        );
+        $statement->execute();
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return;
+        }
+
+        $extra = json_decode((string)$row['extra_json'], true);
+        if (!is_array($extra) || !isset($extra['items']) || !is_array($extra['items'])) {
+            return;
+        }
+
+        $rules = [
+            '铜版纸不干胶' => ['特点：', '优点：'],
+            '珠光膜/PVC/合成纸不干胶' => ['特点：', '1、', '2、', '3、', '1.', '2.', '3.'],
+            '亮银/哑银/合成银不干胶' => ['特点：', '优点：', '用途：'],
+            '镭射不干胶' => ['特点：', '1、', '2、', '3、', '1.', '2.', '3.'],
+        ];
+
+        $changed = false;
+        foreach ($extra['items'] as &$item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $title = isset($item['title']) ? trim((string)$item['title']) : '';
+            if ($title === '' || !isset($rules[$title])) {
+                continue;
+            }
+            foreach (['text', 'mobile_text'] as $field) {
+                if (!isset($item[$field]) || trim((string)$item[$field]) === '') {
+                    continue;
+                }
+                $decorated = $this->decorateReferenceTextColorLines(
+                    (string)$item[$field],
+                    $rules[$title],
+                    self::LABEL_REFERENCE_ACCENT_COLOR
+                );
+                if ($decorated !== (string)$item[$field]) {
+                    $item[$field] = $decorated;
+                    $changed = true;
+                }
+            }
+        }
+        unset($item);
+
+        if (!$changed) {
+            return;
+        }
+
+        $encoded = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($encoded === false) {
+            return;
+        }
+        $update = $pdo->prepare("UPDATE `{$blockTable}` SET `extra_json`=?,`updatetime`=? WHERE `id`=?");
+        $update->execute([$encoded, time(), (int)$row['id']]);
+    }
+
+    protected function decorateReferenceTextColorLines($text, array $prefixes, $color)
+    {
+        $text = str_replace(["\r\n", "\r"], "\n", (string)$text);
+        $lines = explode("\n", $text);
+        foreach ($lines as &$line) {
+            if (trim($line) === '' || strpos($line, '[color=') !== false) {
+                continue;
+            }
+            $probe = trim($line);
+            $probe = preg_replace('/^(?:\\*\\*|__)\\s*/u', '', $probe);
+            foreach ($prefixes as $prefix) {
+                if (strpos($probe, $prefix) === 0) {
+                    $line = '[color=' . $color . ']' . $line . '[/color]';
+                    break;
+                }
+            }
+        }
+        unset($line);
+        return implode("\n", $lines);
+    }
+    /**
+     * 更新 FastAdmin 静态资源缓存版本。
+     *
+     * RequireJS 会把 site.version 拼到后台 JS URL；CMS 后台脚本变更后如果
+     * 版本保持不变，浏览器会继续命中旧缓存，导致新编辑器代码看似“未生效”。
+     */
+    protected function syncAssetVersion($connection, $prefix)
+    {
+        $table = $prefix . 'config';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+        $statement = $this->getPdo($connection)->prepare(
+            "UPDATE `{$table}` SET `value`=? WHERE `name`='version'"
+        );
+        if ($statement) {
+            $statement->execute([self::CMS_ASSET_VERSION]);
+        }
     }
 
     /**
@@ -2051,6 +2761,74 @@ class InstallerService
 
         $this->normalizeWorkshopPageBlockIds($connection, $prefix);
         $this->normalizeCulturePageBlockId($connection, $prefix);
+        $this->retireRemovedPageBlocks($connection, $prefix);
+        $this->retireUnusedBannerRows($connection, $prefix);
+    }
+
+    /**
+     * 物理清理已退出首页信息架构的旧 PageBlock 元数据。
+     *
+     * 这里只删除 cms_page_block 及其旧通用引用；cms_home_section 历史内容继续保留，
+     * 避免清理后台标识时误删运营资料。
+     */
+    protected function retireRemovedPageBlocks($connection, $prefix)
+    {
+        $blockTable = $prefix . 'cms_page_block';
+        if (!$this->tableExists($connection, $blockTable)) {
+            return;
+        }
+
+        $pdo = $this->getPdo($connection);
+        $referenceTable = $prefix . 'cms_page_block_reference';
+
+        foreach (PageSchemaRegistry::pages() as $pageKey => $pageDefinition) {
+            $keys = PageSchemaRegistry::retiredBlockKeys($pageKey);
+            if (!$keys) {
+                continue;
+            }
+            $placeholders = implode(',', array_fill(0, count($keys), '?'));
+            $select = $pdo->prepare(
+                "SELECT `id` FROM `{$blockTable}` WHERE `page_key`=? AND `block_key` IN ({$placeholders})"
+            );
+            $select->execute(array_merge([$pageKey], $keys));
+            $ids = array_values(array_filter(array_map('intval', $select->fetchAll(\PDO::FETCH_COLUMN))));
+            if (!$ids) {
+                continue;
+            }
+
+            $idPlaceholders = implode(',', array_fill(0, count($ids), '?'));
+            if ($this->tableExists($connection, $referenceTable)) {
+                $deleteReferences = $pdo->prepare(
+                    "DELETE FROM `{$referenceTable}` WHERE `page_block_id` IN ({$idPlaceholders})"
+                );
+                $deleteReferences->execute($ids);
+            }
+
+            $deleteBlocks = $pdo->prepare(
+                "DELETE FROM `{$blockTable}` WHERE `id` IN ({$idPlaceholders})"
+            );
+            $deleteBlocks->execute($ids);
+        }
+    }
+
+    /**
+     * 结构化单页和新版产品详情不再读取 cms_banner。
+     * 升级时仅退役已经没有前台消费者的旧 Banner 行，素材文件本身不删除。
+     */
+    protected function retireUnusedBannerRows($connection, $prefix)
+    {
+        $table = $prefix . 'cms_banner';
+        if (!$this->tableExists($connection, $table)) {
+            return;
+        }
+        $pdo = $this->getPdo($connection);
+        $keys = ['page.label', 'page.bags', 'page.boxes', 'page.about', 'page.contact', 'product.detail'];
+        $placeholders = implode(',', array_fill(0, count($keys), '?'));
+        $statement = $pdo->prepare(
+            "UPDATE `{$table}` SET `status`='hidden',`deletetime`=COALESCE(`deletetime`,UNIX_TIMESTAMP()),`updatetime`=UNIX_TIMESTAMP() " .
+            "WHERE (`page_key` IN ({$placeholders}) OR `page_key` LIKE 'product.detail.%') AND `deletetime` IS NULL"
+        );
+        $statement->execute($keys);
     }
 
     /**

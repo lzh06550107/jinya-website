@@ -28,14 +28,23 @@ abstract class AbstractRenderService
             $video = $mobile && !empty($row['mobile_video_url'])
                 ? $row['mobile_video_url']
                 : (isset($row['video_url']) ? $row['video_url'] : '');
+            $highlightItems = $this->bannerHighlights->decode(isset($row['highlights_json']) ? $row['highlights_json'] : '');
+            if ((string)$pageKey === 'home' && (string)$position === 'hero') {
+                $highlightItems = $this->bannerHighlights->homeHero($highlightItems);
+            }
+            $highlightItems = $this->bannerHighlights->forTerminal($highlightItems, $context->terminal());
+
+            $title = $mobile && !empty($row['mobile_title'])
+                ? $row['mobile_title']
+                : (isset($row['title']) ? $row['title'] : '');
+            $subtitle = $mobile && !empty($row['mobile_subtitle'])
+                ? $row['mobile_subtitle']
+                : (isset($row['subtitle']) ? $row['subtitle'] : '');
+
             $out[] = [
                 'id' => (int)$row['id'],
-                'title' => $mobile && !empty($row['mobile_title'])
-                    ? $row['mobile_title']
-                    : (isset($row['title']) ? $row['title'] : ''),
-                'subtitle' => $mobile && !empty($row['mobile_subtitle'])
-                    ? $row['mobile_subtitle']
-                    : (isset($row['subtitle']) ? $row['subtitle'] : ''),
+                'title' => $title,
+                'subtitle' => $subtitle,
                 'description' => $mobile && !empty($row['mobile_description'])
                     ? $row['mobile_description']
                     : (isset($row['description']) ? $row['description'] : ''),
@@ -48,10 +57,7 @@ abstract class AbstractRenderService
                     ? $row['mobile_link_url']
                     : (isset($row['link_url']) ? $row['link_url'] : ''),
                 'button_text' => isset($row['button_text']) ? $row['button_text'] : '',
-                'highlights' => $this->icons->decorateRows($this->bannerHighlights->forTerminal(
-                    $this->bannerHighlights->decode(isset($row['highlights_json']) ? $row['highlights_json'] : ''),
-                    $context->terminal()
-                )),
+                'highlights' => $this->icons->decorateRows($highlightItems),
             ];
         }
         return $out;

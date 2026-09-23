@@ -1,39 +1,23 @@
-{include file="cms/common/strict_header" /}
-{assign name="hideChannelBreadcrumb" value="1" /}
-{include file="cms/common/strict_channel_header" /}
-<div class="blk-main cms-news-detail">
-    <div class="p102-info-blk fl">
-        <div class="p102-info-blk-con">
-            <h1 class="p102-info-blk-title" title="{$content.article.title|htmlentities}">{$content.article.title|htmlentities}</h1>
-            <div class="p102-info-blk-bool">
-                {notempty name="content.metadata.source"}<span>来源：{$content.metadata.source|htmlentities}</span>{/notempty}
-                {if condition="!empty($content.metadata.source) && !empty($content.metadata.publish_date)"}<i>|</i>{/if}
-                {notempty name="content.metadata.publish_date"}<span>发布日期：{$content.metadata.publish_date|htmlentities}</span>{/notempty}
-            </div>
-            <div class="p102-info-content endit-content cms-rich-content">{$content.article.content_html}</div>
-            {if condition="!empty($content.article.tags) || !empty($content.metadata.author)"}
-            <div class="p102-info-key">
-                {notempty name="content.article.tags"}<p>【本文标签】{volist name="content.article.tags" id="tag"}<span><a href="{$tag.url|htmlentities}" title="{$tag.name|htmlentities}">{$tag.name|htmlentities}</a></span>{/volist}</p>{/notempty}
-                {notempty name="content.metadata.author"}<p>【责任编辑】<span>{$content.metadata.author|htmlentities}</span></p>{/notempty}
-            </div>
-            {/if}
-        </div>
-        <div class="p102-info-blk-paging"><dl class="clearafter">
-            {notempty name="content.previous"}<dd class="items-prev fl"><span>上一篇：</span><a href="{$content.previous.url|htmlentities}" title="{$content.previous.title|htmlentities}">{$content.previous.title|htmlentities}</a></dd>{/notempty}
-            {notempty name="content.next"}<dd class="items-next fr"><span>下一篇：</span><a href="{$content.next.url|htmlentities}" title="{$content.next.title|htmlentities}">{$content.next.title|htmlentities}</a></dd>{/notempty}
-        </dl></div>
-        <div class="cms-news-detail-return"><a href="/news" title="返回列表">返回列表</a></div>
+{include file="cms/layout/header" /}
+<main>
+{notempty name="banner.0"}
+<section class="hero hero--inner hero--blue news-generated-hero">
+  {notempty name="banner.0.image"}<div class="inner-hero-bg news-generated-hero-bg" style="background-image:url('{$banner.0.image|htmlentities}');"></div>{else /}<div class="inner-hero-bg news-generated-hero-bg"></div>{/notempty}
+  <div class="container"><div class="hero-text">{notempty name="banner.0.title"}<h1>{$banner.0.title|htmlentities}</h1>{/notempty}{notempty name="banner.0.subtitle"}<p class="lede">{$banner.0.subtitle|htmlentities}</p>{/notempty}</div></div>
+</section>
+{/notempty}
+<section class="news-detail-section"><div class="container">
+  <nav class="news-detail-breadcrumb" aria-label="当前位置"><a href="/">首页</a><span>/</span><a href="/news">新闻动态</a><span>/</span><span>新闻详情</span></nav>
+  <article class="news-detail-article">
+    <header class="news-detail-header"><h1>{$content.article.title|htmlentities}</h1><div class="news-detail-meta">{notempty name="content.metadata.publish_date"}<span>发布时间：<time>{$content.metadata.publish_date|htmlentities}</time></span>{/notempty}{notempty name="content.metadata.source"}<span>来源：{$content.metadata.source|htmlentities}</span>{/notempty}</div></header>
+    {notempty name="content.article.summary"}<div class="news-detail-lead">{$content.article.summary|htmlentities}</div>{/notempty}
+    {notempty name="content.article.cover"}<figure class="news-detail-cover"><img src="{$content.article.cover|htmlentities}" alt="{$content.article.title|htmlentities}"></figure>{/notempty}
+    <div class="news-detail-body cms-rich-content">{$content.article.content_html}</div>
+    <div class="news-detail-nav">
+      {notempty name="content.previous"}<a href="{$content.previous.url|htmlentities}"><span>上一篇</span><strong>{$content.previous.title|htmlentities}</strong></a>{/notempty}
+      {notempty name="content.next"}<a href="{$content.next.url|htmlentities}"><span>下一篇</span><strong>{$content.next.title|htmlentities}</strong></a>{/notempty}
     </div>
-    <div class="clear"></div>
-
-    {notempty name="content.relatedArticles"}<div class="p102-info-related">
-        <h3 class="p102-info-11-title">相关推荐</h3>
-        <div class="p102-info-related-list">{volist name="content.relatedArticles" id="item"}<dl><dt><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}" title="{$item.title|htmlentities}">{/notempty}</a></dt><dd><h4><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.summary|htmlentities}<a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">【详情+】</a></p></dd></dl>{/volist}<div class="clear"></div></div>
-    </div>{/notempty}
-
-    {notempty name="content.latestArticles"}<div class="p102-info-latest">
-        <h3 class="p102-info-12-title">最新资讯</h3>
-        <ul class="clearafter">{volist name="content.latestColumns" id="column" key="columnIndex"}<li class="{if $columnIndex==2}last{/if}">{volist name="column" id="item"}<h4><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a><em>{$item.publish_date|htmlentities}</em></h4>{/volist}</li>{/volist}</ul>
-    </div>{/notempty}
-</div>
-{include file="cms/common/strict_footer" /}
+    <div class="news-detail-back"><a href="/news">返回新闻列表</a></div>
+  </article>
+</div></section>
+{include file="cms/layout/footer" /}

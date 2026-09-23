@@ -17,8 +17,9 @@ class ArticleCategory extends Backend
         parent::_initialize();
         $this->model = new CmsModel();
 
+        $retiredNames = ['常见问答', '科创美新闻', '新闻动态'];
         $parents = [0 => '无'];
-        foreach ($this->model->order('weigh desc,id asc')->select() as $item) {
+        foreach ($this->model->where('name', 'not in', $retiredNames)->order('weigh desc,id asc')->select() as $item) {
             $parents[$item['id']] = $item['name'];
         }
         $this->view->assign('parentList', $parents);
@@ -34,7 +35,11 @@ class ArticleCategory extends Backend
         }
 
         list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-        $list = $this->model->where($where)->order($sort, $order)->paginate($limit);
+        $list = $this->model
+            ->where($where)
+            ->where('name', 'not in', ['常见问答', '科创美新闻', '新闻动态'])
+            ->order($sort, $order)
+            ->paginate($limit);
         $rows = $list->items();
 
         $parentNames = $this->model->column('name', 'id');

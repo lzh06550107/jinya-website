@@ -1,1 +1,11 @@
-<section class="section"><div class="container"><div class="cta-designer"><img alt="设计印刷制作一站式服务" loading="lazy" src="{$block.image|htmlentities}"></div></div></section>
+<section class="bags-benefits-section"><div class="container">
+  <div class="bags-benefits-grid">
+    {volist name="block.extra.items" id="item"}
+    <div class="bags-benefit-item">
+      <div class="bags-benefit-shield">{include file="cms/page/bags/icon" /}</div>
+      <h4>{$item.title|htmlentities}</h4>
+      {notempty name="item.text"}<p>{$item.text|htmlentities}</p>{/notempty}
+    </div>
+    {/volist}
+  </div>
+</div></section>

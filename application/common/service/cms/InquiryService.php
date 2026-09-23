@@ -31,24 +31,46 @@ class InquiryService
             throw new \InvalidArgumentException('咨询需求不能超过2000个字符');
         }
         $ip = isset($data['ip']) ? $data['ip'] : '';
-        $rateKey = 'cms:inquiry:' . md5($ip . '|' . $mobile);
+        // 只拦截几秒内的完全重复提交，防止双击产生重复线索。
+        // 不再按“IP + 手机号”锁 60 秒，否则同一客户补充第二条需求、
+        // 以及后台验收连续测试都会被误判为频繁提交。
+        $rateKey = 'cms:inquiry:dedupe:v2:' . md5($ip . '|' . $mobile . '|' . $company . '|' . $content);
         if (Cache::get($rateKey)) {
-            throw new \RuntimeException('提交过于频繁，请稍后再试');
+            throw new \RuntimeException('请勿重复提交相同内容');
         }
         $inquiry = new Inquiry();
         $data['name'] = $name;
         $data['mobile'] = $mobile;
         $data['company'] = $company;
         $data['content'] = $content;
+        // System metadata must respect cms_inquiry column lengths as well.
+        // Otherwise a long title / Referer / UTM value can make an otherwise
+        // valid customer form fail under MySQL strict mode.
+        $data['source_url'] = $this->clip(isset($data['source_url']) ? $data['source_url'] : '', 500);
+        $data['source_title'] = $this->clip(isset($data['source_title']) ? $data['source_title'] : '', 255);
+        $data['utm_source'] = $this->clip(isset($data['utm_source']) ? $data['utm_source'] : '', 100);
+        $data['utm_medium'] = $this->clip(isset($data['utm_medium']) ? $data['utm_medium'] : '', 100);
+        $data['utm_campaign'] = $this->clip(isset($data['utm_campaign']) ? $data['utm_campaign'] : '', 100);
+        $data['ip'] = $this->clip(isset($data['ip']) ? $data['ip'] : '', 50);
+        $data['user_agent'] = $this->clip(isset($data['user_agent']) ? $data['user_agent'] : '', 500);
         $data['status'] = 'new';
         $inquiry->allowField(true)->save($data);
-        Cache::set($rateKey, 1, 60);
+        Cache::set($rateKey, 1, 5);
         return $inquiry;
     }
 
     protected function fieldLength($value)
     {
         return function_exists('mb_strlen') ? mb_strlen((string)$value, 'UTF-8') : strlen((string)$value);
+    }
+
+    protected function clip($value, $maxLength)
+    {
+        $value = trim((string)$value);
+        if (function_exists('mb_substr')) {
+            return mb_substr($value, 0, (int)$maxLength, 'UTF-8');
+        }
+        return substr($value, 0, (int)$maxLength);
     }
 
     public function assign($id, $adminId, $operatorId)

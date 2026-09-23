@@ -45,7 +45,7 @@ class Inquiry extends Backend
 
     public function detail($ids = null)
     {
-        $row = $this->findAccessible($ids, ['followups.admin', 'assignedAdmin']);
+        $row = $this->findAccessible($ids, ['assignedAdmin']);
         if (!$this->auth->check('cms/inquiry/view_mobile')) {
             $row['mobile'] = $row['mobile_masked'];
         }
@@ -179,7 +179,10 @@ class Inquiry extends Backend
 
     protected function findAccessible($id, array $with = [])
     {
-        $query = InquiryModel::where('id', (int)$id);
+        // assignedAdmin is eager-loaded with a LEFT JOIN. Once that join exists,
+        // an unqualified "id" is ambiguous because both inquiry and admin own it.
+        // Always target the inquiry table explicitly for the requested lead.
+        $query = InquiryModel::where('inquiry.id', (int)$id);
         if ($with) {
             $query->with($with);
         }

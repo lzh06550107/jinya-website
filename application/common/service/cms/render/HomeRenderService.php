@@ -177,6 +177,8 @@ class HomeRenderService extends AbstractRenderService
         }
         $config['social_icon_1_view'] = $this->icons->view(isset($config['social_icon_1']) ? $config['social_icon_1'] : '');
         $config['social_icon_2_view'] = $this->icons->view(isset($config['social_icon_2']) ? $config['social_icon_2'] : '');
+        $config['social_qr_1_url'] = $this->media->resolve(isset($config['social_qr_1']) ? $config['social_qr_1'] : '')['url'];
+        $config['social_qr_2_url'] = $this->media->resolve(isset($config['social_qr_2']) ? $config['social_qr_2'] : '')['url'];
         return $config;
     }
 

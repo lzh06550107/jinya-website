@@ -154,7 +154,7 @@ class MarkdownRenderer
         $flushList();
         $flushQuote();
 
-        return HtmlSanitizer::clean(implode("\n", $html));
+        return self::restoreTextColors(HtmlSanitizer::clean(implode("\n", $html)));
     }
 
     /**
@@ -167,7 +167,20 @@ class MarkdownRenderer
         if (trim($markdown) === '') {
             return '';
         }
-        return HtmlSanitizer::clean(self::inline($markdown, true));
+        return self::restoreTextColors(HtmlSanitizer::clean(self::inline($markdown, true)));
+    }
+
+    /**
+     * Render editor-authored inline rich text while preserving every visual line break.
+     * Used by fields backed by a WYSIWYG/contenteditable editor rather than Markdown soft-wrap semantics.
+     */
+    public static function renderInlinePreserveLineBreaks($markdown)
+    {
+        $markdown = str_replace(["\r\n", "\r"], "\n", (string)$markdown);
+        if (trim($markdown) === '') {
+            return '';
+        }
+        return self::restoreTextColors(HtmlSanitizer::clean(self::inline($markdown, true, true)));
     }
 
     public static function plainText($markdown)
@@ -184,9 +197,19 @@ class MarkdownRenderer
         return trim($text);
     }
 
-    private static function inline($text, $preserveLineBreaks)
+    private static function inline($text, $preserveLineBreaks, $preserveEveryLineBreak = false)
     {
         $text = htmlspecialchars((string)$text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        // Trusted editor syntax for partial text color. The source is escaped
+        // first, so only this validated marker can create the temporary span.
+        $text = preg_replace_callback('/\\[color=(#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?)\\]([\\s\\S]*?)\\[\\/color\\]/u', function ($m) {
+            $color = strtolower($m[1]);
+            if (strlen($color) === 4) {
+                $color = '#' . $color[1] . $color[1] . $color[2] . $color[2] . $color[3] . $color[3];
+            }
+            return '<span data-cms-text-color="' . $color . '">' . $m[2] . '</span>';
+        }, $text);
 
         // Images before links so ![...](...) is not consumed by link matching.
         $text = preg_replace_callback('/!\[([^\]]*)\]\(([^\s\)]+)(?:\s+&quot;([^&]*)&quot;)?\)/u', function ($m) {
@@ -213,10 +236,25 @@ class MarkdownRenderer
         $text = preg_replace('/~~([^~\n]+)~~/u', '<s>$1</s>', $text);
 
         if ($preserveLineBreaks) {
-            $text = preg_replace('/ {2,}\n/u', '<br>', $text);
-            $text = str_replace("\n", ' ', $text);
+            if ($preserveEveryLineBreak) {
+                $text = str_replace("\n", '<br>', $text);
+            } else {
+                $text = preg_replace('/ {2,}\n/u', '<br>', $text);
+                $text = str_replace("\n", ' ', $text);
+            }
         }
         return $text;
+    }
+
+    private static function restoreTextColors($html)
+    {
+        return preg_replace_callback(
+            '/\\sdata-cms-text-color="(#[0-9a-f]{6})"/u',
+            function ($m) {
+                return ' style="color:' . $m[1] . '"';
+            },
+            (string)$html
+        );
     }
 
     private static function safeUrl($url)

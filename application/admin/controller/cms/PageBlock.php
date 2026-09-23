@@ -58,6 +58,10 @@ class PageBlock extends Backend
         $query = $this->model
             ->where('page_key', $pageKey)
             ->where($where);
+        $retiredBlockKeys = PageSchemaRegistry::retiredBlockKeys($pageKey);
+        if ($retiredBlockKeys) {
+            $query->where('block_key', 'not in', $retiredBlockKeys);
+        }
         if ($pageKey === 'home' && $sort === 'weigh') {
             $query->order('weigh ' . ($order === 'asc' ? 'asc' : 'desc') . ',id asc');
         } else {
@@ -134,6 +138,9 @@ class PageBlock extends Backend
         $row = PageBlockModel::get((int)$ids);
         if (!$row) {
             $this->error('固定功能块不存在');
+        }
+        if (in_array((string)$row['block_key'], PageSchemaRegistry::retiredBlockKeys((string)$row['page_key']), true)) {
+            $this->error('该页面功能块已退役');
         }
         $schema = PageSchemaRegistry::block($row['page_key'], $row['block_key']);
         $realSource = (new PageBlockRealSourceEditorRegistry())->resolve($row['page_key'], $row['block_key'], $row['block_type']);
@@ -226,11 +233,16 @@ class PageBlock extends Backend
         if (!$rows) {
             $rows = [$this->emptyBannerRow()];
         }
+        $profile = $this->bannerEditorProfile($realSource['page_key'], $realSource['position']);
+        if (empty($profile['allow_multiple'])) {
+            $rows = array_slice($rows, 0, 1);
+        }
         $this->view->assign('row', $row);
         $this->view->assign('schema', $schema);
         $this->view->assign('bannerRows', $rows);
         $this->view->assign('bannerPageKey', $realSource['page_key']);
         $this->view->assign('bannerPosition', $realSource['position']);
+        $this->view->assign('bannerProfile', $profile);
     }
 
     protected function assignHomeSectionEditData($row, array $schema, array $realSource)
@@ -248,6 +260,49 @@ class PageBlock extends Backend
         $this->view->assign('homePcReferenceIds', implode(',', isset($home['pc_reference_ids']) ? $home['pc_reference_ids'] : []));
         $this->view->assign('homeMobileReferenceIds', implode(',', isset($home['mobile_reference_ids']) ? $home['mobile_reference_ids'] : []));
         $this->view->assign('homeReferenceSource', $this->referenceSource($contentType));
+    }
+
+    protected function bannerEditorProfile($pageKey, $position)
+    {
+        $pageKey = trim((string)$pageKey);
+        if ($pageKey === 'home' && $position === 'hero') {
+            return [
+                'name' => 'home_full',
+                'label' => '首页轮播',
+                'allow_multiple' => 1,
+                'show_copy' => 1,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        if (in_array($pageKey, ['news.index', 'news.category', 'news.detail'], true)) {
+            return [
+                'name' => 'news_channel',
+                'label' => '新闻栏目 Banner',
+                'allow_multiple' => 0,
+                'show_copy' => 1,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        if (in_array($pageKey, ['product.index', 'product.category'], true)) {
+            return [
+                'name' => 'image_channel',
+                'label' => '产品栏目 Banner',
+                'allow_multiple' => 0,
+                'show_copy' => 0,
+                'show_mobile' => 1,
+                'show_mobile_visibility' => 1,
+            ];
+        }
+        return [
+            'name' => 'pc_image',
+            'label' => 'PC 栏目 Banner',
+            'allow_multiple' => 0,
+            'show_copy' => 0,
+            'show_mobile' => 0,
+            'show_mobile_visibility' => 0,
+        ];
     }
 
     protected function emptyBannerRow()
@@ -274,7 +329,13 @@ class PageBlock extends Backend
         $config['enabled'] = $row['status'] === 'normal' ? 1 : 0;
         $fields = [];
         $deviceImageFields = [];
+        $adminHiddenFields = isset($schema['admin_hidden_fields']) && is_array($schema['admin_hidden_fields'])
+            ? array_values($schema['admin_hidden_fields'])
+            : [];
         foreach ($schema['fields'] as $name => $definition) {
+            if (in_array($name, $adminHiddenFields, true)) {
+                continue;
+            }
             $field = $definition;
             $field['name'] = $name;
             $field['input_id'] = 'c-config-' . str_replace('_', '-', $name);
@@ -304,7 +365,9 @@ class PageBlock extends Backend
         $this->view->assign('row', $row);
         $this->view->assign('schema', $schema);
         $this->view->assign('formFields', $fields);
-        $this->view->assign('schemaFieldsJson', json_encode(array_keys($schema['fields']), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $this->view->assign('schemaFieldsJson', json_encode(array_values(array_map(function ($field) {
+            return $field['name'];
+        }, $fields)), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
         $this->view->assign('deviceImageFields', $deviceImageFields);
         $this->view->assign('supportsSourceMode', isset($schema['fields']['source_mode']));
         $this->view->assign('referenceIds', implode(',', array_map('intval', $references ?: [])));

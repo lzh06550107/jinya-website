@@ -1,1 +1,6 @@
-<section class="section"><div class="container"><div class="culture-banner" style="background-image:url('{$block.image|htmlentities}');"><p class="eb">{$block.subtitle|htmlentities}</p><h2>{$block.title|htmlentities}</h2><div class="culture-grid">{volist name="block.extra.items" id="item"}<div class="glass-card"><div class="ic">{include file="cms/page/about/icon" /}</div><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities|nl2br}</p></div>{/volist}</div></div></div></section>
+<section class="about-culture-section"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}>
+  <div class="about-culture-overlay"></div><div class="container about-culture-inner">
+    <div class="about-culture-heading">{notempty name="block.subtitle"}<span>{$block.subtitle|htmlentities}</span>{/notempty}<h2>{$block.title|htmlentities}</h2></div>
+    <div class="about-culture-grid">{volist name="block.extra.items" id="item"}<article class="about-culture-card"><div class="about-culture-icon">{include file="cms/page/about/icon" /}</div><h3>{$item.title|htmlentities}</h3><div class="about-culture-copy">{$item.text|htmlentities|nl2br}</div></article>{/volist}</div>
+  </div>
+</section>

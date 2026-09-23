@@ -41,6 +41,52 @@ class BannerHighlightCodec
         return $out;
     }
 
+    public function homeHero(array $items)
+    {
+        $items = $this->normalize($items);
+        $legacy = [
+            0 => ['from' => 'fa fa-users', 'to' => '/assets/jinya/img/home-highlight-team.png'],
+            1 => ['from' => 'fa fa-shield', 'to' => '/assets/jinya/img/home-highlight-quality.png'],
+            2 => ['from' => 'fa fa-truck', 'to' => '/assets/jinya/img/home-highlight-delivery.png'],
+        ];
+        foreach ($legacy as $index => $mapping) {
+            if (!isset($items[$index])) {
+                continue;
+            }
+            $icon = isset($items[$index]['icon']) ? trim((string)$items[$index]['icon']) : '';
+            if ($icon === $mapping['from']) {
+                $items[$index]['icon'] = $mapping['to'];
+            }
+        }
+        return $items;
+    }
+
+    public function iconAt($json, $index, $homeHero = false)
+    {
+        $items = $this->decode($json);
+        if ($homeHero) {
+            $items = $this->homeHero($items);
+        }
+        $index = (int)$index;
+        return isset($items[$index]['icon']) ? trim((string)$items[$index]['icon']) : '';
+    }
+
+    public function applyIconOverrides($json, array $icons, $homeHero = false)
+    {
+        $items = $this->decode($json);
+        if ($homeHero) {
+            $items = $this->homeHero($items);
+        }
+        foreach ($icons as $index => $icon) {
+            $index = (int)$index;
+            if (!isset($items[$index])) {
+                continue;
+            }
+            $items[$index]['icon'] = trim(is_scalar($icon) ? (string)$icon : '');
+        }
+        return $this->encode($items);
+    }
+
     private function visible($value)
     {
         if ($value === true || $value === 1 || $value === '1') {

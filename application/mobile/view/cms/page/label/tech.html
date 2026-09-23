@@ -1,1 +1,7 @@
-<section class="section section--alt"><div class="container"><div class="cta-banner" style="background-image:url('{$block.image|htmlentities}');"><div class="cta-banner-inner"><h3>{$block.title|htmlentities}</h3><p>{$block.content_inline_html}</p><a class="btn btn-primary" href="{$block.extra.button_url|default='/page/contact'|htmlentities}">{$block.extra.button_text|default='咨询定制方案'|htmlentities}</a></div></div></div></section>
+<section class="section labels-temperature-section">
+  <div class="container">
+    <div class="labels-temperature-visual">
+      {notempty name="block.image"}<img src="{$block.image|htmlentities}" alt="{$block.title|default='不干胶标签耐高低温与不起边性能展示'|htmlentities}" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/labels-temperature-resistance.webp?v=2" alt="不干胶标签耐高低温与不起边性能展示" loading="lazy">{/notempty}
+    </div>
+  </div>
+</section>

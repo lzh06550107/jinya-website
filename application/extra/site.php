@@ -4,7 +4,7 @@ return array (
   'name' => '金亚包装',
   'beian' => '皖ICP备15022698号',
   'cdnurl' => '',
-  'version' => '1.0.1',
+  'version' => '1.0.2.20260922',
   'timezone' => 'Asia/Shanghai',
   'forbiddenip' => '',
   'languages' => 
@@ -44,10 +44,6 @@ return array (
   'cms_company' => '安徽科创美涂料科技股份有限公司',
   'cms_slogan' => '科创美是一家专门从事建筑墙面涂料生产与施工的高新技术企业，提供墙面、地面、屋面的综合涂料解决方案',
   'cms_logo' => '/uploads/20260825/dafe2d34dde77abb9247b226ff2c2406.png',
-  'cms_pc_news_banner' => '',
-  'cms_pc_about_banner' => '',
-  'cms_mobile_news_banner' => '',
-  'cms_mobile_about_banner' => '',
   'cms_wechat_qr' => '/uploads/cms-clone/pc/resource/images/4e3d65d0ac04484b8426f9a10abf6614_22.jpg',
   'cms_douyin_qr' => '/uploads/cms-clone/pc/resource/images/4e3d65d0ac04484b8426f9a10abf6614_28.jpg',
   'cms_kuaishou_qr' => '/uploads/cms-clone/pc/resource/images/4e3d65d0ac04484b8426f9a10abf6614_24.jpg',
@@ -64,6 +60,4 @@ return array (
   'cms_service_wechat_name' => '金亚包装业务客服',
   'cms_service_wechat_tip' => '扫码添加客服，获取包装解决方案',
   'cms_service_hours' => '8:30-18:00',
-  'cms_pc_product_banner' => '',
-  'cms_mobile_product_banner' => '',
 );

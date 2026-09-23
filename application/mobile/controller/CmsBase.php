@@ -7,7 +7,6 @@ use app\common\service\cms\InstallerService;
 use app\common\service\cms\PageConfigService;
 use app\common\service\cms\PageSeoResolver;
 use think\Cache;
-use think\Cookie;
 use think\exception\HttpException;
 use think\exception\HttpResponseException;
 use think\Response;
@@ -43,9 +42,6 @@ abstract class CmsBase extends Frontend
         $requestPath = $this->requestPath();
         $explicitMobile = (bool)preg_match('#^/mobile(?:/|$)#i', $requestPath);
         $this->mobileBase = $explicitMobile ? '/mobile' : '';
-        if ($explicitMobile) {
-            Cookie::set('cms_view', 'mobile', ['expire' => 2592000, 'path' => '/', 'httponly' => true]);
-        }
         $this->desktopPath = $explicitMobile ? $this->stripMobilePrefix($requestPath) : $requestPath;
 
         $this->renderLayout = $this->renderServices()->layout()->render($this->renderContext());
@@ -53,7 +49,10 @@ abstract class CmsBase extends Frontend
         $this->view->assign('layout', $this->renderLayout);
         $this->view->assign('cmsNavigation', $navigation);
         $this->view->assign('cmsSite', isset($this->renderLayout['site']) ? $this->renderLayout['site'] : []);
-        $this->view->assign('cmsInquiryToken', $this->request->token());
+        // CSRF token is generated only while rendering a form page. Generating a
+        // new token during POST initialization would invalidate the token that the
+        // browser is currently submitting before Inquiry::submit() can verify it.
+        $this->view->assign('cmsInquiryToken', $this->request->isPost() ? '' : $this->request->token());
         $this->view->assign('mobileBase', $this->mobileBase);
         $this->view->assign('mobileHomeUrl', $this->mobileBase ? '/mobile' : '/');
         $this->view->assign('desktopUrl', $this->buildModeUrl($this->desktopPath, 'desktop'));
@@ -159,25 +158,7 @@ abstract class CmsBase extends Frontend
     }
     protected function setMobileSection($section)
     {
-        $section = (string)$section;
-        $site = (array)config('site');
-        $bannerMap = [
-            'products' => ['cms_mobile_product_banner', 'cms_pc_product_banner'],
-            'news' => ['cms_mobile_news_banner', 'cms_pc_news_banner'],
-            'page' => ['cms_mobile_about_banner', 'cms_pc_about_banner'],
-            'contact' => ['cms_mobile_about_banner', 'cms_pc_about_banner'],
-        ];
-        $banner = '';
-        if (isset($bannerMap[$section])) {
-            foreach ($bannerMap[$section] as $key) {
-                if (!empty($site[$key])) {
-                    $banner = $site[$key];
-                    break;
-                }
-            }
-        }
-        $this->view->assign('mobileSection', $section);
-        $this->view->assign('mobileChannelBanner', $banner);
+        $this->view->assign('mobileSection', (string)$section);
     }
 
     protected function toMobileUrl($url)
@@ -272,9 +253,10 @@ abstract class CmsBase extends Frontend
         $banner = !empty($data['banner'][0]) ? $data['banner'][0] : [];
         $breadcrumb = !empty($data['breadcrumb']) ? $data['breadcrumb'] : [];
         $current = $breadcrumb ? end($breadcrumb) : [];
+        $mobileChannelBanner = isset($banner['image']) ? trim((string)$banner['image']) : '';
         $this->view->assign('mobileSection', (string)$section);
-        $this->view->assign('mobileChannelBanner', isset($banner['image']) ? $banner['image'] : '');
-        $this->view->assign('channelBannerVisible', !empty($banner));
+        $this->view->assign('mobileChannelBanner', $mobileChannelBanner);
+        $this->view->assign('channelBannerVisible', $mobileChannelBanner !== '');
         $this->view->assign('channelTitle', isset($current['title']) ? $current['title'] : '');
         return $data;
     }

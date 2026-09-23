@@ -1,1 +1,7 @@
-<section class="section"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><p class="eyebrow">{$block.subtitle|htmlentities}</p><div class="dash"></div></div><div class="bags-product-grid">{volist name="block.extra.items" id="item"}{if condition="$item.group eq 'main'"}<div class="photo-card bags-product-main"><div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div></div>{/if}{/volist}<div class="grid grid-2">{volist name="block.extra.items" id="item"}{if condition="$item.group neq 'main'"}<div class="photo-card"><div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div></div>{/if}{/volist}</div></div></div></section>
+<section class="section"><div class="container">
+  <div class="section-head"><h2>{$block.title|htmlentities}</h2>{notempty name="block.subtitle"}<p class="eyebrow">{$block.subtitle|htmlentities}</p>{/notempty}<div class="dash"></div></div>
+  <div class="grid" style="grid-template-columns:1.3fr 1fr;">
+    {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'main'"}<div class="photo-card"><div class="ph" style="aspect-ratio:auto;height:100%;"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy" style="height:100%;object-fit:cover;"></div></div>{/if}{/volist}
+    <div class="grid grid-2">{volist name="block.extra.items" id="item"}{if condition="$item.group neq 'main'"}<div class="photo-card"><div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div></div>{/if}{/volist}</div>
+  </div>
+</div></section>

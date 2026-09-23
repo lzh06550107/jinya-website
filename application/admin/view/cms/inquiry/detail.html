@@ -13,20 +13,3 @@
         </dl>
     </div>
 </div>
-<div class="panel panel-default">
-    <div class="panel-heading"><strong>跟进时间线</strong></div>
-    <div class="panel-body">
-        <ul class="list-group">
-            {volist name="row.followups" id="vo"}
-            <li class="list-group-item">
-                <strong>{$vo.follow_type|htmlentities}</strong>
-                {$vo.content|htmlentities}
-                {if condition="$vo.admin"}<small class="text-muted">— {$vo.admin.nickname|htmlentities}</small>{/if}
-                {if condition="$vo.attachment"}<a class="btn btn-xs btn-default" href="{$vo.attachment|htmlentities}" target="_blank" rel="noopener noreferrer">附件</a>{/if}
-                <span class="text-muted pull-right">{$vo.createtime|date='Y-m-d H:i',###}</span>
-            </li>
-            {/volist}
-            {empty name="row.followups"}<li class="list-group-item text-muted">暂无跟进记录</li>{/empty}
-        </ul>
-    </div>
-</div>

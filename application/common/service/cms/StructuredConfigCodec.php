@@ -12,8 +12,12 @@ class StructuredConfigCodec
     protected $homeScalarMap = [
         'config_social_icon_1' => 'social_icon_1',
         'config_social_text_1' => 'social_text_1',
+        'config_social_url_1' => 'social_url_1',
+        'config_social_qr_1' => 'social_qr_1',
         'config_social_icon_2' => 'social_icon_2',
         'config_social_text_2' => 'social_text_2',
+        'config_social_url_2' => 'social_url_2',
+        'config_social_qr_2' => 'social_qr_2',
         'config_left_title' => 'left_title',
         'config_right_title' => 'right_title',
         'config_left_url' => 'left_url',
@@ -45,8 +49,8 @@ class StructuredConfigCodec
             $config[$key] = isset($params[$input]) ? trim((string)$params[$input]) : '';
         }
         $config['metrics'] = array_key_exists('config_metrics', $params)
-            ? $this->normalizeRows($params['config_metrics'], ['value', 'unit', 'text', 'icon', 'prefix'])
-            : $this->parseRows(isset($params['config_metrics_text']) ? $params['config_metrics_text'] : '', ['value', 'unit', 'text', 'icon', 'prefix']);
+            ? $this->normalizeRows($params['config_metrics'], ['title', 'text', 'icon'])
+            : $this->parseRows(isset($params['config_metrics_text']) ? $params['config_metrics_text'] : '', ['title', 'text', 'icon']);
         $config['items'] = array_key_exists('config_items', $params)
             ? $this->normalizeRows($params['config_items'], ['title', 'text', 'image', 'icon', 'url', 'subtitle', 'mobile_image', 'pc_visible', 'mobile_visible'])
             : $this->parseRows(isset($params['config_items_text']) ? $params['config_items_text'] : '', ['title', 'text', 'image', 'icon', 'url', 'subtitle', 'mobile_image', 'pc_visible', 'mobile_visible']);
@@ -86,7 +90,7 @@ class StructuredConfigCodec
         }
 
         if (array_key_exists('config_metrics', $params)) {
-            $config['metrics'] = $this->normalizeRows($params['config_metrics'], ['value', 'unit', 'text', 'icon', 'prefix']);
+            $config['metrics'] = $this->normalizeRows($params['config_metrics'], ['title', 'text', 'icon']);
             $consumed[] = 'config_metrics';
             if (array_key_exists('config_metrics_text', $params)) {
                 $consumed[] = 'config_metrics_text';
@@ -105,7 +109,7 @@ class StructuredConfigCodec
             'config_social_links_text' => ['social_links', ['title', 'url', 'image']],
         ];
         if (!array_key_exists('config_metrics', $params)) {
-            $rowFields = ['config_metrics_text' => ['metrics', ['value', 'unit', 'text', 'icon', 'prefix']]] + $rowFields;
+            $rowFields = ['config_metrics_text' => ['metrics', ['title', 'text', 'icon']]] + $rowFields;
         }
         if (!array_key_exists('config_items', $params)) {
             $rowFields = ['config_items_text' => ['items', ['title', 'text', 'image', 'icon', 'url', 'subtitle', 'mobile_image', 'pc_visible', 'mobile_visible']]] + $rowFields;

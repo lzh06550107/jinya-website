@@ -21,6 +21,8 @@ class LabelPageBlockConfigCodec
         'label_button_text' => 'button_text',
         'label_button_url' => 'button_url',
         'label_secondary_title' => 'secondary_title',
+        'label_print_title' => 'print_title',
+        'label_print_points' => 'print_points',
     ];
 
     private $itemFields = [

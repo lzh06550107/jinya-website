@@ -56,7 +56,7 @@ class PageBlockRealSourceService
                 if ($id > 0 && !isset($existing[$id])) {
                     throw new \InvalidArgumentException('Banner 不存在或不属于当前页面：' . $id);
                 }
-                $fields = $this->normalizeBanner($row);
+                $fields = $this->normalizeBanner($row, $id > 0 && isset($existing[$id]) ? $existing[$id] : []);
                 $fields['edited_by_admin'] = 1;
                 $fields['updatetime'] = $now;
                 if ($id > 0) {
@@ -257,7 +257,7 @@ class PageBlockRealSourceService
         }
     }
 
-    private function normalizeBanner(array $row)
+    private function normalizeBanner(array $row, array $existing = [])
     {
         $stringFields = [
             'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'description', 'mobile_description',
@@ -266,7 +266,13 @@ class PageBlockRealSourceService
         ];
         $fields = [];
         foreach ($stringFields as $field) {
-            $fields[$field] = isset($row[$field]) && !is_array($row[$field]) ? trim((string)$row[$field]) : '';
+            if (array_key_exists($field, $row) && !is_array($row[$field])) {
+                $fields[$field] = trim((string)$row[$field]);
+            } else {
+                $fields[$field] = isset($existing[$field]) && !is_array($existing[$field])
+                    ? trim((string)$existing[$field])
+                    : '';
+            }
         }
         if (!in_array($fields['media_type'], ['image', 'video'], true)) {
             $fields['media_type'] = 'image';
@@ -275,14 +281,26 @@ class PageBlockRealSourceService
             $fields['mobile_media_type'] = '';
         }
         $fields['highlights_json'] = $this->bannerHighlightCodec->normalizeJson(
-            isset($row['highlights_json']) ? $row['highlights_json'] : ''
+            array_key_exists('highlights_json', $row)
+                ? $row['highlights_json']
+                : (isset($existing['highlights_json']) ? $existing['highlights_json'] : '')
         );
         $fields['status'] = $fields['status'] === 'hidden' ? 'hidden' : 'normal';
-        $fields['pc_visible'] = !empty($row['pc_visible']) ? 1 : 0;
-        $fields['mobile_visible'] = !empty($row['mobile_visible']) ? 1 : 0;
-        $fields['weigh'] = isset($row['weigh']) ? (int)$row['weigh'] : 0;
-        $fields['start_time'] = $this->timestamp(isset($row['start_time']) ? $row['start_time'] : null);
-        $fields['end_time'] = $this->timestamp(isset($row['end_time']) ? $row['end_time'] : null);
+        $fields['pc_visible'] = array_key_exists('pc_visible', $row)
+            ? (!empty($row['pc_visible']) ? 1 : 0)
+            : (isset($existing['pc_visible']) ? (int)$existing['pc_visible'] : 1);
+        $fields['mobile_visible'] = array_key_exists('mobile_visible', $row)
+            ? (!empty($row['mobile_visible']) ? 1 : 0)
+            : (isset($existing['mobile_visible']) ? (int)$existing['mobile_visible'] : 1);
+        $fields['weigh'] = array_key_exists('weigh', $row)
+            ? (int)$row['weigh']
+            : (isset($existing['weigh']) ? (int)$existing['weigh'] : 0);
+        $fields['start_time'] = $this->timestamp(
+            array_key_exists('start_time', $row) ? $row['start_time'] : (isset($existing['start_time']) ? $existing['start_time'] : null)
+        );
+        $fields['end_time'] = $this->timestamp(
+            array_key_exists('end_time', $row) ? $row['end_time'] : (isset($existing['end_time']) ? $existing['end_time'] : null)
+        );
         return $fields;
     }
 

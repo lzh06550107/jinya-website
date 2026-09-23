@@ -4,6 +4,7 @@
         <div class="alert alert-info">
             当前页面：<strong>{$page.page_name|htmlentities}</strong>（{$page.page_key|htmlentities}）。
             固定功能块不能新增或删除；首页轮播固定第一位，其余首页功能块可拖拽调整前台显示顺序。
+            {if condition="$page.page_key eq 'news.index'"}<br>新闻分类导航由已发布分类自动生成，分页由新闻总数与每页数量自动生成，不再提供无效的独立配置。{/if}
         </div>
         <div id="toolbar" class="toolbar">
             {:build_toolbar('refresh')}

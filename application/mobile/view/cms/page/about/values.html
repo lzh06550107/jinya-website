@@ -1,1 +1,4 @@
-<section class="section"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div>{volist name="block.extra.items" id="item"}<div class="value-block {if condition="$item.group == 'reverse'"}rev{/if}"><div class="ph">{notempty name="item.image"}<img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}">{/notempty}</div><div><h3>{$item.title|htmlentities}</h3><p>{$item.text|htmlentities|nl2br}</p></div></div>{/volist}</div></section>
+<section class="section about-quality-section"><div class="container">
+  <div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div>
+  {volist name="block.extra.items" id="item"}<div class="value-block{if condition="$item.group eq 'reverse'"} rev{/if}"><div class="ph"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div><div><h3>{$item.title|htmlentities}</h3><p>{$item.text|htmlentities|nl2br}</p></div></div>{/volist}
+</div></section>

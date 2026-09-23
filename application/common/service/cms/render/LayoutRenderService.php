@@ -38,6 +38,8 @@ class LayoutRenderService
             'cms_email' => isset($site['cms_email']) ? $site['cms_email'] : '',
             'address' => isset($site['cms_address']) ? $site['cms_address'] : '',
             'cms_address' => isset($site['cms_address']) ? $site['cms_address'] : '',
+            'factory_address' => isset($site['cms_factory_address']) ? $site['cms_factory_address'] : '',
+            'cms_factory_address' => isset($site['cms_factory_address']) ? $site['cms_factory_address'] : '',
             'wechat_qr' => isset($site['cms_wechat_qr']) ? $site['cms_wechat_qr'] : '',
             'cms_service_wecom_url' => $this->externalServiceUrl(isset($site['cms_service_wecom_url']) ? $site['cms_service_wecom_url'] : ''),
             'cms_service_wechat_qr' => isset($site['cms_service_wechat_qr']) ? $site['cms_service_wechat_qr'] : '',
@@ -102,7 +104,11 @@ class LayoutRenderService
 
     private function floatingServiceComponent(array $components, $terminal)
     {
-        $component = $this->component($components, 'layout.floating_service.' . $terminal);
+        $key = 'layout.floating_service.' . $terminal;
+        if ($terminal === 'mobile' && empty($components[$key]) && !empty($components['layout.floating_service.pc'])) {
+            $key = 'layout.floating_service.pc';
+        }
+        $component = $this->component($components, $key);
         $config = $component['config'];
         foreach (LayoutSchemaRegistry::fields('floating_service') as $name => $definition) {
             if (!array_key_exists($name, $config)) {
@@ -138,12 +144,48 @@ class LayoutRenderService
             if (isset($item['status']) && $item['status'] === 'hidden') {
                 continue;
             }
+            $title = isset($item['title']) ? trim((string)$item['title']) : '';
             $qrKey = isset($item['qr_key']) ? trim((string)$item['qr_key']) : '';
+            if ($qrKey === '') {
+                $qrKey = $this->defaultFooterSocialQrKey($title);
+            }
+            $item['qr_key'] = $qrKey;
             $item['qr_image'] = $qrKey !== '' && isset($siteView[$qrKey]) ? (string)$siteView[$qrKey] : '';
+            $footerSocialIcon = $this->footerSocialIcon($title);
+            if ($footerSocialIcon !== '') {
+                // Footer social icons are fixed site assets. Override legacy/broken
+                // database icon paths so existing databases immediately use the
+                // uploaded high-resolution artwork without reinstalling CMS data.
+                $item['icon'] = $footerSocialIcon;
+            }
             $visibleItems[] = $item;
         }
         $component['config']['items'] = $this->decorateIconItems($visibleItems);
         return $component;
+    }
+
+    private function defaultFooterSocialQrKey($title)
+    {
+        $map = [
+            '微信' => 'wechat_qr',
+            '抖音' => 'douyin_qr',
+            '小红书' => 'xiaohongshu_qr',
+            '微信视频号' => 'video_qr',
+            '视频号' => 'video_qr',
+        ];
+        $title = trim((string)$title);
+        return isset($map[$title]) ? $map[$title] : '';
+    }
+
+    private function footerSocialIcon($title)
+    {
+        $icons = [
+            '微信' => '/assets/jinya/img/social-wechat.png?v=20260920-r3',
+            '抖音' => '/assets/jinya/img/social-douyin.svg?v=20260920-r5',
+            '小红书' => '/assets/jinya/img/social-xiaohongshu.png?v=20260920-r3',
+            '微信视频号' => '/assets/jinya/img/social-channels.png?v=20260920-r3',
+        ];
+        return isset($icons[$title]) ? $icons[$title] : '';
     }
 
     private function iconComponent(array $components, $key)

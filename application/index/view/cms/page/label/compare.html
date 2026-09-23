@@ -1,1 +1,13 @@
-<section class="section"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><p class="eyebrow">{$block.subtitle|htmlentities}</p><div class="dash"></div></div><table class="compare-table"><thead><tr><th>项目/名称</th><th>水胶</th><th>热熔胶</th></tr></thead><tbody>{volist name="block.extra.items" id="item"}{if condition="$item.group eq 'compare'"}<tr><td>{$item.title|htmlentities}</td><td>{$item.text|htmlentities}</td><td>{$item.subtitle|htmlentities}</td></tr>{/if}{/volist}</tbody></table><div class="mt-lg"></div><table class="compare-table"><thead><tr><th>产品名称</th><th>产品品质</th><th>产品尺寸</th><th>表面工艺</th><th>服务咨询</th></tr></thead><tbody>{volist name="block.extra.items" id="item"}{if condition="$item.group eq 'parameter'"}<tr><td>{$item.title|htmlentities}</td><td>{$item.text|htmlentities}</td><td>{$item.subtitle|htmlentities}</td><td>{$item.badge|htmlentities}</td><td>{$item.value|default='服务咨询'|htmlentities}</td></tr>{/if}{/volist}</tbody></table></div></section>
+<section class="section">
+  <div class="container">
+    <div class="section-head"><h2>{$block.title|default='胶水材质对比'|htmlentities}</h2>{notempty name="block.subtitle"}<p class="eyebrow">{$block.subtitle|htmlentities}</p>{/notempty}<div class="dash"></div></div>
+    <div class="glue-visual">{notempty name="block.image"}<img src="{$block.image|htmlentities}" alt="{$block.title|htmlentities}" loading="lazy">{else /}<img src="__CDN__/assets/jinya/img/labels-glue-visual.jpg" alt="水胶与热熔胶材质结构对比" loading="lazy">{/notempty}</div>
+    <table class="compare-table"><thead><tr><th>项目/名称</th><th>水胶</th><th>热熔胶</th></tr></thead><tbody>
+      {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'compare'"}<tr><td>{$item.title|htmlentities}</td><td>{$item.text|htmlentities}</td><td>{$item.subtitle|htmlentities}</td></tr>{/if}{/volist}
+    </tbody></table>
+    <div class="section-head mt-lg"><h2>{$block.extra.secondary_title|default='介绍说明'|htmlentities}</h2><div class="dash"></div></div>
+    <table class="compare-table kv-table"><tbody>
+      {volist name="block.extra.items" id="item"}{if condition="$item.group eq 'parameter'"}<tr><td>{$item.title|htmlentities}</td><td>{$item.text|htmlentities}</td><td>{$item.subtitle|htmlentities}</td><td>{$item.badge|htmlentities}</td></tr>{/if}{/volist}
+    </tbody></table>
+  </div>
+</section>

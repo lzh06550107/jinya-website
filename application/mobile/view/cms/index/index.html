@@ -1,77 +1,100 @@
-{include file="cms/common/strict_header" /}
-<section class="g-bd">
-{notempty name="hero"}<div class="g-adv swiper-container"><ul class="swiper-wrapper">{volist name="hero.items" id="banner"}<li class="swiper-slide"><a href="{$banner.link_url|default='javascript:;'|htmlentities}" title="{$banner.title|htmlentities}">{if condition="$banner.media_type eq 'video' && !empty($banner.video_url)"}<video autoplay loop muted playsinline{if !empty($banner.image)} poster="{$banner.image|htmlentities}"{/if} style="display:block;width:100%;height:100%;object-fit:cover;"><source src="{$banner.video_url|htmlentities}" type="video/mp4"></video>{elseif !empty($banner.image) /}<img alt="{$banner.title|htmlentities}" src="{$banner.image|htmlentities}">{/if}{if !empty($banner.title) || !empty($banner.subtitle) || !empty($banner.highlights)}{if !empty($banner.highlights)}<div class="cms-home-banner-copy has-highlights">{else /}<div class="cms-home-banner-copy">{/if}{notempty name="banner.title"}<strong class="cms-home-banner-title">{$banner.title|htmlentities}</strong>{/notempty}{notempty name="banner.subtitle"}<span class="cms-home-banner-subtitle">{$banner.subtitle|htmlentities}</span>{/notempty}{notempty name="banner.highlights"}<div class="cms-home-banner-highlights">{volist name="banner.highlights" id="highlight"}<span class="cms-home-banner-highlight">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities} cms-font-icon cms-home-banner-highlight-icon" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img class="cms-home-banner-highlight-icon" src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span class="cms-home-banner-highlight-text">{$highlight.text|htmlentities}</span></span>{/volist}</div>{/notempty}</div>{/if}</a></li>{/volist}</ul><div class="swiper-pagination"></div></div>{/notempty}
-{volist name="section_order" id="homeSectionKey"}
-{switch name="homeSectionKey"}
-{case value="about"}
-{notempty name="about"}<div class="yz"><dl class="yz_con clearfix"><dd><h2 class="wow fadeInDown2"><a href="{$about.more_url|default='/page/about'|htmlentities}"><span>{$about.title|htmlentities}</span></a></h2><p>{$about.content_text|htmlentities}</p></dd><dt class="wow fadeInUp1">{notempty name="about.background"}<img src="{$about.background|htmlentities}" alt="{$about.title|htmlentities}">{/notempty}</dt></dl></div>{/notempty}
-{/case}
-{case value="products"}
-{notempty name="products"}<div class="pro cms-home-products-mobile"><h2 class="tit wow fadeInDown2"><a href="{$products.more_url|default='#'|htmlentities}"><span>{$products.title|htmlentities}</span><i>{$products.subtitle|htmlentities}</i></a></h2><div class="pro_bd"><div class="pro_con swiper-container"><div class="swiper-wrapper">{volist name="products.items" id="item" key="i"}<dl class="swiper-slide cms-home-product-card"><a href="{$item.url|htmlentities}"><dt class="pic cms-home-product-media">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</dt><dd class="cms-home-product-copy"><h4><i>0{$i}</i>{$item.title|htmlentities}</h4><p>{$item.summary|htmlentities}</p><em>{$products.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/pro_jt.png"></em></dd></a></dl>{/volist}</div><div class="swiper-pagination"></div></div><i class="sprev"><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/sprev.png"></i><i class="snext"><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/snext.png"></i></div></div>{/notempty}
-{/case}
-{case value="service"}
-{notempty name="service"}<div class="td"><h2 class="wow fadeInDown2"><span>{$service.title|htmlentities}</span><i>{$service.subtitle|htmlentities}</i></h2>{if condition="!empty($cmsSite.cms_service_wecom_url)"}<a class="more wow fadeInUp1" href="{$cmsSite.cms_service_wecom_url|htmlentities}" target="_blank" rel="noopener noreferrer" title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/td_jt.png"></a>{else /}<a class="more wow fadeInUp1" href="{$service.more_url|default='javascript:;'|htmlentities}"{if !empty($service.more_url) && strpos($service.more_url,'http')===0} target="_blank" rel="noopener noreferrer"{/if} title="{$service.more_text|htmlentities}">{$service.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/td_jt.png"></a>{/if}<ul class="wow fadeInUp1">{volist name="service.config.metrics" id="metric"}<li>{if condition="$metric.icon_view.type eq 'font'"}<i class="{$metric.icon_view.class|htmlentities} cms-font-icon cms-service-font-icon" aria-hidden="true"></i>{elseif condition="$metric.icon_view.type eq 'image'" /}<img alt="" src="{$metric.icon_view.url|htmlentities}">{/if}<span><em>{$metric.value|htmlentities}</em>{$metric.unit|default=''|htmlentities}</span><i>{$metric.text|default=''}</i></li>{/volist}</ul></div>{/notempty}
-{/case}
-{case value="workshop"}
-{notempty name="workshop"}
-<section class="section section--alt cms-home-workshop-source">
-<div class="container">
-<div class="section-head">
-<h2>{$workshop.title|htmlentities}</h2>
-{notempty name="workshop.subtitle"}<p class="eyebrow">{$workshop.subtitle|htmlentities}</p>{/notempty}
-<div class="dash"></div>
-</div>
-{notempty name="workshop.items"}
-<div class="grid grid-3 reveal">
-{volist name="workshop.items" id="item"}
-<div class="photo-card">
-{notempty name="item.resolved_image"}<div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.resolved_image|htmlentities}"></div>{/notempty}
-<div class="cap">{$item.title|htmlentities}</div>
-</div>
-{/volist}
-</div>
-{/notempty}
-</div>
+{include file="cms/layout/header" /}
+<main>
+{notempty name="hero"}
+<section class="hero hero--blue hero--photo hero--home" data-active-index="0">
+  <div class="media-swiper hero-swiper" data-swiper data-autoplay="6000" data-per-view="1" aria-label="金亚包装首页 banner 展示">
+    <div class="swiper-viewport"><div class="swiper-track">
+      {volist name="hero.items" id="banner" key="bannerIndex"}
+      {if !empty($banner.image) || ($banner.media_type eq 'video' && !empty($banner.video_url))}
+      <div class="swiper-slide">
+        {if condition="$banner.media_type eq 'video' && !empty($banner.video_url)"}
+        <video autoplay loop muted playsinline{if !empty($banner.image)} poster="{$banner.image|htmlentities}"{/if}><source src="{$banner.video_url|htmlentities}" type="video/mp4"></video>
+        {else /}
+        <img src="{$banner.image|htmlentities}" alt="{$banner.title|default='金亚包装'|htmlentities}"{if $bannerIndex==1} loading="eager" fetchpriority="high"{else /} loading="lazy" fetchpriority="low"{/if} decoding="async">
+        {/if}
+        {notempty name="banner.title"}<div class="container hero-slide-copy"><div class="hero-text hero-text--slide-1"><h1 class="hero-title"><span class="hero-title-primary">{$banner.title|htmlentities}</span>{notempty name="banner.subtitle"}<span class="hero-title-secondary">{$banner.subtitle|htmlentities}</span>{/notempty}</h1>{notempty name="banner.highlights"}<div class="hero-badges">{volist name="banner.highlights" id="highlight"}<div class="hero-badge">{if condition="$highlight.icon_view.type eq 'font'"}<i class="{$highlight.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$highlight.icon_view.type eq 'image'" /}<img src="{$highlight.icon_view.url|htmlentities}" alt="">{/if}<span>{$highlight.text|htmlentities}</span></div>{/volist}</div>{/notempty}</div></div>{/notempty}
+      </div>
+      {/if}
+      {/volist}
+    </div></div>
+    <div class="swiper-dots" aria-label="轮播分页"></div>
+  </div>
 </section>
 {/notempty}
-{/case}
-{case value="cases"}
-{notempty name="cases"}<div class="case"><h2 class="tit wow fadeInDown2"><a href="{$cases.more_url|default='#'|htmlentities}"><span>{$cases.title|htmlentities}</span><i>{$cases.subtitle|htmlentities}</i></a></h2><div class="case_con wow fadeInUp1 swiper-container"><div class="swiper-wrapper">{volist name="cases.items" id="item"}<div class="swiper-slide"><dl><dt><a href="{$item.url|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</a></dt><dd class="cms-home-product-copy"><h4><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.summary|htmlentities}</p><a href="{$item.url|htmlentities}">{$cases.more_text|htmlentities}<img alt="" src="__CDN__{$mobileStrictAssetBase}/images/case_jt.png"></a></dd></dl></div>{/volist}</div></div></div>{/notempty}
-{/case}
-{case value="advantages"}
-{notempty name="advantages"}<div class="sl"><h2 class="tit wow fadeInDown2"><span>{$advantages.title|htmlentities}</span><i>{$advantages.subtitle|htmlentities}</i></h2><div class="sl_con swiper-container wow fadeInUp1"><div class="swiper-wrapper">{volist name="advantages.config.items" id="item"}<dl class="swiper-slide"><dt>{notempty name="item.image"}<img alt="{$item.title|htmlentities}" src="{$item.image|htmlentities}">{/notempty}</dt><dd>{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon cms-advantage-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img alt="" src="{$item.icon_view.url|htmlentities}">{/if}<h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities}</p></dd></dl>{/volist}</div><div class="swiper-pagination"></div></div></div>{/notempty}
-{/case}
-{case value="news"}
-{notempty name="news"}<div class="news"><h2 class="tit wow fadeInDown2"><a href="{$news.more_url|default='/news'|htmlentities}"><span>{$news.title|htmlentities}</span><i>{$news.subtitle|htmlentities}</i></a></h2><div class="news_con wow fadeInUp1">{volist name="news.items" id="item"}<dl><dt><a href="{$item.url|htmlentities}">{notempty name="item.cover"}<img alt="{$item.title|htmlentities}" src="{$item.cover|htmlentities}">{/notempty}</a></dt><dd class="cms-home-product-copy"><h4><a href="{$item.url|htmlentities}">{$item.title|htmlentities}</a></h4><p>{$item.publish_date|htmlentities}</p></dd></dl>{/volist}</div></div>{/notempty}
-{/case}
-{case value="company"}
-{notempty name="company"}<div class="abt"><h2 class="wow fadeInDown2"><a href="{$company.more_url|default='/page/about'|htmlentities}"><span>{$company.title|htmlentities}</span></a></h2><dl class="wow fadeInUp1"><dd><p>{$company.content_text|htmlentities}</p><div class="yz_s clearfix"><a class="more1" href="{$company.more_url|default='/page/about'|htmlentities}">{$company.more_text|htmlentities}<em><img alt="" src="__CDN__{$mobileStrictAssetBase}/images/abt_ic1.png"></em></a></div></dd><dt>{notempty name="company.background"}<a href="{$company.more_url|default='/page/about'|htmlentities}"><img alt="{$company.title|htmlentities}" src="{$company.background|htmlentities}"></a>{/notempty}</dt></dl>{notempty name="company.config.metrics"}<div class="cms-home-company-metrics-mobile wow fadeInUp1"><ul>{volist name="company.config.metrics" id="metric"}<li><div class="cms-home-company-metric-value"><strong>{$metric.value|htmlentities}</strong>{notempty name="metric.unit"}<span>{$metric.unit|default=''|htmlentities}</span>{/notempty}</div>{notempty name="metric.text"}<p>{$metric.text|default=''|htmlentities}</p>{/notempty}</li>{/volist}</ul></div>{/notempty}</div>{/notempty}
-{/case}
-{case value="culture"}
-{notempty name="culture"}
-<section class="section cms-home-culture-source">
-<div class="container">
-{notempty name="culture.background"}<div class="culture-banner reveal" style="background-image:url('{$culture.background|htmlentities}');">{else /}<div class="culture-banner reveal">{/notempty}
-{notempty name="culture.subtitle"}<p class="eb">{$culture.subtitle|htmlentities}</p>{/notempty}
-<h2>{$culture.title|htmlentities}</h2>
-{notempty name="culture.items"}
-<div class="culture-grid">
-{volist name="culture.items" id="item"}
-<div class="glass-card">
-<div class="ic">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities} cms-font-icon" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img src="{$item.icon_view.url|htmlentities}" alt="">{/if}</div>
-<h4>{$item.title|htmlentities}</h4>
-<p>{$item.text|htmlentities|nl2br}</p>
-</div>
-{/volist}
-</div>
-{/notempty}
-</div>
-</div>
-</section>
-{/notempty}
-{/case}
-{/switch}
-{/volist}
-</section>
 
-{include file="cms/common/strict_footer" /}
+{notempty name="about"}
+<section class="section">
+  <div class="container two-col">
+    <div class="reveal">
+      {notempty name="about.subtitle"}<div class="eyebrow" style="text-align:left;margin-top:0;font-size:13px;">{$about.subtitle|htmlentities}</div>{/notempty}
+      <h2 style="font-size:26px;font-weight:800;color:var(--ink);margin:6px 0 18px;">{$about.title|default='关于金亚'|htmlentities}</h2>
+      <div class="cms-dynamic-richtext">{$about.content_html}</div>
+      <div class="social-cta-list">
+        <a href="{$about.config.social_url_1|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta"><svg class="brand-icon brand-icon--wechat" viewBox="0 0 32 32" aria-hidden="true"><path d="M12.2 5.4C6.6 5.4 2 9.1 2 13.7c0 2.6 1.5 5 4 6.5l-.9 3.1 3.7-1.8c1.1.3 2.2.5 3.4.5h.5c-.3-.8-.5-1.7-.5-2.6 0-4.5 4.3-8.1 9.7-8.1h.6c-1.4-3.4-5.4-5.9-10.3-5.9Z"/><circle cx="8.7" cy="11.7" r="1.1" fill="#fff"/><circle cx="15.7" cy="11.7" r="1.1" fill="#fff"/><path d="M30 19.4c0-3.9-3.8-7.1-8.4-7.1s-8.4 3.2-8.4 7.1 3.8 7.1 8.4 7.1c1 0 2-.2 2.9-.4l3 1.5-.7-2.6c2-1.3 3.2-3.3 3.2-5.6Z"/><circle cx="18.8" cy="17.7" r="1" fill="#fff"/><circle cx="24.5" cy="17.7" r="1" fill="#fff"/></svg><span>{$about.config.social_text_1|default='微信加好友'|htmlentities}</span></a>
+        <a href="{$about.config.social_url_2|default='/page/contact'|htmlentities}" class="btn btn-ghost social-cta social-cta--channels"><img class="brand-icon brand-icon--channels" src="__CDN__/assets/jinya/img/home-video-channels.png" alt="微信视频号"><span>{$about.config.social_text_2|default='关注金亚包装视频号'|htmlentities}</span></a>
+      </div>
+    </div>
+    <div class="grid grid-2 reveal">
+      {volist name="about.config.media_items" id="item"}
+      <div class="photo-card"><div class="ph">{if condition="$item.display_type eq 'video'"}<video controls preload="metadata" playsinline><source src="{$item.display_url|htmlentities}" type="{$item.video_mime|default='video/mp4'|htmlentities}"></video>{elseif condition="$item.display_type eq 'video_embed'" /}<iframe allowfullscreen frameborder="0" loading="lazy" src="{$item.display_url|htmlentities}"></iframe>{else /}<img src="{$item.display_url|htmlentities}" alt="{$item.title|default=''|htmlentities}" loading="lazy">{/if}</div></div>
+      {/volist}
+    </div>
+  </div>
+</section>
+{/notempty}
+
+{notempty name="products"}
+<section class="section section--alt product-section">
+  <div class="container">
+    <div class="section-head"><h2>{$products.title|default='产品中心'|htmlentities}</h2>{notempty name="products.subtitle"}<p class="eyebrow">{$products.subtitle|htmlentities}</p>{/notempty}<div class="dash"></div></div>
+    <div class="product-center-block"><div class="product-masonry">
+      {volist name="products.items" id="item" offset="0" length="1"}
+      <div class="pm-card pm-01"><span class="num">01</span><h3>{$item.title|htmlentities}</h3><p>{$item.home_summary|htmlentities}</p><div class="foot"><a href="{$item.url|htmlentities}" class="arrow" aria-label="查看{$item.title|htmlentities}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>{notempty name="item.cover"}<div class="ph"><img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div>
+      {/volist}
+      {volist name="products.items" id="item" offset="1" length="2" key="productIndex"}
+      <div class="pm-card pm-0{$productIndex+1}"><div class="row"><div class="text"><span class="num">0{$productIndex+1}</span><h3>{$item.title|htmlentities}</h3><p>{$item.home_summary|htmlentities}</p><div class="foot"><a href="{$item.url|htmlentities}" class="arrow" aria-label="查看{$item.title|htmlentities}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>{notempty name="item.cover"}<div class="ph"><img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}</div></div>
+      {/volist}
+      <div class="pm-card pm-04"><div class="row"><div class="text"><span class="num">04</span><h3>{$products.config.other_title|default='金银彩盒'|htmlentities}</h3><p>{$products.config.other_summary|default=''|htmlentities}</p><div class="foot"><a href="{$products.config.other_url|default=$products.more_url|default='#'|htmlentities}" class="arrow" aria-label="查看更多"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+        <div class="photos media-swiper product-swiper" data-swiper data-per-view="3" data-mobile-per-view="1" aria-label="产品展示"><div class="swiper-viewport"><div class="swiper-track">{volist name="products.items" id="item" offset="3"}{notempty name="item.cover"}<div class="ph swiper-slide"><img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}{/volist}</div></div><button class="swiper-arrow swiper-prev" type="button" aria-label="上一张"><span aria-hidden="true">&#8249;</span></button><button class="swiper-arrow swiper-next" type="button" aria-label="下一张"><span aria-hidden="true">&#8250;</span></button><div class="swiper-dots" aria-label="轮播分页"></div></div>
+      </div></div>
+    </div>
+    {notempty name="service"}
+    <div class="service-cta"{notempty name="service.background"} style="background-image:url('{$service.background|htmlentities}');"{else /} style="background-image:url('__CDN__/assets/jinya/img/cta-handshake-bg.png');"{/notempty}>
+      <div class="service-cta-copy"><h3>{$service.title|default='设计印刷制作一站式服务'|htmlentities}</h3><p>{$service.subtitle|htmlentities}</p><a href="{$service.more_url|default='/page/contact'|htmlentities}" class="service-cta-button">{$service.more_text|default='点击咨询'|htmlentities} <span aria-hidden="true">▶</span></a></div>
+      {notempty name="service.config.metrics"}<div class="service-cta-features" aria-label="一站式服务优势">{volist name="service.config.metrics" id="metric"}<div class="service-cta-feature"><div class="service-cta-icon">{if condition="$metric.icon_view.type eq 'font'"}<i class="{$metric.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$metric.icon_view.type eq 'image'" /}<img src="{$metric.icon_view.url|htmlentities}" alt="">{/if}</div><h4>{$metric.title|default=''|htmlentities}</h4><p>{$metric.text|default=''|htmlentities}</p></div>{/volist}</div>{/notempty}
+    </div>
+    {/notempty}
+    </div>
+  </div>
+</section>
+{/notempty}
+
+{notempty name="workshop"}
+<section class="section workshop-section"><div class="container">
+  <div class="section-head workshop-head"><h2>{$workshop.title|default='生产车间'|htmlentities}</h2>{notempty name="workshop.subtitle"}<p class="eyebrow">{$workshop.subtitle|htmlentities}</p>{/notempty}<div class="workshop-mark" aria-hidden="true"><span></span><span></span><span></span></div></div>
+  <div class="workshop-grid reveal">{volist name="workshop.items" id="item"}<article class="workshop-card">{notempty name="item.resolved_image"}<div class="ph"><img src="{$item.resolved_image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/notempty}<div class="workshop-copy"><h3>{$item.title|htmlentities}</h3>{notempty name="item.text"}<p>{$item.text|htmlentities}</p>{/notempty}</div></article>{/volist}</div>
+</div></section>
+{/notempty}
+
+{notempty name="company"}
+<section class="section section--alt walkin-section"><div class="container">
+  <div class="walkin-block reveal">
+    <div class="walkin-hero">
+      {notempty name="company.background"}<img class="walkin-hero-image" src="{$company.background|htmlentities}" alt="{$company.title|htmlentities}">{else /}<img class="walkin-hero-image" src="__CDN__/assets/jinya/img/walkin-home-bg.jpg" alt="金亚包装生产车间">{/notempty}
+      <div class="walkin-copy">{notempty name="company.subtitle"}<p class="walkin-kicker">{$company.subtitle|htmlentities}</p>{/notempty}<h2>{$company.title|default='走进金亚'|htmlentities}</h2><div class="walkin-desc">{$company.content_html}</div><a class="walkin-more" href="{$company.more_url|default='/page/about'|htmlentities}">{$company.more_text|default='探索更多'|htmlentities} <span aria-hidden="true">→</span></a></div>
+    </div>
+    {notempty name="company.config.media_items"}<div class="media-swiper sample-swiper sample-swiper--source" data-swiper data-per-view="4" data-tablet-per-view="2" data-mobile-per-view="1" aria-label="金亚包装产品样品展示"><div class="swiper-viewport"><div class="swiper-track">{volist name="company.config.media_items" id="item"}<div class="photo-card swiper-slide"><div class="ph">{if condition="$item.display_type eq 'image'"}<img src="{$item.display_url|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy">{elseif condition="$item.display_type eq 'video'" /}<video controls preload="metadata" playsinline><source src="{$item.display_url|htmlentities}" type="{$item.video_mime|default='video/mp4'|htmlentities}"></video>{/if}</div><div class="cap">{$item.title|htmlentities}</div></div>{/volist}</div></div><button class="swiper-arrow swiper-prev" type="button" aria-label="上一张"><span aria-hidden="true">&#8249;</span></button><button class="swiper-arrow swiper-next" type="button" aria-label="下一张"><span aria-hidden="true">&#8250;</span></button><div class="swiper-dots" aria-label="轮播分页"></div></div>{/notempty}
+  </div>
+  {notempty name="company.config.metrics"}<div class="stats mt-lg reveal">{volist name="company.config.metrics" id="metric"}<div class="stat"><div class="n" data-count="{$metric.value|default='0'|htmlentities}" data-suffix="{$metric.unit|default=''|htmlentities}">{$metric.value|default='0'|htmlentities}{$metric.unit|default=''|htmlentities}</div><div class="l">{$metric.text|default=''|htmlentities}</div></div>{/volist}</div>{/notempty}
+</div></section>
+{/notempty}
+
+{notempty name="culture"}
+<section class="section"><div class="container">
+  <div class="culture-banner culture-banner--light reveal">
+    <p class="eb">{$culture.subtitle|default='CORPORATE CULTURE'|htmlentities}</p><h2>{$culture.title|default='企业文化'|htmlentities}</h2>
+    {notempty name="culture.items"}<div class="culture-grid">{volist name="culture.items" id="item"}<div class="glass-card"><div class="ic">{if condition="$item.icon_view.type eq 'font'"}<i class="{$item.icon_view.class|htmlentities}" aria-hidden="true"></i>{elseif condition="$item.icon_view.type eq 'image'" /}<img src="{$item.icon_view.url|htmlentities}" alt="" aria-hidden="true">{/if}</div><h4>{$item.title|htmlentities}</h4><p>{$item.text|htmlentities|nl2br}</p></div>{/volist}</div>{/notempty}
+  </div>
+</div></section>
+{/notempty}
+{include file="cms/layout/footer" /}
