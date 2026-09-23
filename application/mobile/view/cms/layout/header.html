@@ -21,7 +21,7 @@
   <div class="container">
     {if condition="!isset($layout.header.config.show_logo) || !empty($layout.header.config.show_logo)"}<a href="{$mobileHomeUrl|default='/mobile'|htmlentities}" class="logo" aria-label="{$cmsSite.name|default='金亚包装'|htmlentities}">{if !empty($cmsSite.logo)}<img src="{$cmsSite.logo|htmlentities}" alt="{$cmsSite.name|default='金亚包装'|htmlentities}" class="site-logo-img">{else /}<img src="__CDN__/assets/jinya/img/site-logo.png" alt="金亚包装" class="site-logo-img">{/if}</a>{/if}
     {if condition="!isset($layout.header.config.show_phone) || !empty($layout.header.config.show_phone)"}
-    <a href="tel:{$cmsSite.hotline|default=''|htmlentities}" class="header-phone">
+    <a href="tel:{$cmsSite.hotline|default='18903716652'|htmlentities}" class="header-phone" aria-label="拨打 {$cmsSite.hotline|default='18903716652'|htmlentities}">
       {if condition="$layout.header.config.hotline_icon_view.type eq 'image'"}<img class="cms-hotline-icon" src="{$layout.header.config.hotline_icon_view.url|htmlentities}" alt="">{elseif condition="$layout.header.config.hotline_icon_view.type eq 'font'" /}<i class="cms-hotline-icon {$layout.header.config.hotline_icon_view.class|htmlentities}" aria-hidden="true"></i>{else /}<svg class="cms-hotline-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>{/if}
       <span class="label">{$cmsSite.hotline|default='18903716652'|htmlentities}</span>
       <span class="tag">{$layout.header.config.hotline_badge_text|default='急单专线'|htmlentities}</span>
