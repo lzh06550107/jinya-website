@@ -2217,3 +2217,62 @@ body.mobile-contact .contact-generated-hero .contact-generated-hero-bg{
   opacity:1 !important;
 }
 
+/* Mobile homepage banner copy legibility v112.
+ * Keep the uploaded banner image untouched: improve only the text itself. */
+body.mobile-home .hero--home .hero-text,
+body.mobile-home .hero--home .hero-eyebrow,
+body.mobile-home .hero--home h1,
+body.mobile-home .hero--home .hero-badge,
+body.mobile-home .hero--home .hero-badge span{
+  color:#fff;
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.96),
+    0 2px 5px rgba(0,0,0,.82),
+    0 0 8px rgba(0,0,0,.5);
+}
+
+body.mobile-home .hero--home h1{
+  font-size:24px;
+  line-height:1.3;
+  font-weight:800;
+  letter-spacing:.01em;
+  -webkit-text-stroke:.35px rgba(0,0,0,.38);
+}
+
+body.mobile-home .hero--home .hero-eyebrow{
+  font-size:11px;
+  line-height:1.45;
+  font-weight:700;
+  -webkit-text-stroke:.2px rgba(0,0,0,.35);
+}
+
+body.mobile-home .hero--home .hero-badge{
+  font-size:12px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+body.mobile-home .hero--home .hero-badge span{
+  -webkit-text-stroke:.2px rgba(0,0,0,.35);
+}
+
+body.mobile-home .hero--home .hero-badge svg,
+body.mobile-home .hero--home .hero-badge i{
+  color:#fff;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.88));
+}
+
+body.mobile-home .hero--home .hero-badge img{
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.72));
+}
+
+@media (max-width:360px){
+  body.mobile-home .hero--home h1{
+    font-size:22px;
+  }
+
+  body.mobile-home .hero--home .hero-badge{
+    font-size:11.5px;
+  }
+}
+
