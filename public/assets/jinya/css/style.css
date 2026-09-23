@@ -9077,3 +9077,27 @@ body.inquiry-modal-open{ overflow:hidden; }
     min-width:min(var(--cms-hotline-scrolled-width,202px),220px)!important;
   }
 }
+
+/* Banner image fidelity v111: banners must render the uploaded artwork directly.
+ * Do not place dark/light/gradient masks over homepage or inner-page banners. */
+.hero--photo .scrim,
+.hero--inner::after,
+.labels-hero-ref::after,
+.bags-hero-ref::after,
+.boxes-hero-ref::after,
+.news-generated-hero::after,
+.contact-generated-hero::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+}
+.hero--inner .inner-hero-bg,
+.labels-hero-ref .inner-hero-bg,
+.bags-hero-ref .inner-hero-bg,
+.boxes-hero-ref .inner-hero-bg,
+.news-generated-hero .news-generated-hero-bg,
+.contact-generated-hero .contact-generated-hero-bg,
+.about-upload-hero-bg{
+  opacity:1 !important;
+}
+
