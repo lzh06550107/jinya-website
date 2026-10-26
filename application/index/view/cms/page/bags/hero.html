@@ -1,1 +1,8 @@
-<section class="hero hero--lav hero--prodbg cms-pc-inner-banner{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"} has-copy{/if}" style="background-image:url('{$block.image|htmlentities}');">{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"}<div class="container"><div class="hero-text">{notempty name="block.title"}<h1>{$block.title|htmlentities|nl2br}</h1>{/notempty}{notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}{notempty name="block.extra.items"}<div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/bags/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div>{/notempty}</div></div>{/if}</section>
+<section class="hero hero--inner hero--orange bags-hero-ref">
+  <div class="inner-hero-bg"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}></div>
+  <div class="container"><div class="hero-text">
+    <h1>{$block.title|htmlentities|nl2br}</h1>
+    {notempty name="block.content_inline_html"}<div class="lede">{$block.content_inline_html}</div>{/notempty}
+    {notempty name="block.extra.items"}<div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/bags/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div>{/notempty}
+  </div></div>
+</section>

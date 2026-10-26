@@ -57,7 +57,7 @@ class SinglePageRenderService extends AbstractRenderService
         return new SinglePageViewModel(
             $common['seo'],
             $common['layout'],
-            $this->banners($key, 'channel', $context),
+            [],
             [['title' => $page['title'], 'url' => '']],
             $common['page_config'],
             $content

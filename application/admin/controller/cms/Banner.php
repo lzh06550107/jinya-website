@@ -40,8 +40,24 @@ class Banner extends Backend
     protected function preExcludeFields($params)
     {
         $params = parent::preExcludeFields($params);
+        $codec = new BannerHighlightCodec();
+        $iconOverrides = [];
+        foreach ([1, 2, 3] as $position) {
+            $field = 'highlight_icon_' . $position;
+            if (!array_key_exists($field, $params)) {
+                continue;
+            }
+            $iconOverrides[$position - 1] = $params[$field];
+            unset($params[$field]);
+        }
+
         if (array_key_exists('highlights_json', $params)) {
-            $params['highlights_json'] = (new BannerHighlightCodec())->normalizeJson($params['highlights_json']);
+            $isHomeHero = isset($params['page_key'], $params['position'])
+                && (string)$params['page_key'] === 'home'
+                && (string)$params['position'] === 'hero';
+            $params['highlights_json'] = $iconOverrides
+                ? $codec->applyIconOverrides($params['highlights_json'], $iconOverrides, $isHomeHero)
+                : $codec->normalizeJson($params['highlights_json']);
         }
         $params['edited_by_admin'] = 1;
         (new CmsCacheInvalidator())->invalidateLayout();

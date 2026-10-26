@@ -1,1 +1,14 @@
-<section class="section section--alt"><div class="container"><div class="section-head"><h2>{$block.title|htmlentities}</h2><div class="dash"></div></div>{volist name="block.extra.items" id="item"}<div class="value-block {if condition="$item.group eq 'reverse'"}rev{/if}"><div class="ph"><img alt="{$item.title|htmlentities}" loading="lazy" src="{$item.image|htmlentities}"></div><div><h3>{$item.title|htmlentities}</h3><p>{$item.text|htmlentities|nl2br}</p></div></div>{/volist}</div></section>
+<section class="boxes-quality-section"><div class="container">
+  <h2 class="boxes-quality-title">{$block.title|htmlentities}</h2>
+  {volist name="block.extra.items" id="item"}
+  <div class="boxes-quality-row {if condition="$item.group eq 'reverse'"}boxes-quality-row--bottom{else /}boxes-quality-row--top{/if}">
+    {if condition="$item.group eq 'reverse'"}
+      <div class="boxes-quality-copy"><h3>{$item.title|htmlentities}</h3><p>{$item.text|htmlentities|nl2br}</p></div>
+      <div class="boxes-quality-media"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>
+    {else /}
+      <div class="boxes-quality-media"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>
+      <div class="boxes-quality-copy"><h3>{$item.title|htmlentities}</h3><p>{$item.text|htmlentities|nl2br}</p></div>
+    {/if}
+  </div>
+  {/volist}
+</div></section>

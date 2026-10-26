@@ -18,7 +18,13 @@
                     <div class="panel-body">
                         <input type="hidden" data-workshop-field="url" name="[inputPrefix][{$workshopIndex}][url]" value="{$workshopItem.url|default=''|htmlentities}">
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="title" name="[inputPrefix][{$workshopIndex}][title]" value="{$workshopItem.title|default=''|htmlentities}" placeholder="例如：高速高精度印刷机"></div></div>
-                        <input type="hidden" data-workshop-field="text" name="[inputPrefix][{$workshopIndex}][text]" value="{$workshopItem.text|default=''|htmlentities}">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">详情说明:</label>
+                            <div class="col-xs-12 col-sm-10">
+                                <textarea class="form-control" rows="3" data-workshop-field="text" name="[inputPrefix][{$workshopIndex}][text]" placeholder="填写该生产车间项目的设备能力、适用范围或生产优势">{$workshopItem.text|default=''|htmlentities}</textarea>
+                                <p class="help-block">显示在首页生产车间卡片标题下方；建议 30～80 字，突出设备、工艺或产能特点。</p>
+                            </div>
+                        </div>
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="image" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" name="[inputPrefix][{$workshopIndex}][image]" value="{$workshopItem.image|default=''|htmlentities}" placeholder="建议 4:3，与上传网站原版卡片比例一致"><p class="help-block">推荐 JPG/WebP，建议单图 ≤800 KB；原站前台仅展示图片和标题，并按 4:3 等比例裁切。</p></div></div>
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">移动图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="mobile_image" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" name="[inputPrefix][{$workshopIndex}][mobile_image]" value="{$workshopItem.mobile_image|default=''|htmlentities}" placeholder="留空时继承 PC 图片"><p class="help-block">移动端可单独裁图；留空时自动使用 PC 图片。</p></div></div>
                         <div class="form-group">
@@ -44,7 +50,12 @@
                     <div class="panel-body">
                         <input type="hidden" data-workshop-field="url" value="">
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">标题:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="title" value="" placeholder="例如：高速高精度印刷机"></div></div>
-                        <input type="hidden" data-workshop-field="text" value="">
+                        <div class="form-group">
+                            <label class="control-label col-xs-12 col-sm-2">详情说明:</label>
+                            <div class="col-xs-12 col-sm-10">
+                                <textarea class="form-control" rows="3" data-workshop-field="text" placeholder="填写该生产车间项目的设备能力、适用范围或生产优势"></textarea>
+                            </div>
+                        </div>
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">PC 图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="image" data-media-preview="image" data-media-upload="true" data-media-usage="PC 首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" value="" placeholder="建议 4:3，与上传网站原版卡片比例一致"></div></div>
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">移动图片:</label><div class="col-xs-12 col-sm-10"><input class="form-control" data-workshop-field="mobile_image" data-media-preview="image" data-media-upload="true" data-media-usage="移动首页生产车间卡片" data-media-recommended-format="JPG/WebP" data-media-max-kb="800" value="" placeholder="留空时继承 PC 图片"></div></div>
                         <div class="form-group"><label class="control-label col-xs-12 col-sm-2">终端显示:</label><div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="pc_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="pc_visible" value="1" checked> PC 显示</label></div><div class="col-xs-12 col-sm-4"><input type="hidden" data-workshop-field="mobile_visible" value="0"><label class="checkbox-inline"><input type="checkbox" data-workshop-field="mobile_visible" value="1" checked> 移动端显示</label></div></div>
@@ -52,7 +63,7 @@
                 </div>
             </script>
             <button type="button" class="btn btn-success" data-workshop-item-add><i class="fa fa-plus"></i> 添加生产车间项目</button>
-            <p class="help-block">数组顺序就是前台顺序。可拖动排序，也可使用“上移/下移”；原站前台仅展示图片和标题。历史说明/链接字段继续隐藏保留，保存本模块不会主动清空；取消某端显示不会删除图片与标题。</p>
+            <p class="help-block">数组顺序就是前台顺序。可拖动排序，也可使用“上移/下移”；前台展示图片、标题和详情说明。取消某端显示不会删除对应内容。</p>
         </div>
     </div>
 </div>

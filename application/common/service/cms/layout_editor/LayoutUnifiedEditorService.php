@@ -506,6 +506,9 @@ class LayoutUnifiedEditorService
                 throw new \InvalidArgumentException('社交平台链接不安全：' . $title);
             }
             $qrKey = trim(isset($item['qr_key']) ? (string)$item['qr_key'] : '');
+            if ($qrKey === '') {
+                $qrKey = $this->defaultSocialQrKey($title);
+            }
             if ($qrKey !== '' && !isset($qrMap[$qrKey])) {
                 throw new \InvalidArgumentException('不支持的二维码绑定：' . $qrKey);
             }
@@ -539,10 +542,14 @@ class LayoutUnifiedEditorService
             if (!is_array($item)) {
                 continue;
             }
+            $title = isset($item['title']) ? trim((string)$item['title']) : '';
             $qrKey = isset($item['qr_key']) ? trim((string)$item['qr_key']) : '';
+            if ($qrKey === '') {
+                $qrKey = $this->defaultSocialQrKey($title);
+            }
             $siteName = $qrKey !== '' && isset($qrMap[$qrKey]) ? $qrMap[$qrKey] : '';
             $result[] = [
-                'title' => isset($item['title']) ? (string)$item['title'] : '',
+                'title' => $title,
                 'icon' => isset($item['icon']) ? (string)$item['icon'] : '',
                 'link_url' => isset($item['link_url']) ? (string)$item['link_url'] : '',
                 'qr_key' => $qrKey,
@@ -619,6 +626,19 @@ class LayoutUnifiedEditorService
             }
         }
         return $updates;
+    }
+
+    private function defaultSocialQrKey($title)
+    {
+        $map = [
+            '微信' => 'wechat_qr',
+            '抖音' => 'douyin_qr',
+            '小红书' => 'xiaohongshu_qr',
+            '微信视频号' => 'video_qr',
+            '视频号' => 'video_qr',
+        ];
+        $title = trim((string)$title);
+        return isset($map[$title]) ? $map[$title] : '';
     }
 
     private function qrSiteFieldNames()

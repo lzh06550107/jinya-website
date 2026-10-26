@@ -9,9 +9,13 @@ class Inquiry extends CmsBase
     public function submit()
     {
         if (!$this->request->isPost()) {
-            $this->error('请求方式错误');
+            return json(['code' => 0, 'msg' => '请求方式错误', 'data' => []]);
         }
+
+        // Keep FastAdmin's CSRF validation, but return a stable JSON envelope for
+        // every business/database outcome below.
         $this->token();
+
         $data = $this->request->post();
         $data['source_url'] = $this->request->server('HTTP_REFERER', '');
         $data['source_title'] = isset($data['source_title']) ? $data['source_title'] : '';
@@ -19,12 +23,27 @@ class Inquiry extends CmsBase
         $data['utm_medium'] = isset($data['utm_medium']) ? $data['utm_medium'] : $this->request->get('utm_medium', '');
         $data['utm_campaign'] = isset($data['utm_campaign']) ? $data['utm_campaign'] : $this->request->get('utm_campaign', '');
         $data['ip'] = $this->request->ip();
-        $data['user_agent'] = substr($this->request->server('HTTP_USER_AGENT', ''), 0, 500);
+        $data['user_agent'] = $this->request->server('HTTP_USER_AGENT', '');
+
         try {
-            (new InquiryService())->create($data);
-            $this->success('提交成功，我们会尽快联系您', '/', ['__token__' => $this->request->token()]);
-        } catch (\Exception $e) {
-            $this->error($e->getMessage(), '', ['__token__' => $this->request->token()]);
+            $inquiry = (new InquiryService())->create($data);
+            return json([
+                'code' => 1,
+                'msg' => '提交成功，我们会尽快联系您',
+                'data' => [
+                    'id' => (int)$inquiry['id'],
+                    '__token__' => $this->request->token(),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            $message = trim((string)$e->getMessage());
+            return json([
+                'code' => 0,
+                'msg' => $message !== '' ? $message : '线索保存失败，请稍后重试',
+                'data' => [
+                    '__token__' => $this->request->token(),
+                ],
+            ]);
         }
     }
 }

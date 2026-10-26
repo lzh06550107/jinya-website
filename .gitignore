@@ -2,10 +2,13 @@
 /thinkphp/
 /vendor/
 /runtime/*
+!/runtime/.htaccess
 /addons/*
+!/addons/.htaccess
 /public/assets/libs/
 /public/assets/addons/*
 /public/uploads/*
+!/public/uploads/.htaccess
 .DS_Store
 .idea
 composer.lock

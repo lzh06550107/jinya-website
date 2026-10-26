@@ -22,7 +22,7 @@ class Product extends CmsBase
     {
         try { $vm = $this->renderServices()->productDetail()->render(trim((string)$slug), $this->renderContext()); }
         catch (ContentNotFoundException $e) { return $this->redirectOr404(); }
-        $this->setPcTheme('product-detail', 'products', 'body-color-p102');
+        $this->setPcTheme('product-detail', 'products', 'pc-product-detail');
         $this->assignPageViewModel($vm);
         $this->applyChannelFromViewModel($vm, '产品中心', '/products');
         return $this->view->fetch('cms/product/detail');

@@ -13,15 +13,15 @@ class HomeSectionEditorSchema
     protected $schemas = [
         'about' => [
             'fields' => [
-                'title', 'mobile_title', 'content', 'mobile_background_image', 'more_url',
-                'config_social_icon_1', 'config_social_text_1',
-                'config_social_icon_2', 'config_social_text_2',
+                'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'content', 'mobile_background_image', 'more_url',
+                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1', 'config_social_qr_1',
+                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2', 'config_social_qr_2',
                 'config_media_items',
                 'pc_visible', 'mobile_visible', 'weigh', 'status',
             ],
             'config_fields' => [
-                'config_social_icon_1', 'config_social_text_1',
-                'config_social_icon_2', 'config_social_text_2',
+                'config_social_icon_1', 'config_social_text_1', 'config_social_url_1', 'config_social_qr_1',
+                'config_social_icon_2', 'config_social_text_2', 'config_social_url_2', 'config_social_qr_2',
                 'config_media_items',
             ],
             'reference_type' => '',
@@ -82,7 +82,7 @@ class HomeSectionEditorSchema
         ],
         'company' => [
             'fields' => [
-                'title', 'mobile_title', 'content', 'background_image', 'mobile_background_image', 'more_text', 'more_url',
+                'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'content', 'background_image', 'mobile_background_image', 'more_text', 'more_url',
                 'config_media_items', 'config_metrics', 'pc_visible', 'mobile_visible', 'weigh', 'status',
             ],
             'config_fields' => ['config_media_items', 'config_metrics'],
@@ -90,8 +90,7 @@ class HomeSectionEditorSchema
         ],
         'culture' => [
             'fields' => [
-                'title', 'mobile_title', 'subtitle', 'mobile_subtitle',
-                'background_image', 'mobile_background_image', 'config_items',
+                'title', 'mobile_title', 'subtitle', 'mobile_subtitle', 'config_items',
                 'pc_visible', 'mobile_visible', 'weigh', 'status',
             ],
             'config_fields' => ['config_items'],

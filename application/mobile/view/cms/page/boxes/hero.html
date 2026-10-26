@@ -1,1 +1,9 @@
-<section class="hero hero--lav hero--prodbg cms-structured-mobile-hero">{notempty name="block.image"}<div class="prod-bg" role="img" aria-label="{$block.title|htmlentities}" style="background-image:url('{$block.image|htmlentities}');"></div>{/notempty}<div class="container"><div class="hero-text"><h1>{$block.title|htmlentities|nl2br}</h1><p class="lede">{$block.content_inline_html}</p><div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/boxes/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div></div></div></section>
+<section class="hero hero--inner hero--pink boxes-hero-ref">
+  <div class="inner-hero-bg"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}></div>
+  <div class="container"><div class="hero-text">
+    <h1>{$block.title|htmlentities|nl2br}</h1>
+    {notempty name="block.subtitle"}<div class="hero-tags" style="margin-top:14px;"><span style="background:rgba(255,255,255,.4);padding:6px 14px;border-radius:14px;font-weight:700;">{$block.subtitle|htmlentities}</span></div>{/notempty}
+    {notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}
+    {notempty name="block.link_text"}<a href="{$block.link_url|default='/page/contact'|htmlentities}" class="hero-cta hero-cta--singleline" style="background:linear-gradient(90deg,#8f4fae,#b070c9);color:#fff;"><span>{$block.link_text|htmlentities}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>{/notempty}
+  </div></div>
+</section>

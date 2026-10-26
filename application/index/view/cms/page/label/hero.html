@@ -1,1 +1,22 @@
-<section class="hero hero--lav hero--prodbg cms-pc-inner-banner{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"} has-copy{/if}" style="background-image:url('{$block.image|htmlentities}');">{if condition="!empty($block.title) || !empty($block.content_inline_html) || !empty($block.extra.items)"}<div class="container"><div class="hero-text">{notempty name="block.title"}<h1>{$block.title|htmlentities|nl2br}</h1>{/notempty}{notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}{notempty name="block.extra.items"}<div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/label/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div>{/notempty}</div></div>{/if}</section>
+<section class="hero hero--inner hero--lav labels-hero-ref">
+  <div class="inner-hero-bg"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}></div>
+  <div class="container">
+    <div class="hero-text labels-hero-copy">
+      <div class="labels-hero-title-row">
+        <h1>{$block.title|default='不干胶/卷筒标签'|htmlentities}</h1>
+        {notempty name="block.subtitle"}<span>{$block.subtitle|htmlentities}</span>{/notempty}
+      </div>
+      {notempty name="block.content_inline_html"}<p class="lede">{$block.content_inline_html}</p>{/notempty}
+      {notempty name="block.extra.items"}
+      <div class="labels-hero-features">
+        {volist name="block.extra.items" id="item"}
+        <div class="labels-hero-feature">
+          {include file="cms/page/label/icon" /}
+          <strong>{$item.title|htmlentities}</strong>{notempty name="item.text"}<span>{$item.text|htmlentities}</span>{/notempty}
+        </div>
+        {/volist}
+      </div>
+      {/notempty}
+    </div>
+  </div>
+</section>

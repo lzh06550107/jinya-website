@@ -1,1 +1,8 @@
-<section class="hero hero--lav hero--prodbg cms-structured-mobile-hero">{notempty name="block.image"}<div class="prod-bg" role="img" aria-label="{$block.title|htmlentities}" style="background-image:url('{$block.image|htmlentities}');"></div>{/notempty}<div class="container"><div class="hero-text"><h1>{$block.title|htmlentities|nl2br}</h1><p class="lede">{$block.content_inline_html}</p><div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/bags/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div></div></div></section>
+<section class="hero hero--inner hero--orange bags-hero-ref">
+  <div class="inner-hero-bg"{notempty name="block.image"} style="background-image:url('{$block.image|htmlentities}');"{/notempty}></div>
+  <div class="container"><div class="hero-text">
+    <h1>{$block.title|htmlentities|nl2br}</h1>
+    {notempty name="block.content_inline_html"}<div class="lede">{$block.content_inline_html}</div>{/notempty}
+    {notempty name="block.extra.items"}<div class="hero-badges">{volist name="block.extra.items" id="item"}<div class="hero-badge">{include file="cms/page/bags/icon" /}<span>{$item.title|htmlentities}</span></div>{/volist}</div>{/notempty}
+  </div></div>
+</section>

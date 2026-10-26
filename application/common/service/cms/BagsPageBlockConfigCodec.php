@@ -7,6 +7,8 @@ class BagsPageBlockConfigCodec
         'bags_note' => 'note',
         'bags_tabs' => 'tabs',
         'bags_secondary_title' => 'secondary_title',
+        'bags_compare_brand' => 'compare_brand',
+        'bags_compare_footer' => 'compare_footer',
     ];
     private $itemFields = [
         'title','text','image','url','value','subtitle','badge','group',

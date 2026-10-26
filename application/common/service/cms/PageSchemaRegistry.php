@@ -38,6 +38,32 @@ class PageSchemaRegistry
     }
 
     /**
+     * 已退出当前前台信息架构的旧功能块。
+     *
+     * 这些键只用于兼容升级数据库和即时过滤旧记录，不能重新注册到页面 Schema。
+     */
+    public static function retiredBlockKeys($pageKey)
+    {
+        $map = [
+            'home' => ['cases', 'advantages', 'news'],
+            'news.index' => ['category_navigation', 'pagination'],
+            'product.detail' => ['banner'],
+            'page.label' => ['banner'],
+            'page.bags' => ['banner'],
+            'page.boxes' => ['banner'],
+            'page.about' => ['banner'],
+            'page.contact' => ['banner'],
+        ];
+        $pageKey = trim((string)$pageKey);
+        return isset($map[$pageKey]) ? $map[$pageKey] : [];
+    }
+
+    public static function retiredHomeBlockKeys()
+    {
+        return self::retiredBlockKeys('home');
+    }
+
+    /**
      * 固定页面级字段只允许结构化 SEO 配置。
      */
     public static function sanitizePageConfig($pageKey, array $input)
@@ -212,9 +238,6 @@ class PageSchemaRegistry
                 'products' => self::blockDefinition('推荐产品', 'business_list', true, self::homeListFields('product', 7, 3), 'product'),
                 'service' => self::blockDefinition('一体化服务', 'items', true, self::serviceFields(), 'page'),
                 'workshop' => self::blockDefinition('生产车间', 'items', true, self::workshopFields(), 'page'),
-                'cases' => self::blockDefinition('工程案例', 'business_list', true, self::homeListFields('case', 6, 10), 'case'),
-                'advantages' => self::blockDefinition('企业优势', 'items', true, self::advantageFields(), 'page'),
-                'news' => self::blockDefinition('新闻动态', 'business_list', true, self::homeListFields('article', 12, 4), 'article'),
                 'company' => self::blockDefinition('底部企业介绍', 'content', true, self::contentFields(), 'page'),
                 'culture' => self::blockDefinition('企业文化', 'items', true, self::workshopFields(), 'page'),
             ]),
@@ -231,7 +254,6 @@ class PageSchemaRegistry
                 'pagination' => self::blockDefinition('产品分页', 'pagination', true, self::paginationFields(), 'query'),
             ]),
             'product.detail' => self::pageDefinition('产品详情', 'dynamic_detail', '/product/{slug}', [
-                'banner' => self::blockDefinition('产品详情 Banner', 'banner', false, self::bannerFields(), 'page'),
                 'gallery' => self::blockDefinition('产品相册', 'gallery', true, self::visibilityFields(true), 'product'),
                 'summary' => self::blockDefinition('产品基础信息', 'detail', true, self::visibilityFields(true), 'product'),
                 'parameters' => self::blockDefinition('技术参数', 'parameters', false, self::visibilityFields(false), 'product'),
@@ -239,7 +261,7 @@ class PageSchemaRegistry
                 'related' => self::blockDefinition('相关推荐', 'business_list', false, self::listFields('product'), 'product'),
                 'contact' => self::blockDefinition('在线咨询入口', 'contact', false, self::buttonFields(), 'global'),
             ]),
-            'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsListPageBlocks()),
+            'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsIndexPageBlocks()),
             'news.category' => self::pageDefinition('新闻分类列表', 'dynamic_list', '/news-list/{category}', self::newsListPageBlocks()),
             'news.detail' => self::pageDefinition('新闻详情', 'dynamic_detail', '/news/{slug}', self::newsDetailPageBlocks()),
             'page.label' => self::pageDefinition('不干胶/卷标', 'fixed_page', '/page/label', []),
@@ -516,6 +538,30 @@ class PageSchemaRegistry
         ];
     }
 
+    /**
+     * 新闻总列表后台只开放真正影响 /news 前端的配置。
+     *
+     * 分类导航直接来自已发布新闻分类树，分页直接由当前页、总数和终端 page size
+     * 自动生成，因此不再把 category_navigation / pagination 暴露成“可配置”功能块。
+     */
+    protected static function newsIndexPageBlocks()
+    {
+        $blocks = self::newsListPageBlocks();
+        unset($blocks['category_navigation'], $blocks['pagination']);
+
+        // 这些字段保留在兼容 Schema 中用于读取历史 config_json，但当前 /news
+        // 前端并不消费，后台不再展示“可填但不生效”的输入项。
+        $blocks['list']['admin_hidden_fields'] = [
+            'page_size',
+            'show_date',
+            'summary_length',
+            'pc_visible',
+            'mobile_visible',
+            'enabled',
+        ];
+        return $blocks;
+    }
+
     protected static function newsListPageBlocks()
     {
         return [
@@ -540,7 +586,6 @@ class PageSchemaRegistry
     protected static function aboutPage()
     {
         return self::pageDefinition('走进金亚', 'fixed_page', '/page/about', [
-            'banner' => self::blockDefinition('企业栏目 Banner', 'banner', false, self::bannerFields(), 'page'),
             'content' => self::blockDefinition('关于我们正文', 'rich_text', true, self::pageContentFields(true), 'page:about'),
         ]);
     }
@@ -548,7 +593,6 @@ class PageSchemaRegistry
     protected static function contactPage()
     {
         return self::pageDefinition('联系我们', 'fixed_page', '/page/contact', [
-            'banner' => self::blockDefinition('企业栏目 Banner', 'banner', false, self::bannerFields(), 'page'),
             'content' => self::blockDefinition('联系我们正文', 'rich_text', true, self::pageContentFields(false), 'page:contact'),
             'contact_info' => self::blockDefinition('联系方式', 'contact_info', false, self::contactInfoFields(), 'global'),
             'inquiry' => self::blockDefinition('在线咨询', 'inquiry', false, self::inquiryFields(), 'global'),

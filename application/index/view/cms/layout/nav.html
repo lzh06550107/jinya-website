@@ -1,0 +1,19 @@
+<nav class="site-nav" aria-label="主导航" style="--cms-nav-active-bg:{$cmsPcNavActiveBackgroundColor|default='#f48101'|htmlentities};">
+  <div class="container">
+    <div class="main-nav" id="main-navigation">
+      {notempty name="cmsNavigationTree"}
+      {volist name="cmsNavigationTree" id="nav"}
+      <a href="{$nav.url|default='#'|htmlentities}" target="{$nav.target|default='_self'|htmlentities}" class="nav-link{if !empty($nav.url) && $cmsCurrentPath==$nav.url} active{/if}"{if !empty($nav.url) && $cmsCurrentPath==$nav.url} aria-current="page"{/if}>{$nav.title|htmlentities}</a>
+      {/volist}
+      {else /}
+      <a href="/" class="nav-link">首页</a>
+      <a href="/page/label" class="nav-link">不干胶/卷标</a>
+      <a href="/page/bags" class="nav-link">包装袋·无版印刷</a>
+      <a href="/page/boxes" class="nav-link">彩盒</a>
+      <a href="/page/about" class="nav-link">走近金亚</a>
+      <a href="/news" class="nav-link">新闻动态</a>
+      <a href="/page/contact" class="nav-link">联系我们</a>
+      {/notempty}
+    </div>
+  </div>
+</nav>

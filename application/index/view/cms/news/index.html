@@ -1,29 +1,24 @@
-{include file="cms/common/strict_header" /}
-<link rel="stylesheet" href="__CDN__/assets/css/cms-pc-inner-banner.css?v={$cmsSite.version|default='1.0'}&layout=background-copy-optional-r1">
-{assign name="hideChannelBreadcrumb" value="1" /}
-{include file="cms/common/strict_channel_header" /}
-<div class="blk-main">
-<div class="p101a-fdh-02"><div class="contenttb"><div class="p101a-fdh-02-nav"><ul class="clearafter"><li><a href="/news" class="{if empty($content.currentCategory)}cur{/if}">全部资讯</a></li>{volist name="content.categories" id="category"}<li><a href="/news-list/{$category.slug|htmlentities}" class="{if !empty($content.currentCategory) && $content.currentCategory.id==$category.id}cur{/if}">{$category.name|htmlentities}</a></li>{/volist}</ul></div><div class="clear"></div></div></div>
-<div class="xin-1k2-info-list-3 cms-news-list-clone">
-{notempty name="content.articles.items"}
-{volist name="content.articles.items" id="item"}
-<dl>
-    <dt>
-        <a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}">{/notempty}</a>
-        {if condition="!empty($content.visibility.date) && !empty($item.publish_date)"}<em>{$item.publish_date|htmlentities}</em>{/if}
-    </dt>
-    <dd>
-        <div class="xin-1k2-info-txt">
-            <h4><a href="{$item.url|htmlentities}" target="_blank" title="{$item.title|htmlentities}">{$item.title|htmlentities}</a></h4>
-            {notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}
-        </div>
-        <div class="xin-1k2-info-more" data-detail-url="/news/{$item.slug|htmlentities}"><a class="cms-news-detail-arrow" href="/news/{$item.slug|htmlentities}" target="_self" title="{$item.title|htmlentities}" aria-label="查看{$item.title|htmlentities}">&gt;</a></div>
-    </dd>
-</dl>
-{/volist}
-{else /}<div class="cms-empty"><h3>{$content.articles.empty_message|default=''|htmlentities}</h3></div>{/notempty}
-<div class="clear"></div>
-</div>
-{include file="cms/common/strict_pagination_p101" /}
-</div>
-{include file="cms/common/strict_footer" /}
+{include file="cms/layout/header" /}
+<main>
+{notempty name="banner.0"}
+<section class="hero hero--inner hero--blue news-generated-hero">
+  {notempty name="banner.0.image"}<div class="inner-hero-bg news-generated-hero-bg" style="background-image:url('{$banner.0.image|htmlentities}');"></div>{else /}<div class="inner-hero-bg news-generated-hero-bg"></div>{/notempty}
+  <div class="container"><div class="hero-text">{notempty name="banner.0.title"}<h1>{$banner.0.title|htmlentities}</h1>{/notempty}{notempty name="banner.0.subtitle"}<p class="lede">{$banner.0.subtitle|htmlentities}</p>{/notempty}</div></div>
+</section>
+{/notempty}
+<section class="section"><div class="container">
+  <div class="gallery-tabs">
+    {volist name="content.categories" id="category" key="categoryIndex"}<button class="{if (!empty($content.currentCategory) && $content.currentCategory.id==$category.id) || (empty($content.currentCategory) && $categoryIndex==1)}active{/if}" type="button" onclick="window.location.href='/news-list/{$category.slug|htmlentities}'">{$category.name|htmlentities}</button>{/volist}
+  </div>
+  {notempty name="content.articles.items"}
+  {volist name="content.articles.items" id="item"}
+  <a class="news-item news-item-link" href="{$item.url|htmlentities}" aria-label="查看新闻详情：{$item.title|htmlentities}">
+    <div class="ph">{notempty name="item.cover"}<img src="{$item.cover|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy">{/notempty}</div>
+    <div><h4>{$item.title|htmlentities}</h4>{notempty name="item.summary"}<p>{$item.summary|htmlentities}</p>{/notempty}</div>
+    <div class="news-date">{notempty name="item.publish_date"}<div class="y">{$item.publish_date|substr=0,4|htmlentities}</div><div class="d">{$item.publish_date|substr=5,5|htmlentities}</div>{/notempty}</div>
+  </a>
+  {/volist}
+  {else /}<div class="cms-empty"><h3>{$content.articles.empty_message|default='暂无新闻'|htmlentities}</h3></div>{/notempty}
+  {include file="cms/common/strict_pagination_p101" /}
+</div></section>
+{include file="cms/layout/footer" /}

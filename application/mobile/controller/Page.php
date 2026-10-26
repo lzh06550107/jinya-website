@@ -13,6 +13,12 @@ class Page extends CmsBase
 
     private $allowed = ['label', 'bags', 'boxes', 'about', 'contact'];
 
+    public function labels(){ return $this->detail('label'); }
+    public function bags(){ return $this->detail('bags'); }
+    public function boxes(){ return $this->detail('boxes'); }
+    public function about(){ return $this->detail('about'); }
+    public function contact(){ return $this->detail('contact'); }
+
     public function detail($slug = '')
     {
         $slug = trim((string)$slug);
@@ -29,8 +35,16 @@ class Page extends CmsBase
 
         $theme = in_array($slug, ['label', 'bags', 'boxes'], true) ? $slug . '-page' : 'about';
         $section = $slug === 'contact' ? 'contact' : 'page';
+        $bodyClasses = [
+            'label' => 'mobile-labels',
+            'bags' => 'mobile-bags',
+            'boxes' => 'mobile-boxes',
+            'about' => 'mobile-about',
+            'contact' => 'mobile-contact',
+        ];
         $this->setMobileTheme($theme);
         $this->setMobileSection($section);
+        $this->view->assign('mobileBodyClass', $bodyClasses[$slug]);
         $this->assignPageViewModel($vm);
         $this->applyMobileChannelFromViewModel($vm, $section);
 

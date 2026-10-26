@@ -1,11 +1,10 @@
-<section class="section section--tight" id="elements"><div class="container">
-{volist name="block.extra.items" id="item"}
-{if condition="$item.group eq 'intro-direction' or $item.group eq 'intro-core' or $item.group eq 'intro-diameter'"}
-<div class="diagram-block">
-<h4>{$item.title|htmlentities}</h4>
-{if condition="!empty($item.text)"}<p class="diagram-note">{$item.text|htmlentities}</p>{/if}
-{if condition="!empty($item.image)"}<div class="diagram-image"><img src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy"></div>{/if}
-</div>
-{/if}
-{/volist}
-</div></section>
+<section class="label-elements section" id="elements">
+  <div class="container">
+    <div class="section-head"><h2>{$block.title|default='卷标三要素'|htmlentities}</h2><div class="dash"></div></div>
+    {volist name="block.extra.items" id="item"}
+    {if condition="$item.group eq 'intro-direction' or $item.group eq 'intro-core' or $item.group eq 'intro-diameter'"}
+    <div class="diagram-block"><h4>{$item.title|htmlentities}</h4>{notempty name="item.text"}<p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;">{$item.text|htmlentities}</p>{/notempty}{notempty name="item.image"}<img class="diagram-image" src="{$item.image|htmlentities}" alt="{$item.title|htmlentities}" loading="lazy">{/notempty}</div>
+    {/if}
+    {/volist}
+  </div>
+</section>

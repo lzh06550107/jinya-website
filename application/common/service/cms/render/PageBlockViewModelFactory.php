@@ -16,7 +16,7 @@ class PageBlockViewModelFactory
             if ($type === 'label_section' || $type === 'bags_section' || $type === 'boxes_section' || $type === 'about_section' || $type === 'contact_section') {
                 $extra = $this->normalizeLabelExtra($extra, $terminal, $blockKey);
             }
-            $extra = $this->renderExtraMarkdown($extra, $terminal);
+            $extra = $this->renderExtraMarkdown($extra, $terminal, $blockKey);
             $content = isset($row['content']) ? $row['content'] : '';
             if ($terminal === 'mobile' && isset($extra['mobile_content']) && trim((string)$extra['mobile_content']) !== '') $content = $extra['mobile_content'];
             $linkText = isset($row['link_text']) ? trim((string)$row['link_text']) : '';
@@ -28,13 +28,16 @@ class PageBlockViewModelFactory
                     $linkUrl = '/mobile/products?category=no-plate-packaging';
                 }
             }
+            $contentInlineHtml = in_array($blockKey, ['label_hero', 'bags_hero', 'boxes_hero', 'contact_thanks'], true)
+                ? MarkdownRenderer::renderInlinePreserveLineBreaks($content)
+                : MarkdownRenderer::renderInline($content);
             $item = [
                 'key' => isset($row['block_key']) ? $row['block_key'] : '',
                 'type' => $type,
                 'title' => isset($row['title']) ? $row['title'] : '',
                 'subtitle' => isset($row['subtitle']) ? $row['subtitle'] : '',
                 'content_html' => MarkdownRenderer::render($content),
-                'content_inline_html' => MarkdownRenderer::renderInline($content),
+                'content_inline_html' => $contentInlineHtml,
                 'image' => isset($row['resolved_image']) ? $row['resolved_image'] : '',
                 'link_text' => $linkText,
                 'link_url' => $linkUrl,
@@ -77,7 +80,7 @@ class PageBlockViewModelFactory
             if ($badge !== '' && preg_match('/^fa\s+fa-[a-z0-9-]+$/i', $badge)) {
                 $entry['icon_kind'] = 'font';
                 $entry['icon_value'] = strtolower(preg_replace('/\s+/', ' ', $badge));
-            } elseif ($badge !== '' && preg_match('#^(?:https?://|//|/uploads/|uploads/)#i', $badge)) {
+            } elseif ($badge !== '' && preg_match('#^(?:https?://|//|/uploads/|uploads/|/assets/|assets/)#i', $badge)) {
                 $entry['icon_kind'] = 'image';
                 $entry['icon_value'] = $badge;
             }
@@ -110,6 +113,22 @@ class PageBlockViewModelFactory
                 array_unshift($extra['tabs_items'], $allTab);
             }
         }
+        if (in_array($blockKey, ['bags_products', 'boxes_products'], true) && !empty($extra['items'])) {
+            $hasMain = false;
+            foreach ($extra['items'] as $productItem) {
+                if (isset($productItem['group']) && trim((string)$productItem['group']) === 'main') {
+                    $hasMain = true;
+                    break;
+                }
+            }
+            if (!$hasMain) {
+                // Historical HTML-baseline data stored every product image with an
+                // empty group, while the approved static bags/boxes layouts treat
+                // the first image as the large left-hand hero card. Preserve that
+                // visual contract without requiring a database migration.
+                $extra['items'][0]['group'] = 'main';
+            }
+        }
         if ($blockKey === 'bags_cases') {
             $legacyGroups = [
                 '无版卷膜' => 't1,t2,t3,t4',
@@ -138,8 +157,14 @@ class PageBlockViewModelFactory
         return $extra;
     }
 
-    private function renderExtraMarkdown(array $extra, $terminal)
+    private function renderExtraMarkdown(array $extra, $terminal, $blockKey = '')
     {
+        foreach (['print_points'] as $scalarMarkdownKey) {
+            if (isset($extra[$scalarMarkdownKey]) && trim((string)$extra[$scalarMarkdownKey]) !== '') {
+                $extra[$scalarMarkdownKey . '_html'] = MarkdownRenderer::render($extra[$scalarMarkdownKey]);
+                $extra[$scalarMarkdownKey . '_inline_html'] = MarkdownRenderer::renderInline($extra[$scalarMarkdownKey]);
+            }
+        }
         if (isset($extra['items']) && is_array($extra['items'])) {
             foreach ($extra['items'] as $index => $entry) {
                 if (!is_array($entry)) continue;
@@ -154,7 +179,9 @@ class PageBlockViewModelFactory
                 foreach (['value','text','description','content'] as $field) {
                     if (!isset($entry[$field]) || trim((string)$entry[$field]) === '') continue;
                     $entry[$field . '_html'] = MarkdownRenderer::render($entry[$field]);
-                    $entry[$field . '_inline_html'] = MarkdownRenderer::renderInline($entry[$field]);
+                    $entry[$field . '_inline_html'] = ($blockKey === 'label_capability' && $field === 'text')
+                        ? MarkdownRenderer::renderInlinePreserveLineBreaks($entry[$field])
+                        : MarkdownRenderer::renderInline($entry[$field]);
                 }
                 $extra['items'][$index] = $entry;
             }

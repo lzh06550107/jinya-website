@@ -458,9 +458,20 @@ body.mobile-home .hero--home .hero-badge{
   font-size:10.5px;
 }
 
-body.mobile-home .hero--home .hero-badge svg{
+body.mobile-home .hero--home .hero-badge svg,
+body.mobile-home .hero--home .hero-badge img{
   width:16px;
   height:16px;
+  flex:0 0 16px;
+}
+
+body.mobile-home .hero--home .hero-badge i{
+  width:16px;
+  min-width:16px;
+  font-size:15px;
+  line-height:1;
+  text-align:center;
+  flex:0 0 16px;
 }
 
 body.mobile-home .hero--home .swiper-arrow{

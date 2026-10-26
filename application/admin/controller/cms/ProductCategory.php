@@ -18,7 +18,7 @@ class ProductCategory extends Backend
         $this->model = new CmsModel();
 
         $parents = [0 => '无'];
-        foreach ($this->model->order('weigh desc,id asc')->select() as $item) {
+        foreach ($this->model->where('slug', '<>', 'html-home-display')->order('weigh desc,id asc')->select() as $item) {
             $parents[$item['id']] = $item['name'];
         }
         $this->view->assign('parentList', $parents);
@@ -34,7 +34,11 @@ class ProductCategory extends Backend
         }
 
         list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-        $list = $this->model->where($where)->order($sort, $order)->paginate($limit);
+        $list = $this->model
+            ->where($where)
+            ->where('slug', '<>', 'html-home-display')
+            ->order($sort, $order)
+            ->paginate($limit);
         $rows = $list->items();
 
         $parentNames = $this->model->column('name', 'id');
