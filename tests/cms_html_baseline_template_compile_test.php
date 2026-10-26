@@ -185,7 +185,7 @@ $footerLinks = array_column($footerData['config']['items'], 'link_url');
 if ($footerLinks !== ['https://example.com/wechat', 'https://example.com/legacy', '#']) {
     throw new \RuntimeException('Footer social links are not normalized for modern, legacy and empty records');
 }
-echo "FOOTER SOCIAL URL NORMALIZATION OK [current/legacy/missing]\\n";
+echo "FOOTER SOCIAL URL NORMALIZATION OK [current/legacy/missing]\n";
 
 $targets = [
     'index' => [

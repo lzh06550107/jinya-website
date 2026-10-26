@@ -277,7 +277,6 @@ expect(
   "boxes default upsert must reuse soft-deleted source_key rows instead of violating uk_page_block_source",
 );
 
-const pageSchemaRegistry = read("application/common/service/cms/PageSchemaRegistry.php");
 expect(
   pageSchemaRegistry.includes("'news.index' => self::pageDefinition('新闻总列表', 'list', '/news', self::newsIndexPageBlocks())"),
   "news.index must use its cleaned page-block schema",
