@@ -149,6 +149,13 @@ class LayoutRenderService
             if ($qrKey === '') {
                 $qrKey = $this->defaultFooterSocialQrKey($title);
             }
+            // Normalize legacy social links once before rendering. Some records
+            // use 'url' while current CMS editors save 'link_url'.
+            $linkUrl = isset($item['link_url']) ? trim((string)$item['link_url']) : '';
+            if ($linkUrl === '' && isset($item['url'])) {
+                $linkUrl = trim((string)$item['url']);
+            }
+            $item['link_url'] = $linkUrl !== '' ? $linkUrl : '#';
             $item['qr_key'] = $qrKey;
             $item['qr_image'] = $qrKey !== '' && isset($siteView[$qrKey]) ? (string)$siteView[$qrKey] : '';
             $footerSocialIcon = $this->footerSocialIcon($title);

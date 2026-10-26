@@ -10,7 +10,14 @@ function build_radios($name, $list = [], $selected = null) { return ''; }
 
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 require ROOT_PATH . 'thinkphp/base.php';
-set_error_handler(static function () { return true; }, E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_WARNING);
+set_error_handler(static function ($severity, $message) {
+    // Treat the formerly hidden social-link undefined-key warning as a regression.
+    if (strpos($message, 'Undefined array key "url"') !== false ||
+        strpos($message, 'Undefined index: url') !== false) {
+        throw new \ErrorException($message, 0, $severity);
+    }
+    return true;
+}, E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_WARNING);
 \think\Loader::addNamespace('app', APP_PATH);
 
 try {
@@ -92,7 +99,15 @@ $baseLayout = [
     'navigation' => ['header' => [], 'footer' => []],
     'footer_company' => ['title' => '', 'content' => '', 'config' => []],
     'footer_contact' => ['title' => '', 'config' => []],
-    'footer_qrcode' => ['title' => '', 'config' => ['items' => []]],
+    // The social entry intentionally has link_url but NO legacy url key.
+    'footer_qrcode' => ['title' => '', 'config' => ['items' => [
+        [
+            'title' => '微信',
+            'link_url' => 'https://example.com/wechat',
+            'qr_image' => '',
+            'icon_view' => ['type' => 'image', 'url' => '/assets/jinya/img/social-wechat.png', 'class' => ''],
+        ],
+    ]]],
     'friend_links' => ['title' => '', 'config' => ['items' => []]],
     'floating_service' => ['config' => []],
 ];
@@ -151,8 +166,30 @@ $common = [
     'pcPagination' => '',
 ];
 
+// Check that both current and legacy social-link shapes normalize safely.
+$serviceClass = new \ReflectionClass(\app\common\service\cms\render\LayoutRenderService::class);
+$service = $serviceClass->newInstanceWithoutConstructor();
+$iconsProperty = $serviceClass->getProperty('icons');
+$iconsProperty->setAccessible(true);
+$iconsProperty->setValue($service, new \app\common\service\cms\CmsIconValue());
+$footerMethod = $serviceClass->getMethod('footerQrcodeComponent');
+$footerMethod->setAccessible(true);
+$footerData = $footerMethod->invoke($service, [
+    'layout.footer.qrcode' => ['config' => ['items' => [
+        ['title' => '微信', 'link_url' => 'https://example.com/wechat'],
+        ['title' => '抖音', 'url' => 'https://example.com/legacy'],
+        ['title' => '小红书'],
+    ]]],
+], []);
+$footerLinks = array_column($footerData['config']['items'], 'link_url');
+if ($footerLinks !== ['https://example.com/wechat', 'https://example.com/legacy', '#']) {
+    throw new \RuntimeException('Footer social links are not normalized for modern, legacy and empty records');
+}
+echo "FOOTER SOCIAL URL NORMALIZATION OK [current/legacy/missing]\\n";
+
 $targets = [
     'index' => [
+        'cms/layout/footer.html',
         'cms/index/index.html',
         'cms/page/label.html',
         'cms/page/bags.html',
@@ -163,6 +200,7 @@ $targets = [
         'cms/news/detail.html',
     ],
     'mobile' => [
+        'cms/layout/footer.html',
         'cms/index/index.html',
         'cms/page/label.html',
         'cms/page/bags.html',
@@ -184,7 +222,11 @@ foreach ($targets as $module => $templates) {
         try {
             ob_start();
             $template->fetch(APP_PATH . $module . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . $relative, $common);
-            ob_end_clean();
+            $rendered = ob_get_clean();
+            if ($relative === 'cms/layout/footer.html' &&
+                strpos($rendered, 'href="https://example.com/wechat"') === false) {
+                throw new \RuntimeException('Footer social link did not render link_url');
+            }
             echo "TEMPLATE OK [$module] $relative\n";
         } catch (\Throwable $e) {
             if (ob_get_level() > 0) {
